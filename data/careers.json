@@ -21,7 +21,12 @@
       "science",
       "focus"
     ],
-    "supportRole": "집중력 회복"
+    "supportRole": "집중력 회복",
+    "choiceRank": 1,
+    "choiceBand": "S급",
+    "powerMultiplier": 1.22,
+    "prestigeIncomeRate": 0.24,
+    "prestigePowerRate": 0.006
   },
   {
     "id": "judge",
@@ -45,7 +50,12 @@
       "humanities",
       "exam"
     ],
-    "supportRole": "오답 판정"
+    "supportRole": "오답 판정",
+    "choiceRank": 2,
+    "choiceBand": "S급",
+    "powerMultiplier": 1.211,
+    "prestigeIncomeRate": 0.24,
+    "prestigePowerRate": 0.006
   },
   {
     "id": "prosecutor",
@@ -69,7 +79,12 @@
       "humanities",
       "exam"
     ],
-    "supportRole": "근거 추적"
+    "supportRole": "근거 추적",
+    "choiceRank": 3,
+    "choiceBand": "S급",
+    "powerMultiplier": 1.202,
+    "prestigeIncomeRate": 0.24,
+    "prestigePowerRate": 0.006
   },
   {
     "id": "attorney",
@@ -93,7 +108,12 @@
       "humanities",
       "steady"
     ],
-    "supportRole": "논리 정리"
+    "supportRole": "논리 정리",
+    "choiceRank": 7,
+    "choiceBand": "S급",
+    "powerMultiplier": 1.167,
+    "prestigeIncomeRate": 0.24,
+    "prestigePowerRate": 0.006
   },
   {
     "id": "dentist",
@@ -117,7 +137,12 @@
       "science",
       "focus"
     ],
-    "supportRole": "실수 교정"
+    "supportRole": "실수 교정",
+    "choiceRank": 4,
+    "choiceBand": "S급",
+    "powerMultiplier": 1.193,
+    "prestigeIncomeRate": 0.24,
+    "prestigePowerRate": 0.006
   },
   {
     "id": "pharmacist",
@@ -141,7 +166,12 @@
       "science",
       "focus"
     ],
-    "supportRole": "암기 처방"
+    "supportRole": "암기 처방",
+    "choiceRank": 9,
+    "choiceBand": "S급",
+    "powerMultiplier": 1.149,
+    "prestigeIncomeRate": 0.24,
+    "prestigePowerRate": 0.006
   },
   {
     "id": "professor",
@@ -165,7 +195,12 @@
       "basic",
       "exam"
     ],
-    "supportRole": "개념 압축"
+    "supportRole": "개념 압축",
+    "choiceRank": 8,
+    "choiceBand": "S급",
+    "powerMultiplier": 1.158,
+    "prestigeIncomeRate": 0.24,
+    "prestigePowerRate": 0.006
   },
   {
     "id": "ai_researcher",
@@ -189,7 +224,12 @@
       "science",
       "math"
     ],
-    "supportRole": "풀이 최적화"
+    "supportRole": "풀이 최적화",
+    "choiceRank": 10,
+    "choiceBand": "S급",
+    "powerMultiplier": 1.14,
+    "prestigeIncomeRate": 0.24,
+    "prestigePowerRate": 0.006
   },
   {
     "id": "software_engineer",
@@ -213,7 +253,12 @@
       "math",
       "fun"
     ],
-    "supportRole": "반복 자동화"
+    "supportRole": "반복 자동화",
+    "choiceRank": 23,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.055,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "semiconductor_engineer",
@@ -237,7 +282,12 @@
       "science",
       "math"
     ],
-    "supportRole": "공식 회로"
+    "supportRole": "공식 회로",
+    "choiceRank": 16,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.081,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "data_scientist",
@@ -261,7 +311,12 @@
       "math",
       "science"
     ],
-    "supportRole": "오답 예측"
+    "supportRole": "오답 예측",
+    "choiceRank": 18,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.074,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "finance_analyst",
@@ -285,7 +340,12 @@
       "math",
       "balanced"
     ],
-    "supportRole": "점수 분석"
+    "supportRole": "점수 분석",
+    "choiceRank": 14,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.089,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "consultant",
@@ -309,7 +369,12 @@
       "balanced",
       "fun"
     ],
-    "supportRole": "전략 수립"
+    "supportRole": "전략 수립",
+    "choiceRank": 12,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.096,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "accountant",
@@ -333,7 +398,12 @@
       "math",
       "steady"
     ],
-    "supportRole": "계산 안정화"
+    "supportRole": "계산 안정화",
+    "choiceRank": 22,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.059,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "diplomat",
@@ -357,7 +427,12 @@
       "english",
       "social"
     ],
-    "supportRole": "언어 감각"
+    "supportRole": "언어 감각",
+    "choiceRank": 13,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.093,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "public_officer_5",
@@ -381,7 +456,12 @@
       "humanities",
       "steady"
     ],
-    "supportRole": "루틴 관리"
+    "supportRole": "루틴 관리",
+    "choiceRank": 27,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.04,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "teacher",
@@ -405,7 +485,12 @@
       "basic",
       "exam"
     ],
-    "supportRole": "기초 정리"
+    "supportRole": "기초 정리",
+    "choiceRank": 32,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.99,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "nurse",
@@ -429,7 +514,12 @@
       "science",
       "focus"
     ],
-    "supportRole": "컨디션 관리"
+    "supportRole": "컨디션 관리",
+    "choiceRank": 40,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.97,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "research_scientist",
@@ -453,7 +543,12 @@
       "science",
       "focus"
     ],
-    "supportRole": "실험 사고"
+    "supportRole": "실험 사고",
+    "choiceRank": 28,
+    "choiceBand": "B급",
+    "powerMultiplier": 1,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "mechanical_engineer",
@@ -477,7 +572,12 @@
       "science",
       "math"
     ],
-    "supportRole": "구조 이해"
+    "supportRole": "구조 이해",
+    "choiceRank": 30,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.995,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "architect",
@@ -501,7 +601,12 @@
       "creative",
       "math"
     ],
-    "supportRole": "공간 기억"
+    "supportRole": "공간 기억",
+    "choiceRank": 31,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.992,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "game_developer",
@@ -525,7 +630,12 @@
       "math",
       "fun"
     ],
-    "supportRole": "반복 자동화"
+    "supportRole": "반복 자동화",
+    "choiceRank": 36,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.98,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "public_officer",
@@ -549,7 +659,12 @@
       "humanities",
       "steady"
     ],
-    "supportRole": "루틴 관리"
+    "supportRole": "루틴 관리",
+    "choiceRank": 44,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.96,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "banker",
@@ -573,7 +688,12 @@
       "math",
       "steady"
     ],
-    "supportRole": "숫자 감각"
+    "supportRole": "숫자 감각",
+    "choiceRank": 46,
+    "choiceBand": "C급",
+    "powerMultiplier": 0.928,
+    "prestigeIncomeRate": 0.15,
+    "prestigePowerRate": 0.003
   },
   {
     "id": "journalist",
@@ -597,7 +717,12 @@
       "korean",
       "social"
     ],
-    "supportRole": "요약력"
+    "supportRole": "요약력",
+    "choiceRank": 45,
+    "choiceBand": "C급",
+    "powerMultiplier": 0.93,
+    "prestigeIncomeRate": 0.15,
+    "prestigePowerRate": 0.003
   },
   {
     "id": "marketer",
@@ -621,7 +746,12 @@
       "creative",
       "fun"
     ],
-    "supportRole": "동기 부여"
+    "supportRole": "동기 부여",
+    "choiceRank": 49,
+    "choiceBand": "C급",
+    "powerMultiplier": 0.92,
+    "prestigeIncomeRate": 0.15,
+    "prestigePowerRate": 0.003
   },
   {
     "id": "designer",
@@ -645,7 +775,12 @@
       "creative",
       "fun"
     ],
-    "supportRole": "패턴 인식"
+    "supportRole": "패턴 인식",
+    "choiceRank": 52,
+    "choiceBand": "C급",
+    "powerMultiplier": 0.913,
+    "prestigeIncomeRate": 0.15,
+    "prestigePowerRate": 0.003
   },
   {
     "id": "translator",
@@ -669,7 +804,12 @@
       "english",
       "korean"
     ],
-    "supportRole": "문장 해독"
+    "supportRole": "문장 해독",
+    "choiceRank": 48,
+    "choiceBand": "C급",
+    "powerMultiplier": 0.923,
+    "prestigeIncomeRate": 0.15,
+    "prestigePowerRate": 0.003
   },
   {
     "id": "social_worker",
@@ -693,7 +833,12 @@
       "humanities",
       "steady"
     ],
-    "supportRole": "멘탈 케어"
+    "supportRole": "멘탈 케어",
+    "choiceRank": 59,
+    "choiceBand": "D급",
+    "powerMultiplier": 0.875,
+    "prestigeIncomeRate": 0.12,
+    "prestigePowerRate": 0.002
   },
   {
     "id": "local_admin",
@@ -717,7 +862,12 @@
       "steady",
       "basic"
     ],
-    "supportRole": "기본기 유지"
+    "supportRole": "기본기 유지",
+    "choiceRank": 62,
+    "choiceBand": "D급",
+    "powerMultiplier": 0.86,
+    "prestigeIncomeRate": 0.12,
+    "prestigePowerRate": 0.002
   },
   {
     "id": "startup_founder",
@@ -741,7 +891,12 @@
       "balanced",
       "fun"
     ],
-    "supportRole": "동기 부여"
+    "supportRole": "동기 부여",
+    "choiceRank": 35,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.982,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "pilot",
@@ -765,7 +920,12 @@
       "science",
       "english"
     ],
-    "supportRole": "집중 항로"
+    "supportRole": "집중 항로",
+    "choiceRank": 19,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.07,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "veterinarian",
@@ -789,7 +949,12 @@
       "science",
       "focus"
     ],
-    "supportRole": "생명 과학"
+    "supportRole": "생명 과학",
+    "choiceRank": 11,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.1,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "civil_engineer",
@@ -813,7 +978,12 @@
       "math",
       "science"
     ],
-    "supportRole": "구조 계산"
+    "supportRole": "구조 계산",
+    "choiceRank": 33,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.988,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "chemical_engineer",
@@ -837,7 +1007,12 @@
       "science",
       "math"
     ],
-    "supportRole": "반응 최적화"
+    "supportRole": "반응 최적화",
+    "choiceRank": 21,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.063,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "electrical_engineer",
@@ -861,7 +1036,12 @@
       "science",
       "math"
     ],
-    "supportRole": "회로 이해"
+    "supportRole": "회로 이해",
+    "choiceRank": 24,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.051,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "bio_researcher",
@@ -885,7 +1065,12 @@
       "science",
       "focus"
     ],
-    "supportRole": "개념 배양"
+    "supportRole": "개념 배양",
+    "choiceRank": 20,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.066,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "psychologist",
@@ -909,7 +1094,12 @@
       "humanities",
       "steady"
     ],
-    "supportRole": "멘탈 정리"
+    "supportRole": "멘탈 정리",
+    "choiceRank": 42,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.965,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "clinical_lab",
@@ -933,7 +1123,12 @@
       "science",
       "focus"
     ],
-    "supportRole": "검증 루틴"
+    "supportRole": "검증 루틴",
+    "choiceRank": 43,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.962,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "patent_attorney",
@@ -957,7 +1152,12 @@
       "science",
       "humanities"
     ],
-    "supportRole": "논리 보호"
+    "supportRole": "논리 보호",
+    "choiceRank": 6,
+    "choiceBand": "S급",
+    "powerMultiplier": 1.176,
+    "prestigeIncomeRate": 0.24,
+    "prestigePowerRate": 0.006
   },
   {
     "id": "ux_researcher",
@@ -981,7 +1181,12 @@
       "balanced",
       "creative"
     ],
-    "supportRole": "문제 관찰"
+    "supportRole": "문제 관찰",
+    "choiceRank": 39,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.972,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "product_manager",
@@ -1005,7 +1210,12 @@
       "balanced",
       "fun"
     ],
-    "supportRole": "우선순위 정리"
+    "supportRole": "우선순위 정리",
+    "choiceRank": 26,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.044,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "actuary",
@@ -1029,7 +1239,12 @@
       "math",
       "steady"
     ],
-    "supportRole": "확률 감각"
+    "supportRole": "확률 감각",
+    "choiceRank": 17,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.078,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "tax_accountant",
@@ -1053,7 +1268,12 @@
       "math",
       "steady"
     ],
-    "supportRole": "계산 정리"
+    "supportRole": "계산 정리",
+    "choiceRank": 29,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.998,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "investment_banker",
@@ -1077,7 +1297,12 @@
       "math",
       "english"
     ],
-    "supportRole": "숫자 압축"
+    "supportRole": "숫자 압축",
+    "choiceRank": 5,
+    "choiceBand": "S급",
+    "powerMultiplier": 1.184,
+    "prestigeIncomeRate": 0.24,
+    "prestigePowerRate": 0.006
   },
   {
     "id": "economist",
@@ -1101,7 +1326,12 @@
       "math",
       "social"
     ],
-    "supportRole": "흐름 분석"
+    "supportRole": "흐름 분석",
+    "choiceRank": 25,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.048,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   },
   {
     "id": "policy_researcher",
@@ -1125,7 +1355,12 @@
       "humanities",
       "social"
     ],
-    "supportRole": "근거 정리"
+    "supportRole": "근거 정리",
+    "choiceRank": 34,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.985,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "curator",
@@ -1149,7 +1384,12 @@
       "creative",
       "social"
     ],
-    "supportRole": "맥락 기억"
+    "supportRole": "맥락 기억",
+    "choiceRank": 50,
+    "choiceBand": "C급",
+    "powerMultiplier": 0.918,
+    "prestigeIncomeRate": 0.15,
+    "prestigePowerRate": 0.003
   },
   {
     "id": "librarian",
@@ -1173,7 +1413,12 @@
       "korean",
       "steady"
     ],
-    "supportRole": "자료 정리"
+    "supportRole": "자료 정리",
+    "choiceRank": 57,
+    "choiceBand": "C급",
+    "powerMultiplier": 0.9,
+    "prestigeIncomeRate": 0.15,
+    "prestigePowerRate": 0.003
   },
   {
     "id": "writer",
@@ -1197,7 +1442,12 @@
       "korean",
       "creative"
     ],
-    "supportRole": "문장 감각"
+    "supportRole": "문장 감각",
+    "choiceRank": 55,
+    "choiceBand": "C급",
+    "powerMultiplier": 0.905,
+    "prestigeIncomeRate": 0.15,
+    "prestigePowerRate": 0.003
   },
   {
     "id": "editor",
@@ -1221,7 +1471,12 @@
       "korean",
       "social"
     ],
-    "supportRole": "오답 교정"
+    "supportRole": "오답 교정",
+    "choiceRank": 53,
+    "choiceBand": "C급",
+    "powerMultiplier": 0.91,
+    "prestigeIncomeRate": 0.15,
+    "prestigePowerRate": 0.003
   },
   {
     "id": "broadcaster",
@@ -1245,7 +1500,12 @@
       "creative",
       "fun"
     ],
-    "supportRole": "몰입 연출"
+    "supportRole": "몰입 연출",
+    "choiceRank": 37,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.978,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "police_officer",
@@ -1269,7 +1529,12 @@
       "humanities",
       "steady"
     ],
-    "supportRole": "집중 순찰"
+    "supportRole": "집중 순찰",
+    "choiceRank": 54,
+    "choiceBand": "C급",
+    "powerMultiplier": 0.908,
+    "prestigeIncomeRate": 0.15,
+    "prestigePowerRate": 0.003
   },
   {
     "id": "firefighter",
@@ -1293,7 +1558,12 @@
       "science",
       "steady"
     ],
-    "supportRole": "위기 대응"
+    "supportRole": "위기 대응",
+    "choiceRank": 56,
+    "choiceBand": "C급",
+    "powerMultiplier": 0.903,
+    "prestigeIncomeRate": 0.15,
+    "prestigePowerRate": 0.003
   },
   {
     "id": "military_officer",
@@ -1317,7 +1587,12 @@
       "steady",
       "balanced"
     ],
-    "supportRole": "루틴 지휘"
+    "supportRole": "루틴 지휘",
+    "choiceRank": 41,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.968,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "airline_crew",
@@ -1341,7 +1616,12 @@
       "english",
       "steady"
     ],
-    "supportRole": "언어 루틴"
+    "supportRole": "언어 루틴",
+    "choiceRank": 51,
+    "choiceBand": "C급",
+    "powerMultiplier": 0.915,
+    "prestigeIncomeRate": 0.15,
+    "prestigePowerRate": 0.003
   },
   {
     "id": "chef",
@@ -1365,7 +1645,12 @@
       "creative",
       "fun"
     ],
-    "supportRole": "감각 훈련"
+    "supportRole": "감각 훈련",
+    "choiceRank": 60,
+    "choiceBand": "D급",
+    "powerMultiplier": 0.87,
+    "prestigeIncomeRate": 0.12,
+    "prestigePowerRate": 0.002
   },
   {
     "id": "sports_coach",
@@ -1389,7 +1674,12 @@
       "steady",
       "fun"
     ],
-    "supportRole": "반복 훈련"
+    "supportRole": "반복 훈련",
+    "choiceRank": 61,
+    "choiceBand": "D급",
+    "powerMultiplier": 0.865,
+    "prestigeIncomeRate": 0.12,
+    "prestigePowerRate": 0.002
   },
   {
     "id": "creator",
@@ -1413,7 +1703,12 @@
       "creative",
       "fun"
     ],
-    "supportRole": "동기 부여"
+    "supportRole": "동기 부여",
+    "choiceRank": 58,
+    "choiceBand": "D급",
+    "powerMultiplier": 0.88,
+    "prestigeIncomeRate": 0.12,
+    "prestigePowerRate": 0.002
   },
   {
     "id": "animation_director",
@@ -1437,7 +1732,12 @@
       "creative",
       "fun"
     ],
-    "supportRole": "패턴 연출"
+    "supportRole": "패턴 연출",
+    "choiceRank": 47,
+    "choiceBand": "C급",
+    "powerMultiplier": 0.925,
+    "prestigeIncomeRate": 0.15,
+    "prestigePowerRate": 0.003
   },
   {
     "id": "environmental_engineer",
@@ -1461,7 +1761,12 @@
       "science",
       "social"
     ],
-    "supportRole": "원인 추적"
+    "supportRole": "원인 추적",
+    "choiceRank": 38,
+    "choiceBand": "B급",
+    "powerMultiplier": 0.975,
+    "prestigeIncomeRate": 0.18,
+    "prestigePowerRate": 0.004
   },
   {
     "id": "robotics_engineer",
@@ -1485,6 +1790,11 @@
       "science",
       "math"
     ],
-    "supportRole": "자동화 사고"
+    "supportRole": "자동화 사고",
+    "choiceRank": 15,
+    "choiceBand": "A급",
+    "powerMultiplier": 1.085,
+    "prestigeIncomeRate": 0.21,
+    "prestigePowerRate": 0.005
   }
 ]
