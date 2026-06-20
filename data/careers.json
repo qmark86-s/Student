@@ -26,7 +26,10 @@
     "choiceBand": "S급",
     "powerMultiplier": 1.22,
     "prestigeIncomeRate": 0.24,
-    "prestigePowerRate": 0.006
+    "prestigePowerRate": 0.006,
+    "portraitAsset": "career-doctor",
+    "spriteAsset": "unit-helper-medic",
+    "iconAsset": "icon-medic"
   },
   {
     "id": "judge",
@@ -55,7 +58,10 @@
     "choiceBand": "S급",
     "powerMultiplier": 1.211,
     "prestigeIncomeRate": 0.24,
-    "prestigePowerRate": 0.006
+    "prestigePowerRate": 0.006,
+    "portraitAsset": "career-judge",
+    "spriteAsset": "unit-helper-judge",
+    "iconAsset": "icon-judge"
   },
   {
     "id": "prosecutor",
@@ -84,7 +90,10 @@
     "choiceBand": "S급",
     "powerMultiplier": 1.202,
     "prestigeIncomeRate": 0.24,
-    "prestigePowerRate": 0.006
+    "prestigePowerRate": 0.006,
+    "portraitAsset": "career-prosecutor",
+    "spriteAsset": "unit-helper-judge",
+    "iconAsset": "icon-judge"
   },
   {
     "id": "attorney",
@@ -113,7 +122,10 @@
     "choiceBand": "S급",
     "powerMultiplier": 1.167,
     "prestigeIncomeRate": 0.24,
-    "prestigePowerRate": 0.006
+    "prestigePowerRate": 0.006,
+    "portraitAsset": "career-attorney",
+    "spriteAsset": "unit-helper-files",
+    "iconAsset": "icon-files"
   },
   {
     "id": "dentist",
@@ -142,7 +154,10 @@
     "choiceBand": "S급",
     "powerMultiplier": 1.193,
     "prestigeIncomeRate": 0.24,
-    "prestigePowerRate": 0.006
+    "prestigePowerRate": 0.006,
+    "portraitAsset": "career-dentist",
+    "spriteAsset": "unit-helper-medic",
+    "iconAsset": "icon-medic"
   },
   {
     "id": "pharmacist",
@@ -171,7 +186,10 @@
     "choiceBand": "S급",
     "powerMultiplier": 1.149,
     "prestigeIncomeRate": 0.24,
-    "prestigePowerRate": 0.006
+    "prestigePowerRate": 0.006,
+    "portraitAsset": "career-pharmacist",
+    "spriteAsset": "unit-helper-medic",
+    "iconAsset": "icon-medic"
   },
   {
     "id": "professor",
@@ -200,7 +218,10 @@
     "choiceBand": "S급",
     "powerMultiplier": 1.158,
     "prestigeIncomeRate": 0.24,
-    "prestigePowerRate": 0.006
+    "prestigePowerRate": 0.006,
+    "portraitAsset": "career-professor",
+    "spriteAsset": "unit-helper-teacher",
+    "iconAsset": "icon-teacher"
   },
   {
     "id": "ai_researcher",
@@ -229,7 +250,10 @@
     "choiceBand": "S급",
     "powerMultiplier": 1.14,
     "prestigeIncomeRate": 0.24,
-    "prestigePowerRate": 0.006
+    "prestigePowerRate": 0.006,
+    "portraitAsset": "career-ai_researcher",
+    "spriteAsset": "unit-helper-laptop",
+    "iconAsset": "icon-laptop"
   },
   {
     "id": "software_engineer",
@@ -258,7 +282,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.055,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-software_engineer",
+    "spriteAsset": "unit-helper-laptop",
+    "iconAsset": "icon-laptop"
   },
   {
     "id": "semiconductor_engineer",
@@ -287,7 +314,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.081,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-semiconductor_engineer",
+    "spriteAsset": "unit-helper-chip",
+    "iconAsset": "icon-chip"
   },
   {
     "id": "data_scientist",
@@ -316,7 +346,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.074,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-data_scientist",
+    "spriteAsset": "unit-helper-chart",
+    "iconAsset": "icon-chart"
   },
   {
     "id": "finance_analyst",
@@ -345,7 +378,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.089,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-finance_analyst",
+    "spriteAsset": "unit-helper-chart",
+    "iconAsset": "icon-chart"
   },
   {
     "id": "consultant",
@@ -374,7 +410,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.096,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-consultant",
+    "spriteAsset": "unit-helper-bulb",
+    "iconAsset": "icon-bulb"
   },
   {
     "id": "accountant",
@@ -403,7 +442,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.059,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-accountant",
+    "spriteAsset": "unit-helper-chart",
+    "iconAsset": "icon-chart"
   },
   {
     "id": "diplomat",
@@ -432,7 +474,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.093,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-diplomat",
+    "spriteAsset": "unit-helper-globe",
+    "iconAsset": "icon-globe"
   },
   {
     "id": "public_officer_5",
@@ -461,7 +506,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.04,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-public_officer_5",
+    "spriteAsset": "unit-helper-files",
+    "iconAsset": "icon-files"
   },
   {
     "id": "teacher",
@@ -490,7 +538,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.99,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-teacher",
+    "spriteAsset": "unit-helper-teacher",
+    "iconAsset": "icon-teacher"
   },
   {
     "id": "nurse",
@@ -519,7 +570,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.97,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-nurse",
+    "spriteAsset": "unit-helper-medic",
+    "iconAsset": "icon-medic"
   },
   {
     "id": "research_scientist",
@@ -548,7 +602,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 1,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-research_scientist",
+    "spriteAsset": "unit-helper-flask",
+    "iconAsset": "icon-flask"
   },
   {
     "id": "mechanical_engineer",
@@ -577,7 +634,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.995,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-mechanical_engineer",
+    "spriteAsset": "unit-helper-chip",
+    "iconAsset": "icon-chip"
   },
   {
     "id": "architect",
@@ -606,7 +666,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.992,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-architect",
+    "spriteAsset": "unit-helper-palette",
+    "iconAsset": "icon-palette"
   },
   {
     "id": "game_developer",
@@ -635,7 +698,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.98,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-game_developer",
+    "spriteAsset": "unit-helper-laptop",
+    "iconAsset": "icon-laptop"
   },
   {
     "id": "public_officer",
@@ -664,7 +730,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.96,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-public_officer",
+    "spriteAsset": "unit-helper-files",
+    "iconAsset": "icon-files"
   },
   {
     "id": "banker",
@@ -693,7 +762,10 @@
     "choiceBand": "C급",
     "powerMultiplier": 0.928,
     "prestigeIncomeRate": 0.15,
-    "prestigePowerRate": 0.003
+    "prestigePowerRate": 0.003,
+    "portraitAsset": "career-banker",
+    "spriteAsset": "unit-helper-chart",
+    "iconAsset": "icon-chart"
   },
   {
     "id": "journalist",
@@ -722,7 +794,10 @@
     "choiceBand": "C급",
     "powerMultiplier": 0.93,
     "prestigeIncomeRate": 0.15,
-    "prestigePowerRate": 0.003
+    "prestigePowerRate": 0.003,
+    "portraitAsset": "career-journalist",
+    "spriteAsset": "unit-helper-mic",
+    "iconAsset": "icon-mic"
   },
   {
     "id": "marketer",
@@ -751,7 +826,10 @@
     "choiceBand": "C급",
     "powerMultiplier": 0.92,
     "prestigeIncomeRate": 0.15,
-    "prestigePowerRate": 0.003
+    "prestigePowerRate": 0.003,
+    "portraitAsset": "career-marketer",
+    "spriteAsset": "unit-helper-bulb",
+    "iconAsset": "icon-bulb"
   },
   {
     "id": "designer",
@@ -780,7 +858,10 @@
     "choiceBand": "C급",
     "powerMultiplier": 0.913,
     "prestigeIncomeRate": 0.15,
-    "prestigePowerRate": 0.003
+    "prestigePowerRate": 0.003,
+    "portraitAsset": "career-designer",
+    "spriteAsset": "unit-helper-palette",
+    "iconAsset": "icon-palette"
   },
   {
     "id": "translator",
@@ -809,7 +890,10 @@
     "choiceBand": "C급",
     "powerMultiplier": 0.923,
     "prestigeIncomeRate": 0.15,
-    "prestigePowerRate": 0.003
+    "prestigePowerRate": 0.003,
+    "portraitAsset": "career-translator",
+    "spriteAsset": "unit-helper-book",
+    "iconAsset": "icon-book"
   },
   {
     "id": "social_worker",
@@ -838,7 +922,10 @@
     "choiceBand": "D급",
     "powerMultiplier": 0.875,
     "prestigeIncomeRate": 0.12,
-    "prestigePowerRate": 0.002
+    "prestigePowerRate": 0.002,
+    "portraitAsset": "career-social_worker",
+    "spriteAsset": "unit-helper-files",
+    "iconAsset": "icon-files"
   },
   {
     "id": "local_admin",
@@ -867,7 +954,10 @@
     "choiceBand": "D급",
     "powerMultiplier": 0.86,
     "prestigeIncomeRate": 0.12,
-    "prestigePowerRate": 0.002
+    "prestigePowerRate": 0.002,
+    "portraitAsset": "career-local_admin",
+    "spriteAsset": "unit-helper-files",
+    "iconAsset": "icon-files"
   },
   {
     "id": "startup_founder",
@@ -896,7 +986,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.982,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-startup_founder",
+    "spriteAsset": "unit-helper-bulb",
+    "iconAsset": "icon-bulb"
   },
   {
     "id": "pilot",
@@ -925,7 +1018,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.07,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-pilot",
+    "spriteAsset": "unit-helper-globe",
+    "iconAsset": "icon-globe"
   },
   {
     "id": "veterinarian",
@@ -954,7 +1050,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.1,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-veterinarian",
+    "spriteAsset": "unit-helper-medic",
+    "iconAsset": "icon-medic"
   },
   {
     "id": "civil_engineer",
@@ -983,7 +1082,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.988,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-civil_engineer",
+    "spriteAsset": "unit-helper-chip",
+    "iconAsset": "icon-chip"
   },
   {
     "id": "chemical_engineer",
@@ -1012,7 +1114,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.063,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-chemical_engineer",
+    "spriteAsset": "unit-helper-flask",
+    "iconAsset": "icon-flask"
   },
   {
     "id": "electrical_engineer",
@@ -1041,7 +1146,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.051,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-electrical_engineer",
+    "spriteAsset": "unit-helper-chip",
+    "iconAsset": "icon-chip"
   },
   {
     "id": "bio_researcher",
@@ -1070,7 +1178,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.066,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-bio_researcher",
+    "spriteAsset": "unit-helper-flask",
+    "iconAsset": "icon-flask"
   },
   {
     "id": "psychologist",
@@ -1099,7 +1210,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.965,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-psychologist",
+    "spriteAsset": "unit-helper-bulb",
+    "iconAsset": "icon-bulb"
   },
   {
     "id": "clinical_lab",
@@ -1128,7 +1242,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.962,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-clinical_lab",
+    "spriteAsset": "unit-helper-flask",
+    "iconAsset": "icon-flask"
   },
   {
     "id": "patent_attorney",
@@ -1157,7 +1274,10 @@
     "choiceBand": "S급",
     "powerMultiplier": 1.176,
     "prestigeIncomeRate": 0.24,
-    "prestigePowerRate": 0.006
+    "prestigePowerRate": 0.006,
+    "portraitAsset": "career-patent_attorney",
+    "spriteAsset": "unit-helper-files",
+    "iconAsset": "icon-files"
   },
   {
     "id": "ux_researcher",
@@ -1186,7 +1306,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.972,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-ux_researcher",
+    "spriteAsset": "unit-helper-bulb",
+    "iconAsset": "icon-bulb"
   },
   {
     "id": "product_manager",
@@ -1215,7 +1338,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.044,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-product_manager",
+    "spriteAsset": "unit-helper-bulb",
+    "iconAsset": "icon-bulb"
   },
   {
     "id": "actuary",
@@ -1244,7 +1370,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.078,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-actuary",
+    "spriteAsset": "unit-helper-chart",
+    "iconAsset": "icon-chart"
   },
   {
     "id": "tax_accountant",
@@ -1273,7 +1402,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.998,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-tax_accountant",
+    "spriteAsset": "unit-helper-chart",
+    "iconAsset": "icon-chart"
   },
   {
     "id": "investment_banker",
@@ -1302,7 +1434,10 @@
     "choiceBand": "S급",
     "powerMultiplier": 1.184,
     "prestigeIncomeRate": 0.24,
-    "prestigePowerRate": 0.006
+    "prestigePowerRate": 0.006,
+    "portraitAsset": "career-investment_banker",
+    "spriteAsset": "unit-helper-chart",
+    "iconAsset": "icon-chart"
   },
   {
     "id": "economist",
@@ -1331,7 +1466,10 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.048,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-economist",
+    "spriteAsset": "unit-helper-chart",
+    "iconAsset": "icon-chart"
   },
   {
     "id": "policy_researcher",
@@ -1360,7 +1498,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.985,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-policy_researcher",
+    "spriteAsset": "unit-helper-files",
+    "iconAsset": "icon-files"
   },
   {
     "id": "curator",
@@ -1389,7 +1530,10 @@
     "choiceBand": "C급",
     "powerMultiplier": 0.918,
     "prestigeIncomeRate": 0.15,
-    "prestigePowerRate": 0.003
+    "prestigePowerRate": 0.003,
+    "portraitAsset": "career-curator",
+    "spriteAsset": "unit-helper-palette",
+    "iconAsset": "icon-palette"
   },
   {
     "id": "librarian",
@@ -1418,7 +1562,10 @@
     "choiceBand": "C급",
     "powerMultiplier": 0.9,
     "prestigeIncomeRate": 0.15,
-    "prestigePowerRate": 0.003
+    "prestigePowerRate": 0.003,
+    "portraitAsset": "career-librarian",
+    "spriteAsset": "unit-helper-book",
+    "iconAsset": "icon-book"
   },
   {
     "id": "writer",
@@ -1447,7 +1594,10 @@
     "choiceBand": "C급",
     "powerMultiplier": 0.905,
     "prestigeIncomeRate": 0.15,
-    "prestigePowerRate": 0.003
+    "prestigePowerRate": 0.003,
+    "portraitAsset": "career-writer",
+    "spriteAsset": "unit-helper-book",
+    "iconAsset": "icon-book"
   },
   {
     "id": "editor",
@@ -1476,7 +1626,10 @@
     "choiceBand": "C급",
     "powerMultiplier": 0.91,
     "prestigeIncomeRate": 0.15,
-    "prestigePowerRate": 0.003
+    "prestigePowerRate": 0.003,
+    "portraitAsset": "career-editor",
+    "spriteAsset": "unit-helper-book",
+    "iconAsset": "icon-book"
   },
   {
     "id": "broadcaster",
@@ -1505,7 +1658,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.978,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-broadcaster",
+    "spriteAsset": "unit-helper-mic",
+    "iconAsset": "icon-mic"
   },
   {
     "id": "police_officer",
@@ -1534,7 +1690,10 @@
     "choiceBand": "C급",
     "powerMultiplier": 0.908,
     "prestigeIncomeRate": 0.15,
-    "prestigePowerRate": 0.003
+    "prestigePowerRate": 0.003,
+    "portraitAsset": "career-police_officer",
+    "spriteAsset": "unit-helper-files",
+    "iconAsset": "icon-files"
   },
   {
     "id": "firefighter",
@@ -1563,7 +1722,10 @@
     "choiceBand": "C급",
     "powerMultiplier": 0.903,
     "prestigeIncomeRate": 0.15,
-    "prestigePowerRate": 0.003
+    "prestigePowerRate": 0.003,
+    "portraitAsset": "career-firefighter",
+    "spriteAsset": "unit-helper-medic",
+    "iconAsset": "icon-medic"
   },
   {
     "id": "military_officer",
@@ -1592,7 +1754,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.968,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-military_officer",
+    "spriteAsset": "unit-helper-files",
+    "iconAsset": "icon-files"
   },
   {
     "id": "airline_crew",
@@ -1621,7 +1786,10 @@
     "choiceBand": "C급",
     "powerMultiplier": 0.915,
     "prestigeIncomeRate": 0.15,
-    "prestigePowerRate": 0.003
+    "prestigePowerRate": 0.003,
+    "portraitAsset": "career-airline_crew",
+    "spriteAsset": "unit-helper-globe",
+    "iconAsset": "icon-globe"
   },
   {
     "id": "chef",
@@ -1650,7 +1818,10 @@
     "choiceBand": "D급",
     "powerMultiplier": 0.87,
     "prestigeIncomeRate": 0.12,
-    "prestigePowerRate": 0.002
+    "prestigePowerRate": 0.002,
+    "portraitAsset": "career-chef",
+    "spriteAsset": "unit-helper-palette",
+    "iconAsset": "icon-palette"
   },
   {
     "id": "sports_coach",
@@ -1679,7 +1850,10 @@
     "choiceBand": "D급",
     "powerMultiplier": 0.865,
     "prestigeIncomeRate": 0.12,
-    "prestigePowerRate": 0.002
+    "prestigePowerRate": 0.002,
+    "portraitAsset": "career-sports_coach",
+    "spriteAsset": "unit-helper-bulb",
+    "iconAsset": "icon-bulb"
   },
   {
     "id": "creator",
@@ -1708,7 +1882,10 @@
     "choiceBand": "D급",
     "powerMultiplier": 0.88,
     "prestigeIncomeRate": 0.12,
-    "prestigePowerRate": 0.002
+    "prestigePowerRate": 0.002,
+    "portraitAsset": "career-creator",
+    "spriteAsset": "unit-helper-mic",
+    "iconAsset": "icon-mic"
   },
   {
     "id": "animation_director",
@@ -1737,7 +1914,10 @@
     "choiceBand": "C급",
     "powerMultiplier": 0.925,
     "prestigeIncomeRate": 0.15,
-    "prestigePowerRate": 0.003
+    "prestigePowerRate": 0.003,
+    "portraitAsset": "career-animation_director",
+    "spriteAsset": "unit-helper-palette",
+    "iconAsset": "icon-palette"
   },
   {
     "id": "environmental_engineer",
@@ -1766,7 +1946,10 @@
     "choiceBand": "B급",
     "powerMultiplier": 0.975,
     "prestigeIncomeRate": 0.18,
-    "prestigePowerRate": 0.004
+    "prestigePowerRate": 0.004,
+    "portraitAsset": "career-environmental_engineer",
+    "spriteAsset": "unit-helper-flask",
+    "iconAsset": "icon-flask"
   },
   {
     "id": "robotics_engineer",
@@ -1795,6 +1978,9 @@
     "choiceBand": "A급",
     "powerMultiplier": 1.085,
     "prestigeIncomeRate": 0.21,
-    "prestigePowerRate": 0.005
+    "prestigePowerRate": 0.005,
+    "portraitAsset": "career-robotics_engineer",
+    "spriteAsset": "unit-helper-chip",
+    "iconAsset": "icon-chip"
   }
 ]

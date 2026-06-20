@@ -19,8 +19,8 @@
       "token": "__STUDENT_ASSET_002__",
       "file": "assets/asset-002.png",
       "mime": "image/png",
-      "bytes": 2875,
-      "sha256": "94631a366dfb0dbb81692ce88469586f8f7a20f554c5190c2dabdd4b976bdad6",
+      "bytes": 3971,
+      "sha256": "a8b055b65b581260e52651644be4af0c2d93e2021a39688a983795ffe655c3bb",
       "width": 1024,
       "height": 96
     },
@@ -28,8 +28,8 @@
       "token": "__STUDENT_ASSET_003__",
       "file": "assets/asset-003.png",
       "mime": "image/png",
-      "bytes": 51653,
-      "sha256": "02a582b3220338ba9e23c074dbae79dc3c5f77872fdfbe3ba506bf546122d0ec",
+      "bytes": 59377,
+      "sha256": "d6878ef639da615164765269073a2cf3665b60d75e12db103528f2736b925849",
       "width": 18432,
       "height": 96
     },
@@ -59,6 +59,42 @@
       "sha256": "80c9cd78d7764a254d8b26bc3c223b5b3117b379c94b90989219acc764f7a000",
       "width": 1536,
       "height": 8640
+    },
+    {
+      "token": "__STUDENT_ASSET_007__",
+      "file": "assets/visual-companions.png",
+      "mime": "image/png",
+      "bytes": 4537,
+      "sha256": "20097f73995a1ac1ea73b64dc3e0d8284aff284792a65e179b565b550e6ffb2c",
+      "width": 1248,
+      "height": 96
+    },
+    {
+      "token": "__STUDENT_ASSET_008__",
+      "file": "assets/visual-enemies.png",
+      "mime": "image/png",
+      "bytes": 17563,
+      "sha256": "cb60b404fa562859460464b077d26de3a6670240deca67617a3035f029ec2590",
+      "width": 3840,
+      "height": 96
+    },
+    {
+      "token": "__STUDENT_ASSET_009__",
+      "file": "assets/visual-careers.png",
+      "mime": "image/png",
+      "bytes": 18765,
+      "sha256": "5951607efd4ea0f2ecb537924a4d69eeb97afeea69b27f9cd922ffec8145fff2",
+      "width": 3968,
+      "height": 64
+    },
+    {
+      "token": "__STUDENT_ASSET_010__",
+      "file": "assets/visual-expedition-backdrops.png",
+      "mime": "image/png",
+      "bytes": 3949894,
+      "sha256": "55cc3ea49830b9c2c3fd4fa64094b96b4e4525c801f4d6023d96817e8d2e8afc",
+      "width": 5016,
+      "height": 540
     }
   ],
   "dataTables": [

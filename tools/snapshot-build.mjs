@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
@@ -22,6 +22,14 @@ function parseArgs(argv) {
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
+}
+
+function readSnapshotStyles() {
+  const baseStyles = readFileSync(resolve(snapshotSourceRoot, "styles.css"), "utf8").replace(/\n$/, "");
+  const visualStylesPath = resolve(snapshotSourceRoot, "visual-assets.css");
+  if (!existsSync(visualStylesPath)) return baseStyles;
+  const visualStyles = readFileSync(visualStylesPath, "utf8").replace(/\n$/, "");
+  return `${baseStyles}\n${visualStyles}`;
 }
 
 function injectDataTables(script) {
@@ -114,7 +122,7 @@ function writeText(path, content) {
 
 export async function buildSnapshot(options = {}) {
   const template = readFileSync(resolve(snapshotSourceRoot, "index.template.html"), "utf8");
-  const styles = readFileSync(resolve(snapshotSourceRoot, "styles.css"), "utf8").replace(/\n$/, "");
+  const styles = readSnapshotStyles();
   const sourceScript = readFileSync(resolve(snapshotSourceRoot, "app.bundle.js"), "utf8").replace(/\n$/, "");
   const manifest = readJson(resolve(snapshotSourceRoot, "manifest.json"));
   const args = { distOnly: false, noRoot: false, noShare: false, ...options };

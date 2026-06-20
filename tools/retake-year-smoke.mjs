@@ -206,10 +206,19 @@ try {
 
   const afterRetake = await page.evaluate(() => {
     const text = document.body.innerText;
+    const sceneEnemies = [...document.querySelectorAll(".battle-scene-enemy")];
+    const sceneMonsterArt = [...document.querySelectorAll(".battle-scene-monster-art")];
     return {
       text,
       battleCards: document.querySelectorAll(".battle-enemy-card").length,
+      arenaTextCards: document.querySelectorAll(".pixel-arena .battle-enemy-card").length,
       suneungCards: document.querySelectorAll(".battle-enemy-card.suneung").length,
+      sceneEnemies: sceneEnemies.length,
+      sceneEnemyImages: sceneMonsterArt.filter((monster) => getComputedStyle(monster).backgroundImage.includes("data:image")).length,
+      sceneEnemyFrames: new Set(sceneMonsterArt.map((monster) => [...monster.classList].find((item) => item.startsWith("main-monster-"))).filter(Boolean)).size,
+      sceneBosses: sceneEnemies.filter((enemy) => enemy.classList.contains("boss")).length,
+      sceneHpBars: document.querySelectorAll(".battle-scene-enemy .battle-scene-hp").length,
+      normalHpBars: document.querySelectorAll(".battle-scene-enemy.normal .battle-scene-hp").length,
       gradeId: JSON.parse(localStorage.getItem("student-idle-rpg-save-v1")).current.gradeId,
     };
   });
@@ -228,10 +237,18 @@ try {
   const afterYearComplete = await page.evaluate(() => {
     const text = document.body.innerText;
     const state = JSON.parse(localStorage.getItem("student-idle-rpg-save-v1"));
+    const sceneEnemies = [...document.querySelectorAll(".battle-scene-enemy")];
+    const sceneMonsterArt = [...document.querySelectorAll(".battle-scene-monster-art")];
     return {
       text,
       battleCards: document.querySelectorAll(".battle-enemy-card").length,
+      arenaTextCards: document.querySelectorAll(".pixel-arena .battle-enemy-card").length,
       suneungCards: document.querySelectorAll(".battle-enemy-card.suneung").length,
+      sceneEnemies: sceneEnemies.length,
+      sceneEnemyImages: sceneMonsterArt.filter((monster) => getComputedStyle(monster).backgroundImage.includes("data:image")).length,
+      sceneEnemyFrames: new Set(sceneMonsterArt.map((monster) => [...monster.classList].find((item) => item.startsWith("main-monster-"))).filter(Boolean)).size,
+      sceneSuneungEnemies: sceneEnemies.filter((enemy) => enemy.classList.contains("suneung")).length,
+      sceneHpBars: document.querySelectorAll(".battle-scene-enemy .battle-scene-hp").length,
       awaitingDecision: state.current.awaitingDecision,
       gradeId: state.current.gradeId,
       retakeCount: state.current.retakeCount,
@@ -259,12 +276,22 @@ try {
   if (afterRetake.gradeId !== "REPEATER") failures.push(`Expected REPEATER after retake, got ${afterRetake.gradeId}`);
   if (!afterRetake.text.includes("12개월")) failures.push("Retake year does not show 12-month battle copy");
   if (afterRetake.text.includes("수능 5과목")) failures.push("Retake immediately shows suneung battle copy");
-  if (afterRetake.battleCards !== 12) failures.push(`Expected 12 retake-year battle cards, got ${afterRetake.battleCards}`);
+  if (afterRetake.arenaTextCards !== 0) failures.push(`Expected no retake-year text cards in arena, got ${afterRetake.arenaTextCards}`);
+  if (afterRetake.sceneEnemies !== 12) failures.push(`Expected 12 retake-year scene enemies, got ${afterRetake.sceneEnemies}`);
+  if (afterRetake.sceneEnemyImages !== 12) failures.push(`Expected 12 rendered retake-year scene enemy images, got ${afterRetake.sceneEnemyImages}`);
+  if (afterRetake.sceneEnemyFrames < 8) failures.push(`Expected varied retake-year scene enemy frames, got ${afterRetake.sceneEnemyFrames}`);
+  if (afterRetake.sceneBosses !== 4) failures.push(`Expected 4 retake-year scene bosses, got ${afterRetake.sceneBosses}`);
+  if (afterRetake.sceneHpBars !== 4) failures.push(`Expected 4 retake-year boss HP bars, got ${afterRetake.sceneHpBars}`);
+  if (afterRetake.normalHpBars !== 0) failures.push(`Expected no normal monster HP bars, got ${afterRetake.normalHpBars}`);
   if (afterRetake.suneungCards !== 0) failures.push(`Expected no immediate suneung cards, got ${afterRetake.suneungCards}`);
   if (afterYearComplete.awaitingDecision) failures.push("Retake year completion returned to decision UI before suneung battle");
   if (afterYearComplete.battleKind !== "suneung") failures.push(`Expected suneung battle after retake year, got ${afterYearComplete.battleKind}`);
-  if (afterYearComplete.battleCards !== 5) failures.push(`Expected 5 suneung battle cards after retake year, got ${afterYearComplete.battleCards}`);
-  if (afterYearComplete.suneungCards !== 5) failures.push(`Expected 5 suneung cards after retake year, got ${afterYearComplete.suneungCards}`);
+  if (afterYearComplete.arenaTextCards !== 0) failures.push(`Expected no suneung text cards in arena, got ${afterYearComplete.arenaTextCards}`);
+  if (afterYearComplete.sceneEnemies !== 5) failures.push(`Expected 5 suneung scene enemies after retake year, got ${afterYearComplete.sceneEnemies}`);
+  if (afterYearComplete.sceneSuneungEnemies !== 5) failures.push(`Expected 5 suneung scene enemy classes, got ${afterYearComplete.sceneSuneungEnemies}`);
+  if (afterYearComplete.sceneEnemyImages !== 5) failures.push(`Expected 5 rendered suneung scene enemy images, got ${afterYearComplete.sceneEnemyImages}`);
+  if (afterYearComplete.sceneEnemyFrames < 4) failures.push(`Expected varied suneung scene enemy frames, got ${afterYearComplete.sceneEnemyFrames}`);
+  if (afterYearComplete.sceneHpBars !== 5) failures.push(`Expected 5 suneung HP bars, got ${afterYearComplete.sceneHpBars}`);
   if (!afterYearComplete.text.includes("수능 5과목")) failures.push("Retake year completion does not show suneung battle copy");
   if (afterYearComplete.outcomeCareerCount !== 0) failures.push(`Expected no outcome before retake suneung result, got ${afterYearComplete.outcomeCareerCount}`);
   if (!afterSuneungComplete.hasDecisionText) failures.push("Retake suneung completion did not return to decision-ready UI");
@@ -281,7 +308,7 @@ try {
     process.exit(1);
   }
 
-  console.log(`RETAKE_YEAR_SMOKE_OK yearCards=${afterRetake.battleCards} suneungCards=${afterYearComplete.suneungCards} retakeCount=${afterSuneungComplete.retakeCount}`);
+  console.log(`RETAKE_YEAR_SMOKE_OK yearSceneEnemies=${afterRetake.sceneEnemies} suneungSceneEnemies=${afterYearComplete.sceneEnemies} retakeCount=${afterSuneungComplete.retakeCount}`);
 } finally {
   await browser.close();
   await closeServer(server);

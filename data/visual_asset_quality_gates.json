@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "defaults": {
+    "minCoverage": 0.04,
+    "maxCoverage": 0.96,
+    "minDistinctColors": 8,
+    "minBoundsWidth": 18,
+    "minBoundsHeight": 18
+  },
+  "atlases": {
+    "mainStudents": {
+      "minCoverage": 0.1,
+      "maxCoverage": 0.57,
+      "minDistinctColors": 10,
+      "minBoundsWidth": 36,
+      "minBoundsHeight": 54
+    },
+    "mainMonsters": {
+      "minCoverage": 0.08,
+      "maxCoverage": 0.58,
+      "minDistinctColors": 9,
+      "minBoundsWidth": 28,
+      "minBoundsHeight": 26
+    },
+    "companions": {
+      "minCoverage": 0.12,
+      "maxCoverage": 0.52,
+      "minDistinctColors": 10,
+      "minBoundsWidth": 42,
+      "minBoundsHeight": 58
+    },
+    "enemies": {
+      "minCoverage": 0.1,
+      "maxCoverage": 0.58,
+      "minDistinctColors": 9,
+      "minBoundsWidth": 38,
+      "minBoundsHeight": 38
+    },
+    "careers": {
+      "minCoverage": 0.78,
+      "maxCoverage": 0.98,
+      "minDistinctColors": 14,
+      "minBoundsWidth": 54,
+      "minBoundsHeight": 52
+    }
+  }
+}

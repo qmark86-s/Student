@@ -1,0 +1,2577 @@
+{
+  "version": 1,
+  "style": "pixel-voxel",
+  "generatedBy": "tools/build-visual-assets.mjs",
+  "atlases": [
+    {
+      "id": "mainStudents",
+      "token": "__STUDENT_ASSET_002__",
+      "file": "assets/asset-002.png",
+      "cell": 64,
+      "width": 1024,
+      "height": 96,
+      "items": [
+        {
+          "id": "main-student-000",
+          "frame": 0,
+          "phase": "elementary",
+          "age": 8,
+          "title": "초1 작은 책가방",
+          "band": "lower-elementary"
+        },
+        {
+          "id": "main-student-001",
+          "frame": 1,
+          "phase": "elementary",
+          "age": 9,
+          "title": "초2 준비물 가방",
+          "band": "lower-elementary"
+        },
+        {
+          "id": "main-student-002",
+          "frame": 2,
+          "phase": "elementary",
+          "age": 10,
+          "title": "초3 교과서 가방",
+          "band": "upper-elementary"
+        },
+        {
+          "id": "main-student-003",
+          "frame": 3,
+          "phase": "elementary",
+          "age": 11,
+          "title": "초4 발표 준비생",
+          "band": "upper-elementary"
+        },
+        {
+          "id": "main-student-004",
+          "frame": 4,
+          "phase": "elementary",
+          "age": 12,
+          "title": "초5 수행평가 준비생",
+          "band": "upper-elementary"
+        },
+        {
+          "id": "main-student-005",
+          "frame": 5,
+          "phase": "elementary",
+          "age": 13,
+          "title": "초6 졸업반",
+          "band": "upper-elementary"
+        },
+        {
+          "id": "main-student-006",
+          "frame": 6,
+          "phase": "middle",
+          "age": 14,
+          "title": "중1 교복 적응",
+          "band": "middle"
+        },
+        {
+          "id": "main-student-007",
+          "frame": 7,
+          "phase": "middle",
+          "age": 15,
+          "title": "중2 수행평가 러너",
+          "band": "middle"
+        },
+        {
+          "id": "main-student-008",
+          "frame": 8,
+          "phase": "middle",
+          "age": 16,
+          "title": "중3 고입 대비",
+          "band": "middle"
+        },
+        {
+          "id": "main-student-009",
+          "frame": 9,
+          "phase": "high",
+          "age": 17,
+          "title": "고1 계열 탐색",
+          "band": "high"
+        },
+        {
+          "id": "main-student-010",
+          "frame": 10,
+          "phase": "high",
+          "age": 18,
+          "title": "고2 계열 고정",
+          "band": "high"
+        },
+        {
+          "id": "main-student-011",
+          "frame": 11,
+          "phase": "high",
+          "age": 19,
+          "title": "고3 수험생",
+          "band": "high"
+        },
+        {
+          "id": "main-student-012",
+          "frame": 12,
+          "phase": "repeater",
+          "age": 20,
+          "title": "1수 독서실 적응",
+          "band": "repeater"
+        },
+        {
+          "id": "main-student-013",
+          "frame": 13,
+          "phase": "repeater",
+          "age": 21,
+          "title": "2수 루틴 고정",
+          "band": "repeater"
+        },
+        {
+          "id": "main-student-014",
+          "frame": 14,
+          "phase": "repeater",
+          "age": 22,
+          "title": "장수생 압축 학습",
+          "band": "repeater"
+        },
+        {
+          "id": "main-student-015",
+          "frame": 15,
+          "phase": "repeater",
+          "age": 23,
+          "title": "N수 베테랑",
+          "band": "repeater"
+        }
+      ]
+    },
+    {
+      "id": "mainMonsters",
+      "token": "__STUDENT_ASSET_003__",
+      "file": "assets/asset-003.png",
+      "cell": 96,
+      "width": 18432,
+      "height": 96,
+      "items": [
+        {
+          "id": "main-monster-000",
+          "frame": 0,
+          "phase": "elementary",
+          "age": 8,
+          "gradeTitle": "초1 작은 책가방",
+          "name": "받아쓰기장",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-001",
+          "frame": 1,
+          "phase": "elementary",
+          "age": 8,
+          "gradeTitle": "초1 작은 책가방",
+          "name": "색종이 문제집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-002",
+          "frame": 2,
+          "phase": "elementary",
+          "age": 8,
+          "gradeTitle": "초1 작은 책가방",
+          "name": "알림장 슬라임",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-003",
+          "frame": 3,
+          "phase": "elementary",
+          "age": 8,
+          "gradeTitle": "초1 작은 책가방",
+          "name": "숫자 카드",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-004",
+          "frame": 4,
+          "phase": "elementary",
+          "age": 8,
+          "gradeTitle": "초1 작은 책가방",
+          "name": "크레파스 숙제통",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-005",
+          "frame": 5,
+          "phase": "elementary",
+          "age": 8,
+          "gradeTitle": "초1 작은 책가방",
+          "name": "스티커 시험지",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-006",
+          "frame": 6,
+          "phase": "elementary",
+          "age": 8,
+          "gradeTitle": "초1 작은 책가방",
+          "name": "종이비행기 노트",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-007",
+          "frame": 7,
+          "phase": "elementary",
+          "age": 8,
+          "gradeTitle": "초1 작은 책가방",
+          "name": "연필깎이 문제함",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-008",
+          "frame": 8,
+          "phase": "elementary",
+          "age": 9,
+          "gradeTitle": "초2 준비물 가방",
+          "name": "곱셈 카드",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-009",
+          "frame": 9,
+          "phase": "elementary",
+          "age": 9,
+          "gradeTitle": "초2 준비물 가방",
+          "name": "받아쓰기 공책",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-010",
+          "frame": 10,
+          "phase": "elementary",
+          "age": 9,
+          "gradeTitle": "초2 준비물 가방",
+          "name": "독서록 더미",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-011",
+          "frame": 11,
+          "phase": "elementary",
+          "age": 9,
+          "gradeTitle": "초2 준비물 가방",
+          "name": "알파벳 책",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-012",
+          "frame": 12,
+          "phase": "elementary",
+          "age": 9,
+          "gradeTitle": "초2 준비물 가방",
+          "name": "구구단 타워",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-013",
+          "frame": 13,
+          "phase": "elementary",
+          "age": 9,
+          "gradeTitle": "초2 준비물 가방",
+          "name": "그림일기 묶음",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-014",
+          "frame": 14,
+          "phase": "elementary",
+          "age": 9,
+          "gradeTitle": "초2 준비물 가방",
+          "name": "받침 괴물장",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-015",
+          "frame": 15,
+          "phase": "elementary",
+          "age": 9,
+          "gradeTitle": "초2 준비물 가방",
+          "name": "시계 읽기 퍼즐",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-016",
+          "frame": 16,
+          "phase": "elementary",
+          "age": 10,
+          "gradeTitle": "초3 교과서 가방",
+          "name": "사회 그림책",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-017",
+          "frame": 17,
+          "phase": "elementary",
+          "age": 10,
+          "gradeTitle": "초3 교과서 가방",
+          "name": "나눗셈 문제장",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-018",
+          "frame": 18,
+          "phase": "elementary",
+          "age": 10,
+          "gradeTitle": "초3 교과서 가방",
+          "name": "영단어 카드",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-019",
+          "frame": 19,
+          "phase": "elementary",
+          "age": 10,
+          "gradeTitle": "초3 교과서 가방",
+          "name": "실험 관찰장",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-020",
+          "frame": 20,
+          "phase": "elementary",
+          "age": 10,
+          "gradeTitle": "초3 교과서 가방",
+          "name": "지도 퍼즐북",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-021",
+          "frame": 21,
+          "phase": "elementary",
+          "age": 10,
+          "gradeTitle": "초3 교과서 가방",
+          "name": "원고지 벌집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-022",
+          "frame": 22,
+          "phase": "elementary",
+          "age": 10,
+          "gradeTitle": "초3 교과서 가방",
+          "name": "측정 단위자",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-023",
+          "frame": 23,
+          "phase": "elementary",
+          "age": 10,
+          "gradeTitle": "초3 교과서 가방",
+          "name": "과학 스티커북",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-024",
+          "frame": 24,
+          "phase": "elementary",
+          "age": 11,
+          "gradeTitle": "초4 발표 준비생",
+          "name": "분수 문제집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-025",
+          "frame": 25,
+          "phase": "elementary",
+          "age": 11,
+          "gradeTitle": "초4 발표 준비생",
+          "name": "독후감 노트",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-026",
+          "frame": 26,
+          "phase": "elementary",
+          "age": 11,
+          "gradeTitle": "초4 발표 준비생",
+          "name": "단원평가 묶음",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-027",
+          "frame": 27,
+          "phase": "elementary",
+          "age": 11,
+          "gradeTitle": "초4 발표 준비생",
+          "name": "영어 리딩북",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-028",
+          "frame": 28,
+          "phase": "elementary",
+          "age": 11,
+          "gradeTitle": "초4 발표 준비생",
+          "name": "각도기 함정지",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-029",
+          "frame": 29,
+          "phase": "elementary",
+          "age": 11,
+          "gradeTitle": "초4 발표 준비생",
+          "name": "발표 대본집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-030",
+          "frame": 30,
+          "phase": "elementary",
+          "age": 11,
+          "gradeTitle": "초4 발표 준비생",
+          "name": "도형 카드팩",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-031",
+          "frame": 31,
+          "phase": "elementary",
+          "age": 11,
+          "gradeTitle": "초4 발표 준비생",
+          "name": "요약 공책탑",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-032",
+          "frame": 32,
+          "phase": "elementary",
+          "age": 12,
+          "gradeTitle": "초5 수행평가 준비생",
+          "name": "소수 문제집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-033",
+          "frame": 33,
+          "phase": "elementary",
+          "age": 12,
+          "gradeTitle": "초5 수행평가 준비생",
+          "name": "과학 관찰록",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-034",
+          "frame": 34,
+          "phase": "elementary",
+          "age": 12,
+          "gradeTitle": "초5 수행평가 준비생",
+          "name": "역사 인물 카드",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-035",
+          "frame": 35,
+          "phase": "elementary",
+          "age": 12,
+          "gradeTitle": "초5 수행평가 준비생",
+          "name": "영어 문장책",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-036",
+          "frame": 36,
+          "phase": "elementary",
+          "age": 12,
+          "gradeTitle": "초5 수행평가 준비생",
+          "name": "실험 보고서통",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-037",
+          "frame": 37,
+          "phase": "elementary",
+          "age": 12,
+          "gradeTitle": "초5 수행평가 준비생",
+          "name": "비율 퍼즐집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-038",
+          "frame": 38,
+          "phase": "elementary",
+          "age": 12,
+          "gradeTitle": "초5 수행평가 준비생",
+          "name": "한자 급수장",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-039",
+          "frame": 39,
+          "phase": "elementary",
+          "age": 12,
+          "gradeTitle": "초5 수행평가 준비생",
+          "name": "암기 포스트잇",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-040",
+          "frame": 40,
+          "phase": "elementary",
+          "age": 13,
+          "gradeTitle": "초6 졸업반",
+          "name": "중학 예비 문제집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-041",
+          "frame": 41,
+          "phase": "elementary",
+          "age": 13,
+          "gradeTitle": "초6 졸업반",
+          "name": "졸업시험지",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-042",
+          "frame": 42,
+          "phase": "elementary",
+          "age": 13,
+          "gradeTitle": "초6 졸업반",
+          "name": "비문학 책자",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-043",
+          "frame": 43,
+          "phase": "elementary",
+          "age": 13,
+          "gradeTitle": "초6 졸업반",
+          "name": "수학 총정리",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-044",
+          "frame": 44,
+          "phase": "elementary",
+          "age": 13,
+          "gradeTitle": "초6 졸업반",
+          "name": "서술형 대비서",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-045",
+          "frame": 45,
+          "phase": "elementary",
+          "age": 13,
+          "gradeTitle": "초6 졸업반",
+          "name": "어휘 압축팩",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-046",
+          "frame": 46,
+          "phase": "elementary",
+          "age": 13,
+          "gradeTitle": "초6 졸업반",
+          "name": "예비중 체크북",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-047",
+          "frame": 47,
+          "phase": "elementary",
+          "age": 13,
+          "gradeTitle": "초6 졸업반",
+          "name": "졸업 앨범 과제",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-048",
+          "frame": 48,
+          "phase": "middle",
+          "age": 14,
+          "gradeTitle": "중1 교복 적응",
+          "name": "중등 국어 노트",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-049",
+          "frame": 49,
+          "phase": "middle",
+          "age": 14,
+          "gradeTitle": "중1 교복 적응",
+          "name": "영문법 카드",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-050",
+          "frame": 50,
+          "phase": "middle",
+          "age": 14,
+          "gradeTitle": "중1 교복 적응",
+          "name": "방정식 책",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-051",
+          "frame": 51,
+          "phase": "middle",
+          "age": 14,
+          "gradeTitle": "중1 교복 적응",
+          "name": "사회 지도책",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-052",
+          "frame": 52,
+          "phase": "middle",
+          "age": 14,
+          "gradeTitle": "중1 교복 적응",
+          "name": "과학 용어장",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-053",
+          "frame": 53,
+          "phase": "middle",
+          "age": 14,
+          "gradeTitle": "중1 교복 적응",
+          "name": "수행평가 파일",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-054",
+          "frame": 54,
+          "phase": "middle",
+          "age": 14,
+          "gradeTitle": "중1 교복 적응",
+          "name": "서술형 노트",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-055",
+          "frame": 55,
+          "phase": "middle",
+          "age": 14,
+          "gradeTitle": "중1 교복 적응",
+          "name": "암기장 스택",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-056",
+          "frame": 56,
+          "phase": "middle",
+          "age": 15,
+          "gradeTitle": "중2 수행평가 러너",
+          "name": "연립방정식 책",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-057",
+          "frame": 57,
+          "phase": "middle",
+          "age": 15,
+          "gradeTitle": "중2 수행평가 러너",
+          "name": "과학 실험지",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-058",
+          "frame": 58,
+          "phase": "middle",
+          "age": 15,
+          "gradeTitle": "중2 수행평가 러너",
+          "name": "역사 연표",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-059",
+          "frame": 59,
+          "phase": "middle",
+          "age": 15,
+          "gradeTitle": "중2 수행평가 러너",
+          "name": "영어 독해집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-060",
+          "frame": 60,
+          "phase": "middle",
+          "age": 15,
+          "gradeTitle": "중2 수행평가 러너",
+          "name": "문법 오답통",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-061",
+          "frame": 61,
+          "phase": "middle",
+          "age": 15,
+          "gradeTitle": "중2 수행평가 러너",
+          "name": "도덕 활동지",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-062",
+          "frame": 62,
+          "phase": "middle",
+          "age": 15,
+          "gradeTitle": "중2 수행평가 러너",
+          "name": "함수 예고편",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-063",
+          "frame": 63,
+          "phase": "middle",
+          "age": 15,
+          "gradeTitle": "중2 수행평가 러너",
+          "name": "실험 결과표",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-064",
+          "frame": 64,
+          "phase": "middle",
+          "age": 16,
+          "gradeTitle": "중3 고입 대비",
+          "name": "고입 대비서",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-065",
+          "frame": 65,
+          "phase": "middle",
+          "age": 16,
+          "gradeTitle": "중3 고입 대비",
+          "name": "문법 총정리",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-066",
+          "frame": 66,
+          "phase": "middle",
+          "age": 16,
+          "gradeTitle": "중3 고입 대비",
+          "name": "이차방정식 책",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-067",
+          "frame": 67,
+          "phase": "middle",
+          "age": 16,
+          "gradeTitle": "중3 고입 대비",
+          "name": "과학 개념서",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-068",
+          "frame": 68,
+          "phase": "middle",
+          "age": 16,
+          "gradeTitle": "중3 고입 대비",
+          "name": "내신 파이널북",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-069",
+          "frame": 69,
+          "phase": "middle",
+          "age": 16,
+          "gradeTitle": "중3 고입 대비",
+          "name": "역사 사건카드",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-070",
+          "frame": 70,
+          "phase": "middle",
+          "age": 16,
+          "gradeTitle": "중3 고입 대비",
+          "name": "모의고사 맛보기",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-071",
+          "frame": 71,
+          "phase": "middle",
+          "age": 16,
+          "gradeTitle": "중3 고입 대비",
+          "name": "진로 탐색지",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-072",
+          "frame": 72,
+          "phase": "high",
+          "age": 17,
+          "gradeTitle": "고1 계열 탐색",
+          "name": "고등 공통국어",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-073",
+          "frame": 73,
+          "phase": "high",
+          "age": 17,
+          "gradeTitle": "고1 계열 탐색",
+          "name": "수학 상",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-074",
+          "frame": 74,
+          "phase": "high",
+          "age": 17,
+          "gradeTitle": "고1 계열 탐색",
+          "name": "통합사회 문제집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-075",
+          "frame": 75,
+          "phase": "high",
+          "age": 17,
+          "gradeTitle": "고1 계열 탐색",
+          "name": "통합과학 문제집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-076",
+          "frame": 76,
+          "phase": "high",
+          "age": 17,
+          "gradeTitle": "고1 계열 탐색",
+          "name": "영어 모의지",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-077",
+          "frame": 77,
+          "phase": "high",
+          "age": 17,
+          "gradeTitle": "고1 계열 탐색",
+          "name": "한국사 연표팩",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-078",
+          "frame": 78,
+          "phase": "high",
+          "age": 17,
+          "gradeTitle": "고1 계열 탐색",
+          "name": "계열 선택지",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-079",
+          "frame": 79,
+          "phase": "high",
+          "age": 17,
+          "gradeTitle": "고1 계열 탐색",
+          "name": "공통과목 벽돌책",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-080",
+          "frame": 80,
+          "phase": "high",
+          "age": 18,
+          "gradeTitle": "고2 계열 고정",
+          "name": "선택과목 문제집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-081",
+          "frame": 81,
+          "phase": "high",
+          "age": 18,
+          "gradeTitle": "고2 계열 고정",
+          "name": "문학 독서 세트",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-082",
+          "frame": 82,
+          "phase": "high",
+          "age": 18,
+          "gradeTitle": "고2 계열 고정",
+          "name": "미적분 예열집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-083",
+          "frame": 83,
+          "phase": "high",
+          "age": 18,
+          "gradeTitle": "고2 계열 고정",
+          "name": "탐구 개념서",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-084",
+          "frame": 84,
+          "phase": "high",
+          "age": 18,
+          "gradeTitle": "고2 계열 고정",
+          "name": "확통 노트",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-085",
+          "frame": 85,
+          "phase": "high",
+          "age": 18,
+          "gradeTitle": "고2 계열 고정",
+          "name": "생윤 카드팩",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-086",
+          "frame": 86,
+          "phase": "high",
+          "age": 18,
+          "gradeTitle": "고2 계열 고정",
+          "name": "물화생지 샘플러",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-087",
+          "frame": 87,
+          "phase": "high",
+          "age": 18,
+          "gradeTitle": "고2 계열 고정",
+          "name": "수행평가 보고서",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-088",
+          "frame": 88,
+          "phase": "high",
+          "age": 19,
+          "gradeTitle": "고3 수험생",
+          "name": "수능특강",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-089",
+          "frame": 89,
+          "phase": "high",
+          "age": 19,
+          "gradeTitle": "고3 수험생",
+          "name": "기출 모음집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-090",
+          "frame": 90,
+          "phase": "high",
+          "age": 19,
+          "gradeTitle": "고3 수험생",
+          "name": "킬러문항 봉투",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-091",
+          "frame": 91,
+          "phase": "high",
+          "age": 19,
+          "gradeTitle": "고3 수험생",
+          "name": "탐구 실전서",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-092",
+          "frame": 92,
+          "phase": "high",
+          "age": 19,
+          "gradeTitle": "고3 수험생",
+          "name": "수능완성",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-093",
+          "frame": 93,
+          "phase": "high",
+          "age": 19,
+          "gradeTitle": "고3 수험생",
+          "name": "오답노트 괴수",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-094",
+          "frame": 94,
+          "phase": "high",
+          "age": 19,
+          "gradeTitle": "고3 수험생",
+          "name": "실모 봉투팩",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-095",
+          "frame": 95,
+          "phase": "high",
+          "age": 19,
+          "gradeTitle": "고3 수험생",
+          "name": "시간관리 시계",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-096",
+          "frame": 96,
+          "phase": "repeater",
+          "age": 20,
+          "gradeTitle": "1수 독서실 적응",
+          "name": "기출 1회독",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-097",
+          "frame": 97,
+          "phase": "repeater",
+          "age": 20,
+          "gradeTitle": "1수 독서실 적응",
+          "name": "오답노트",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-098",
+          "frame": 98,
+          "phase": "repeater",
+          "age": 20,
+          "gradeTitle": "1수 독서실 적응",
+          "name": "스터디카페 모의고사",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-099",
+          "frame": 99,
+          "phase": "repeater",
+          "age": 20,
+          "gradeTitle": "1수 독서실 적응",
+          "name": "탐구 압축팩",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-100",
+          "frame": 100,
+          "phase": "repeater",
+          "age": 20,
+          "gradeTitle": "1수 독서실 적응",
+          "name": "개념 재정리집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-101",
+          "frame": 101,
+          "phase": "repeater",
+          "age": 20,
+          "gradeTitle": "1수 독서실 적응",
+          "name": "멘탈 체크표",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-102",
+          "frame": 102,
+          "phase": "repeater",
+          "age": 20,
+          "gradeTitle": "1수 독서실 적응",
+          "name": "6월 대비 봉투",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-103",
+          "frame": 103,
+          "phase": "repeater",
+          "age": 20,
+          "gradeTitle": "1수 독서실 적응",
+          "name": "약점 형광펜",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-104",
+          "frame": 104,
+          "phase": "repeater",
+          "age": 21,
+          "gradeTitle": "2수 루틴 고정",
+          "name": "기출 2회독",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-105",
+          "frame": 105,
+          "phase": "repeater",
+          "age": 21,
+          "gradeTitle": "2수 루틴 고정",
+          "name": "실전 봉투",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-106",
+          "frame": 106,
+          "phase": "repeater",
+          "age": 21,
+          "gradeTitle": "2수 루틴 고정",
+          "name": "약점 체크리스트",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-107",
+          "frame": 107,
+          "phase": "repeater",
+          "age": 21,
+          "gradeTitle": "2수 루틴 고정",
+          "name": "오답 재압축",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-108",
+          "frame": 108,
+          "phase": "repeater",
+          "age": 21,
+          "gradeTitle": "2수 루틴 고정",
+          "name": "시간표 압박장",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-109",
+          "frame": 109,
+          "phase": "repeater",
+          "age": 21,
+          "gradeTitle": "2수 루틴 고정",
+          "name": "평가원 분석집",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-110",
+          "frame": 110,
+          "phase": "repeater",
+          "age": 21,
+          "gradeTitle": "2수 루틴 고정",
+          "name": "수면 관리표",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-111",
+          "frame": 111,
+          "phase": "repeater",
+          "age": 21,
+          "gradeTitle": "2수 루틴 고정",
+          "name": "탐구 스피드팩",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-112",
+          "frame": 112,
+          "phase": "repeater",
+          "age": 22,
+          "gradeTitle": "장수생 압축 학습",
+          "name": "장수 기출팩",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-113",
+          "frame": 113,
+          "phase": "repeater",
+          "age": 22,
+          "gradeTitle": "장수생 압축 학습",
+          "name": "멘탈 관리표",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-114",
+          "frame": 114,
+          "phase": "repeater",
+          "age": 22,
+          "gradeTitle": "장수생 압축 학습",
+          "name": "시간표 보스",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-115",
+          "frame": 115,
+          "phase": "repeater",
+          "age": 22,
+          "gradeTitle": "장수생 압축 학습",
+          "name": "실모 더미",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-116",
+          "frame": 116,
+          "phase": "repeater",
+          "age": 22,
+          "gradeTitle": "장수생 압축 학습",
+          "name": "불안 노트",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-117",
+          "frame": 117,
+          "phase": "repeater",
+          "age": 22,
+          "gradeTitle": "장수생 압축 학습",
+          "name": "루틴 점검표",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-118",
+          "frame": 118,
+          "phase": "repeater",
+          "age": 22,
+          "gradeTitle": "장수생 압축 학습",
+          "name": "파이널 압축서",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-119",
+          "frame": 119,
+          "phase": "repeater",
+          "age": 22,
+          "gradeTitle": "장수생 압축 학습",
+          "name": "기억력 체커",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-120",
+          "frame": 120,
+          "phase": "repeater",
+          "age": 23,
+          "gradeTitle": "N수 베테랑",
+          "name": "N수 파이널팩",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-121",
+          "frame": 121,
+          "phase": "repeater",
+          "age": 23,
+          "gradeTitle": "N수 베테랑",
+          "name": "마지막 오답장",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-122",
+          "frame": 122,
+          "phase": "repeater",
+          "age": 23,
+          "gradeTitle": "N수 베테랑",
+          "name": "실전 시계",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-123",
+          "frame": 123,
+          "phase": "repeater",
+          "age": 23,
+          "gradeTitle": "N수 베테랑",
+          "name": "최종 봉투",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-124",
+          "frame": 124,
+          "phase": "repeater",
+          "age": 23,
+          "gradeTitle": "N수 베테랑",
+          "name": "초압축 기출서",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-125",
+          "frame": 125,
+          "phase": "repeater",
+          "age": 23,
+          "gradeTitle": "N수 베테랑",
+          "name": "체력 관리표",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-126",
+          "frame": 126,
+          "phase": "repeater",
+          "age": 23,
+          "gradeTitle": "N수 베테랑",
+          "name": "막판 실모팩",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-127",
+          "frame": 127,
+          "phase": "repeater",
+          "age": 23,
+          "gradeTitle": "N수 베테랑",
+          "name": "수능장 시뮬레이터",
+          "type": "normal"
+        },
+        {
+          "id": "main-monster-128",
+          "frame": 128,
+          "phase": "elementary",
+          "age": 8,
+          "gradeTitle": "초1 작은 책가방",
+          "name": "3월 받아쓰기 보스",
+          "type": "march_eval"
+        },
+        {
+          "id": "main-monster-129",
+          "frame": 129,
+          "phase": "elementary",
+          "age": 8,
+          "gradeTitle": "초1 작은 책가방",
+          "name": "중간 색종이 왕",
+          "type": "midterm"
+        },
+        {
+          "id": "main-monster-130",
+          "frame": 130,
+          "phase": "elementary",
+          "age": 8,
+          "gradeTitle": "초1 작은 책가방",
+          "name": "기말 알림장",
+          "type": "final"
+        },
+        {
+          "id": "main-monster-131",
+          "frame": 131,
+          "phase": "elementary",
+          "age": 8,
+          "gradeTitle": "초1 작은 책가방",
+          "name": "1학년 학년고사장",
+          "type": "year_boss"
+        },
+        {
+          "id": "main-monster-132",
+          "frame": 132,
+          "phase": "elementary",
+          "age": 9,
+          "gradeTitle": "초2 준비물 가방",
+          "name": "3월 곱셈 카드",
+          "type": "march_eval"
+        },
+        {
+          "id": "main-monster-133",
+          "frame": 133,
+          "phase": "elementary",
+          "age": 9,
+          "gradeTitle": "초2 준비물 가방",
+          "name": "중간 독서록장",
+          "type": "midterm"
+        },
+        {
+          "id": "main-monster-134",
+          "frame": 134,
+          "phase": "elementary",
+          "age": 9,
+          "gradeTitle": "초2 준비물 가방",
+          "name": "기말 공책 골렘",
+          "type": "final"
+        },
+        {
+          "id": "main-monster-135",
+          "frame": 135,
+          "phase": "elementary",
+          "age": 9,
+          "gradeTitle": "초2 준비물 가방",
+          "name": "2학년 학년고사장",
+          "type": "year_boss"
+        },
+        {
+          "id": "main-monster-136",
+          "frame": 136,
+          "phase": "elementary",
+          "age": 10,
+          "gradeTitle": "초3 교과서 가방",
+          "name": "3월 나눗셈 기사",
+          "type": "march_eval"
+        },
+        {
+          "id": "main-monster-137",
+          "frame": 137,
+          "phase": "elementary",
+          "age": 10,
+          "gradeTitle": "초3 교과서 가방",
+          "name": "중간 사회 지도",
+          "type": "midterm"
+        },
+        {
+          "id": "main-monster-138",
+          "frame": 138,
+          "phase": "elementary",
+          "age": 10,
+          "gradeTitle": "초3 교과서 가방",
+          "name": "기말 실험장",
+          "type": "final"
+        },
+        {
+          "id": "main-monster-139",
+          "frame": 139,
+          "phase": "elementary",
+          "age": 10,
+          "gradeTitle": "초3 교과서 가방",
+          "name": "3학년 학년고사장",
+          "type": "year_boss"
+        },
+        {
+          "id": "main-monster-140",
+          "frame": 140,
+          "phase": "elementary",
+          "age": 11,
+          "gradeTitle": "초4 발표 준비생",
+          "name": "3월 분수 장군",
+          "type": "march_eval"
+        },
+        {
+          "id": "main-monster-141",
+          "frame": 141,
+          "phase": "elementary",
+          "age": 11,
+          "gradeTitle": "초4 발표 준비생",
+          "name": "중간 단원평가",
+          "type": "midterm"
+        },
+        {
+          "id": "main-monster-142",
+          "frame": 142,
+          "phase": "elementary",
+          "age": 11,
+          "gradeTitle": "초4 발표 준비생",
+          "name": "기말 독후감",
+          "type": "final"
+        },
+        {
+          "id": "main-monster-143",
+          "frame": 143,
+          "phase": "elementary",
+          "age": 11,
+          "gradeTitle": "초4 발표 준비생",
+          "name": "4학년 학년고사장",
+          "type": "year_boss"
+        },
+        {
+          "id": "main-monster-144",
+          "frame": 144,
+          "phase": "elementary",
+          "age": 12,
+          "gradeTitle": "초5 수행평가 준비생",
+          "name": "3월 소수 보스",
+          "type": "march_eval"
+        },
+        {
+          "id": "main-monster-145",
+          "frame": 145,
+          "phase": "elementary",
+          "age": 12,
+          "gradeTitle": "초5 수행평가 준비생",
+          "name": "중간 과학 관찰장",
+          "type": "midterm"
+        },
+        {
+          "id": "main-monster-146",
+          "frame": 146,
+          "phase": "elementary",
+          "age": 12,
+          "gradeTitle": "초5 수행평가 준비생",
+          "name": "기말 역사 카드",
+          "type": "final"
+        },
+        {
+          "id": "main-monster-147",
+          "frame": 147,
+          "phase": "elementary",
+          "age": 12,
+          "gradeTitle": "초5 수행평가 준비생",
+          "name": "5학년 학년고사장",
+          "type": "year_boss"
+        },
+        {
+          "id": "main-monster-148",
+          "frame": 148,
+          "phase": "elementary",
+          "age": 13,
+          "gradeTitle": "초6 졸업반",
+          "name": "3월 예비중 보스",
+          "type": "march_eval"
+        },
+        {
+          "id": "main-monster-149",
+          "frame": 149,
+          "phase": "elementary",
+          "age": 13,
+          "gradeTitle": "초6 졸업반",
+          "name": "중간 총정리장",
+          "type": "midterm"
+        },
+        {
+          "id": "main-monster-150",
+          "frame": 150,
+          "phase": "elementary",
+          "age": 13,
+          "gradeTitle": "초6 졸업반",
+          "name": "기말 졸업시험",
+          "type": "final"
+        },
+        {
+          "id": "main-monster-151",
+          "frame": 151,
+          "phase": "elementary",
+          "age": 13,
+          "gradeTitle": "초6 졸업반",
+          "name": "초등 졸업고사",
+          "type": "year_boss"
+        },
+        {
+          "id": "main-monster-152",
+          "frame": 152,
+          "phase": "middle",
+          "age": 14,
+          "gradeTitle": "중1 교복 적응",
+          "name": "3월 적응평가",
+          "type": "march_eval"
+        },
+        {
+          "id": "main-monster-153",
+          "frame": 153,
+          "phase": "middle",
+          "age": 14,
+          "gradeTitle": "중1 교복 적응",
+          "name": "중간고사 노트",
+          "type": "midterm"
+        },
+        {
+          "id": "main-monster-154",
+          "frame": 154,
+          "phase": "middle",
+          "age": 14,
+          "gradeTitle": "중1 교복 적응",
+          "name": "기말고사 더미",
+          "type": "final"
+        },
+        {
+          "id": "main-monster-155",
+          "frame": 155,
+          "phase": "middle",
+          "age": 14,
+          "gradeTitle": "중1 교복 적응",
+          "name": "중1 학년고사장",
+          "type": "year_boss"
+        },
+        {
+          "id": "main-monster-156",
+          "frame": 156,
+          "phase": "middle",
+          "age": 15,
+          "gradeTitle": "중2 수행평가 러너",
+          "name": "3월 연립문제",
+          "type": "march_eval"
+        },
+        {
+          "id": "main-monster-157",
+          "frame": 157,
+          "phase": "middle",
+          "age": 15,
+          "gradeTitle": "중2 수행평가 러너",
+          "name": "중간 실험보고서",
+          "type": "midterm"
+        },
+        {
+          "id": "main-monster-158",
+          "frame": 158,
+          "phase": "middle",
+          "age": 15,
+          "gradeTitle": "중2 수행평가 러너",
+          "name": "기말 연표장",
+          "type": "final"
+        },
+        {
+          "id": "main-monster-159",
+          "frame": 159,
+          "phase": "middle",
+          "age": 15,
+          "gradeTitle": "중2 수행평가 러너",
+          "name": "중2 학년고사장",
+          "type": "year_boss"
+        },
+        {
+          "id": "main-monster-160",
+          "frame": 160,
+          "phase": "middle",
+          "age": 16,
+          "gradeTitle": "중3 고입 대비",
+          "name": "3월 고입 예열",
+          "type": "march_eval"
+        },
+        {
+          "id": "main-monster-161",
+          "frame": 161,
+          "phase": "middle",
+          "age": 16,
+          "gradeTitle": "중3 고입 대비",
+          "name": "중간 총정리장",
+          "type": "midterm"
+        },
+        {
+          "id": "main-monster-162",
+          "frame": 162,
+          "phase": "middle",
+          "age": 16,
+          "gradeTitle": "중3 고입 대비",
+          "name": "기말 내신 보스",
+          "type": "final"
+        },
+        {
+          "id": "main-monster-163",
+          "frame": 163,
+          "phase": "middle",
+          "age": 16,
+          "gradeTitle": "중3 고입 대비",
+          "name": "중등 졸업고사",
+          "type": "year_boss"
+        },
+        {
+          "id": "main-monster-164",
+          "frame": 164,
+          "phase": "high",
+          "age": 17,
+          "gradeTitle": "고1 계열 탐색",
+          "name": "3월 모의고사",
+          "type": "march_mock"
+        },
+        {
+          "id": "main-monster-165",
+          "frame": 165,
+          "phase": "high",
+          "age": 17,
+          "gradeTitle": "고1 계열 탐색",
+          "name": "6월 모의평가",
+          "type": "june_mock"
+        },
+        {
+          "id": "main-monster-166",
+          "frame": 166,
+          "phase": "high",
+          "age": 17,
+          "gradeTitle": "고1 계열 탐색",
+          "name": "9월 모의평가",
+          "type": "september_mock"
+        },
+        {
+          "id": "main-monster-167",
+          "frame": 167,
+          "phase": "high",
+          "age": 17,
+          "gradeTitle": "고1 계열 탐색",
+          "name": "고1 전국연합 보스",
+          "type": "suneung"
+        },
+        {
+          "id": "main-monster-168",
+          "frame": 168,
+          "phase": "high",
+          "age": 18,
+          "gradeTitle": "고2 계열 고정",
+          "name": "3월 선택과목 보스",
+          "type": "march_mock"
+        },
+        {
+          "id": "main-monster-169",
+          "frame": 169,
+          "phase": "high",
+          "age": 18,
+          "gradeTitle": "고2 계열 고정",
+          "name": "6월 계열평가",
+          "type": "june_mock"
+        },
+        {
+          "id": "main-monster-170",
+          "frame": 170,
+          "phase": "high",
+          "age": 18,
+          "gradeTitle": "고2 계열 고정",
+          "name": "9월 탐구평가",
+          "type": "september_mock"
+        },
+        {
+          "id": "main-monster-171",
+          "frame": 171,
+          "phase": "high",
+          "age": 18,
+          "gradeTitle": "고2 계열 고정",
+          "name": "고2 전국연합 보스",
+          "type": "suneung"
+        },
+        {
+          "id": "main-monster-172",
+          "frame": 172,
+          "phase": "high",
+          "age": 19,
+          "gradeTitle": "고3 수험생",
+          "name": "3월 모의고사장",
+          "type": "march_mock"
+        },
+        {
+          "id": "main-monster-173",
+          "frame": 173,
+          "phase": "high",
+          "age": 19,
+          "gradeTitle": "고3 수험생",
+          "name": "6월 평가원 보스",
+          "type": "june_mock"
+        },
+        {
+          "id": "main-monster-174",
+          "frame": 174,
+          "phase": "high",
+          "age": 19,
+          "gradeTitle": "고3 수험생",
+          "name": "9월 평가원 보스",
+          "type": "september_mock"
+        },
+        {
+          "id": "main-monster-175",
+          "frame": 175,
+          "phase": "high",
+          "age": 19,
+          "gradeTitle": "고3 수험생",
+          "name": "수능 시험장",
+          "type": "suneung"
+        },
+        {
+          "id": "main-monster-176",
+          "frame": 176,
+          "phase": "repeater",
+          "age": 20,
+          "gradeTitle": "1수 독서실 적응",
+          "name": "N수 3월 진단",
+          "type": "march_mock"
+        },
+        {
+          "id": "main-monster-177",
+          "frame": 177,
+          "phase": "repeater",
+          "age": 20,
+          "gradeTitle": "1수 독서실 적응",
+          "name": "N수 6월 평가원",
+          "type": "june_mock"
+        },
+        {
+          "id": "main-monster-178",
+          "frame": 178,
+          "phase": "repeater",
+          "age": 20,
+          "gradeTitle": "1수 독서실 적응",
+          "name": "N수 9월 평가원",
+          "type": "september_mock"
+        },
+        {
+          "id": "main-monster-179",
+          "frame": 179,
+          "phase": "repeater",
+          "age": 20,
+          "gradeTitle": "1수 독서실 적응",
+          "name": "N수 수능 시험장",
+          "type": "suneung"
+        },
+        {
+          "id": "main-monster-180",
+          "frame": 180,
+          "phase": "repeater",
+          "age": 21,
+          "gradeTitle": "2수 루틴 고정",
+          "name": "2수 3월 진단",
+          "type": "march_mock"
+        },
+        {
+          "id": "main-monster-181",
+          "frame": 181,
+          "phase": "repeater",
+          "age": 21,
+          "gradeTitle": "2수 루틴 고정",
+          "name": "2수 6월 평가원",
+          "type": "june_mock"
+        },
+        {
+          "id": "main-monster-182",
+          "frame": 182,
+          "phase": "repeater",
+          "age": 21,
+          "gradeTitle": "2수 루틴 고정",
+          "name": "2수 9월 평가원",
+          "type": "september_mock"
+        },
+        {
+          "id": "main-monster-183",
+          "frame": 183,
+          "phase": "repeater",
+          "age": 21,
+          "gradeTitle": "2수 루틴 고정",
+          "name": "2수 수능 시험장",
+          "type": "suneung"
+        },
+        {
+          "id": "main-monster-184",
+          "frame": 184,
+          "phase": "repeater",
+          "age": 22,
+          "gradeTitle": "장수생 압축 학습",
+          "name": "장수 3월 진단",
+          "type": "march_mock"
+        },
+        {
+          "id": "main-monster-185",
+          "frame": 185,
+          "phase": "repeater",
+          "age": 22,
+          "gradeTitle": "장수생 압축 학습",
+          "name": "장수 6월 평가원",
+          "type": "june_mock"
+        },
+        {
+          "id": "main-monster-186",
+          "frame": 186,
+          "phase": "repeater",
+          "age": 22,
+          "gradeTitle": "장수생 압축 학습",
+          "name": "장수 9월 평가원",
+          "type": "september_mock"
+        },
+        {
+          "id": "main-monster-187",
+          "frame": 187,
+          "phase": "repeater",
+          "age": 22,
+          "gradeTitle": "장수생 압축 학습",
+          "name": "장수 수능 시험장",
+          "type": "suneung"
+        },
+        {
+          "id": "main-monster-188",
+          "frame": 188,
+          "phase": "repeater",
+          "age": 23,
+          "gradeTitle": "N수 베테랑",
+          "name": "N수 3월 파이널",
+          "type": "march_mock"
+        },
+        {
+          "id": "main-monster-189",
+          "frame": 189,
+          "phase": "repeater",
+          "age": 23,
+          "gradeTitle": "N수 베테랑",
+          "name": "N수 6월 파이널",
+          "type": "june_mock"
+        },
+        {
+          "id": "main-monster-190",
+          "frame": 190,
+          "phase": "repeater",
+          "age": 23,
+          "gradeTitle": "N수 베테랑",
+          "name": "N수 9월 파이널",
+          "type": "september_mock"
+        },
+        {
+          "id": "main-monster-191",
+          "frame": 191,
+          "phase": "repeater",
+          "age": 23,
+          "gradeTitle": "N수 베테랑",
+          "name": "N수 수능 시험장",
+          "type": "suneung"
+        }
+      ]
+    },
+    {
+      "id": "companions",
+      "token": "__STUDENT_ASSET_007__",
+      "file": "assets/visual-companions.png",
+      "cell": 96,
+      "width": 1248,
+      "height": 96,
+      "items": [
+        {
+          "id": "helper-book",
+          "index": 0
+        },
+        {
+          "id": "helper-bulb",
+          "index": 1
+        },
+        {
+          "id": "helper-chart",
+          "index": 2
+        },
+        {
+          "id": "helper-chip",
+          "index": 3
+        },
+        {
+          "id": "helper-files",
+          "index": 4
+        },
+        {
+          "id": "helper-flask",
+          "index": 5
+        },
+        {
+          "id": "helper-globe",
+          "index": 6
+        },
+        {
+          "id": "helper-judge",
+          "index": 7
+        },
+        {
+          "id": "helper-laptop",
+          "index": 8
+        },
+        {
+          "id": "helper-medic",
+          "index": 9
+        },
+        {
+          "id": "helper-mic",
+          "index": 10
+        },
+        {
+          "id": "helper-palette",
+          "index": 11
+        },
+        {
+          "id": "helper-teacher",
+          "index": 12
+        }
+      ]
+    },
+    {
+      "id": "enemies",
+      "token": "__STUDENT_ASSET_008__",
+      "file": "assets/visual-enemies.png",
+      "cell": 96,
+      "width": 3840,
+      "height": 96,
+      "items": [
+        {
+          "id": "shelter-mob-1",
+          "index": 0,
+          "tone": "shelter",
+          "boss": false
+        },
+        {
+          "id": "shelter-mob-2",
+          "index": 1,
+          "tone": "shelter",
+          "boss": false
+        },
+        {
+          "id": "shelter-mob-3",
+          "index": 2,
+          "tone": "shelter",
+          "boss": false
+        },
+        {
+          "id": "shelter-boss",
+          "index": 3,
+          "tone": "shelter",
+          "boss": true
+        },
+        {
+          "id": "studio-mob-1",
+          "index": 4,
+          "tone": "studio",
+          "boss": false
+        },
+        {
+          "id": "studio-mob-2",
+          "index": 5,
+          "tone": "studio",
+          "boss": false
+        },
+        {
+          "id": "studio-mob-3",
+          "index": 6,
+          "tone": "studio",
+          "boss": false
+        },
+        {
+          "id": "studio-boss",
+          "index": 7,
+          "tone": "studio",
+          "boss": true
+        },
+        {
+          "id": "neighborhood-mob-1",
+          "index": 8,
+          "tone": "neighborhood",
+          "boss": false
+        },
+        {
+          "id": "neighborhood-mob-2",
+          "index": 9,
+          "tone": "neighborhood",
+          "boss": false
+        },
+        {
+          "id": "neighborhood-mob-3",
+          "index": 10,
+          "tone": "neighborhood",
+          "boss": false
+        },
+        {
+          "id": "neighborhood-boss",
+          "index": 11,
+          "tone": "neighborhood",
+          "boss": true
+        },
+        {
+          "id": "company-mob-1",
+          "index": 12,
+          "tone": "company",
+          "boss": false
+        },
+        {
+          "id": "company-mob-2",
+          "index": 13,
+          "tone": "company",
+          "boss": false
+        },
+        {
+          "id": "company-mob-3",
+          "index": 14,
+          "tone": "company",
+          "boss": false
+        },
+        {
+          "id": "company-boss",
+          "index": 15,
+          "tone": "company",
+          "boss": true
+        },
+        {
+          "id": "office-mob-1",
+          "index": 16,
+          "tone": "office",
+          "boss": false
+        },
+        {
+          "id": "office-mob-2",
+          "index": 17,
+          "tone": "office",
+          "boss": false
+        },
+        {
+          "id": "office-mob-3",
+          "index": 18,
+          "tone": "office",
+          "boss": false
+        },
+        {
+          "id": "office-boss",
+          "index": 19,
+          "tone": "office",
+          "boss": true
+        },
+        {
+          "id": "asset-mob-1",
+          "index": 20,
+          "tone": "asset",
+          "boss": false
+        },
+        {
+          "id": "asset-mob-2",
+          "index": 21,
+          "tone": "asset",
+          "boss": false
+        },
+        {
+          "id": "asset-mob-3",
+          "index": 22,
+          "tone": "asset",
+          "boss": false
+        },
+        {
+          "id": "asset-boss",
+          "index": 23,
+          "tone": "asset",
+          "boss": true
+        },
+        {
+          "id": "national-mob-1",
+          "index": 24,
+          "tone": "national",
+          "boss": false
+        },
+        {
+          "id": "national-mob-2",
+          "index": 25,
+          "tone": "national",
+          "boss": false
+        },
+        {
+          "id": "national-mob-3",
+          "index": 26,
+          "tone": "national",
+          "boss": false
+        },
+        {
+          "id": "national-boss",
+          "index": 27,
+          "tone": "national",
+          "boss": true
+        },
+        {
+          "id": "global-mob-1",
+          "index": 28,
+          "tone": "global",
+          "boss": false
+        },
+        {
+          "id": "global-mob-2",
+          "index": 29,
+          "tone": "global",
+          "boss": false
+        },
+        {
+          "id": "global-mob-3",
+          "index": 30,
+          "tone": "global",
+          "boss": false
+        },
+        {
+          "id": "global-boss",
+          "index": 31,
+          "tone": "global",
+          "boss": true
+        },
+        {
+          "id": "future-mob-1",
+          "index": 32,
+          "tone": "future",
+          "boss": false
+        },
+        {
+          "id": "future-mob-2",
+          "index": 33,
+          "tone": "future",
+          "boss": false
+        },
+        {
+          "id": "future-mob-3",
+          "index": 34,
+          "tone": "future",
+          "boss": false
+        },
+        {
+          "id": "future-boss",
+          "index": 35,
+          "tone": "future",
+          "boss": true
+        },
+        {
+          "id": "summit-mob-1",
+          "index": 36,
+          "tone": "summit",
+          "boss": false
+        },
+        {
+          "id": "summit-mob-2",
+          "index": 37,
+          "tone": "summit",
+          "boss": false
+        },
+        {
+          "id": "summit-mob-3",
+          "index": 38,
+          "tone": "summit",
+          "boss": false
+        },
+        {
+          "id": "summit-boss",
+          "index": 39,
+          "tone": "summit",
+          "boss": true
+        }
+      ]
+    },
+    {
+      "id": "careers",
+      "token": "__STUDENT_ASSET_009__",
+      "file": "assets/visual-careers.png",
+      "cell": 64,
+      "width": 3968,
+      "height": 64,
+      "items": [
+        {
+          "id": "career-doctor",
+          "careerId": "doctor",
+          "index": 0
+        },
+        {
+          "id": "career-judge",
+          "careerId": "judge",
+          "index": 1
+        },
+        {
+          "id": "career-prosecutor",
+          "careerId": "prosecutor",
+          "index": 2
+        },
+        {
+          "id": "career-dentist",
+          "careerId": "dentist",
+          "index": 3
+        },
+        {
+          "id": "career-investment_banker",
+          "careerId": "investment_banker",
+          "index": 4
+        },
+        {
+          "id": "career-patent_attorney",
+          "careerId": "patent_attorney",
+          "index": 5
+        },
+        {
+          "id": "career-attorney",
+          "careerId": "attorney",
+          "index": 6
+        },
+        {
+          "id": "career-professor",
+          "careerId": "professor",
+          "index": 7
+        },
+        {
+          "id": "career-pharmacist",
+          "careerId": "pharmacist",
+          "index": 8
+        },
+        {
+          "id": "career-ai_researcher",
+          "careerId": "ai_researcher",
+          "index": 9
+        },
+        {
+          "id": "career-veterinarian",
+          "careerId": "veterinarian",
+          "index": 10
+        },
+        {
+          "id": "career-consultant",
+          "careerId": "consultant",
+          "index": 11
+        },
+        {
+          "id": "career-diplomat",
+          "careerId": "diplomat",
+          "index": 12
+        },
+        {
+          "id": "career-finance_analyst",
+          "careerId": "finance_analyst",
+          "index": 13
+        },
+        {
+          "id": "career-robotics_engineer",
+          "careerId": "robotics_engineer",
+          "index": 14
+        },
+        {
+          "id": "career-semiconductor_engineer",
+          "careerId": "semiconductor_engineer",
+          "index": 15
+        },
+        {
+          "id": "career-actuary",
+          "careerId": "actuary",
+          "index": 16
+        },
+        {
+          "id": "career-data_scientist",
+          "careerId": "data_scientist",
+          "index": 17
+        },
+        {
+          "id": "career-pilot",
+          "careerId": "pilot",
+          "index": 18
+        },
+        {
+          "id": "career-bio_researcher",
+          "careerId": "bio_researcher",
+          "index": 19
+        },
+        {
+          "id": "career-chemical_engineer",
+          "careerId": "chemical_engineer",
+          "index": 20
+        },
+        {
+          "id": "career-accountant",
+          "careerId": "accountant",
+          "index": 21
+        },
+        {
+          "id": "career-software_engineer",
+          "careerId": "software_engineer",
+          "index": 22
+        },
+        {
+          "id": "career-electrical_engineer",
+          "careerId": "electrical_engineer",
+          "index": 23
+        },
+        {
+          "id": "career-economist",
+          "careerId": "economist",
+          "index": 24
+        },
+        {
+          "id": "career-product_manager",
+          "careerId": "product_manager",
+          "index": 25
+        },
+        {
+          "id": "career-public_officer_5",
+          "careerId": "public_officer_5",
+          "index": 26
+        },
+        {
+          "id": "career-research_scientist",
+          "careerId": "research_scientist",
+          "index": 27
+        },
+        {
+          "id": "career-tax_accountant",
+          "careerId": "tax_accountant",
+          "index": 28
+        },
+        {
+          "id": "career-mechanical_engineer",
+          "careerId": "mechanical_engineer",
+          "index": 29
+        },
+        {
+          "id": "career-architect",
+          "careerId": "architect",
+          "index": 30
+        },
+        {
+          "id": "career-teacher",
+          "careerId": "teacher",
+          "index": 31
+        },
+        {
+          "id": "career-civil_engineer",
+          "careerId": "civil_engineer",
+          "index": 32
+        },
+        {
+          "id": "career-policy_researcher",
+          "careerId": "policy_researcher",
+          "index": 33
+        },
+        {
+          "id": "career-startup_founder",
+          "careerId": "startup_founder",
+          "index": 34
+        },
+        {
+          "id": "career-game_developer",
+          "careerId": "game_developer",
+          "index": 35
+        },
+        {
+          "id": "career-broadcaster",
+          "careerId": "broadcaster",
+          "index": 36
+        },
+        {
+          "id": "career-environmental_engineer",
+          "careerId": "environmental_engineer",
+          "index": 37
+        },
+        {
+          "id": "career-ux_researcher",
+          "careerId": "ux_researcher",
+          "index": 38
+        },
+        {
+          "id": "career-nurse",
+          "careerId": "nurse",
+          "index": 39
+        },
+        {
+          "id": "career-military_officer",
+          "careerId": "military_officer",
+          "index": 40
+        },
+        {
+          "id": "career-psychologist",
+          "careerId": "psychologist",
+          "index": 41
+        },
+        {
+          "id": "career-clinical_lab",
+          "careerId": "clinical_lab",
+          "index": 42
+        },
+        {
+          "id": "career-public_officer",
+          "careerId": "public_officer",
+          "index": 43
+        },
+        {
+          "id": "career-journalist",
+          "careerId": "journalist",
+          "index": 44
+        },
+        {
+          "id": "career-banker",
+          "careerId": "banker",
+          "index": 45
+        },
+        {
+          "id": "career-animation_director",
+          "careerId": "animation_director",
+          "index": 46
+        },
+        {
+          "id": "career-translator",
+          "careerId": "translator",
+          "index": 47
+        },
+        {
+          "id": "career-marketer",
+          "careerId": "marketer",
+          "index": 48
+        },
+        {
+          "id": "career-curator",
+          "careerId": "curator",
+          "index": 49
+        },
+        {
+          "id": "career-airline_crew",
+          "careerId": "airline_crew",
+          "index": 50
+        },
+        {
+          "id": "career-designer",
+          "careerId": "designer",
+          "index": 51
+        },
+        {
+          "id": "career-editor",
+          "careerId": "editor",
+          "index": 52
+        },
+        {
+          "id": "career-police_officer",
+          "careerId": "police_officer",
+          "index": 53
+        },
+        {
+          "id": "career-writer",
+          "careerId": "writer",
+          "index": 54
+        },
+        {
+          "id": "career-firefighter",
+          "careerId": "firefighter",
+          "index": 55
+        },
+        {
+          "id": "career-librarian",
+          "careerId": "librarian",
+          "index": 56
+        },
+        {
+          "id": "career-creator",
+          "careerId": "creator",
+          "index": 57
+        },
+        {
+          "id": "career-social_worker",
+          "careerId": "social_worker",
+          "index": 58
+        },
+        {
+          "id": "career-chef",
+          "careerId": "chef",
+          "index": 59
+        },
+        {
+          "id": "career-sports_coach",
+          "careerId": "sports_coach",
+          "index": 60
+        },
+        {
+          "id": "career-local_admin",
+          "careerId": "local_admin",
+          "index": 61
+        }
+      ]
+    }
+  ],
+  "backgrounds": [
+    {
+      "id": "expeditionBackdrops",
+      "token": "__STUDENT_ASSET_010__",
+      "file": "assets/visual-expedition-backdrops.png",
+      "width": 5016,
+      "height": 540,
+      "rowHeight": 540,
+      "items": [
+        {
+          "id": "expedition-backdrop-shelter",
+          "backdrop": "shelter",
+          "row": 0
+        },
+        {
+          "id": "expedition-backdrop-studio",
+          "backdrop": "studio",
+          "row": 0
+        },
+        {
+          "id": "expedition-backdrop-neighborhood",
+          "backdrop": "neighborhood",
+          "row": 0
+        },
+        {
+          "id": "expedition-backdrop-company",
+          "backdrop": "company",
+          "row": 0
+        },
+        {
+          "id": "expedition-backdrop-office",
+          "backdrop": "office",
+          "row": 0
+        },
+        {
+          "id": "expedition-backdrop-asset",
+          "backdrop": "asset",
+          "row": 0
+        },
+        {
+          "id": "expedition-backdrop-national",
+          "backdrop": "national",
+          "row": 0
+        },
+        {
+          "id": "expedition-backdrop-global",
+          "backdrop": "global",
+          "row": 0
+        },
+        {
+          "id": "expedition-backdrop-future",
+          "backdrop": "future",
+          "row": 0
+        },
+        {
+          "id": "expedition-backdrop-summit",
+          "backdrop": "summit",
+          "row": 0
+        }
+      ]
+    }
+  ]
+}

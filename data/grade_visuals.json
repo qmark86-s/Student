@@ -37,6 +37,23 @@
       "midterm": "중간 색종이 왕",
       "final": "기말 알림장",
       "year_boss": "1학년 학년고사장"
+    },
+    "studentAsset": "main-student-000",
+    "normalMonsterAssets": [
+      "main-monster-000",
+      "main-monster-001",
+      "main-monster-002",
+      "main-monster-003",
+      "main-monster-004",
+      "main-monster-005",
+      "main-monster-006",
+      "main-monster-007"
+    ],
+    "examMonsterAssets": {
+      "march_eval": "main-monster-128",
+      "midterm": "main-monster-129",
+      "final": "main-monster-130",
+      "year_boss": "main-monster-131"
     }
   },
   {
@@ -77,6 +94,23 @@
       "midterm": "중간 독서록장",
       "final": "기말 공책 골렘",
       "year_boss": "2학년 학년고사장"
+    },
+    "studentAsset": "main-student-001",
+    "normalMonsterAssets": [
+      "main-monster-008",
+      "main-monster-009",
+      "main-monster-010",
+      "main-monster-011",
+      "main-monster-012",
+      "main-monster-013",
+      "main-monster-014",
+      "main-monster-015"
+    ],
+    "examMonsterAssets": {
+      "march_eval": "main-monster-132",
+      "midterm": "main-monster-133",
+      "final": "main-monster-134",
+      "year_boss": "main-monster-135"
     }
   },
   {
@@ -117,6 +151,23 @@
       "midterm": "중간 사회 지도",
       "final": "기말 실험장",
       "year_boss": "3학년 학년고사장"
+    },
+    "studentAsset": "main-student-002",
+    "normalMonsterAssets": [
+      "main-monster-016",
+      "main-monster-017",
+      "main-monster-018",
+      "main-monster-019",
+      "main-monster-020",
+      "main-monster-021",
+      "main-monster-022",
+      "main-monster-023"
+    ],
+    "examMonsterAssets": {
+      "march_eval": "main-monster-136",
+      "midterm": "main-monster-137",
+      "final": "main-monster-138",
+      "year_boss": "main-monster-139"
     }
   },
   {
@@ -157,6 +208,23 @@
       "midterm": "중간 단원평가",
       "final": "기말 독후감",
       "year_boss": "4학년 학년고사장"
+    },
+    "studentAsset": "main-student-003",
+    "normalMonsterAssets": [
+      "main-monster-024",
+      "main-monster-025",
+      "main-monster-026",
+      "main-monster-027",
+      "main-monster-028",
+      "main-monster-029",
+      "main-monster-030",
+      "main-monster-031"
+    ],
+    "examMonsterAssets": {
+      "march_eval": "main-monster-140",
+      "midterm": "main-monster-141",
+      "final": "main-monster-142",
+      "year_boss": "main-monster-143"
     }
   },
   {
@@ -197,6 +265,23 @@
       "midterm": "중간 과학 관찰장",
       "final": "기말 역사 카드",
       "year_boss": "5학년 학년고사장"
+    },
+    "studentAsset": "main-student-004",
+    "normalMonsterAssets": [
+      "main-monster-032",
+      "main-monster-033",
+      "main-monster-034",
+      "main-monster-035",
+      "main-monster-036",
+      "main-monster-037",
+      "main-monster-038",
+      "main-monster-039"
+    ],
+    "examMonsterAssets": {
+      "march_eval": "main-monster-144",
+      "midterm": "main-monster-145",
+      "final": "main-monster-146",
+      "year_boss": "main-monster-147"
     }
   },
   {
@@ -237,6 +322,23 @@
       "midterm": "중간 총정리장",
       "final": "기말 졸업시험",
       "year_boss": "초등 졸업고사"
+    },
+    "studentAsset": "main-student-005",
+    "normalMonsterAssets": [
+      "main-monster-040",
+      "main-monster-041",
+      "main-monster-042",
+      "main-monster-043",
+      "main-monster-044",
+      "main-monster-045",
+      "main-monster-046",
+      "main-monster-047"
+    ],
+    "examMonsterAssets": {
+      "march_eval": "main-monster-148",
+      "midterm": "main-monster-149",
+      "final": "main-monster-150",
+      "year_boss": "main-monster-151"
     }
   },
   {
@@ -277,6 +379,23 @@
       "midterm": "중간고사 노트",
       "final": "기말고사 더미",
       "year_boss": "중1 학년고사장"
+    },
+    "studentAsset": "main-student-006",
+    "normalMonsterAssets": [
+      "main-monster-048",
+      "main-monster-049",
+      "main-monster-050",
+      "main-monster-051",
+      "main-monster-052",
+      "main-monster-053",
+      "main-monster-054",
+      "main-monster-055"
+    ],
+    "examMonsterAssets": {
+      "march_eval": "main-monster-152",
+      "midterm": "main-monster-153",
+      "final": "main-monster-154",
+      "year_boss": "main-monster-155"
     }
   },
   {
@@ -317,6 +436,23 @@
       "midterm": "중간 실험보고서",
       "final": "기말 연표장",
       "year_boss": "중2 학년고사장"
+    },
+    "studentAsset": "main-student-007",
+    "normalMonsterAssets": [
+      "main-monster-056",
+      "main-monster-057",
+      "main-monster-058",
+      "main-monster-059",
+      "main-monster-060",
+      "main-monster-061",
+      "main-monster-062",
+      "main-monster-063"
+    ],
+    "examMonsterAssets": {
+      "march_eval": "main-monster-156",
+      "midterm": "main-monster-157",
+      "final": "main-monster-158",
+      "year_boss": "main-monster-159"
     }
   },
   {
@@ -357,6 +493,23 @@
       "midterm": "중간 총정리장",
       "final": "기말 내신 보스",
       "year_boss": "중등 졸업고사"
+    },
+    "studentAsset": "main-student-008",
+    "normalMonsterAssets": [
+      "main-monster-064",
+      "main-monster-065",
+      "main-monster-066",
+      "main-monster-067",
+      "main-monster-068",
+      "main-monster-069",
+      "main-monster-070",
+      "main-monster-071"
+    ],
+    "examMonsterAssets": {
+      "march_eval": "main-monster-160",
+      "midterm": "main-monster-161",
+      "final": "main-monster-162",
+      "year_boss": "main-monster-163"
     }
   },
   {
@@ -397,6 +550,23 @@
       "june_mock": "6월 모의평가",
       "september_mock": "9월 모의평가",
       "suneung": "고1 전국연합 보스"
+    },
+    "studentAsset": "main-student-009",
+    "normalMonsterAssets": [
+      "main-monster-072",
+      "main-monster-073",
+      "main-monster-074",
+      "main-monster-075",
+      "main-monster-076",
+      "main-monster-077",
+      "main-monster-078",
+      "main-monster-079"
+    ],
+    "examMonsterAssets": {
+      "march_mock": "main-monster-164",
+      "june_mock": "main-monster-165",
+      "september_mock": "main-monster-166",
+      "suneung": "main-monster-167"
     }
   },
   {
@@ -437,6 +607,23 @@
       "june_mock": "6월 계열평가",
       "september_mock": "9월 탐구평가",
       "suneung": "고2 전국연합 보스"
+    },
+    "studentAsset": "main-student-010",
+    "normalMonsterAssets": [
+      "main-monster-080",
+      "main-monster-081",
+      "main-monster-082",
+      "main-monster-083",
+      "main-monster-084",
+      "main-monster-085",
+      "main-monster-086",
+      "main-monster-087"
+    ],
+    "examMonsterAssets": {
+      "march_mock": "main-monster-168",
+      "june_mock": "main-monster-169",
+      "september_mock": "main-monster-170",
+      "suneung": "main-monster-171"
     }
   },
   {
@@ -477,6 +664,23 @@
       "june_mock": "6월 평가원 보스",
       "september_mock": "9월 평가원 보스",
       "suneung": "수능 시험장"
+    },
+    "studentAsset": "main-student-011",
+    "normalMonsterAssets": [
+      "main-monster-088",
+      "main-monster-089",
+      "main-monster-090",
+      "main-monster-091",
+      "main-monster-092",
+      "main-monster-093",
+      "main-monster-094",
+      "main-monster-095"
+    ],
+    "examMonsterAssets": {
+      "march_mock": "main-monster-172",
+      "june_mock": "main-monster-173",
+      "september_mock": "main-monster-174",
+      "suneung": "main-monster-175"
     }
   },
   {
@@ -517,6 +721,23 @@
       "june_mock": "N수 6월 평가원",
       "september_mock": "N수 9월 평가원",
       "suneung": "N수 수능 시험장"
+    },
+    "studentAsset": "main-student-012",
+    "normalMonsterAssets": [
+      "main-monster-096",
+      "main-monster-097",
+      "main-monster-098",
+      "main-monster-099",
+      "main-monster-100",
+      "main-monster-101",
+      "main-monster-102",
+      "main-monster-103"
+    ],
+    "examMonsterAssets": {
+      "march_mock": "main-monster-176",
+      "june_mock": "main-monster-177",
+      "september_mock": "main-monster-178",
+      "suneung": "main-monster-179"
     }
   },
   {
@@ -557,6 +778,23 @@
       "june_mock": "2수 6월 평가원",
       "september_mock": "2수 9월 평가원",
       "suneung": "2수 수능 시험장"
+    },
+    "studentAsset": "main-student-013",
+    "normalMonsterAssets": [
+      "main-monster-104",
+      "main-monster-105",
+      "main-monster-106",
+      "main-monster-107",
+      "main-monster-108",
+      "main-monster-109",
+      "main-monster-110",
+      "main-monster-111"
+    ],
+    "examMonsterAssets": {
+      "march_mock": "main-monster-180",
+      "june_mock": "main-monster-181",
+      "september_mock": "main-monster-182",
+      "suneung": "main-monster-183"
     }
   },
   {
@@ -597,6 +835,23 @@
       "june_mock": "장수 6월 평가원",
       "september_mock": "장수 9월 평가원",
       "suneung": "장수 수능 시험장"
+    },
+    "studentAsset": "main-student-014",
+    "normalMonsterAssets": [
+      "main-monster-112",
+      "main-monster-113",
+      "main-monster-114",
+      "main-monster-115",
+      "main-monster-116",
+      "main-monster-117",
+      "main-monster-118",
+      "main-monster-119"
+    ],
+    "examMonsterAssets": {
+      "march_mock": "main-monster-184",
+      "june_mock": "main-monster-185",
+      "september_mock": "main-monster-186",
+      "suneung": "main-monster-187"
     }
   },
   {
@@ -637,6 +892,23 @@
       "june_mock": "N수 6월 파이널",
       "september_mock": "N수 9월 파이널",
       "suneung": "N수 수능 시험장"
+    },
+    "studentAsset": "main-student-015",
+    "normalMonsterAssets": [
+      "main-monster-120",
+      "main-monster-121",
+      "main-monster-122",
+      "main-monster-123",
+      "main-monster-124",
+      "main-monster-125",
+      "main-monster-126",
+      "main-monster-127"
+    ],
+    "examMonsterAssets": {
+      "march_mock": "main-monster-188",
+      "june_mock": "main-monster-189",
+      "september_mock": "main-monster-190",
+      "suneung": "main-monster-191"
     }
   }
 ]

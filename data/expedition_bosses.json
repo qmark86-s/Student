@@ -18,7 +18,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.16,
-    "description": "낡은 골목 입구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "낡은 골목 입구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "shelter-boss"
   },
   {
     "id": "chapter-01-midboss-02",
@@ -39,7 +40,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.19,
-    "description": "임시 쉼터 대기줄 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "임시 쉼터 대기줄 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "shelter-boss"
   },
   {
     "id": "chapter-01-midboss-03",
@@ -61,7 +63,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.21,
-    "description": "편의점 앞 새벽 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "편의점 앞 새벽 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "shelter-boss"
   },
   {
     "id": "chapter-01-midboss-04",
@@ -83,7 +86,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.24,
-    "description": "구청 민원 창구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "구청 민원 창구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "shelter-boss"
   },
   {
     "id": "chapter-01-midboss-05",
@@ -104,7 +108,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.26,
-    "description": "식비 계산 골목 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "식비 계산 골목 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "shelter-boss"
   },
   {
     "id": "chapter-01-midboss-06",
@@ -126,7 +131,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.29,
-    "description": "무료 상담소 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "무료 상담소 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "shelter-boss"
   },
   {
     "id": "chapter-01-midboss-07",
@@ -147,7 +153,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.31,
-    "description": "고시원 복도 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "고시원 복도 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "shelter-boss"
   },
   {
     "id": "chapter-01-midboss-08",
@@ -169,7 +176,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.34,
-    "description": "직업소개소 앞 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "직업소개소 앞 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "shelter-boss"
   },
   {
     "id": "chapter-01-midboss-09",
@@ -191,7 +199,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.36,
-    "description": "체납 고지서 거리 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "체납 고지서 거리 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "shelter-boss"
   },
   {
     "id": "chapter-01-boss",
@@ -214,7 +223,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.37,
-    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다."
+    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다.",
+    "bossAsset": "shelter-boss"
   },
   {
     "id": "chapter-02-midboss-01",
@@ -236,7 +246,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.22,
-    "description": "원룸촌 입구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "원룸촌 입구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "studio-boss"
   },
   {
     "id": "chapter-02-midboss-02",
@@ -257,7 +268,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.24,
-    "description": "고시원 계단 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "고시원 계단 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "studio-boss"
   },
   {
     "id": "chapter-02-midboss-03",
@@ -279,7 +291,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.27,
-    "description": "편의점 야간 근무 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "편의점 야간 근무 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "studio-boss"
   },
   {
     "id": "chapter-02-midboss-04",
@@ -301,7 +314,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.29,
-    "description": "카페 알바 거리 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "카페 알바 거리 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "studio-boss"
   },
   {
     "id": "chapter-02-midboss-05",
@@ -322,7 +336,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.32,
-    "description": "버스정류장 환승 미로 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "버스정류장 환승 미로 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "studio-boss"
   },
   {
     "id": "chapter-02-midboss-06",
@@ -343,7 +358,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.34,
-    "description": "면접 대기실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "면접 대기실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "studio-boss"
   },
   {
     "id": "chapter-02-midboss-07",
@@ -365,7 +381,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.37,
-    "description": "자격증 학원 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "자격증 학원 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "studio-boss"
   },
   {
     "id": "chapter-02-midboss-08",
@@ -387,7 +404,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.39,
-    "description": "근로계약 상담소 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "근로계약 상담소 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "studio-boss"
   },
   {
     "id": "chapter-02-midboss-09",
@@ -409,7 +427,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.42,
-    "description": "알바비 정산 창구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "알바비 정산 창구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "studio-boss"
   },
   {
     "id": "chapter-02-boss",
@@ -432,7 +451,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.46,
-    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다."
+    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다.",
+    "bossAsset": "studio-boss"
   },
   {
     "id": "chapter-03-midboss-01",
@@ -453,7 +473,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.27,
-    "description": "빌라촌 골목 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "빌라촌 골목 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "neighborhood-boss"
   },
   {
     "id": "chapter-03-midboss-02",
@@ -475,7 +496,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.3,
-    "description": "동네 시장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "동네 시장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "neighborhood-boss"
   },
   {
     "id": "chapter-03-midboss-03",
@@ -498,7 +520,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.32,
-    "description": "동네 병원 대기실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "동네 병원 대기실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "neighborhood-boss"
   },
   {
     "id": "chapter-03-midboss-04",
@@ -520,7 +543,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.35,
-    "description": "학원가 입구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "학원가 입구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "neighborhood-boss"
   },
   {
     "id": "chapter-03-midboss-05",
@@ -542,7 +566,8 @@
       "math"
     ],
     "difficultyMultiplier": 1.37,
-    "description": "주민센터 게시판 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "주민센터 게시판 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "neighborhood-boss"
   },
   {
     "id": "chapter-03-midboss-06",
@@ -564,7 +589,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.4,
-    "description": "소상공인 장부 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "소상공인 장부 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "neighborhood-boss"
   },
   {
     "id": "chapter-03-midboss-07",
@@ -586,7 +612,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.42,
-    "description": "동네 부동산 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "동네 부동산 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "neighborhood-boss"
   },
   {
     "id": "chapter-03-midboss-08",
@@ -608,7 +635,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.45,
-    "description": "보험 상담 창구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "보험 상담 창구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "neighborhood-boss"
   },
   {
     "id": "chapter-03-midboss-09",
@@ -630,7 +658,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.47,
-    "description": "생활비 회의실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "생활비 회의실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "neighborhood-boss"
   },
   {
     "id": "chapter-03-boss",
@@ -653,7 +682,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.55,
-    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다."
+    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다.",
+    "bossAsset": "neighborhood-boss"
   },
   {
     "id": "chapter-04-midboss-01",
@@ -675,7 +705,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.33,
-    "description": "신도시 출근길 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "신도시 출근길 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "company-boss"
   },
   {
     "id": "chapter-04-midboss-02",
@@ -698,7 +729,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.35,
-    "description": "오피스 로비 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "오피스 로비 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "company-boss"
   },
   {
     "id": "chapter-04-midboss-03",
@@ -719,7 +751,8 @@
       "math"
     ],
     "difficultyMultiplier": 1.38,
-    "description": "회의실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "회의실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "company-boss"
   },
   {
     "id": "chapter-04-midboss-04",
@@ -740,7 +773,8 @@
       "korean"
     ],
     "difficultyMultiplier": 1.4,
-    "description": "엑셀 늪지 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "엑셀 늪지 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "company-boss"
   },
   {
     "id": "chapter-04-midboss-05",
@@ -762,7 +796,8 @@
       "social"
     ],
     "difficultyMultiplier": 1.43,
-    "description": "메일함 폭풍 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "메일함 폭풍 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "company-boss"
   },
   {
     "id": "chapter-04-midboss-06",
@@ -784,7 +819,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.45,
-    "description": "발표 자료실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "발표 자료실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "company-boss"
   },
   {
     "id": "chapter-04-midboss-07",
@@ -808,7 +844,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.48,
-    "description": "성과 평가실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "성과 평가실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "company-boss"
   },
   {
     "id": "chapter-04-midboss-08",
@@ -831,7 +868,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.5,
-    "description": "팀 프로젝트 전장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "팀 프로젝트 전장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "company-boss"
   },
   {
     "id": "chapter-04-midboss-09",
@@ -854,7 +892,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.53,
-    "description": "야근 복도 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "야근 복도 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "company-boss"
   },
   {
     "id": "chapter-04-boss",
@@ -878,7 +917,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.64,
-    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다."
+    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다.",
+    "bossAsset": "company-boss"
   },
   {
     "id": "chapter-05-midboss-01",
@@ -901,7 +941,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.38,
-    "description": "법원 앞 계단 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "법원 앞 계단 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "office-boss"
   },
   {
     "id": "chapter-05-midboss-02",
@@ -923,7 +964,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.41,
-    "description": "대학병원 응급실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "대학병원 응급실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "office-boss"
   },
   {
     "id": "chapter-05-midboss-03",
@@ -947,7 +989,8 @@
       "korean"
     ],
     "difficultyMultiplier": 1.43,
-    "description": "연구소 복도 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "연구소 복도 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "office-boss"
   },
   {
     "id": "chapter-05-midboss-04",
@@ -970,7 +1013,8 @@
       "korean"
     ],
     "difficultyMultiplier": 1.46,
-    "description": "증권가 전광판 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "증권가 전광판 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "office-boss"
   },
   {
     "id": "chapter-05-midboss-05",
@@ -992,7 +1036,8 @@
       "social"
     ],
     "difficultyMultiplier": 1.48,
-    "description": "특허 사무소 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "특허 사무소 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "office-boss"
   },
   {
     "id": "chapter-05-midboss-06",
@@ -1014,7 +1059,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.51,
-    "description": "고급 회의실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "고급 회의실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "office-boss"
   },
   {
     "id": "chapter-05-midboss-07",
@@ -1037,7 +1083,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.53,
-    "description": "전문직 네트워크 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "전문직 네트워크 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "office-boss"
   },
   {
     "id": "chapter-05-midboss-08",
@@ -1061,7 +1108,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.56,
-    "description": "컨설팅 워룸 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "컨설팅 워룸 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "office-boss"
   },
   {
     "id": "chapter-05-midboss-09",
@@ -1084,7 +1132,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.58,
-    "description": "고층 오피스 야경 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "고층 오피스 야경 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "office-boss"
   },
   {
     "id": "chapter-05-boss",
@@ -1106,7 +1155,8 @@
     ],
     "resistSubjects": [],
     "difficultyMultiplier": 1.73,
-    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다."
+    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다.",
+    "bossAsset": "office-boss"
   },
   {
     "id": "chapter-06-midboss-01",
@@ -1129,7 +1179,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.44,
-    "description": "초대장 없는 로비 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "초대장 없는 로비 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "asset-boss"
   },
   {
     "id": "chapter-06-midboss-02",
@@ -1152,7 +1203,8 @@
       "korean"
     ],
     "difficultyMultiplier": 1.46,
-    "description": "투자 세미나 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "투자 세미나 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "asset-boss"
   },
   {
     "id": "chapter-06-midboss-03",
@@ -1173,7 +1225,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.49,
-    "description": "자산관리 사무실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "자산관리 사무실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "asset-boss"
   },
   {
     "id": "chapter-06-midboss-04",
@@ -1196,7 +1249,8 @@
       "math"
     ],
     "difficultyMultiplier": 1.51,
-    "description": "평판 라운지 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "평판 라운지 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "asset-boss"
   },
   {
     "id": "chapter-06-midboss-05",
@@ -1219,7 +1273,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.54,
-    "description": "정보 격차의 계단 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "정보 격차의 계단 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "asset-boss"
   },
   {
     "id": "chapter-06-midboss-06",
@@ -1243,7 +1298,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.56,
-    "description": "비공개 만찬장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "비공개 만찬장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "asset-boss"
   },
   {
     "id": "chapter-06-midboss-07",
@@ -1266,7 +1322,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.59,
-    "description": "부동산 전망대 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "부동산 전망대 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "asset-boss"
   },
   {
     "id": "chapter-06-midboss-08",
@@ -1289,7 +1346,8 @@
       "social"
     ],
     "difficultyMultiplier": 1.61,
-    "description": "스타트업 피칭룸 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "스타트업 피칭룸 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "asset-boss"
   },
   {
     "id": "chapter-06-midboss-09",
@@ -1312,7 +1370,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.64,
-    "description": "프라이빗 네트워크 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "프라이빗 네트워크 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "asset-boss"
   },
   {
     "id": "chapter-06-boss",
@@ -1336,7 +1395,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.82,
-    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다."
+    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다.",
+    "bossAsset": "asset-boss"
   },
   {
     "id": "chapter-07-midboss-01",
@@ -1358,7 +1418,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.49,
-    "description": "정부청사 입구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "정부청사 입구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "national-boss"
   },
   {
     "id": "chapter-07-midboss-02",
@@ -1380,7 +1441,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.52,
-    "description": "예산 회의실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "예산 회의실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "national-boss"
   },
   {
     "id": "chapter-07-midboss-03",
@@ -1402,7 +1464,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.54,
-    "description": "공청회장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "공청회장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "national-boss"
   },
   {
     "id": "chapter-07-midboss-04",
@@ -1424,7 +1487,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.57,
-    "description": "도시 계획실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "도시 계획실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "national-boss"
   },
   {
     "id": "chapter-07-midboss-05",
@@ -1447,7 +1511,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.59,
-    "description": "재난 대응 본부 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "재난 대응 본부 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "national-boss"
   },
   {
     "id": "chapter-07-midboss-06",
@@ -1470,7 +1535,8 @@
       "korean"
     ],
     "difficultyMultiplier": 1.62,
-    "description": "환경 정책 구역 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "환경 정책 구역 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "national-boss"
   },
   {
     "id": "chapter-07-midboss-07",
@@ -1492,7 +1558,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.64,
-    "description": "교육 정책실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "교육 정책실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "national-boss"
   },
   {
     "id": "chapter-07-midboss-08",
@@ -1516,7 +1583,8 @@
       "english"
     ],
     "difficultyMultiplier": 1.67,
-    "description": "보건 정책센터 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "보건 정책센터 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "national-boss"
   },
   {
     "id": "chapter-07-midboss-09",
@@ -1540,7 +1608,8 @@
       "social"
     ],
     "difficultyMultiplier": 1.69,
-    "description": "국책 연구소 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "국책 연구소 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "national-boss"
   },
   {
     "id": "chapter-07-boss",
@@ -1562,7 +1631,8 @@
     ],
     "resistSubjects": [],
     "difficultyMultiplier": 1.91,
-    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다."
+    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다.",
+    "bossAsset": "national-boss"
   },
   {
     "id": "chapter-08-midboss-01",
@@ -1583,7 +1653,8 @@
       "math"
     ],
     "difficultyMultiplier": 1.55,
-    "description": "국제공항 터미널 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "국제공항 터미널 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "global-boss"
   },
   {
     "id": "chapter-08-midboss-02",
@@ -1605,7 +1676,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.57,
-    "description": "출입국 서류 심사대 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "출입국 서류 심사대 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "global-boss"
   },
   {
     "id": "chapter-08-midboss-03",
@@ -1628,7 +1700,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.6,
-    "description": "무역항 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "무역항 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "global-boss"
   },
   {
     "id": "chapter-08-midboss-04",
@@ -1652,7 +1725,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.62,
-    "description": "해외 계약 회의실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "해외 계약 회의실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "global-boss"
   },
   {
     "id": "chapter-08-midboss-05",
@@ -1675,7 +1749,8 @@
       "math"
     ],
     "difficultyMultiplier": 1.65,
-    "description": "글로벌 메일함 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "글로벌 메일함 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "global-boss"
   },
   {
     "id": "chapter-08-midboss-06",
@@ -1699,7 +1774,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.67,
-    "description": "국제 토론장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "국제 토론장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "global-boss"
   },
   {
     "id": "chapter-08-midboss-07",
@@ -1723,7 +1799,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.7,
-    "description": "글로벌 투자 심사실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "글로벌 투자 심사실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "global-boss"
   },
   {
     "id": "chapter-08-midboss-08",
@@ -1746,7 +1823,8 @@
       "math"
     ],
     "difficultyMultiplier": 1.72,
-    "description": "다국적 프로젝트룸 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "다국적 프로젝트룸 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "global-boss"
   },
   {
     "id": "chapter-08-midboss-09",
@@ -1768,7 +1846,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.75,
-    "description": "글로벌 발표장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "글로벌 발표장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "global-boss"
   },
   {
     "id": "chapter-08-boss",
@@ -1792,7 +1871,8 @@
       "science"
     ],
     "difficultyMultiplier": 2,
-    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다."
+    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다.",
+    "bossAsset": "global-boss"
   },
   {
     "id": "chapter-09-midboss-01",
@@ -1814,7 +1894,8 @@
       "social"
     ],
     "difficultyMultiplier": 1.6,
-    "description": "AI 연구소 입구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "AI 연구소 입구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "future-boss"
   },
   {
     "id": "chapter-09-midboss-02",
@@ -1835,7 +1916,8 @@
       "korean"
     ],
     "difficultyMultiplier": 1.63,
-    "description": "데이터 센터 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "데이터 센터 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "future-boss"
   },
   {
     "id": "chapter-09-midboss-03",
@@ -1856,7 +1938,8 @@
       "social"
     ],
     "difficultyMultiplier": 1.65,
-    "description": "바이오 실험실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "바이오 실험실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "future-boss"
   },
   {
     "id": "chapter-09-midboss-04",
@@ -1878,7 +1961,8 @@
       "korean"
     ],
     "difficultyMultiplier": 1.68,
-    "description": "로봇 공장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "로봇 공장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "future-boss"
   },
   {
     "id": "chapter-09-midboss-05",
@@ -1903,7 +1987,8 @@
       "math"
     ],
     "difficultyMultiplier": 1.7,
-    "description": "AI 윤리 재판장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "AI 윤리 재판장 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "future-boss"
   },
   {
     "id": "chapter-09-midboss-06",
@@ -1925,7 +2010,8 @@
       "korean"
     ],
     "difficultyMultiplier": 1.73,
-    "description": "우주 관제센터 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "우주 관제센터 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "future-boss"
   },
   {
     "id": "chapter-09-midboss-07",
@@ -1947,7 +2033,8 @@
       "social"
     ],
     "difficultyMultiplier": 1.75,
-    "description": "양자 서버실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "양자 서버실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "future-boss"
   },
   {
     "id": "chapter-09-midboss-08",
@@ -1970,7 +2057,8 @@
       "korean"
     ],
     "difficultyMultiplier": 1.78,
-    "description": "미래 의학 연구소 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "미래 의학 연구소 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "future-boss"
   },
   {
     "id": "chapter-09-midboss-09",
@@ -1992,7 +2080,8 @@
       "social"
     ],
     "difficultyMultiplier": 1.8,
-    "description": "우주 엘리베이터 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "우주 엘리베이터 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "future-boss"
   },
   {
     "id": "chapter-09-boss",
@@ -2015,7 +2104,8 @@
       "korean"
     ],
     "difficultyMultiplier": 2.09,
-    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다."
+    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다.",
+    "bossAsset": "future-boss"
   },
   {
     "id": "chapter-10-midboss-01",
@@ -2038,7 +2128,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.66,
-    "description": "세계 정상회의장 입구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "세계 정상회의장 입구 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "summit-boss"
   },
   {
     "id": "chapter-10-midboss-02",
@@ -2062,7 +2153,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.68,
-    "description": "세계 경제 위기실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "세계 경제 위기실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "summit-boss"
   },
   {
     "id": "chapter-10-midboss-03",
@@ -2087,7 +2179,8 @@
       "korean"
     ],
     "difficultyMultiplier": 1.71,
-    "description": "기후 대응 본부 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "기후 대응 본부 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "summit-boss"
   },
   {
     "id": "chapter-10-midboss-04",
@@ -2112,7 +2205,8 @@
       "math"
     ],
     "difficultyMultiplier": 1.73,
-    "description": "글로벌 보건 회의 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "글로벌 보건 회의 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "summit-boss"
   },
   {
     "id": "chapter-10-midboss-05",
@@ -2136,7 +2230,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.76,
-    "description": "세계 교육 재단 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "세계 교육 재단 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "summit-boss"
   },
   {
     "id": "chapter-10-midboss-06",
@@ -2160,7 +2255,8 @@
       "korean"
     ],
     "difficultyMultiplier": 1.78,
-    "description": "우주 개척 회의 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "우주 개척 회의 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "summit-boss"
   },
   {
     "id": "chapter-10-midboss-07",
@@ -2184,7 +2280,8 @@
       "science"
     ],
     "difficultyMultiplier": 1.81,
-    "description": "국제 분쟁 조정실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "국제 분쟁 조정실 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "summit-boss"
   },
   {
     "id": "chapter-10-midboss-08",
@@ -2209,7 +2306,8 @@
       "math"
     ],
     "difficultyMultiplier": 1.83,
-    "description": "글로벌 기술 윤리 위원회 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "글로벌 기술 윤리 위원회 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "summit-boss"
   },
   {
     "id": "chapter-10-midboss-09",
@@ -2234,7 +2332,8 @@
     ],
     "resistSubjects": [],
     "difficultyMultiplier": 1.86,
-    "description": "인류 미래 포럼 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다."
+    "description": "인류 미래 포럼 100 Stage 구간을 막는 중간 보스. 실패 시 해당 구간 첫 Stage로 회귀한다.",
+    "bossAsset": "summit-boss"
   },
   {
     "id": "chapter-10-boss",
@@ -2259,6 +2358,7 @@
     ],
     "resistSubjects": [],
     "difficultyMultiplier": 2.18,
-    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다."
+    "description": "undefined을 마무리하는 챕터 보스. 클리어 시 다음 생활권이 열린다.",
+    "bossAsset": "summit-boss"
   }
 ]

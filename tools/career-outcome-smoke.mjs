@@ -1,9 +1,10 @@
-import { createReadStream, existsSync, readFileSync, statSync } from "node:fs";
+import { createReadStream, existsSync, mkdirSync, readFileSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
 import { chromium } from "@playwright/test";
 
 const root = resolve("dist");
+const outputDir = resolve("artifacts/career-outcome-smoke");
 const preferredPort = Number(process.env.CAREER_SMOKE_PORT || 5494);
 const saveKey = "student-idle-rpg-save-v1";
 const resultTabIndex = 5;
@@ -171,6 +172,7 @@ function makeResultState(careers, university) {
 const careers = JSON.parse(readFileSync(resolve("data/careers.json"), "utf8"));
 const universities = JSON.parse(readFileSync(resolve("data/universities.json"), "utf8"));
 const topUniversity = universities.slice().sort((a, b) => a.gameRank - b.gameRank)[0];
+mkdirSync(outputDir, { recursive: true });
 const server = createStaticServer();
 const port = await listenAvailable(server);
 const browser = await chromium.launch({ headless: true });
@@ -201,6 +203,7 @@ try {
     const availableBadgeText = `${String.fromCharCode(0xac1c)} ${String.fromCharCode(0xac00, 0xb2a5)}`;
     const powerText = `${String.fromCharCode(0xc804, 0xd22c)} x`;
     const buttons = [...document.querySelectorAll(".career-choice.ranked")];
+    const portraits = [...document.querySelectorAll(".career-choice-aura.career-portrait")];
     const enabled = buttons.filter((button) => !button.disabled);
     const text = document.body.innerText;
     const doc = document.documentElement;
@@ -208,6 +211,8 @@ try {
     return {
       rankedButtons: buttons.length,
       enabledButtons: enabled.length,
+      portraitButtons: portraits.length,
+      portraitBackgrounds: portraits.filter((portrait) => getComputedStyle(portrait).backgroundImage.includes("data:image")).length,
       hasOldThreeChoice: text.includes(oldThreeChoice),
       hasAvailableBadge: text.includes(availableBadgeText),
       hasRankOne: text.includes("#1"),
@@ -215,10 +220,14 @@ try {
       horizontalOverflow: Math.max(0, doc.scrollWidth - doc.clientWidth),
     };
   });
+  const screenshotPath = resolve(outputDir, "career-choice-ranked.png");
+  await page.screenshot({ path: screenshotPath, fullPage: true });
 
   const failures = [];
   if (metrics.rankedButtons !== careers.length) failures.push(`Expected ${careers.length} ranked buttons, got ${metrics.rankedButtons}`);
   if (metrics.enabledButtons < 1) failures.push("Expected at least one enabled career button");
+  if (metrics.portraitButtons !== careers.length) failures.push(`Expected ${careers.length} career portraits, got ${metrics.portraitButtons}`);
+  if (metrics.portraitBackgrounds !== careers.length) failures.push(`Expected ${careers.length} portrait backgrounds, got ${metrics.portraitBackgrounds}`);
   if (metrics.hasOldThreeChoice) failures.push("Old 3-choice label remains visible");
   if (!metrics.hasAvailableBadge) failures.push("Available count badge is missing");
   if (!metrics.hasRankOne) failures.push("Rank #1 label is missing");
@@ -226,7 +235,7 @@ try {
   if (metrics.horizontalOverflow > 4) failures.push(`Horizontal overflow ${metrics.horizontalOverflow}px`);
   if (consoleErrors.length > 0) failures.push(`Console errors: ${consoleErrors.slice(0, 3).join(" | ")}`);
 
-  console.log(JSON.stringify({ baseUrl: `http://127.0.0.1:${port}/`, metrics, failures }, null, 2));
+  console.log(JSON.stringify({ baseUrl: `http://127.0.0.1:${port}/`, metrics, screenshotPath, failures }, null, 2));
 
   if (failures.length > 0) {
     console.error(`CAREER_OUTCOME_SMOKE_FAILED failures=${failures.length}`);

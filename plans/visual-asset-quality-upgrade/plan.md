@@ -85,3 +85,68 @@
 - 직업 결과 화면과 도감에서 직업별 고유 초상화가 표시된다.
 - 모바일 360px/412px smoke에서 깨진 이미지와 가로 overflow가 없다.
 - `npm run verify:mobile`에 비주얼 자산 경로 검증이 포함된다.
+- `npm run visual:qa`로 자산 생성, 품질 감사, 컨택트시트, 화면 적용 검증을 반복할 수 있다.
+
+## 1차 구현 결과
+
+- 완료일: 2026-06-20
+- 기본 학년 전투 학생 16프레임과 학년/수능 몬스터 192프레임을 새 픽셀 아틀라스로 재생성했다.
+- 원정대 동료 13종, 원정대 몬스터/보스 40종, 직업 초상화 62종 아틀라스를 추가했다.
+- `data/careers.json`, `data/grade_visuals.json`, `data/expedition_stages.json`, `data/expedition_bosses.json`에 비주얼 자산 키를 추가했다.
+- `data/visual_assets.json`, `data/visual_asset_quality_gates.json`, `src/snapshot/visual-assets.css`, `tools/build-visual-assets.mjs`, `tools/verify-visual-assets.mjs`로 재생성 가능한 자산 파이프라인을 만들었다.
+- `tools/visual-asset-audit.mjs`, `tools/visual-asset-contact-sheet.mjs`, `tools/visual-asset-smoke.mjs`로 품질 감사, 컨택트시트, 화면 적용 검증을 시스템화했다.
+- `npm run verify:mobile`에서 비주얼 자산 생성/검증, 메인 전투/원정대 비주얼 스모크, 모바일 스크린샷, 직업 초상화 62개, N수 흐름을 함께 검증한다.
+- 양산 방법론은 `docs/visual_asset_production.md`에 정리했다.
+
+## 다음 차수 후보
+
+- AI 이미지 생성 결과물을 원본 컨셉 보드로 저장하고, 선별된 스프라이트를 수작업 보정해 아틀라스 품질을 더 끌어올린다.
+- 원정대 파티가 비어 있을 때도 대표 학생/실루엣이 보이도록 초기 파티 안내 화면을 개선한다.
+- WebP 변환과 PNG fallback을 추가해 APK 번들 크기 예산을 더 엄격하게 관리한다.
+
+## 2차 적용 결과
+
+- 완료일: 2026-06-20
+- 전투 하단 텍스트 카드를 메인 전투장에서 제거하고, 전투장 안 `battle-scene-enemy` 편대로 교체했다.
+- 12개월 전투는 일반 몬스터와 보스 몬스터가 섞인 12마리 캐릭터 편대로 보인다.
+- 보스 몬스터만 캐릭터 위 HP바를 표시하고, 일반 몬스터의 반복 텍스트/HP바는 제거했다.
+- 수능 전투는 전투장 안 5마리 수능 몬스터와 HP바로 표시된다.
+- 사용자가 확정한 컨택트시트 품질 기준을 `docs/visual_asset_production.md`에 추가했다.
+- 구현 상세는 `implementations/battle-scene-enemy-lineup/implementation.md`에 기록했다.
+
+## 3차 적용 결과
+
+- 완료일: 2026-06-20
+- 일반 방치형 RPG 전투처럼 보이도록 전투장 배경, 바닥, 학생, 몬스터 편대, 피격 이펙트, 학습 도우미 모션을 추가했다.
+- 기존 원거리 투사체 느낌의 `pencil-shot`을 메인 전투장에서는 숨기고 학생의 근접 slash 이펙트로 대체했다.
+- 모든 전투장 몬스터가 slot별 지연값으로 idle/breath 모션을 갖고, 현재 타깃만 피격 모션과 hit spark를 표시한다.
+- 학습 도우미가 활성화되면 학생 옆 동료처럼 지원 돌진 루프를 갖는다.
+- 모션 기준은 `docs/visual_asset_production.md`, 구현 상세는 `implementations/battle-arena-motion/implementation.md`에 기록했다.
+
+## 4차 적용 결과
+
+- 완료일: 2026-06-20
+- 학생 내부 스프라이트에 제자리 idle bounce를 추가해 돌진하지 않는 순간에도 살아 움직이게 했다.
+- 피격 중인 몬스터의 이동폭과 회전/스케일 반응을 키워 타격감이 더 크게 보이게 했다.
+- `enemyShockRing`, `battleDustBurst`, `studentDashDust` VFX를 추가했다.
+- `visual:smoke`가 학생 idle 이동량, 일반 몬스터 idle 이동량, 큰 피격 이동량, shock ring, dust burst까지 검증한다.
+
+## 5차 적용 결과
+
+- 완료일: 2026-06-20
+- 원정대 배경을 낮은 밀도의 절차형 파노라마에서 원화급 PNG 기반 파노라마로 교체했다.
+- 기존 도시 원화 배경을 3구간 긴 배경으로 재조립하고 이음새를 블렌딩해 `visual-expedition-backdrops.png`를 생성한다.
+- 원정대 배경은 60초 pan으로 움직이며, 기존 배경 `<img>`와 품질을 낮추는 격자/CSS 배경은 숨긴다.
+- 원정대 동료 melee, 적 idle/피격, shock ring, slash, dust burst VFX를 추가했다.
+- 컨택트시트와 smoke 검증에서 원정대 파노라마도 확인한다.
+
+## 6차 적용 결과
+
+- 완료일: 2026-06-20
+- 학년군별 학생 스프라이트를 초등 저학년, 초등 고학년, 중등, 고등, N수 기준으로 다시 정리했다.
+- 초등학생이 직장인처럼 보이지 않도록 작은 체형, 안전모, 밝은 책가방, 교과서/노트 소품을 강화했다.
+- 중고등학생은 정장 넥타이 느낌을 줄이고 교복 리본, 학교 배지, OMR/모의고사 종이로 읽히게 수정했다.
+- N수는 후드, 헤어밴드, 커피, 독서실 종이로 고등학생과 구분했다.
+- 메인 몬스터 192프레임을 초등/중등/고등/N수 테마별 학습 물체로 재분류했다.
+- 컨택트시트가 학생 타이틀, 몬스터명, 나이, 학년군을 표시해 나이대 부적합 자산을 사람이 바로 검수할 수 있게 했다.
+- 학년군 자산 기준은 `docs/visual_asset_production.md`에 양산 규칙으로 정리했다.
