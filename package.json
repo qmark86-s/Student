@@ -5,9 +5,33 @@
   "type": "module",
   "scripts": {
     "serve": "node tools/serve.mjs",
+    "preview": "node tools/preview.mjs",
+    "build:web": "node tools/prepare-web.mjs",
+    "snapshot:extract": "node tools/snapshot-extract.mjs reference/Student-Idle-RPG-mobile-3.html",
+    "snapshot:build": "node tools/snapshot-build.mjs",
+    "snapshot:verify": "npm run snapshot:build && npm run verify:mobile",
     "audit": "node tools/audit-reference.mjs",
     "extract:data": "node tools/extract-reference-data.mjs",
     "extract:bundle": "node tools/extract-bundle.mjs",
-    "verify": "npm run audit && npm run extract:data && npm run extract:bundle"
+    "reference:refresh": "npm run audit && npm run extract:data && npm run extract:bundle",
+    "verify": "npm run audit && npm run snapshot:build",
+    "mobile:smoke": "node tools/mobile-smoke.mjs",
+    "verify:mobile": "npm run verify && npm run build:web && npm run mobile:smoke",
+    "cap:add:android": "npm run build:web && cap add android",
+    "cap:sync": "npm run build:web && cap sync android",
+    "cap:open": "cap open android",
+    "android:install-jdk": "powershell -ExecutionPolicy Bypass -File tools/install-portable-jdk.ps1",
+    "android:setup-sdk": "powershell -ExecutionPolicy Bypass -File tools/setup-android-sdk.ps1",
+    "android:doctor": "cap doctor android",
+    "android:debug": "node tools/build-android.mjs debug",
+    "android:release": "node tools/build-android.mjs release"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/core": "^8.4.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.4.1",
+    "@playwright/test": "^1.61.0"
   }
 }

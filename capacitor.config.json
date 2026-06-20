@@ -1,0 +1,8 @@
+{
+  "appId": "com.qmark86.studentidlerpg",
+  "appName": "Student Idle RPG",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}
