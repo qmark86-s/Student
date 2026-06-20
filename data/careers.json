@@ -1,0 +1,1490 @@
+[
+  {
+    "id": "doctor",
+    "name": "의사",
+    "tier": 1,
+    "baseIncomePerMinute": 24,
+    "minPrestige": 88,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.7,
+      "english": 1,
+      "math": 1.25,
+      "social": 0.35,
+      "science": 1.8
+    },
+    "helperSprite": "helper-medic",
+    "battleProp": "청진기",
+    "auraColor": "#7ad7ff",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "focus"
+    ],
+    "supportRole": "집중력 회복"
+  },
+  {
+    "id": "judge",
+    "name": "판사",
+    "tier": 1,
+    "baseIncomePerMinute": 23,
+    "minPrestige": 88,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.7,
+      "english": 0.85,
+      "math": 0.55,
+      "social": 1.7,
+      "science": 0.35
+    },
+    "helperSprite": "helper-judge",
+    "battleProp": "판결봉",
+    "auraColor": "#f4d35e",
+    "dialogueTags": [
+      "helper",
+      "humanities",
+      "exam"
+    ],
+    "supportRole": "오답 판정"
+  },
+  {
+    "id": "prosecutor",
+    "name": "검사",
+    "tier": 1,
+    "baseIncomePerMinute": 22,
+    "minPrestige": 86,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.6,
+      "english": 0.8,
+      "math": 0.65,
+      "social": 1.65,
+      "science": 0.35
+    },
+    "helperSprite": "helper-judge",
+    "battleProp": "수사기록",
+    "auraColor": "#fde047",
+    "dialogueTags": [
+      "helper",
+      "humanities",
+      "exam"
+    ],
+    "supportRole": "근거 추적"
+  },
+  {
+    "id": "attorney",
+    "name": "변호사",
+    "tier": 1,
+    "baseIncomePerMinute": 21,
+    "minPrestige": 82,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.65,
+      "english": 1,
+      "math": 0.6,
+      "social": 1.55,
+      "science": 0.35
+    },
+    "helperSprite": "helper-files",
+    "battleProp": "계약서",
+    "auraColor": "#f59e0b",
+    "dialogueTags": [
+      "helper",
+      "humanities",
+      "steady"
+    ],
+    "supportRole": "논리 정리"
+  },
+  {
+    "id": "dentist",
+    "name": "치과의사",
+    "tier": 1,
+    "baseIncomePerMinute": 23,
+    "minPrestige": 85,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.6,
+      "english": 0.9,
+      "math": 1.25,
+      "social": 0.35,
+      "science": 1.75
+    },
+    "helperSprite": "helper-medic",
+    "battleProp": "치경",
+    "auraColor": "#67e8f9",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "focus"
+    ],
+    "supportRole": "실수 교정"
+  },
+  {
+    "id": "pharmacist",
+    "name": "약사",
+    "tier": 1,
+    "baseIncomePerMinute": 20,
+    "minPrestige": 80,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.7,
+      "english": 1,
+      "math": 1.2,
+      "social": 0.35,
+      "science": 1.65
+    },
+    "helperSprite": "helper-medic",
+    "battleProp": "조제 노트",
+    "auraColor": "#86efac",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "focus"
+    ],
+    "supportRole": "암기 처방"
+  },
+  {
+    "id": "professor",
+    "name": "교수",
+    "tier": 1,
+    "baseIncomePerMinute": 20,
+    "minPrestige": 82,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 1.15,
+      "english": 1.25,
+      "math": 1.25,
+      "social": 0.9,
+      "science": 1.05
+    },
+    "helperSprite": "helper-teacher",
+    "battleProp": "논문",
+    "auraColor": "#c4b5fd",
+    "dialogueTags": [
+      "helper",
+      "basic",
+      "exam"
+    ],
+    "supportRole": "개념 압축"
+  },
+  {
+    "id": "ai_researcher",
+    "name": "AI 연구원",
+    "tier": 1,
+    "baseIncomePerMinute": 21,
+    "minPrestige": 78,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.5,
+      "english": 1.25,
+      "math": 1.85,
+      "social": 0.35,
+      "science": 1.45
+    },
+    "helperSprite": "helper-laptop",
+    "battleProp": "연산 칩",
+    "auraColor": "#a78bfa",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "math"
+    ],
+    "supportRole": "풀이 최적화"
+  },
+  {
+    "id": "software_engineer",
+    "name": "소프트웨어 엔지니어",
+    "tier": 2,
+    "baseIncomePerMinute": 17,
+    "minPrestige": 60,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.7,
+      "english": 1,
+      "math": 1.65,
+      "social": 0.45,
+      "science": 1.15
+    },
+    "helperSprite": "helper-laptop",
+    "battleProp": "코드 에디터",
+    "auraColor": "#60a5fa",
+    "dialogueTags": [
+      "helper",
+      "math",
+      "fun"
+    ],
+    "supportRole": "반복 자동화"
+  },
+  {
+    "id": "semiconductor_engineer",
+    "name": "반도체 엔지니어",
+    "tier": 2,
+    "baseIncomePerMinute": 18,
+    "minPrestige": 66,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.4,
+      "english": 0.9,
+      "math": 1.7,
+      "social": 0.3,
+      "science": 1.55
+    },
+    "helperSprite": "helper-chip",
+    "battleProp": "회로판",
+    "auraColor": "#38bdf8",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "math"
+    ],
+    "supportRole": "공식 회로"
+  },
+  {
+    "id": "data_scientist",
+    "name": "데이터 사이언티스트",
+    "tier": 2,
+    "baseIncomePerMinute": 18,
+    "minPrestige": 64,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.5,
+      "english": 1.05,
+      "math": 1.8,
+      "social": 0.6,
+      "science": 1.25
+    },
+    "helperSprite": "helper-chart",
+    "battleProp": "데이터판",
+    "auraColor": "#34d399",
+    "dialogueTags": [
+      "helper",
+      "math",
+      "science"
+    ],
+    "supportRole": "오답 예측"
+  },
+  {
+    "id": "finance_analyst",
+    "name": "금융 애널리스트",
+    "tier": 2,
+    "baseIncomePerMinute": 18,
+    "minPrestige": 68,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 0.9,
+      "english": 1.25,
+      "math": 1.65,
+      "social": 0.95,
+      "science": 0.4
+    },
+    "helperSprite": "helper-chart",
+    "battleProp": "차트",
+    "auraColor": "#10b981",
+    "dialogueTags": [
+      "helper",
+      "math",
+      "balanced"
+    ],
+    "supportRole": "점수 분석"
+  },
+  {
+    "id": "consultant",
+    "name": "전략 컨설턴트",
+    "tier": 2,
+    "baseIncomePerMinute": 17,
+    "minPrestige": 70,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 1.15,
+      "english": 1.35,
+      "math": 1.25,
+      "social": 1.05,
+      "science": 0.65
+    },
+    "helperSprite": "helper-bulb",
+    "battleProp": "슬라이드",
+    "auraColor": "#fde047",
+    "dialogueTags": [
+      "helper",
+      "balanced",
+      "fun"
+    ],
+    "supportRole": "전략 수립"
+  },
+  {
+    "id": "accountant",
+    "name": "회계사",
+    "tier": 2,
+    "baseIncomePerMinute": 16,
+    "minPrestige": 62,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 0.95,
+      "english": 1,
+      "math": 1.55,
+      "social": 1.15,
+      "science": 0.35
+    },
+    "helperSprite": "helper-chart",
+    "battleProp": "계산기",
+    "auraColor": "#22c55e",
+    "dialogueTags": [
+      "helper",
+      "math",
+      "steady"
+    ],
+    "supportRole": "계산 안정화"
+  },
+  {
+    "id": "diplomat",
+    "name": "외교관",
+    "tier": 2,
+    "baseIncomePerMinute": 16,
+    "minPrestige": 70,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.3,
+      "english": 1.7,
+      "math": 0.5,
+      "social": 1.35,
+      "science": 0.3
+    },
+    "helperSprite": "helper-globe",
+    "battleProp": "지구본",
+    "auraColor": "#4fc3a1",
+    "dialogueTags": [
+      "helper",
+      "english",
+      "social"
+    ],
+    "supportRole": "언어 감각"
+  },
+  {
+    "id": "public_officer_5",
+    "name": "5급 공무원",
+    "tier": 2,
+    "baseIncomePerMinute": 15,
+    "minPrestige": 58,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.35,
+      "english": 0.9,
+      "math": 0.85,
+      "social": 1.45,
+      "science": 0.45
+    },
+    "helperSprite": "helper-files",
+    "battleProp": "행정 서류",
+    "auraColor": "#94a3b8",
+    "dialogueTags": [
+      "helper",
+      "humanities",
+      "steady"
+    ],
+    "supportRole": "루틴 관리"
+  },
+  {
+    "id": "teacher",
+    "name": "교사",
+    "tier": 3,
+    "baseIncomePerMinute": 12,
+    "minPrestige": 45,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 1.2,
+      "english": 1.1,
+      "math": 1,
+      "social": 0.9,
+      "science": 0.9
+    },
+    "helperSprite": "helper-teacher",
+    "battleProp": "분필",
+    "auraColor": "#f59e0b",
+    "dialogueTags": [
+      "helper",
+      "basic",
+      "exam"
+    ],
+    "supportRole": "기초 정리"
+  },
+  {
+    "id": "nurse",
+    "name": "간호사",
+    "tier": 3,
+    "baseIncomePerMinute": 12,
+    "minPrestige": 38,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.9,
+      "english": 0.8,
+      "math": 0.85,
+      "social": 0.55,
+      "science": 1.35
+    },
+    "helperSprite": "helper-medic",
+    "battleProp": "체크리스트",
+    "auraColor": "#fb7185",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "focus"
+    ],
+    "supportRole": "컨디션 관리"
+  },
+  {
+    "id": "research_scientist",
+    "name": "연구원",
+    "tier": 3,
+    "baseIncomePerMinute": 13,
+    "minPrestige": 52,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.55,
+      "english": 1,
+      "math": 1.45,
+      "social": 0.4,
+      "science": 1.7
+    },
+    "helperSprite": "helper-flask",
+    "battleProp": "플라스크",
+    "auraColor": "#22c55e",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "focus"
+    ],
+    "supportRole": "실험 사고"
+  },
+  {
+    "id": "mechanical_engineer",
+    "name": "기계 엔지니어",
+    "tier": 3,
+    "baseIncomePerMinute": 13,
+    "minPrestige": 48,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.55,
+      "english": 0.8,
+      "math": 1.55,
+      "social": 0.35,
+      "science": 1.45
+    },
+    "helperSprite": "helper-chip",
+    "battleProp": "설계도",
+    "auraColor": "#93c5fd",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "math"
+    ],
+    "supportRole": "구조 이해"
+  },
+  {
+    "id": "architect",
+    "name": "건축사",
+    "tier": 3,
+    "baseIncomePerMinute": 12,
+    "minPrestige": 46,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 0.85,
+      "english": 0.75,
+      "math": 1.25,
+      "social": 0.95,
+      "science": 0.95
+    },
+    "helperSprite": "helper-palette",
+    "battleProp": "도면",
+    "auraColor": "#f97316",
+    "dialogueTags": [
+      "helper",
+      "creative",
+      "math"
+    ],
+    "supportRole": "공간 기억"
+  },
+  {
+    "id": "game_developer",
+    "name": "게임 개발자",
+    "tier": 3,
+    "baseIncomePerMinute": 12,
+    "minPrestige": 42,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.8,
+      "english": 0.9,
+      "math": 1.5,
+      "social": 0.5,
+      "science": 1
+    },
+    "helperSprite": "helper-laptop",
+    "battleProp": "노트북",
+    "auraColor": "#fb7185",
+    "dialogueTags": [
+      "helper",
+      "math",
+      "fun"
+    ],
+    "supportRole": "반복 자동화"
+  },
+  {
+    "id": "public_officer",
+    "name": "공무원",
+    "tier": 3,
+    "baseIncomePerMinute": 10,
+    "minPrestige": 32,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.3,
+      "english": 0.8,
+      "math": 0.7,
+      "social": 1.2,
+      "science": 0.5
+    },
+    "helperSprite": "helper-files",
+    "battleProp": "서류철",
+    "auraColor": "#94a3b8",
+    "dialogueTags": [
+      "helper",
+      "humanities",
+      "steady"
+    ],
+    "supportRole": "루틴 관리"
+  },
+  {
+    "id": "banker",
+    "name": "은행원",
+    "tier": 4,
+    "baseIncomePerMinute": 9,
+    "minPrestige": 28,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 0.95,
+      "english": 0.8,
+      "math": 1.15,
+      "social": 1.1,
+      "science": 0.35
+    },
+    "helperSprite": "helper-chart",
+    "battleProp": "통장",
+    "auraColor": "#14b8a6",
+    "dialogueTags": [
+      "helper",
+      "math",
+      "steady"
+    ],
+    "supportRole": "숫자 감각"
+  },
+  {
+    "id": "journalist",
+    "name": "기자",
+    "tier": 4,
+    "baseIncomePerMinute": 8,
+    "minPrestige": 30,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.6,
+      "english": 0.9,
+      "math": 0.4,
+      "social": 1.3,
+      "science": 0.4
+    },
+    "helperSprite": "helper-mic",
+    "battleProp": "마이크",
+    "auraColor": "#f97316",
+    "dialogueTags": [
+      "helper",
+      "korean",
+      "social"
+    ],
+    "supportRole": "요약력"
+  },
+  {
+    "id": "marketer",
+    "name": "마케터",
+    "tier": 4,
+    "baseIncomePerMinute": 8,
+    "minPrestige": 24,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 1.2,
+      "english": 0.95,
+      "math": 0.65,
+      "social": 1.15,
+      "science": 0.35
+    },
+    "helperSprite": "helper-bulb",
+    "battleProp": "캠페인 보드",
+    "auraColor": "#facc15",
+    "dialogueTags": [
+      "helper",
+      "creative",
+      "fun"
+    ],
+    "supportRole": "동기 부여"
+  },
+  {
+    "id": "designer",
+    "name": "디자이너",
+    "tier": 4,
+    "baseIncomePerMinute": 8,
+    "minPrestige": 22,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 1.2,
+      "english": 0.8,
+      "math": 0.5,
+      "social": 1,
+      "science": 0.5
+    },
+    "helperSprite": "helper-palette",
+    "battleProp": "팔레트",
+    "auraColor": "#ec4899",
+    "dialogueTags": [
+      "helper",
+      "creative",
+      "fun"
+    ],
+    "supportRole": "패턴 인식"
+  },
+  {
+    "id": "translator",
+    "name": "전문 번역가",
+    "tier": 4,
+    "baseIncomePerMinute": 8,
+    "minPrestige": 25,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.4,
+      "english": 1.7,
+      "math": 0.3,
+      "social": 0.8,
+      "science": 0.3
+    },
+    "helperSprite": "helper-book",
+    "battleProp": "사전",
+    "auraColor": "#818cf8",
+    "dialogueTags": [
+      "helper",
+      "english",
+      "korean"
+    ],
+    "supportRole": "문장 해독"
+  },
+  {
+    "id": "social_worker",
+    "name": "사회복지사",
+    "tier": 5,
+    "baseIncomePerMinute": 6,
+    "minPrestige": 0,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.1,
+      "english": 0.5,
+      "math": 0.35,
+      "social": 1.35,
+      "science": 0.4
+    },
+    "helperSprite": "helper-files",
+    "battleProp": "상담 기록",
+    "auraColor": "#a3e635",
+    "dialogueTags": [
+      "helper",
+      "humanities",
+      "steady"
+    ],
+    "supportRole": "멘탈 케어"
+  },
+  {
+    "id": "local_admin",
+    "name": "지역 행정직",
+    "tier": 5,
+    "baseIncomePerMinute": 6,
+    "minPrestige": 0,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 1,
+      "english": 0.45,
+      "math": 0.65,
+      "social": 1.1,
+      "science": 0.45
+    },
+    "helperSprite": "helper-files",
+    "battleProp": "민원대장",
+    "auraColor": "#cbd5e1",
+    "dialogueTags": [
+      "helper",
+      "steady",
+      "basic"
+    ],
+    "supportRole": "기본기 유지"
+  },
+  {
+    "id": "startup_founder",
+    "name": "스타트업 창업가",
+    "tier": 3,
+    "baseIncomePerMinute": 14,
+    "minPrestige": 42,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 1,
+      "english": 1.1,
+      "math": 1.2,
+      "social": 1,
+      "science": 1
+    },
+    "helperSprite": "helper-bulb",
+    "battleProp": "전구",
+    "auraColor": "#fde047",
+    "dialogueTags": [
+      "helper",
+      "balanced",
+      "fun"
+    ],
+    "supportRole": "동기 부여"
+  },
+  {
+    "id": "pilot",
+    "name": "항공 조종사",
+    "tier": 2,
+    "baseIncomePerMinute": 17,
+    "minPrestige": 64,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.7,
+      "english": 1.45,
+      "math": 1.45,
+      "social": 0.55,
+      "science": 1.2
+    },
+    "helperSprite": "helper-globe",
+    "battleProp": "비행 지도",
+    "auraColor": "#38bdf8",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "english"
+    ],
+    "supportRole": "집중 항로"
+  },
+  {
+    "id": "veterinarian",
+    "name": "수의사",
+    "tier": 2,
+    "baseIncomePerMinute": 18,
+    "minPrestige": 72,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.7,
+      "english": 0.85,
+      "math": 1.05,
+      "social": 0.45,
+      "science": 1.8
+    },
+    "helperSprite": "helper-medic",
+    "battleProp": "진료 차트",
+    "auraColor": "#86efac",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "focus"
+    ],
+    "supportRole": "생명 과학"
+  },
+  {
+    "id": "civil_engineer",
+    "name": "토목 엔지니어",
+    "tier": 3,
+    "baseIncomePerMinute": 13,
+    "minPrestige": 44,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.55,
+      "english": 0.65,
+      "math": 1.55,
+      "social": 0.55,
+      "science": 1.35
+    },
+    "helperSprite": "helper-chip",
+    "battleProp": "측량기",
+    "auraColor": "#f59e0b",
+    "dialogueTags": [
+      "helper",
+      "math",
+      "science"
+    ],
+    "supportRole": "구조 계산"
+  },
+  {
+    "id": "chemical_engineer",
+    "name": "화학 엔지니어",
+    "tier": 2,
+    "baseIncomePerMinute": 16,
+    "minPrestige": 62,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.5,
+      "english": 0.9,
+      "math": 1.45,
+      "social": 0.35,
+      "science": 1.75
+    },
+    "helperSprite": "helper-flask",
+    "battleProp": "반응식",
+    "auraColor": "#22c55e",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "math"
+    ],
+    "supportRole": "반응 최적화"
+  },
+  {
+    "id": "electrical_engineer",
+    "name": "전기전자 엔지니어",
+    "tier": 2,
+    "baseIncomePerMinute": 17,
+    "minPrestige": 60,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.45,
+      "english": 0.85,
+      "math": 1.8,
+      "social": 0.3,
+      "science": 1.55
+    },
+    "helperSprite": "helper-chip",
+    "battleProp": "회로 노트",
+    "auraColor": "#60a5fa",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "math"
+    ],
+    "supportRole": "회로 이해"
+  },
+  {
+    "id": "bio_researcher",
+    "name": "바이오 연구원",
+    "tier": 2,
+    "baseIncomePerMinute": 16,
+    "minPrestige": 64,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.55,
+      "english": 1,
+      "math": 1.1,
+      "social": 0.35,
+      "science": 1.9
+    },
+    "helperSprite": "helper-flask",
+    "battleProp": "배양 접시",
+    "auraColor": "#4ade80",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "focus"
+    ],
+    "supportRole": "개념 배양"
+  },
+  {
+    "id": "psychologist",
+    "name": "심리상담가",
+    "tier": 3,
+    "baseIncomePerMinute": 11,
+    "minPrestige": 36,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.25,
+      "english": 0.75,
+      "math": 0.45,
+      "social": 1.55,
+      "science": 0.7
+    },
+    "helperSprite": "helper-bulb",
+    "battleProp": "상담 카드",
+    "auraColor": "#c084fc",
+    "dialogueTags": [
+      "helper",
+      "humanities",
+      "steady"
+    ],
+    "supportRole": "멘탈 정리"
+  },
+  {
+    "id": "clinical_lab",
+    "name": "임상병리사",
+    "tier": 3,
+    "baseIncomePerMinute": 11,
+    "minPrestige": 34,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.65,
+      "english": 0.65,
+      "math": 0.95,
+      "social": 0.4,
+      "science": 1.55
+    },
+    "helperSprite": "helper-flask",
+    "battleProp": "검체 노트",
+    "auraColor": "#67e8f9",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "focus"
+    ],
+    "supportRole": "검증 루틴"
+  },
+  {
+    "id": "patent_attorney",
+    "name": "변리사",
+    "tier": 1,
+    "baseIncomePerMinute": 21,
+    "minPrestige": 82,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 1.15,
+      "english": 1.05,
+      "math": 1.45,
+      "social": 0.85,
+      "science": 1.55
+    },
+    "helperSprite": "helper-files",
+    "battleProp": "특허 명세서",
+    "auraColor": "#facc15",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "humanities"
+    ],
+    "supportRole": "논리 보호"
+  },
+  {
+    "id": "ux_researcher",
+    "name": "UX 리서처",
+    "tier": 3,
+    "baseIncomePerMinute": 12,
+    "minPrestige": 40,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 1.25,
+      "english": 1,
+      "math": 0.85,
+      "social": 1.25,
+      "science": 0.65
+    },
+    "helperSprite": "helper-bulb",
+    "battleProp": "사용자 노트",
+    "auraColor": "#f472b6",
+    "dialogueTags": [
+      "helper",
+      "balanced",
+      "creative"
+    ],
+    "supportRole": "문제 관찰"
+  },
+  {
+    "id": "product_manager",
+    "name": "프로덕트 매니저",
+    "tier": 2,
+    "baseIncomePerMinute": 16,
+    "minPrestige": 58,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 1.15,
+      "english": 1.15,
+      "math": 1.15,
+      "social": 1.05,
+      "science": 0.8
+    },
+    "helperSprite": "helper-bulb",
+    "battleProp": "로드맵",
+    "auraColor": "#fde047",
+    "dialogueTags": [
+      "helper",
+      "balanced",
+      "fun"
+    ],
+    "supportRole": "우선순위 정리"
+  },
+  {
+    "id": "actuary",
+    "name": "보험계리사",
+    "tier": 2,
+    "baseIncomePerMinute": 17,
+    "minPrestige": 66,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.65,
+      "english": 0.95,
+      "math": 1.95,
+      "social": 0.75,
+      "science": 0.8
+    },
+    "helperSprite": "helper-chart",
+    "battleProp": "확률표",
+    "auraColor": "#34d399",
+    "dialogueTags": [
+      "helper",
+      "math",
+      "steady"
+    ],
+    "supportRole": "확률 감각"
+  },
+  {
+    "id": "tax_accountant",
+    "name": "세무사",
+    "tier": 3,
+    "baseIncomePerMinute": 14,
+    "minPrestige": 48,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 0.95,
+      "english": 0.65,
+      "math": 1.45,
+      "social": 1.2,
+      "science": 0.35
+    },
+    "helperSprite": "helper-chart",
+    "battleProp": "세법 노트",
+    "auraColor": "#22c55e",
+    "dialogueTags": [
+      "helper",
+      "math",
+      "steady"
+    ],
+    "supportRole": "계산 정리"
+  },
+  {
+    "id": "investment_banker",
+    "name": "투자은행가",
+    "tier": 1,
+    "baseIncomePerMinute": 22,
+    "minPrestige": 84,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 0.95,
+      "english": 1.45,
+      "math": 1.8,
+      "social": 0.95,
+      "science": 0.35
+    },
+    "helperSprite": "helper-chart",
+    "battleProp": "딜북",
+    "auraColor": "#10b981",
+    "dialogueTags": [
+      "helper",
+      "math",
+      "english"
+    ],
+    "supportRole": "숫자 압축"
+  },
+  {
+    "id": "economist",
+    "name": "경제연구원",
+    "tier": 2,
+    "baseIncomePerMinute": 16,
+    "minPrestige": 60,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 0.95,
+      "english": 1.15,
+      "math": 1.55,
+      "social": 1.35,
+      "science": 0.35
+    },
+    "helperSprite": "helper-chart",
+    "battleProp": "경제 지표",
+    "auraColor": "#4ade80",
+    "dialogueTags": [
+      "helper",
+      "math",
+      "social"
+    ],
+    "supportRole": "흐름 분석"
+  },
+  {
+    "id": "policy_researcher",
+    "name": "정책연구원",
+    "tier": 3,
+    "baseIncomePerMinute": 12,
+    "minPrestige": 44,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.35,
+      "english": 0.95,
+      "math": 0.75,
+      "social": 1.65,
+      "science": 0.45
+    },
+    "helperSprite": "helper-files",
+    "battleProp": "정책 보고서",
+    "auraColor": "#94a3b8",
+    "dialogueTags": [
+      "helper",
+      "humanities",
+      "social"
+    ],
+    "supportRole": "근거 정리"
+  },
+  {
+    "id": "curator",
+    "name": "큐레이터",
+    "tier": 4,
+    "baseIncomePerMinute": 8,
+    "minPrestige": 24,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.25,
+      "english": 0.9,
+      "math": 0.35,
+      "social": 1.35,
+      "science": 0.45
+    },
+    "helperSprite": "helper-palette",
+    "battleProp": "전시 도록",
+    "auraColor": "#fb923c",
+    "dialogueTags": [
+      "helper",
+      "creative",
+      "social"
+    ],
+    "supportRole": "맥락 기억"
+  },
+  {
+    "id": "librarian",
+    "name": "사서",
+    "tier": 4,
+    "baseIncomePerMinute": 7,
+    "minPrestige": 18,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.45,
+      "english": 0.85,
+      "math": 0.45,
+      "social": 1.1,
+      "science": 0.35
+    },
+    "helperSprite": "helper-book",
+    "battleProp": "분류표",
+    "auraColor": "#818cf8",
+    "dialogueTags": [
+      "helper",
+      "korean",
+      "steady"
+    ],
+    "supportRole": "자료 정리"
+  },
+  {
+    "id": "writer",
+    "name": "작가",
+    "tier": 4,
+    "baseIncomePerMinute": 8,
+    "minPrestige": 20,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.85,
+      "english": 0.75,
+      "math": 0.3,
+      "social": 1,
+      "science": 0.35
+    },
+    "helperSprite": "helper-book",
+    "battleProp": "원고지",
+    "auraColor": "#f472b6",
+    "dialogueTags": [
+      "helper",
+      "korean",
+      "creative"
+    ],
+    "supportRole": "문장 감각"
+  },
+  {
+    "id": "editor",
+    "name": "콘텐츠 에디터",
+    "tier": 4,
+    "baseIncomePerMinute": 8,
+    "minPrestige": 22,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.55,
+      "english": 0.9,
+      "math": 0.35,
+      "social": 1.15,
+      "science": 0.35
+    },
+    "helperSprite": "helper-book",
+    "battleProp": "교정지",
+    "auraColor": "#fb7185",
+    "dialogueTags": [
+      "helper",
+      "korean",
+      "social"
+    ],
+    "supportRole": "오답 교정"
+  },
+  {
+    "id": "broadcaster",
+    "name": "방송 PD",
+    "tier": 3,
+    "baseIncomePerMinute": 12,
+    "minPrestige": 42,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 1.35,
+      "english": 0.8,
+      "math": 0.55,
+      "social": 1.25,
+      "science": 0.45
+    },
+    "helperSprite": "helper-mic",
+    "battleProp": "콘티",
+    "auraColor": "#f97316",
+    "dialogueTags": [
+      "helper",
+      "creative",
+      "fun"
+    ],
+    "supportRole": "몰입 연출"
+  },
+  {
+    "id": "police_officer",
+    "name": "경찰관",
+    "tier": 4,
+    "baseIncomePerMinute": 8,
+    "minPrestige": 20,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1,
+      "english": 0.45,
+      "math": 0.65,
+      "social": 1.35,
+      "science": 0.55
+    },
+    "helperSprite": "helper-files",
+    "battleProp": "수첩",
+    "auraColor": "#60a5fa",
+    "dialogueTags": [
+      "helper",
+      "humanities",
+      "steady"
+    ],
+    "supportRole": "집중 순찰"
+  },
+  {
+    "id": "firefighter",
+    "name": "소방관",
+    "tier": 4,
+    "baseIncomePerMinute": 8,
+    "minPrestige": 18,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.85,
+      "english": 0.35,
+      "math": 0.75,
+      "social": 0.8,
+      "science": 1.3
+    },
+    "helperSprite": "helper-medic",
+    "battleProp": "안전 매뉴얼",
+    "auraColor": "#ef4444",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "steady"
+    ],
+    "supportRole": "위기 대응"
+  },
+  {
+    "id": "military_officer",
+    "name": "장교",
+    "tier": 3,
+    "baseIncomePerMinute": 11,
+    "minPrestige": 38,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 0.95,
+      "english": 0.75,
+      "math": 0.95,
+      "social": 1.1,
+      "science": 0.9
+    },
+    "helperSprite": "helper-files",
+    "battleProp": "작전 지도",
+    "auraColor": "#84cc16",
+    "dialogueTags": [
+      "helper",
+      "steady",
+      "balanced"
+    ],
+    "supportRole": "루틴 지휘"
+  },
+  {
+    "id": "airline_crew",
+    "name": "항공 승무원",
+    "tier": 4,
+    "baseIncomePerMinute": 8,
+    "minPrestige": 24,
+    "preferredTrack": "humanities",
+    "statWeights": {
+      "korean": 1.05,
+      "english": 1.55,
+      "math": 0.35,
+      "social": 0.95,
+      "science": 0.3
+    },
+    "helperSprite": "helper-globe",
+    "battleProp": "탑승 명단",
+    "auraColor": "#38bdf8",
+    "dialogueTags": [
+      "helper",
+      "english",
+      "steady"
+    ],
+    "supportRole": "언어 루틴"
+  },
+  {
+    "id": "chef",
+    "name": "셰프",
+    "tier": 5,
+    "baseIncomePerMinute": 6,
+    "minPrestige": 0,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 0.85,
+      "english": 0.35,
+      "math": 0.75,
+      "social": 0.65,
+      "science": 0.85
+    },
+    "helperSprite": "helper-palette",
+    "battleProp": "레시피북",
+    "auraColor": "#fb923c",
+    "dialogueTags": [
+      "helper",
+      "creative",
+      "fun"
+    ],
+    "supportRole": "감각 훈련"
+  },
+  {
+    "id": "sports_coach",
+    "name": "스포츠 코치",
+    "tier": 5,
+    "baseIncomePerMinute": 6,
+    "minPrestige": 0,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 0.75,
+      "english": 0.35,
+      "math": 0.65,
+      "social": 0.95,
+      "science": 0.95
+    },
+    "helperSprite": "helper-bulb",
+    "battleProp": "훈련표",
+    "auraColor": "#a3e635",
+    "dialogueTags": [
+      "helper",
+      "steady",
+      "fun"
+    ],
+    "supportRole": "반복 훈련"
+  },
+  {
+    "id": "creator",
+    "name": "크리에이터",
+    "tier": 5,
+    "baseIncomePerMinute": 7,
+    "minPrestige": 0,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 1.2,
+      "english": 0.75,
+      "math": 0.45,
+      "social": 1.05,
+      "science": 0.35
+    },
+    "helperSprite": "helper-mic",
+    "battleProp": "카메라",
+    "auraColor": "#f472b6",
+    "dialogueTags": [
+      "helper",
+      "creative",
+      "fun"
+    ],
+    "supportRole": "동기 부여"
+  },
+  {
+    "id": "animation_director",
+    "name": "애니메이션 감독",
+    "tier": 4,
+    "baseIncomePerMinute": 9,
+    "minPrestige": 26,
+    "preferredTrack": "balanced",
+    "statWeights": {
+      "korean": 1.25,
+      "english": 0.7,
+      "math": 0.6,
+      "social": 0.9,
+      "science": 0.5
+    },
+    "helperSprite": "helper-palette",
+    "battleProp": "스토리보드",
+    "auraColor": "#ec4899",
+    "dialogueTags": [
+      "helper",
+      "creative",
+      "fun"
+    ],
+    "supportRole": "패턴 연출"
+  },
+  {
+    "id": "environmental_engineer",
+    "name": "환경 엔지니어",
+    "tier": 3,
+    "baseIncomePerMinute": 12,
+    "minPrestige": 40,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.75,
+      "english": 0.75,
+      "math": 1.15,
+      "social": 0.95,
+      "science": 1.55
+    },
+    "helperSprite": "helper-flask",
+    "battleProp": "수질표",
+    "auraColor": "#22c55e",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "social"
+    ],
+    "supportRole": "원인 추적"
+  },
+  {
+    "id": "robotics_engineer",
+    "name": "로봇 엔지니어",
+    "tier": 2,
+    "baseIncomePerMinute": 18,
+    "minPrestige": 68,
+    "preferredTrack": "science",
+    "statWeights": {
+      "korean": 0.45,
+      "english": 0.9,
+      "math": 1.9,
+      "social": 0.3,
+      "science": 1.55
+    },
+    "helperSprite": "helper-chip",
+    "battleProp": "로봇 팔",
+    "auraColor": "#93c5fd",
+    "dialogueTags": [
+      "helper",
+      "science",
+      "math"
+    ],
+    "supportRole": "자동화 사고"
+  }
+]

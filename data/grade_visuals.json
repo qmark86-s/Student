@@ -1,0 +1,642 @@
+[
+  {
+    "order": 1,
+    "phase": "elementary",
+    "age": 8,
+    "studentFrame": 0,
+    "studentTitle": "초1 작은 책가방",
+    "dialogueGroup": "lower_elementary",
+    "normalMonsterFrames": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "normalMonsterNames": [
+      "받아쓰기장",
+      "색종이 문제집",
+      "알림장 슬라임",
+      "숫자 카드",
+      "크레파스 숙제통",
+      "스티커 시험지",
+      "종이비행기 노트",
+      "연필깎이 문제함"
+    ],
+    "examMonsterFrames": {
+      "march_eval": 128,
+      "midterm": 129,
+      "final": 130,
+      "year_boss": 131
+    },
+    "examMonsterNames": {
+      "march_eval": "3월 받아쓰기 보스",
+      "midterm": "중간 색종이 왕",
+      "final": "기말 알림장",
+      "year_boss": "1학년 학년고사장"
+    }
+  },
+  {
+    "order": 2,
+    "phase": "elementary",
+    "age": 9,
+    "studentFrame": 1,
+    "studentTitle": "초2 준비물 가방",
+    "dialogueGroup": "lower_elementary",
+    "normalMonsterFrames": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "normalMonsterNames": [
+      "곱셈 카드",
+      "받아쓰기 공책",
+      "독서록 더미",
+      "알파벳 책",
+      "구구단 타워",
+      "그림일기 묶음",
+      "받침 괴물장",
+      "시계 읽기 퍼즐"
+    ],
+    "examMonsterFrames": {
+      "march_eval": 132,
+      "midterm": 133,
+      "final": 134,
+      "year_boss": 135
+    },
+    "examMonsterNames": {
+      "march_eval": "3월 곱셈 카드",
+      "midterm": "중간 독서록장",
+      "final": "기말 공책 골렘",
+      "year_boss": "2학년 학년고사장"
+    }
+  },
+  {
+    "order": 3,
+    "phase": "elementary",
+    "age": 10,
+    "studentFrame": 2,
+    "studentTitle": "초3 교과서 가방",
+    "dialogueGroup": "upper_elementary",
+    "normalMonsterFrames": [
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23
+    ],
+    "normalMonsterNames": [
+      "사회 그림책",
+      "나눗셈 문제장",
+      "영단어 카드",
+      "실험 관찰장",
+      "지도 퍼즐북",
+      "원고지 벌집",
+      "측정 단위자",
+      "과학 스티커북"
+    ],
+    "examMonsterFrames": {
+      "march_eval": 136,
+      "midterm": 137,
+      "final": 138,
+      "year_boss": 139
+    },
+    "examMonsterNames": {
+      "march_eval": "3월 나눗셈 기사",
+      "midterm": "중간 사회 지도",
+      "final": "기말 실험장",
+      "year_boss": "3학년 학년고사장"
+    }
+  },
+  {
+    "order": 4,
+    "phase": "elementary",
+    "age": 11,
+    "studentFrame": 3,
+    "studentTitle": "초4 발표 준비생",
+    "dialogueGroup": "upper_elementary",
+    "normalMonsterFrames": [
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "normalMonsterNames": [
+      "분수 문제집",
+      "독후감 노트",
+      "단원평가 묶음",
+      "영어 리딩북",
+      "각도기 함정지",
+      "발표 대본집",
+      "도형 카드팩",
+      "요약 공책탑"
+    ],
+    "examMonsterFrames": {
+      "march_eval": 140,
+      "midterm": 141,
+      "final": 142,
+      "year_boss": 143
+    },
+    "examMonsterNames": {
+      "march_eval": "3월 분수 장군",
+      "midterm": "중간 단원평가",
+      "final": "기말 독후감",
+      "year_boss": "4학년 학년고사장"
+    }
+  },
+  {
+    "order": 5,
+    "phase": "elementary",
+    "age": 12,
+    "studentFrame": 4,
+    "studentTitle": "초5 수행평가 준비생",
+    "dialogueGroup": "upper_elementary",
+    "normalMonsterFrames": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+    ],
+    "normalMonsterNames": [
+      "소수 문제집",
+      "과학 관찰록",
+      "역사 인물 카드",
+      "영어 문장책",
+      "실험 보고서통",
+      "비율 퍼즐집",
+      "한자 급수장",
+      "암기 포스트잇"
+    ],
+    "examMonsterFrames": {
+      "march_eval": 144,
+      "midterm": 145,
+      "final": 146,
+      "year_boss": 147
+    },
+    "examMonsterNames": {
+      "march_eval": "3월 소수 보스",
+      "midterm": "중간 과학 관찰장",
+      "final": "기말 역사 카드",
+      "year_boss": "5학년 학년고사장"
+    }
+  },
+  {
+    "order": 6,
+    "phase": "elementary",
+    "age": 13,
+    "studentFrame": 5,
+    "studentTitle": "초6 졸업반",
+    "dialogueGroup": "upper_elementary",
+    "normalMonsterFrames": [
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+    ],
+    "normalMonsterNames": [
+      "중학 예비 문제집",
+      "졸업시험지",
+      "비문학 책자",
+      "수학 총정리",
+      "서술형 대비서",
+      "어휘 압축팩",
+      "예비중 체크북",
+      "졸업 앨범 과제"
+    ],
+    "examMonsterFrames": {
+      "march_eval": 148,
+      "midterm": 149,
+      "final": 150,
+      "year_boss": 151
+    },
+    "examMonsterNames": {
+      "march_eval": "3월 예비중 보스",
+      "midterm": "중간 총정리장",
+      "final": "기말 졸업시험",
+      "year_boss": "초등 졸업고사"
+    }
+  },
+  {
+    "order": 7,
+    "phase": "middle",
+    "age": 14,
+    "studentFrame": 6,
+    "studentTitle": "중1 교복 적응",
+    "dialogueGroup": "early_middle",
+    "normalMonsterFrames": [
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55
+    ],
+    "normalMonsterNames": [
+      "중등 국어 노트",
+      "영문법 카드",
+      "방정식 책",
+      "사회 지도책",
+      "과학 용어장",
+      "수행평가 파일",
+      "서술형 노트",
+      "암기장 스택"
+    ],
+    "examMonsterFrames": {
+      "march_eval": 152,
+      "midterm": 153,
+      "final": 154,
+      "year_boss": 155
+    },
+    "examMonsterNames": {
+      "march_eval": "3월 적응평가",
+      "midterm": "중간고사 노트",
+      "final": "기말고사 더미",
+      "year_boss": "중1 학년고사장"
+    }
+  },
+  {
+    "order": 8,
+    "phase": "middle",
+    "age": 15,
+    "studentFrame": 7,
+    "studentTitle": "중2 수행평가 러너",
+    "dialogueGroup": "middle",
+    "normalMonsterFrames": [
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63
+    ],
+    "normalMonsterNames": [
+      "연립방정식 책",
+      "과학 실험지",
+      "역사 연표",
+      "영어 독해집",
+      "문법 오답통",
+      "도덕 활동지",
+      "함수 예고편",
+      "실험 결과표"
+    ],
+    "examMonsterFrames": {
+      "march_eval": 156,
+      "midterm": 157,
+      "final": 158,
+      "year_boss": 159
+    },
+    "examMonsterNames": {
+      "march_eval": "3월 연립문제",
+      "midterm": "중간 실험보고서",
+      "final": "기말 연표장",
+      "year_boss": "중2 학년고사장"
+    }
+  },
+  {
+    "order": 9,
+    "phase": "middle",
+    "age": 16,
+    "studentFrame": 8,
+    "studentTitle": "중3 고입 대비",
+    "dialogueGroup": "late_middle",
+    "normalMonsterFrames": [
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71
+    ],
+    "normalMonsterNames": [
+      "고입 대비서",
+      "문법 총정리",
+      "이차방정식 책",
+      "과학 개념서",
+      "내신 파이널북",
+      "역사 사건카드",
+      "모의고사 맛보기",
+      "진로 탐색지"
+    ],
+    "examMonsterFrames": {
+      "march_eval": 160,
+      "midterm": 161,
+      "final": 162,
+      "year_boss": 163
+    },
+    "examMonsterNames": {
+      "march_eval": "3월 고입 예열",
+      "midterm": "중간 총정리장",
+      "final": "기말 내신 보스",
+      "year_boss": "중등 졸업고사"
+    }
+  },
+  {
+    "order": 10,
+    "phase": "high",
+    "age": 17,
+    "studentFrame": 9,
+    "studentTitle": "고1 계열 탐색",
+    "dialogueGroup": "high1",
+    "normalMonsterFrames": [
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79
+    ],
+    "normalMonsterNames": [
+      "고등 공통국어",
+      "수학 상",
+      "통합사회 문제집",
+      "통합과학 문제집",
+      "영어 모의지",
+      "한국사 연표팩",
+      "계열 선택지",
+      "공통과목 벽돌책"
+    ],
+    "examMonsterFrames": {
+      "march_mock": 164,
+      "june_mock": 165,
+      "september_mock": 166,
+      "suneung": 167
+    },
+    "examMonsterNames": {
+      "march_mock": "3월 모의고사",
+      "june_mock": "6월 모의평가",
+      "september_mock": "9월 모의평가",
+      "suneung": "고1 전국연합 보스"
+    }
+  },
+  {
+    "order": 11,
+    "phase": "high",
+    "age": 18,
+    "studentFrame": 10,
+    "studentTitle": "고2 계열 고정",
+    "dialogueGroup": "high2",
+    "normalMonsterFrames": [
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87
+    ],
+    "normalMonsterNames": [
+      "선택과목 문제집",
+      "문학 독서 세트",
+      "미적분 예열집",
+      "탐구 개념서",
+      "확통 노트",
+      "생윤 카드팩",
+      "물화생지 샘플러",
+      "수행평가 보고서"
+    ],
+    "examMonsterFrames": {
+      "march_mock": 168,
+      "june_mock": 169,
+      "september_mock": 170,
+      "suneung": 171
+    },
+    "examMonsterNames": {
+      "march_mock": "3월 선택과목 보스",
+      "june_mock": "6월 계열평가",
+      "september_mock": "9월 탐구평가",
+      "suneung": "고2 전국연합 보스"
+    }
+  },
+  {
+    "order": 12,
+    "phase": "high",
+    "age": 19,
+    "studentFrame": 11,
+    "studentTitle": "고3 수험생",
+    "dialogueGroup": "high3",
+    "normalMonsterFrames": [
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95
+    ],
+    "normalMonsterNames": [
+      "수능특강",
+      "기출 모음집",
+      "킬러문항 봉투",
+      "탐구 실전서",
+      "수능완성",
+      "오답노트 괴수",
+      "실모 봉투팩",
+      "시간관리 시계"
+    ],
+    "examMonsterFrames": {
+      "march_mock": 172,
+      "june_mock": 173,
+      "september_mock": 174,
+      "suneung": 175
+    },
+    "examMonsterNames": {
+      "march_mock": "3월 모의고사장",
+      "june_mock": "6월 평가원 보스",
+      "september_mock": "9월 평가원 보스",
+      "suneung": "수능 시험장"
+    }
+  },
+  {
+    "order": 13,
+    "phase": "repeater",
+    "age": 20,
+    "studentFrame": 12,
+    "studentTitle": "1수 독서실 적응",
+    "dialogueGroup": "repeater1",
+    "normalMonsterFrames": [
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103
+    ],
+    "normalMonsterNames": [
+      "기출 1회독",
+      "오답노트",
+      "스터디카페 모의고사",
+      "탐구 압축팩",
+      "개념 재정리집",
+      "멘탈 체크표",
+      "6월 대비 봉투",
+      "약점 형광펜"
+    ],
+    "examMonsterFrames": {
+      "march_mock": 176,
+      "june_mock": 177,
+      "september_mock": 178,
+      "suneung": 179
+    },
+    "examMonsterNames": {
+      "march_mock": "N수 3월 진단",
+      "june_mock": "N수 6월 평가원",
+      "september_mock": "N수 9월 평가원",
+      "suneung": "N수 수능 시험장"
+    }
+  },
+  {
+    "order": 14,
+    "phase": "repeater",
+    "age": 21,
+    "studentFrame": 13,
+    "studentTitle": "2수 루틴 고정",
+    "dialogueGroup": "repeater2",
+    "normalMonsterFrames": [
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111
+    ],
+    "normalMonsterNames": [
+      "기출 2회독",
+      "실전 봉투",
+      "약점 체크리스트",
+      "오답 재압축",
+      "시간표 압박장",
+      "평가원 분석집",
+      "수면 관리표",
+      "탐구 스피드팩"
+    ],
+    "examMonsterFrames": {
+      "march_mock": 180,
+      "june_mock": 181,
+      "september_mock": 182,
+      "suneung": 183
+    },
+    "examMonsterNames": {
+      "march_mock": "2수 3월 진단",
+      "june_mock": "2수 6월 평가원",
+      "september_mock": "2수 9월 평가원",
+      "suneung": "2수 수능 시험장"
+    }
+  },
+  {
+    "order": 15,
+    "phase": "repeater",
+    "age": 22,
+    "studentFrame": 14,
+    "studentTitle": "장수생 압축 학습",
+    "dialogueGroup": "repeater_long",
+    "normalMonsterFrames": [
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119
+    ],
+    "normalMonsterNames": [
+      "장수 기출팩",
+      "멘탈 관리표",
+      "시간표 보스",
+      "실모 더미",
+      "불안 노트",
+      "루틴 점검표",
+      "파이널 압축서",
+      "기억력 체커"
+    ],
+    "examMonsterFrames": {
+      "march_mock": 184,
+      "june_mock": 185,
+      "september_mock": 186,
+      "suneung": 187
+    },
+    "examMonsterNames": {
+      "march_mock": "장수 3월 진단",
+      "june_mock": "장수 6월 평가원",
+      "september_mock": "장수 9월 평가원",
+      "suneung": "장수 수능 시험장"
+    }
+  },
+  {
+    "order": 16,
+    "phase": "repeater",
+    "age": 23,
+    "studentFrame": 15,
+    "studentTitle": "N수 베테랑",
+    "dialogueGroup": "repeater_long",
+    "normalMonsterFrames": [
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127
+    ],
+    "normalMonsterNames": [
+      "N수 파이널팩",
+      "마지막 오답장",
+      "실전 시계",
+      "최종 봉투",
+      "초압축 기출서",
+      "체력 관리표",
+      "막판 실모팩",
+      "수능장 시뮬레이터"
+    ],
+    "examMonsterFrames": {
+      "march_mock": 188,
+      "june_mock": 189,
+      "september_mock": 190,
+      "suneung": 191
+    },
+    "examMonsterNames": {
+      "march_mock": "N수 3월 파이널",
+      "june_mock": "N수 6월 파이널",
+      "september_mock": "N수 9월 파이널",
+      "suneung": "N수 수능 시험장"
+    }
+  }
+]

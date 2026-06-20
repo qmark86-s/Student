@@ -1,0 +1,2402 @@
+[
+  {
+    "level": 1,
+    "expCost": 18
+  },
+  {
+    "level": 2,
+    "expCost": 30
+  },
+  {
+    "level": 3,
+    "expCost": 43
+  },
+  {
+    "level": 4,
+    "expCost": 58
+  },
+  {
+    "level": 5,
+    "expCost": 74
+  },
+  {
+    "level": 6,
+    "expCost": 91
+  },
+  {
+    "level": 7,
+    "expCost": 109
+  },
+  {
+    "level": 8,
+    "expCost": 128
+  },
+  {
+    "level": 9,
+    "expCost": 148
+  },
+  {
+    "level": 10,
+    "expCost": 168
+  },
+  {
+    "level": 11,
+    "expCost": 189
+  },
+  {
+    "level": 12,
+    "expCost": 211
+  },
+  {
+    "level": 13,
+    "expCost": 233
+  },
+  {
+    "level": 14,
+    "expCost": 256
+  },
+  {
+    "level": 15,
+    "expCost": 279
+  },
+  {
+    "level": 16,
+    "expCost": 303
+  },
+  {
+    "level": 17,
+    "expCost": 328
+  },
+  {
+    "level": 18,
+    "expCost": 352
+  },
+  {
+    "level": 19,
+    "expCost": 378
+  },
+  {
+    "level": 20,
+    "expCost": 403
+  },
+  {
+    "level": 21,
+    "expCost": 429
+  },
+  {
+    "level": 22,
+    "expCost": 456
+  },
+  {
+    "level": 23,
+    "expCost": 483
+  },
+  {
+    "level": 24,
+    "expCost": 510
+  },
+  {
+    "level": 25,
+    "expCost": 537
+  },
+  {
+    "level": 26,
+    "expCost": 565
+  },
+  {
+    "level": 27,
+    "expCost": 594
+  },
+  {
+    "level": 28,
+    "expCost": 622
+  },
+  {
+    "level": 29,
+    "expCost": 651
+  },
+  {
+    "level": 30,
+    "expCost": 681
+  },
+  {
+    "level": 31,
+    "expCost": 710
+  },
+  {
+    "level": 32,
+    "expCost": 740
+  },
+  {
+    "level": 33,
+    "expCost": 771
+  },
+  {
+    "level": 34,
+    "expCost": 801
+  },
+  {
+    "level": 35,
+    "expCost": 832
+  },
+  {
+    "level": 36,
+    "expCost": 863
+  },
+  {
+    "level": 37,
+    "expCost": 894
+  },
+  {
+    "level": 38,
+    "expCost": 926
+  },
+  {
+    "level": 39,
+    "expCost": 958
+  },
+  {
+    "level": 40,
+    "expCost": 990
+  },
+  {
+    "level": 41,
+    "expCost": 1023
+  },
+  {
+    "level": 42,
+    "expCost": 1056
+  },
+  {
+    "level": 43,
+    "expCost": 1089
+  },
+  {
+    "level": 44,
+    "expCost": 1122
+  },
+  {
+    "level": 45,
+    "expCost": 1155
+  },
+  {
+    "level": 46,
+    "expCost": 1189
+  },
+  {
+    "level": 47,
+    "expCost": 1223
+  },
+  {
+    "level": 48,
+    "expCost": 1257
+  },
+  {
+    "level": 49,
+    "expCost": 1292
+  },
+  {
+    "level": 50,
+    "expCost": 1326
+  },
+  {
+    "level": 51,
+    "expCost": 1361
+  },
+  {
+    "level": 52,
+    "expCost": 1396
+  },
+  {
+    "level": 53,
+    "expCost": 1432
+  },
+  {
+    "level": 54,
+    "expCost": 1467
+  },
+  {
+    "level": 55,
+    "expCost": 1503
+  },
+  {
+    "level": 56,
+    "expCost": 1539
+  },
+  {
+    "level": 57,
+    "expCost": 1575
+  },
+  {
+    "level": 58,
+    "expCost": 1612
+  },
+  {
+    "level": 59,
+    "expCost": 1649
+  },
+  {
+    "level": 60,
+    "expCost": 1685
+  },
+  {
+    "level": 61,
+    "expCost": 1722
+  },
+  {
+    "level": 62,
+    "expCost": 1760
+  },
+  {
+    "level": 63,
+    "expCost": 1797
+  },
+  {
+    "level": 64,
+    "expCost": 1835
+  },
+  {
+    "level": 65,
+    "expCost": 1873
+  },
+  {
+    "level": 66,
+    "expCost": 1911
+  },
+  {
+    "level": 67,
+    "expCost": 1949
+  },
+  {
+    "level": 68,
+    "expCost": 1987
+  },
+  {
+    "level": 69,
+    "expCost": 2026
+  },
+  {
+    "level": 70,
+    "expCost": 2065
+  },
+  {
+    "level": 71,
+    "expCost": 2104
+  },
+  {
+    "level": 72,
+    "expCost": 2143
+  },
+  {
+    "level": 73,
+    "expCost": 2182
+  },
+  {
+    "level": 74,
+    "expCost": 2222
+  },
+  {
+    "level": 75,
+    "expCost": 2261
+  },
+  {
+    "level": 76,
+    "expCost": 2301
+  },
+  {
+    "level": 77,
+    "expCost": 2341
+  },
+  {
+    "level": 78,
+    "expCost": 2381
+  },
+  {
+    "level": 79,
+    "expCost": 2422
+  },
+  {
+    "level": 80,
+    "expCost": 2462
+  },
+  {
+    "level": 81,
+    "expCost": 2503
+  },
+  {
+    "level": 82,
+    "expCost": 2544
+  },
+  {
+    "level": 83,
+    "expCost": 2585
+  },
+  {
+    "level": 84,
+    "expCost": 2626
+  },
+  {
+    "level": 85,
+    "expCost": 2667
+  },
+  {
+    "level": 86,
+    "expCost": 2709
+  },
+  {
+    "level": 87,
+    "expCost": 2750
+  },
+  {
+    "level": 88,
+    "expCost": 2792
+  },
+  {
+    "level": 89,
+    "expCost": 2834
+  },
+  {
+    "level": 90,
+    "expCost": 2876
+  },
+  {
+    "level": 91,
+    "expCost": 2919
+  },
+  {
+    "level": 92,
+    "expCost": 2961
+  },
+  {
+    "level": 93,
+    "expCost": 3004
+  },
+  {
+    "level": 94,
+    "expCost": 3047
+  },
+  {
+    "level": 95,
+    "expCost": 3089
+  },
+  {
+    "level": 96,
+    "expCost": 3133
+  },
+  {
+    "level": 97,
+    "expCost": 3176
+  },
+  {
+    "level": 98,
+    "expCost": 3219
+  },
+  {
+    "level": 99,
+    "expCost": 3263
+  },
+  {
+    "level": 100,
+    "expCost": 3306
+  },
+  {
+    "level": 101,
+    "expCost": 3350
+  },
+  {
+    "level": 102,
+    "expCost": 3394
+  },
+  {
+    "level": 103,
+    "expCost": 3438
+  },
+  {
+    "level": 104,
+    "expCost": 3482
+  },
+  {
+    "level": 105,
+    "expCost": 3527
+  },
+  {
+    "level": 106,
+    "expCost": 3571
+  },
+  {
+    "level": 107,
+    "expCost": 3616
+  },
+  {
+    "level": 108,
+    "expCost": 3661
+  },
+  {
+    "level": 109,
+    "expCost": 3705
+  },
+  {
+    "level": 110,
+    "expCost": 3750
+  },
+  {
+    "level": 111,
+    "expCost": 3796
+  },
+  {
+    "level": 112,
+    "expCost": 3841
+  },
+  {
+    "level": 113,
+    "expCost": 3886
+  },
+  {
+    "level": 114,
+    "expCost": 3932
+  },
+  {
+    "level": 115,
+    "expCost": 3978
+  },
+  {
+    "level": 116,
+    "expCost": 4024
+  },
+  {
+    "level": 117,
+    "expCost": 4070
+  },
+  {
+    "level": 118,
+    "expCost": 4116
+  },
+  {
+    "level": 119,
+    "expCost": 4162
+  },
+  {
+    "level": 120,
+    "expCost": 4208
+  },
+  {
+    "level": 121,
+    "expCost": 4255
+  },
+  {
+    "level": 122,
+    "expCost": 4301
+  },
+  {
+    "level": 123,
+    "expCost": 4348
+  },
+  {
+    "level": 124,
+    "expCost": 4395
+  },
+  {
+    "level": 125,
+    "expCost": 4442
+  },
+  {
+    "level": 126,
+    "expCost": 4489
+  },
+  {
+    "level": 127,
+    "expCost": 4537
+  },
+  {
+    "level": 128,
+    "expCost": 4584
+  },
+  {
+    "level": 129,
+    "expCost": 4631
+  },
+  {
+    "level": 130,
+    "expCost": 4679
+  },
+  {
+    "level": 131,
+    "expCost": 4727
+  },
+  {
+    "level": 132,
+    "expCost": 4775
+  },
+  {
+    "level": 133,
+    "expCost": 4823
+  },
+  {
+    "level": 134,
+    "expCost": 4871
+  },
+  {
+    "level": 135,
+    "expCost": 4919
+  },
+  {
+    "level": 136,
+    "expCost": 4967
+  },
+  {
+    "level": 137,
+    "expCost": 5016
+  },
+  {
+    "level": 138,
+    "expCost": 5064
+  },
+  {
+    "level": 139,
+    "expCost": 5113
+  },
+  {
+    "level": 140,
+    "expCost": 5162
+  },
+  {
+    "level": 141,
+    "expCost": 5211
+  },
+  {
+    "level": 142,
+    "expCost": 5260
+  },
+  {
+    "level": 143,
+    "expCost": 5309
+  },
+  {
+    "level": 144,
+    "expCost": 5358
+  },
+  {
+    "level": 145,
+    "expCost": 5408
+  },
+  {
+    "level": 146,
+    "expCost": 5457
+  },
+  {
+    "level": 147,
+    "expCost": 5507
+  },
+  {
+    "level": 148,
+    "expCost": 5557
+  },
+  {
+    "level": 149,
+    "expCost": 5606
+  },
+  {
+    "level": 150,
+    "expCost": 5656
+  },
+  {
+    "level": 151,
+    "expCost": 5706
+  },
+  {
+    "level": 152,
+    "expCost": 5757
+  },
+  {
+    "level": 153,
+    "expCost": 5807
+  },
+  {
+    "level": 154,
+    "expCost": 5857
+  },
+  {
+    "level": 155,
+    "expCost": 5908
+  },
+  {
+    "level": 156,
+    "expCost": 5958
+  },
+  {
+    "level": 157,
+    "expCost": 6009
+  },
+  {
+    "level": 158,
+    "expCost": 6060
+  },
+  {
+    "level": 159,
+    "expCost": 6111
+  },
+  {
+    "level": 160,
+    "expCost": 6162
+  },
+  {
+    "level": 161,
+    "expCost": 6213
+  },
+  {
+    "level": 162,
+    "expCost": 6264
+  },
+  {
+    "level": 163,
+    "expCost": 6316
+  },
+  {
+    "level": 164,
+    "expCost": 6367
+  },
+  {
+    "level": 165,
+    "expCost": 6419
+  },
+  {
+    "level": 166,
+    "expCost": 6470
+  },
+  {
+    "level": 167,
+    "expCost": 6522
+  },
+  {
+    "level": 168,
+    "expCost": 6574
+  },
+  {
+    "level": 169,
+    "expCost": 6626
+  },
+  {
+    "level": 170,
+    "expCost": 6678
+  },
+  {
+    "level": 171,
+    "expCost": 6730
+  },
+  {
+    "level": 172,
+    "expCost": 6783
+  },
+  {
+    "level": 173,
+    "expCost": 6835
+  },
+  {
+    "level": 174,
+    "expCost": 6888
+  },
+  {
+    "level": 175,
+    "expCost": 6940
+  },
+  {
+    "level": 176,
+    "expCost": 6993
+  },
+  {
+    "level": 177,
+    "expCost": 7046
+  },
+  {
+    "level": 178,
+    "expCost": 7099
+  },
+  {
+    "level": 179,
+    "expCost": 7152
+  },
+  {
+    "level": 180,
+    "expCost": 7205
+  },
+  {
+    "level": 181,
+    "expCost": 7258
+  },
+  {
+    "level": 182,
+    "expCost": 7311
+  },
+  {
+    "level": 183,
+    "expCost": 7364
+  },
+  {
+    "level": 184,
+    "expCost": 7418
+  },
+  {
+    "level": 185,
+    "expCost": 7472
+  },
+  {
+    "level": 186,
+    "expCost": 7525
+  },
+  {
+    "level": 187,
+    "expCost": 7579
+  },
+  {
+    "level": 188,
+    "expCost": 7633
+  },
+  {
+    "level": 189,
+    "expCost": 7687
+  },
+  {
+    "level": 190,
+    "expCost": 7741
+  },
+  {
+    "level": 191,
+    "expCost": 7795
+  },
+  {
+    "level": 192,
+    "expCost": 7849
+  },
+  {
+    "level": 193,
+    "expCost": 7904
+  },
+  {
+    "level": 194,
+    "expCost": 7958
+  },
+  {
+    "level": 195,
+    "expCost": 8013
+  },
+  {
+    "level": 196,
+    "expCost": 8067
+  },
+  {
+    "level": 197,
+    "expCost": 8122
+  },
+  {
+    "level": 198,
+    "expCost": 8177
+  },
+  {
+    "level": 199,
+    "expCost": 8232
+  },
+  {
+    "level": 200,
+    "expCost": 8287
+  },
+  {
+    "level": 201,
+    "expCost": 8342
+  },
+  {
+    "level": 202,
+    "expCost": 8397
+  },
+  {
+    "level": 203,
+    "expCost": 8452
+  },
+  {
+    "level": 204,
+    "expCost": 8508
+  },
+  {
+    "level": 205,
+    "expCost": 8563
+  },
+  {
+    "level": 206,
+    "expCost": 8619
+  },
+  {
+    "level": 207,
+    "expCost": 8674
+  },
+  {
+    "level": 208,
+    "expCost": 8730
+  },
+  {
+    "level": 209,
+    "expCost": 8786
+  },
+  {
+    "level": 210,
+    "expCost": 8842
+  },
+  {
+    "level": 211,
+    "expCost": 8898
+  },
+  {
+    "level": 212,
+    "expCost": 8954
+  },
+  {
+    "level": 213,
+    "expCost": 9010
+  },
+  {
+    "level": 214,
+    "expCost": 9066
+  },
+  {
+    "level": 215,
+    "expCost": 9122
+  },
+  {
+    "level": 216,
+    "expCost": 9179
+  },
+  {
+    "level": 217,
+    "expCost": 9235
+  },
+  {
+    "level": 218,
+    "expCost": 9292
+  },
+  {
+    "level": 219,
+    "expCost": 9349
+  },
+  {
+    "level": 220,
+    "expCost": 9406
+  },
+  {
+    "level": 221,
+    "expCost": 9462
+  },
+  {
+    "level": 222,
+    "expCost": 9519
+  },
+  {
+    "level": 223,
+    "expCost": 9576
+  },
+  {
+    "level": 224,
+    "expCost": 9633
+  },
+  {
+    "level": 225,
+    "expCost": 9691
+  },
+  {
+    "level": 226,
+    "expCost": 9748
+  },
+  {
+    "level": 227,
+    "expCost": 9805
+  },
+  {
+    "level": 228,
+    "expCost": 9863
+  },
+  {
+    "level": 229,
+    "expCost": 9920
+  },
+  {
+    "level": 230,
+    "expCost": 9978
+  },
+  {
+    "level": 231,
+    "expCost": 10036
+  },
+  {
+    "level": 232,
+    "expCost": 10094
+  },
+  {
+    "level": 233,
+    "expCost": 10151
+  },
+  {
+    "level": 234,
+    "expCost": 10209
+  },
+  {
+    "level": 235,
+    "expCost": 10267
+  },
+  {
+    "level": 236,
+    "expCost": 10326
+  },
+  {
+    "level": 237,
+    "expCost": 10384
+  },
+  {
+    "level": 238,
+    "expCost": 10442
+  },
+  {
+    "level": 239,
+    "expCost": 10500
+  },
+  {
+    "level": 240,
+    "expCost": 10559
+  },
+  {
+    "level": 241,
+    "expCost": 10617
+  },
+  {
+    "level": 242,
+    "expCost": 10676
+  },
+  {
+    "level": 243,
+    "expCost": 10735
+  },
+  {
+    "level": 244,
+    "expCost": 10794
+  },
+  {
+    "level": 245,
+    "expCost": 10852
+  },
+  {
+    "level": 246,
+    "expCost": 10911
+  },
+  {
+    "level": 247,
+    "expCost": 10970
+  },
+  {
+    "level": 248,
+    "expCost": 11029
+  },
+  {
+    "level": 249,
+    "expCost": 11089
+  },
+  {
+    "level": 250,
+    "expCost": 11148
+  },
+  {
+    "level": 251,
+    "expCost": 11207
+  },
+  {
+    "level": 252,
+    "expCost": 11267
+  },
+  {
+    "level": 253,
+    "expCost": 11326
+  },
+  {
+    "level": 254,
+    "expCost": 11386
+  },
+  {
+    "level": 255,
+    "expCost": 11445
+  },
+  {
+    "level": 256,
+    "expCost": 11505
+  },
+  {
+    "level": 257,
+    "expCost": 11565
+  },
+  {
+    "level": 258,
+    "expCost": 11625
+  },
+  {
+    "level": 259,
+    "expCost": 11685
+  },
+  {
+    "level": 260,
+    "expCost": 11745
+  },
+  {
+    "level": 261,
+    "expCost": 11805
+  },
+  {
+    "level": 262,
+    "expCost": 11865
+  },
+  {
+    "level": 263,
+    "expCost": 11926
+  },
+  {
+    "level": 264,
+    "expCost": 11986
+  },
+  {
+    "level": 265,
+    "expCost": 12046
+  },
+  {
+    "level": 266,
+    "expCost": 12107
+  },
+  {
+    "level": 267,
+    "expCost": 12167
+  },
+  {
+    "level": 268,
+    "expCost": 12228
+  },
+  {
+    "level": 269,
+    "expCost": 12289
+  },
+  {
+    "level": 270,
+    "expCost": 12350
+  },
+  {
+    "level": 271,
+    "expCost": 12411
+  },
+  {
+    "level": 272,
+    "expCost": 12472
+  },
+  {
+    "level": 273,
+    "expCost": 12533
+  },
+  {
+    "level": 274,
+    "expCost": 12594
+  },
+  {
+    "level": 275,
+    "expCost": 12655
+  },
+  {
+    "level": 276,
+    "expCost": 12716
+  },
+  {
+    "level": 277,
+    "expCost": 12777
+  },
+  {
+    "level": 278,
+    "expCost": 12839
+  },
+  {
+    "level": 279,
+    "expCost": 12900
+  },
+  {
+    "level": 280,
+    "expCost": 12962
+  },
+  {
+    "level": 281,
+    "expCost": 13024
+  },
+  {
+    "level": 282,
+    "expCost": 13085
+  },
+  {
+    "level": 283,
+    "expCost": 13147
+  },
+  {
+    "level": 284,
+    "expCost": 13209
+  },
+  {
+    "level": 285,
+    "expCost": 13271
+  },
+  {
+    "level": 286,
+    "expCost": 13333
+  },
+  {
+    "level": 287,
+    "expCost": 13395
+  },
+  {
+    "level": 288,
+    "expCost": 13457
+  },
+  {
+    "level": 289,
+    "expCost": 13519
+  },
+  {
+    "level": 290,
+    "expCost": 13582
+  },
+  {
+    "level": 291,
+    "expCost": 13644
+  },
+  {
+    "level": 292,
+    "expCost": 13706
+  },
+  {
+    "level": 293,
+    "expCost": 13769
+  },
+  {
+    "level": 294,
+    "expCost": 13831
+  },
+  {
+    "level": 295,
+    "expCost": 13894
+  },
+  {
+    "level": 296,
+    "expCost": 13957
+  },
+  {
+    "level": 297,
+    "expCost": 14020
+  },
+  {
+    "level": 298,
+    "expCost": 14082
+  },
+  {
+    "level": 299,
+    "expCost": 14145
+  },
+  {
+    "level": 300,
+    "expCost": 14208
+  },
+  {
+    "level": 301,
+    "expCost": 14272
+  },
+  {
+    "level": 302,
+    "expCost": 14335
+  },
+  {
+    "level": 303,
+    "expCost": 14398
+  },
+  {
+    "level": 304,
+    "expCost": 14461
+  },
+  {
+    "level": 305,
+    "expCost": 14525
+  },
+  {
+    "level": 306,
+    "expCost": 14588
+  },
+  {
+    "level": 307,
+    "expCost": 14651
+  },
+  {
+    "level": 308,
+    "expCost": 14715
+  },
+  {
+    "level": 309,
+    "expCost": 14779
+  },
+  {
+    "level": 310,
+    "expCost": 14842
+  },
+  {
+    "level": 311,
+    "expCost": 14906
+  },
+  {
+    "level": 312,
+    "expCost": 14970
+  },
+  {
+    "level": 313,
+    "expCost": 15034
+  },
+  {
+    "level": 314,
+    "expCost": 15098
+  },
+  {
+    "level": 315,
+    "expCost": 15162
+  },
+  {
+    "level": 316,
+    "expCost": 15226
+  },
+  {
+    "level": 317,
+    "expCost": 15290
+  },
+  {
+    "level": 318,
+    "expCost": 15354
+  },
+  {
+    "level": 319,
+    "expCost": 15419
+  },
+  {
+    "level": 320,
+    "expCost": 15483
+  },
+  {
+    "level": 321,
+    "expCost": 15548
+  },
+  {
+    "level": 322,
+    "expCost": 15612
+  },
+  {
+    "level": 323,
+    "expCost": 15677
+  },
+  {
+    "level": 324,
+    "expCost": 15741
+  },
+  {
+    "level": 325,
+    "expCost": 15806
+  },
+  {
+    "level": 326,
+    "expCost": 15871
+  },
+  {
+    "level": 327,
+    "expCost": 15936
+  },
+  {
+    "level": 328,
+    "expCost": 16001
+  },
+  {
+    "level": 329,
+    "expCost": 16066
+  },
+  {
+    "level": 330,
+    "expCost": 16131
+  },
+  {
+    "level": 331,
+    "expCost": 16196
+  },
+  {
+    "level": 332,
+    "expCost": 16261
+  },
+  {
+    "level": 333,
+    "expCost": 16326
+  },
+  {
+    "level": 334,
+    "expCost": 16392
+  },
+  {
+    "level": 335,
+    "expCost": 16457
+  },
+  {
+    "level": 336,
+    "expCost": 16522
+  },
+  {
+    "level": 337,
+    "expCost": 16588
+  },
+  {
+    "level": 338,
+    "expCost": 16654
+  },
+  {
+    "level": 339,
+    "expCost": 16719
+  },
+  {
+    "level": 340,
+    "expCost": 16785
+  },
+  {
+    "level": 341,
+    "expCost": 16851
+  },
+  {
+    "level": 342,
+    "expCost": 16917
+  },
+  {
+    "level": 343,
+    "expCost": 16982
+  },
+  {
+    "level": 344,
+    "expCost": 17048
+  },
+  {
+    "level": 345,
+    "expCost": 17114
+  },
+  {
+    "level": 346,
+    "expCost": 17181
+  },
+  {
+    "level": 347,
+    "expCost": 17247
+  },
+  {
+    "level": 348,
+    "expCost": 17313
+  },
+  {
+    "level": 349,
+    "expCost": 17379
+  },
+  {
+    "level": 350,
+    "expCost": 17446
+  },
+  {
+    "level": 351,
+    "expCost": 17512
+  },
+  {
+    "level": 352,
+    "expCost": 17578
+  },
+  {
+    "level": 353,
+    "expCost": 17645
+  },
+  {
+    "level": 354,
+    "expCost": 17712
+  },
+  {
+    "level": 355,
+    "expCost": 17778
+  },
+  {
+    "level": 356,
+    "expCost": 17845
+  },
+  {
+    "level": 357,
+    "expCost": 17912
+  },
+  {
+    "level": 358,
+    "expCost": 17979
+  },
+  {
+    "level": 359,
+    "expCost": 18046
+  },
+  {
+    "level": 360,
+    "expCost": 18113
+  },
+  {
+    "level": 361,
+    "expCost": 18180
+  },
+  {
+    "level": 362,
+    "expCost": 18247
+  },
+  {
+    "level": 363,
+    "expCost": 18314
+  },
+  {
+    "level": 364,
+    "expCost": 18381
+  },
+  {
+    "level": 365,
+    "expCost": 18449
+  },
+  {
+    "level": 366,
+    "expCost": 18516
+  },
+  {
+    "level": 367,
+    "expCost": 18583
+  },
+  {
+    "level": 368,
+    "expCost": 18651
+  },
+  {
+    "level": 369,
+    "expCost": 18718
+  },
+  {
+    "level": 370,
+    "expCost": 18786
+  },
+  {
+    "level": 371,
+    "expCost": 18854
+  },
+  {
+    "level": 372,
+    "expCost": 18921
+  },
+  {
+    "level": 373,
+    "expCost": 18989
+  },
+  {
+    "level": 374,
+    "expCost": 19057
+  },
+  {
+    "level": 375,
+    "expCost": 19125
+  },
+  {
+    "level": 376,
+    "expCost": 19193
+  },
+  {
+    "level": 377,
+    "expCost": 19261
+  },
+  {
+    "level": 378,
+    "expCost": 19329
+  },
+  {
+    "level": 379,
+    "expCost": 19397
+  },
+  {
+    "level": 380,
+    "expCost": 19465
+  },
+  {
+    "level": 381,
+    "expCost": 19534
+  },
+  {
+    "level": 382,
+    "expCost": 19602
+  },
+  {
+    "level": 383,
+    "expCost": 19670
+  },
+  {
+    "level": 384,
+    "expCost": 19739
+  },
+  {
+    "level": 385,
+    "expCost": 19807
+  },
+  {
+    "level": 386,
+    "expCost": 19876
+  },
+  {
+    "level": 387,
+    "expCost": 19945
+  },
+  {
+    "level": 388,
+    "expCost": 20013
+  },
+  {
+    "level": 389,
+    "expCost": 20082
+  },
+  {
+    "level": 390,
+    "expCost": 20151
+  },
+  {
+    "level": 391,
+    "expCost": 20220
+  },
+  {
+    "level": 392,
+    "expCost": 20289
+  },
+  {
+    "level": 393,
+    "expCost": 20358
+  },
+  {
+    "level": 394,
+    "expCost": 20427
+  },
+  {
+    "level": 395,
+    "expCost": 20496
+  },
+  {
+    "level": 396,
+    "expCost": 20565
+  },
+  {
+    "level": 397,
+    "expCost": 20634
+  },
+  {
+    "level": 398,
+    "expCost": 20704
+  },
+  {
+    "level": 399,
+    "expCost": 20773
+  },
+  {
+    "level": 400,
+    "expCost": 20842
+  },
+  {
+    "level": 401,
+    "expCost": 20912
+  },
+  {
+    "level": 402,
+    "expCost": 20981
+  },
+  {
+    "level": 403,
+    "expCost": 21051
+  },
+  {
+    "level": 404,
+    "expCost": 21121
+  },
+  {
+    "level": 405,
+    "expCost": 21190
+  },
+  {
+    "level": 406,
+    "expCost": 21260
+  },
+  {
+    "level": 407,
+    "expCost": 21330
+  },
+  {
+    "level": 408,
+    "expCost": 21400
+  },
+  {
+    "level": 409,
+    "expCost": 21470
+  },
+  {
+    "level": 410,
+    "expCost": 21540
+  },
+  {
+    "level": 411,
+    "expCost": 21610
+  },
+  {
+    "level": 412,
+    "expCost": 21680
+  },
+  {
+    "level": 413,
+    "expCost": 21750
+  },
+  {
+    "level": 414,
+    "expCost": 21820
+  },
+  {
+    "level": 415,
+    "expCost": 21890
+  },
+  {
+    "level": 416,
+    "expCost": 21961
+  },
+  {
+    "level": 417,
+    "expCost": 22031
+  },
+  {
+    "level": 418,
+    "expCost": 22102
+  },
+  {
+    "level": 419,
+    "expCost": 22172
+  },
+  {
+    "level": 420,
+    "expCost": 22243
+  },
+  {
+    "level": 421,
+    "expCost": 22313
+  },
+  {
+    "level": 422,
+    "expCost": 22384
+  },
+  {
+    "level": 423,
+    "expCost": 22455
+  },
+  {
+    "level": 424,
+    "expCost": 22525
+  },
+  {
+    "level": 425,
+    "expCost": 22596
+  },
+  {
+    "level": 426,
+    "expCost": 22667
+  },
+  {
+    "level": 427,
+    "expCost": 22738
+  },
+  {
+    "level": 428,
+    "expCost": 22809
+  },
+  {
+    "level": 429,
+    "expCost": 22880
+  },
+  {
+    "level": 430,
+    "expCost": 22951
+  },
+  {
+    "level": 431,
+    "expCost": 23022
+  },
+  {
+    "level": 432,
+    "expCost": 23094
+  },
+  {
+    "level": 433,
+    "expCost": 23165
+  },
+  {
+    "level": 434,
+    "expCost": 23236
+  },
+  {
+    "level": 435,
+    "expCost": 23308
+  },
+  {
+    "level": 436,
+    "expCost": 23379
+  },
+  {
+    "level": 437,
+    "expCost": 23451
+  },
+  {
+    "level": 438,
+    "expCost": 23522
+  },
+  {
+    "level": 439,
+    "expCost": 23594
+  },
+  {
+    "level": 440,
+    "expCost": 23666
+  },
+  {
+    "level": 441,
+    "expCost": 23737
+  },
+  {
+    "level": 442,
+    "expCost": 23809
+  },
+  {
+    "level": 443,
+    "expCost": 23881
+  },
+  {
+    "level": 444,
+    "expCost": 23953
+  },
+  {
+    "level": 445,
+    "expCost": 24025
+  },
+  {
+    "level": 446,
+    "expCost": 24097
+  },
+  {
+    "level": 447,
+    "expCost": 24169
+  },
+  {
+    "level": 448,
+    "expCost": 24241
+  },
+  {
+    "level": 449,
+    "expCost": 24313
+  },
+  {
+    "level": 450,
+    "expCost": 24385
+  },
+  {
+    "level": 451,
+    "expCost": 24458
+  },
+  {
+    "level": 452,
+    "expCost": 24530
+  },
+  {
+    "level": 453,
+    "expCost": 24602
+  },
+  {
+    "level": 454,
+    "expCost": 24675
+  },
+  {
+    "level": 455,
+    "expCost": 24747
+  },
+  {
+    "level": 456,
+    "expCost": 24820
+  },
+  {
+    "level": 457,
+    "expCost": 24892
+  },
+  {
+    "level": 458,
+    "expCost": 24965
+  },
+  {
+    "level": 459,
+    "expCost": 25038
+  },
+  {
+    "level": 460,
+    "expCost": 25110
+  },
+  {
+    "level": 461,
+    "expCost": 25183
+  },
+  {
+    "level": 462,
+    "expCost": 25256
+  },
+  {
+    "level": 463,
+    "expCost": 25329
+  },
+  {
+    "level": 464,
+    "expCost": 25402
+  },
+  {
+    "level": 465,
+    "expCost": 25475
+  },
+  {
+    "level": 466,
+    "expCost": 25548
+  },
+  {
+    "level": 467,
+    "expCost": 25621
+  },
+  {
+    "level": 468,
+    "expCost": 25694
+  },
+  {
+    "level": 469,
+    "expCost": 25768
+  },
+  {
+    "level": 470,
+    "expCost": 25841
+  },
+  {
+    "level": 471,
+    "expCost": 25914
+  },
+  {
+    "level": 472,
+    "expCost": 25988
+  },
+  {
+    "level": 473,
+    "expCost": 26061
+  },
+  {
+    "level": 474,
+    "expCost": 26135
+  },
+  {
+    "level": 475,
+    "expCost": 26208
+  },
+  {
+    "level": 476,
+    "expCost": 26282
+  },
+  {
+    "level": 477,
+    "expCost": 26355
+  },
+  {
+    "level": 478,
+    "expCost": 26429
+  },
+  {
+    "level": 479,
+    "expCost": 26503
+  },
+  {
+    "level": 480,
+    "expCost": 26577
+  },
+  {
+    "level": 481,
+    "expCost": 26651
+  },
+  {
+    "level": 482,
+    "expCost": 26724
+  },
+  {
+    "level": 483,
+    "expCost": 26798
+  },
+  {
+    "level": 484,
+    "expCost": 26872
+  },
+  {
+    "level": 485,
+    "expCost": 26946
+  },
+  {
+    "level": 486,
+    "expCost": 27021
+  },
+  {
+    "level": 487,
+    "expCost": 27095
+  },
+  {
+    "level": 488,
+    "expCost": 27169
+  },
+  {
+    "level": 489,
+    "expCost": 27243
+  },
+  {
+    "level": 490,
+    "expCost": 27318
+  },
+  {
+    "level": 491,
+    "expCost": 27392
+  },
+  {
+    "level": 492,
+    "expCost": 27466
+  },
+  {
+    "level": 493,
+    "expCost": 27541
+  },
+  {
+    "level": 494,
+    "expCost": 27615
+  },
+  {
+    "level": 495,
+    "expCost": 27690
+  },
+  {
+    "level": 496,
+    "expCost": 27765
+  },
+  {
+    "level": 497,
+    "expCost": 27839
+  },
+  {
+    "level": 498,
+    "expCost": 27914
+  },
+  {
+    "level": 499,
+    "expCost": 27989
+  },
+  {
+    "level": 500,
+    "expCost": 28064
+  },
+  {
+    "level": 501,
+    "expCost": 28138
+  },
+  {
+    "level": 502,
+    "expCost": 28213
+  },
+  {
+    "level": 503,
+    "expCost": 28288
+  },
+  {
+    "level": 504,
+    "expCost": 28363
+  },
+  {
+    "level": 505,
+    "expCost": 28439
+  },
+  {
+    "level": 506,
+    "expCost": 28514
+  },
+  {
+    "level": 507,
+    "expCost": 28589
+  },
+  {
+    "level": 508,
+    "expCost": 28664
+  },
+  {
+    "level": 509,
+    "expCost": 28739
+  },
+  {
+    "level": 510,
+    "expCost": 28815
+  },
+  {
+    "level": 511,
+    "expCost": 28890
+  },
+  {
+    "level": 512,
+    "expCost": 28965
+  },
+  {
+    "level": 513,
+    "expCost": 29041
+  },
+  {
+    "level": 514,
+    "expCost": 29117
+  },
+  {
+    "level": 515,
+    "expCost": 29192
+  },
+  {
+    "level": 516,
+    "expCost": 29268
+  },
+  {
+    "level": 517,
+    "expCost": 29343
+  },
+  {
+    "level": 518,
+    "expCost": 29419
+  },
+  {
+    "level": 519,
+    "expCost": 29495
+  },
+  {
+    "level": 520,
+    "expCost": 29571
+  },
+  {
+    "level": 521,
+    "expCost": 29647
+  },
+  {
+    "level": 522,
+    "expCost": 29723
+  },
+  {
+    "level": 523,
+    "expCost": 29799
+  },
+  {
+    "level": 524,
+    "expCost": 29875
+  },
+  {
+    "level": 525,
+    "expCost": 29951
+  },
+  {
+    "level": 526,
+    "expCost": 30027
+  },
+  {
+    "level": 527,
+    "expCost": 30103
+  },
+  {
+    "level": 528,
+    "expCost": 30179
+  },
+  {
+    "level": 529,
+    "expCost": 30255
+  },
+  {
+    "level": 530,
+    "expCost": 30332
+  },
+  {
+    "level": 531,
+    "expCost": 30408
+  },
+  {
+    "level": 532,
+    "expCost": 30485
+  },
+  {
+    "level": 533,
+    "expCost": 30561
+  },
+  {
+    "level": 534,
+    "expCost": 30637
+  },
+  {
+    "level": 535,
+    "expCost": 30714
+  },
+  {
+    "level": 536,
+    "expCost": 30791
+  },
+  {
+    "level": 537,
+    "expCost": 30867
+  },
+  {
+    "level": 538,
+    "expCost": 30944
+  },
+  {
+    "level": 539,
+    "expCost": 31021
+  },
+  {
+    "level": 540,
+    "expCost": 31098
+  },
+  {
+    "level": 541,
+    "expCost": 31174
+  },
+  {
+    "level": 542,
+    "expCost": 31251
+  },
+  {
+    "level": 543,
+    "expCost": 31328
+  },
+  {
+    "level": 544,
+    "expCost": 31405
+  },
+  {
+    "level": 545,
+    "expCost": 31482
+  },
+  {
+    "level": 546,
+    "expCost": 31559
+  },
+  {
+    "level": 547,
+    "expCost": 31637
+  },
+  {
+    "level": 548,
+    "expCost": 31714
+  },
+  {
+    "level": 549,
+    "expCost": 31791
+  },
+  {
+    "level": 550,
+    "expCost": 31868
+  },
+  {
+    "level": 551,
+    "expCost": 31946
+  },
+  {
+    "level": 552,
+    "expCost": 32023
+  },
+  {
+    "level": 553,
+    "expCost": 32100
+  },
+  {
+    "level": 554,
+    "expCost": 32178
+  },
+  {
+    "level": 555,
+    "expCost": 32255
+  },
+  {
+    "level": 556,
+    "expCost": 32333
+  },
+  {
+    "level": 557,
+    "expCost": 32411
+  },
+  {
+    "level": 558,
+    "expCost": 32488
+  },
+  {
+    "level": 559,
+    "expCost": 32566
+  },
+  {
+    "level": 560,
+    "expCost": 32644
+  },
+  {
+    "level": 561,
+    "expCost": 32721
+  },
+  {
+    "level": 562,
+    "expCost": 32799
+  },
+  {
+    "level": 563,
+    "expCost": 32877
+  },
+  {
+    "level": 564,
+    "expCost": 32955
+  },
+  {
+    "level": 565,
+    "expCost": 33033
+  },
+  {
+    "level": 566,
+    "expCost": 33111
+  },
+  {
+    "level": 567,
+    "expCost": 33189
+  },
+  {
+    "level": 568,
+    "expCost": 33267
+  },
+  {
+    "level": 569,
+    "expCost": 33345
+  },
+  {
+    "level": 570,
+    "expCost": 33424
+  },
+  {
+    "level": 571,
+    "expCost": 33502
+  },
+  {
+    "level": 572,
+    "expCost": 33580
+  },
+  {
+    "level": 573,
+    "expCost": 33659
+  },
+  {
+    "level": 574,
+    "expCost": 33737
+  },
+  {
+    "level": 575,
+    "expCost": 33815
+  },
+  {
+    "level": 576,
+    "expCost": 33894
+  },
+  {
+    "level": 577,
+    "expCost": 33973
+  },
+  {
+    "level": 578,
+    "expCost": 34051
+  },
+  {
+    "level": 579,
+    "expCost": 34130
+  },
+  {
+    "level": 580,
+    "expCost": 34208
+  },
+  {
+    "level": 581,
+    "expCost": 34287
+  },
+  {
+    "level": 582,
+    "expCost": 34366
+  },
+  {
+    "level": 583,
+    "expCost": 34445
+  },
+  {
+    "level": 584,
+    "expCost": 34524
+  },
+  {
+    "level": 585,
+    "expCost": 34602
+  },
+  {
+    "level": 586,
+    "expCost": 34681
+  },
+  {
+    "level": 587,
+    "expCost": 34760
+  },
+  {
+    "level": 588,
+    "expCost": 34839
+  },
+  {
+    "level": 589,
+    "expCost": 34919
+  },
+  {
+    "level": 590,
+    "expCost": 34998
+  },
+  {
+    "level": 591,
+    "expCost": 35077
+  },
+  {
+    "level": 592,
+    "expCost": 35156
+  },
+  {
+    "level": 593,
+    "expCost": 35235
+  },
+  {
+    "level": 594,
+    "expCost": 35315
+  },
+  {
+    "level": 595,
+    "expCost": 35394
+  },
+  {
+    "level": 596,
+    "expCost": 35473
+  },
+  {
+    "level": 597,
+    "expCost": 35553
+  },
+  {
+    "level": 598,
+    "expCost": 35632
+  },
+  {
+    "level": 599,
+    "expCost": 35712
+  },
+  {
+    "level": 600,
+    "expCost": 35792
+  }
+]

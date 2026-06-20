@@ -1,0 +1,2663 @@
+[
+  {
+    "id": "chapter-01-segment-01",
+    "chapter": 1,
+    "segment": 1,
+    "name": "낡은 골목 입구",
+    "enemyName": "월세 알림",
+    "normalEnemyNames": [
+      "월세 알림",
+      "생활 기반 1구간 서류",
+      "구겨진 이력서 괴물 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 0.96,
+    "description": "생활 기반의 낡은 골목 입구에서 월세 알림과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-01-segment-02",
+    "chapter": 1,
+    "segment": 2,
+    "name": "임시 쉼터 대기줄",
+    "enemyName": "대기 번호표",
+    "normalEnemyNames": [
+      "대기 번호표",
+      "생활 기반 2구간 서류",
+      "잠자리 추첨함 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "social"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 0.98,
+    "description": "생활 기반의 임시 쉼터 대기줄에서 대기 번호표과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-01-segment-03",
+    "chapter": 1,
+    "segment": 3,
+    "name": "편의점 앞 새벽",
+    "enemyName": "새벽 근무표",
+    "normalEnemyNames": [
+      "새벽 근무표",
+      "생활 기반 3구간 서류",
+      "새벽 알바 스케줄러 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "social",
+      "math"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 0.99,
+    "description": "생활 기반의 편의점 앞 새벽에서 새벽 근무표과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-01-segment-04",
+    "chapter": 1,
+    "segment": 4,
+    "name": "구청 민원 창구",
+    "enemyName": "민원 서류 더미",
+    "normalEnemyNames": [
+      "민원 서류 더미",
+      "생활 기반 4구간 서류",
+      "서류 미비 유령 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.01,
+    "description": "생활 기반의 구청 민원 창구에서 민원 서류 더미과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-01-segment-05",
+    "chapter": 1,
+    "segment": 5,
+    "name": "식비 계산 골목",
+    "enemyName": "생활비 영수증",
+    "normalEnemyNames": [
+      "생활비 영수증",
+      "생활 기반 5구간 서류",
+      "식비 계산표 슬라임 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "math"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.03,
+    "description": "생활 기반의 식비 계산 골목에서 생활비 영수증과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-01-segment-06",
+    "chapter": 1,
+    "segment": 6,
+    "name": "무료 상담소",
+    "enemyName": "상담 예약표",
+    "normalEnemyNames": [
+      "상담 예약표",
+      "생활 기반 6구간 서류",
+      "상담 예약 장벽 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.05,
+    "description": "생활 기반의 무료 상담소에서 상담 예약표과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-01-segment-07",
+    "chapter": 1,
+    "segment": 7,
+    "name": "고시원 복도",
+    "enemyName": "좁은 방음벽",
+    "normalEnemyNames": [
+      "좁은 방음벽",
+      "생활 기반 7구간 서류",
+      "방음 없는 밤 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "social"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.07,
+    "description": "생활 기반의 고시원 복도에서 좁은 방음벽과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-01-segment-08",
+    "chapter": 1,
+    "segment": 8,
+    "name": "직업소개소 앞",
+    "enemyName": "경력 빈칸",
+    "normalEnemyNames": [
+      "경력 빈칸",
+      "생활 기반 8구간 서류",
+      "경력 공백의 그림자 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.08,
+    "description": "생활 기반의 직업소개소 앞에서 경력 빈칸과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-01-segment-09",
+    "chapter": 1,
+    "segment": 9,
+    "name": "체납 고지서 거리",
+    "enemyName": "체납 고지서",
+    "normalEnemyNames": [
+      "체납 고지서",
+      "생활 기반 9구간 서류",
+      "체납 고지서 골렘 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.1,
+    "description": "생활 기반의 체납 고지서 거리에서 체납 고지서과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-01-segment-10",
+    "chapter": 1,
+    "segment": 10,
+    "name": "자립의 문",
+    "enemyName": "마지막 점검표",
+    "normalEnemyNames": [
+      "마지막 점검표",
+      "생활 기반 10구간 서류",
+      "자립 승인 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean",
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.12,
+    "description": "생활 기반의 자립의 문에서 마지막 점검표과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-02-segment-01",
+    "chapter": 2,
+    "segment": 1,
+    "name": "원룸촌 입구",
+    "enemyName": "월세 계약서",
+    "normalEnemyNames": [
+      "월세 계약서",
+      "원룸 자립 1구간 서류",
+      "월세 계약서 함정 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.04,
+    "description": "원룸 자립의 원룸촌 입구에서 월세 계약서과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-02-segment-02",
+    "chapter": 2,
+    "segment": 2,
+    "name": "고시원 계단",
+    "enemyName": "공용 세탁표",
+    "normalEnemyNames": [
+      "공용 세탁표",
+      "원룸 자립 2구간 서류",
+      "공용 세탁기 전쟁 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "social"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.06,
+    "description": "원룸 자립의 고시원 계단에서 공용 세탁표과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-02-segment-03",
+    "chapter": 2,
+    "segment": 3,
+    "name": "편의점 야간 근무",
+    "enemyName": "야간 근무 피로",
+    "normalEnemyNames": [
+      "야간 근무 피로",
+      "원룸 자립 3구간 서류",
+      "야간 근무 피로 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "social",
+      "math"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.07,
+    "description": "원룸 자립의 편의점 야간 근무에서 야간 근무 피로과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-02-segment-04",
+    "chapter": 2,
+    "segment": 4,
+    "name": "카페 알바 거리",
+    "enemyName": "주문 러시",
+    "normalEnemyNames": [
+      "주문 러시",
+      "원룸 자립 4구간 서류",
+      "주문 러시 타이머 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean",
+      "math"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.09,
+    "description": "원룸 자립의 카페 알바 거리에서 주문 러시과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-02-segment-05",
+    "chapter": 2,
+    "segment": 5,
+    "name": "버스정류장 환승 미로",
+    "enemyName": "환승 계산표",
+    "normalEnemyNames": [
+      "환승 계산표",
+      "원룸 자립 5구간 서류",
+      "교통비 계산 미로 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "math"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.11,
+    "description": "원룸 자립의 버스정류장 환승 미로에서 환승 계산표과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-02-segment-06",
+    "chapter": 2,
+    "segment": 6,
+    "name": "면접 대기실",
+    "enemyName": "자기소개 압박",
+    "normalEnemyNames": [
+      "자기소개 압박",
+      "원룸 자립 6구간 서류",
+      "자기소개 압박 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.13,
+    "description": "원룸 자립의 면접 대기실에서 자기소개 압박과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-02-segment-07",
+    "chapter": 2,
+    "segment": 7,
+    "name": "자격증 학원",
+    "enemyName": "문제집 더미",
+    "normalEnemyNames": [
+      "문제집 더미",
+      "원룸 자립 7구간 서류",
+      "문제집 산맥 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean",
+      "math"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.15,
+    "description": "원룸 자립의 자격증 학원에서 문제집 더미과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-02-segment-08",
+    "chapter": 2,
+    "segment": 8,
+    "name": "근로계약 상담소",
+    "enemyName": "작은 글씨 조항",
+    "normalEnemyNames": [
+      "작은 글씨 조항",
+      "원룸 자립 8구간 서류",
+      "작은 글씨 계약 조항 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.16,
+    "description": "원룸 자립의 근로계약 상담소에서 작은 글씨 조항과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-02-segment-09",
+    "chapter": 2,
+    "segment": 9,
+    "name": "알바비 정산 창구",
+    "enemyName": "누락된 시급표",
+    "normalEnemyNames": [
+      "누락된 시급표",
+      "원룸 자립 9구간 서류",
+      "누락된 시급 계산서 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.18,
+    "description": "원룸 자립의 알바비 정산 창구에서 누락된 시급표과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-02-segment-10",
+    "chapter": 2,
+    "segment": 10,
+    "name": "첫 독립의 방",
+    "enemyName": "보증금 견적서",
+    "normalEnemyNames": [
+      "보증금 견적서",
+      "원룸 자립 10구간 서류",
+      "독립 승인 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "math",
+      "korean",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.2,
+    "description": "원룸 자립의 첫 독립의 방에서 보증금 견적서과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-03-segment-01",
+    "chapter": 3,
+    "segment": 1,
+    "name": "빌라촌 골목",
+    "enemyName": "관리비 고지서",
+    "normalEnemyNames": [
+      "관리비 고지서",
+      "동네 생활권 1구간 서류",
+      "관리비 고지서 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "math"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.12,
+    "description": "동네 생활권의 빌라촌 골목에서 관리비 고지서과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-03-segment-02",
+    "chapter": 3,
+    "segment": 2,
+    "name": "동네 시장",
+    "enemyName": "가격표 혼란",
+    "normalEnemyNames": [
+      "가격표 혼란",
+      "동네 생활권 2구간 서류",
+      "가격표 혼란 슬라임 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.14,
+    "description": "동네 생활권의 동네 시장에서 가격표 혼란과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-03-segment-03",
+    "chapter": 3,
+    "segment": 3,
+    "name": "동네 병원 대기실",
+    "enemyName": "병원 예약표",
+    "normalEnemyNames": [
+      "병원 예약표",
+      "동네 생활권 3구간 서류",
+      "병원 예약 전쟁 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "science",
+      "social"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.15,
+    "description": "동네 생활권의 동네 병원 대기실에서 병원 예약표과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-03-segment-04",
+    "chapter": 3,
+    "segment": 4,
+    "name": "학원가 입구",
+    "enemyName": "학원비 계산서",
+    "normalEnemyNames": [
+      "학원비 계산서",
+      "동네 생활권 4구간 서류",
+      "학원비 계산서 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "math",
+      "korean"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.17,
+    "description": "동네 생활권의 학원가 입구에서 학원비 계산서과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-03-segment-05",
+    "chapter": 3,
+    "segment": 5,
+    "name": "주민센터 게시판",
+    "enemyName": "민원 게시판",
+    "normalEnemyNames": [
+      "민원 게시판",
+      "동네 생활권 5구간 서류",
+      "동네 민원 게시판 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "social",
+      "korean"
+    ],
+    "resistSubjects": [
+      "math"
+    ],
+    "difficultyMultiplier": 1.19,
+    "description": "동네 생활권의 주민센터 게시판에서 민원 게시판과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-03-segment-06",
+    "chapter": 3,
+    "segment": 6,
+    "name": "소상공인 장부",
+    "enemyName": "장부 누락",
+    "normalEnemyNames": [
+      "장부 누락",
+      "동네 생활권 6구간 서류",
+      "장부 누락 괴물 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.21,
+    "description": "동네 생활권의 소상공인 장부에서 장부 누락과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-03-segment-07",
+    "chapter": 3,
+    "segment": 7,
+    "name": "동네 부동산",
+    "enemyName": "전월세 비교표",
+    "normalEnemyNames": [
+      "전월세 비교표",
+      "동네 생활권 7구간 서류",
+      "전월세 비교표 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "math",
+      "korean"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.23,
+    "description": "동네 생활권의 동네 부동산에서 전월세 비교표과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-03-segment-08",
+    "chapter": 3,
+    "segment": 8,
+    "name": "보험 상담 창구",
+    "enemyName": "보장 조건 미로",
+    "normalEnemyNames": [
+      "보장 조건 미로",
+      "동네 생활권 8구간 서류",
+      "보장 조건 미로 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean",
+      "math"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.24,
+    "description": "동네 생활권의 보험 상담 창구에서 보장 조건 미로과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-03-segment-09",
+    "chapter": 3,
+    "segment": 9,
+    "name": "생활비 회의실",
+    "enemyName": "가계부 블랙홀",
+    "normalEnemyNames": [
+      "가계부 블랙홀",
+      "동네 생활권 9구간 서류",
+      "가계부 블랙홀 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.26,
+    "description": "동네 생활권의 생활비 회의실에서 가계부 블랙홀과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-03-segment-10",
+    "chapter": 3,
+    "segment": 10,
+    "name": "은행 대출 창구",
+    "enemyName": "대출 서류 묶음",
+    "normalEnemyNames": [
+      "대출 서류 묶음",
+      "동네 생활권 10구간 서류",
+      "신용 조건 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "social",
+      "math"
+    ],
+    "weakSubjects": [
+      "math",
+      "korean",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.28,
+    "description": "동네 생활권의 은행 대출 창구에서 대출 서류 묶음과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-04-segment-01",
+    "chapter": 4,
+    "segment": 1,
+    "name": "신도시 출근길",
+    "enemyName": "출근길 지옥철",
+    "normalEnemyNames": [
+      "출근길 지옥철",
+      "회사 지구 1구간 서류",
+      "출근길 지옥철 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.2,
+    "description": "회사 지구의 신도시 출근길에서 출근길 지옥철과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-04-segment-02",
+    "chapter": 4,
+    "segment": 2,
+    "name": "오피스 로비",
+    "enemyName": "출입증 게이트",
+    "normalEnemyNames": [
+      "출입증 게이트",
+      "회사 지구 2구간 서류",
+      "출입증 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "social",
+      "korean"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.22,
+    "description": "회사 지구의 오피스 로비에서 출입증 게이트과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-04-segment-03",
+    "chapter": 4,
+    "segment": 3,
+    "name": "회의실",
+    "enemyName": "회의록 미로",
+    "normalEnemyNames": [
+      "회의록 미로",
+      "회사 지구 3구간 서류",
+      "회의록 미로 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean"
+    ],
+    "resistSubjects": [
+      "math"
+    ],
+    "difficultyMultiplier": 1.23,
+    "description": "회사 지구의 회의실에서 회의록 미로과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-04-segment-04",
+    "chapter": 4,
+    "segment": 4,
+    "name": "엑셀 늪지",
+    "enemyName": "엑셀 수식 늪",
+    "normalEnemyNames": [
+      "엑셀 수식 늪",
+      "회사 지구 4구간 서류",
+      "엑셀 수식 늪 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math"
+    ],
+    "weakSubjects": [
+      "math"
+    ],
+    "resistSubjects": [
+      "korean"
+    ],
+    "difficultyMultiplier": 1.25,
+    "description": "회사 지구의 엑셀 늪지에서 엑셀 수식 늪과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-04-segment-05",
+    "chapter": 4,
+    "segment": 5,
+    "name": "메일함 폭풍",
+    "enemyName": "영어 메일 폭탄",
+    "normalEnemyNames": [
+      "영어 메일 폭탄",
+      "회사 지구 5구간 서류",
+      "영어 메일 폭탄 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math"
+    ],
+    "weakSubjects": [
+      "english",
+      "korean"
+    ],
+    "resistSubjects": [
+      "social"
+    ],
+    "difficultyMultiplier": 1.27,
+    "description": "회사 지구의 메일함 폭풍에서 영어 메일 폭탄과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-04-segment-06",
+    "chapter": 4,
+    "segment": 6,
+    "name": "발표 자료실",
+    "enemyName": "PPT 골렘",
+    "normalEnemyNames": [
+      "PPT 골렘",
+      "회사 지구 6구간 서류",
+      "PPT 골렘 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean",
+      "english"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.29,
+    "description": "회사 지구의 발표 자료실에서 PPT 골렘과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-04-segment-07",
+    "chapter": 4,
+    "segment": 7,
+    "name": "성과 평가실",
+    "enemyName": "성과 평가 저울",
+    "normalEnemyNames": [
+      "성과 평가 저울",
+      "회사 지구 7구간 서류",
+      "성과 평가 저울 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "korean",
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.31,
+    "description": "회사 지구의 성과 평가실에서 성과 평가 저울과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-04-segment-08",
+    "chapter": 4,
+    "segment": 8,
+    "name": "팀 프로젝트 전장",
+    "enemyName": "일정 지연 괴물",
+    "normalEnemyNames": [
+      "일정 지연 괴물",
+      "회사 지구 8구간 서류",
+      "일정 지연 괴물 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "social",
+      "math"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.32,
+    "description": "회사 지구의 팀 프로젝트 전장에서 일정 지연 괴물과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-04-segment-09",
+    "chapter": 4,
+    "segment": 9,
+    "name": "야근 복도",
+    "enemyName": "퇴근 방해 그림자",
+    "normalEnemyNames": [
+      "퇴근 방해 그림자",
+      "회사 지구 9구간 서류",
+      "퇴근 방해 그림자 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "social",
+      "korean"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.34,
+    "description": "회사 지구의 야근 복도에서 퇴근 방해 그림자과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-04-segment-10",
+    "chapter": 4,
+    "segment": 10,
+    "name": "부장실 앞",
+    "enemyName": "야근 승인 도장",
+    "normalEnemyNames": [
+      "야근 승인 도장",
+      "회사 지구 10구간 서류",
+      "회사 지구 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "korean",
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.36,
+    "description": "회사 지구의 부장실 앞에서 야근 승인 도장과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-05-segment-01",
+    "chapter": 5,
+    "segment": 1,
+    "name": "법원 앞 계단",
+    "enemyName": "계약서 히드라",
+    "normalEnemyNames": [
+      "계약서 히드라",
+      "전문직 오피스 1구간 서류",
+      "계약서 히드라 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "science",
+      "social"
+    ],
+    "weakSubjects": [
+      "korean",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.28,
+    "description": "전문직 오피스의 법원 앞 계단에서 계약서 히드라과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-05-segment-02",
+    "chapter": 5,
+    "segment": 2,
+    "name": "대학병원 응급실",
+    "enemyName": "응급실 타이머",
+    "normalEnemyNames": [
+      "응급실 타이머",
+      "전문직 오피스 2구간 서류",
+      "응급실 타이머 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "science",
+      "math"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.3,
+    "description": "전문직 오피스의 대학병원 응급실에서 응급실 타이머과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-05-segment-03",
+    "chapter": 5,
+    "segment": 3,
+    "name": "연구소 복도",
+    "enemyName": "논문 심사관",
+    "normalEnemyNames": [
+      "논문 심사관",
+      "전문직 오피스 3구간 서류",
+      "논문 심사관 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "science",
+      "english"
+    ],
+    "weakSubjects": [
+      "math",
+      "science",
+      "english"
+    ],
+    "resistSubjects": [
+      "korean"
+    ],
+    "difficultyMultiplier": 1.31,
+    "description": "전문직 오피스의 연구소 복도에서 논문 심사관과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-05-segment-04",
+    "chapter": 5,
+    "segment": 4,
+    "name": "증권가 전광판",
+    "enemyName": "투자 리스크 블랙홀",
+    "normalEnemyNames": [
+      "투자 리스크 블랙홀",
+      "전문직 오피스 4구간 서류",
+      "투자 리스크 블랙홀 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "science",
+      "social"
+    ],
+    "weakSubjects": [
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "korean"
+    ],
+    "difficultyMultiplier": 1.33,
+    "description": "전문직 오피스의 증권가 전광판에서 투자 리스크 블랙홀과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-05-segment-05",
+    "chapter": 5,
+    "segment": 5,
+    "name": "특허 사무소",
+    "enemyName": "특허 문장 미궁",
+    "normalEnemyNames": [
+      "특허 문장 미궁",
+      "전문직 오피스 5구간 서류",
+      "특허 문장 미궁 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "korean",
+      "science"
+    ],
+    "resistSubjects": [
+      "social"
+    ],
+    "difficultyMultiplier": 1.35,
+    "description": "전문직 오피스의 특허 사무소에서 특허 문장 미궁과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-05-segment-06",
+    "chapter": 5,
+    "segment": 6,
+    "name": "고급 회의실",
+    "enemyName": "임원 보고 압박",
+    "normalEnemyNames": [
+      "임원 보고 압박",
+      "전문직 오피스 6구간 서류",
+      "임원 보고 압박 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "korean",
+      "math"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.37,
+    "description": "전문직 오피스의 고급 회의실에서 임원 보고 압박과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-05-segment-07",
+    "chapter": 5,
+    "segment": 7,
+    "name": "전문직 네트워크",
+    "enemyName": "평판의 거울",
+    "normalEnemyNames": [
+      "평판의 거울",
+      "전문직 오피스 7구간 서류",
+      "평판의 거울 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "science",
+      "social"
+    ],
+    "weakSubjects": [
+      "social",
+      "korean"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.39,
+    "description": "전문직 오피스의 전문직 네트워크에서 평판의 거울과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-05-segment-08",
+    "chapter": 5,
+    "segment": 8,
+    "name": "컨설팅 워룸",
+    "enemyName": "전략 보고서 골렘",
+    "normalEnemyNames": [
+      "전략 보고서 골렘",
+      "전문직 오피스 8구간 서류",
+      "전략 보고서 골렘 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "science",
+      "english"
+    ],
+    "weakSubjects": [
+      "korean",
+      "math",
+      "english"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.4,
+    "description": "전문직 오피스의 컨설팅 워룸에서 전략 보고서 골렘과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-05-segment-09",
+    "chapter": 5,
+    "segment": 9,
+    "name": "고층 오피스 야경",
+    "enemyName": "성과 압박 타워",
+    "normalEnemyNames": [
+      "성과 압박 타워",
+      "전문직 오피스 9구간 서류",
+      "성과 압박 타워 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "science",
+      "social"
+    ],
+    "weakSubjects": [
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.42,
+    "description": "전문직 오피스의 고층 오피스 야경에서 성과 압박 타워과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-05-segment-10",
+    "chapter": 5,
+    "segment": 10,
+    "name": "커리어 타워 입구",
+    "enemyName": "전문직 승인 게이트",
+    "normalEnemyNames": [
+      "전문직 승인 게이트",
+      "전문직 오피스 10구간 서류",
+      "커리어 타워 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "science",
+      "social"
+    ],
+    "weakSubjects": [
+      "korean",
+      "math",
+      "social"
+    ],
+    "resistSubjects": [],
+    "difficultyMultiplier": 1.44,
+    "description": "전문직 오피스의 커리어 타워 입구에서 전문직 승인 게이트과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-06-segment-01",
+    "chapter": 6,
+    "segment": 1,
+    "name": "초대장 없는 로비",
+    "enemyName": "초대장 게이트",
+    "normalEnemyNames": [
+      "초대장 게이트",
+      "자산 네트워크 1구간 서류",
+      "초대장 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "social",
+      "korean"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.36,
+    "description": "자산 네트워크의 초대장 없는 로비에서 초대장 게이트과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-06-segment-02",
+    "chapter": 6,
+    "segment": 2,
+    "name": "투자 세미나",
+    "enemyName": "수익률 환상",
+    "normalEnemyNames": [
+      "수익률 환상",
+      "자산 네트워크 2구간 서류",
+      "수익률 환상 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "korean"
+    ],
+    "difficultyMultiplier": 1.38,
+    "description": "자산 네트워크의 투자 세미나에서 수익률 환상과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-06-segment-03",
+    "chapter": 6,
+    "segment": 3,
+    "name": "자산관리 사무실",
+    "enemyName": "포트폴리오 미궁",
+    "normalEnemyNames": [
+      "포트폴리오 미궁",
+      "자산 네트워크 3구간 서류",
+      "포트폴리오 미궁 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math"
+    ],
+    "weakSubjects": [
+      "math"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.39,
+    "description": "자산 네트워크의 자산관리 사무실에서 포트폴리오 미궁과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-06-segment-04",
+    "chapter": 6,
+    "segment": 4,
+    "name": "평판 라운지",
+    "enemyName": "평판의 거울",
+    "normalEnemyNames": [
+      "평판의 거울",
+      "자산 네트워크 4구간 서류",
+      "평판의 거울 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "social",
+      "korean"
+    ],
+    "resistSubjects": [
+      "math"
+    ],
+    "difficultyMultiplier": 1.41,
+    "description": "자산 네트워크의 평판 라운지에서 평판의 거울과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-06-segment-05",
+    "chapter": 6,
+    "segment": 5,
+    "name": "정보 격차의 계단",
+    "enemyName": "정보 격차의 벽",
+    "normalEnemyNames": [
+      "정보 격차의 벽",
+      "자산 네트워크 5구간 서류",
+      "정보 격차의 벽 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "social",
+      "english"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.43,
+    "description": "자산 네트워크의 정보 격차의 계단에서 정보 격차의 벽과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-06-segment-06",
+    "chapter": 6,
+    "segment": 6,
+    "name": "비공개 만찬장",
+    "enemyName": "대화 주제 함정",
+    "normalEnemyNames": [
+      "대화 주제 함정",
+      "자산 네트워크 6구간 서류",
+      "대화 주제 함정 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "korean",
+      "social",
+      "english"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.45,
+    "description": "자산 네트워크의 비공개 만찬장에서 대화 주제 함정과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-06-segment-07",
+    "chapter": 6,
+    "segment": 7,
+    "name": "부동산 전망대",
+    "enemyName": "입지 분석 괴물",
+    "normalEnemyNames": [
+      "입지 분석 괴물",
+      "자산 네트워크 7구간 서류",
+      "입지 분석 괴물 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.47,
+    "description": "자산 네트워크의 부동산 전망대에서 입지 분석 괴물과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-06-segment-08",
+    "chapter": 6,
+    "segment": 8,
+    "name": "스타트업 피칭룸",
+    "enemyName": "투자자 질문 폭풍",
+    "normalEnemyNames": [
+      "투자자 질문 폭풍",
+      "자산 네트워크 8구간 서류",
+      "투자자 질문 폭풍 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math"
+    ],
+    "weakSubjects": [
+      "korean",
+      "math",
+      "english"
+    ],
+    "resistSubjects": [
+      "social"
+    ],
+    "difficultyMultiplier": 1.48,
+    "description": "자산 네트워크의 스타트업 피칭룸에서 투자자 질문 폭풍과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-06-segment-09",
+    "chapter": 6,
+    "segment": 9,
+    "name": "프라이빗 네트워크",
+    "enemyName": "폐쇄적 인맥 장벽",
+    "normalEnemyNames": [
+      "폐쇄적 인맥 장벽",
+      "자산 네트워크 9구간 서류",
+      "폐쇄적 인맥 장벽 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "social",
+      "english"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.5,
+    "description": "자산 네트워크의 프라이빗 네트워크에서 폐쇄적 인맥 장벽과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-06-segment-10",
+    "chapter": 6,
+    "segment": 10,
+    "name": "네트워크 라운지 정상",
+    "enemyName": "네트워크 인증 게이트",
+    "normalEnemyNames": [
+      "네트워크 인증 게이트",
+      "자산 네트워크 10구간 서류",
+      "자산 구역 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "social",
+      "korean",
+      "english"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.52,
+    "description": "자산 네트워크의 네트워크 라운지 정상에서 네트워크 인증 게이트과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-07-segment-01",
+    "chapter": 7,
+    "segment": 1,
+    "name": "정부청사 입구",
+    "enemyName": "출입 승인 게이트",
+    "normalEnemyNames": [
+      "출입 승인 게이트",
+      "국가 프로젝트 1구간 서류",
+      "출입 승인 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "social",
+      "korean"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.44,
+    "description": "국가 프로젝트의 정부청사 입구에서 출입 승인 게이트과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-07-segment-02",
+    "chapter": 7,
+    "segment": 2,
+    "name": "예산 회의실",
+    "enemyName": "예산안 골렘",
+    "normalEnemyNames": [
+      "예산안 골렘",
+      "국가 프로젝트 2구간 서류",
+      "예산안 골렘 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.46,
+    "description": "국가 프로젝트의 예산 회의실에서 예산안 골렘과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-07-segment-03",
+    "chapter": 7,
+    "segment": 3,
+    "name": "공청회장",
+    "enemyName": "공청회 드래곤",
+    "normalEnemyNames": [
+      "공청회 드래곤",
+      "국가 프로젝트 3구간 서류",
+      "공청회 드래곤 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "korean",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.47,
+    "description": "국가 프로젝트의 공청회장에서 공청회 드래곤과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-07-segment-04",
+    "chapter": 7,
+    "segment": 4,
+    "name": "도시 계획실",
+    "enemyName": "교통망 퍼즐",
+    "normalEnemyNames": [
+      "교통망 퍼즐",
+      "국가 프로젝트 4구간 서류",
+      "교통망 퍼즐 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.49,
+    "description": "국가 프로젝트의 도시 계획실에서 교통망 퍼즐과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-07-segment-05",
+    "chapter": 7,
+    "segment": 5,
+    "name": "재난 대응 본부",
+    "enemyName": "재난 대응 타이머",
+    "normalEnemyNames": [
+      "재난 대응 타이머",
+      "국가 프로젝트 5구간 서류",
+      "재난 대응 타이머 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "social",
+      "science"
+    ],
+    "weakSubjects": [
+      "science",
+      "social"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.51,
+    "description": "국가 프로젝트의 재난 대응 본부에서 재난 대응 타이머과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-07-segment-06",
+    "chapter": 7,
+    "segment": 6,
+    "name": "환경 정책 구역",
+    "enemyName": "탄소 배출 안개",
+    "normalEnemyNames": [
+      "탄소 배출 안개",
+      "국가 프로젝트 6구간 서류",
+      "탄소 배출 안개 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "social",
+      "science"
+    ],
+    "weakSubjects": [
+      "science",
+      "social"
+    ],
+    "resistSubjects": [
+      "korean"
+    ],
+    "difficultyMultiplier": 1.53,
+    "description": "국가 프로젝트의 환경 정책 구역에서 탄소 배출 안개과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-07-segment-07",
+    "chapter": 7,
+    "segment": 7,
+    "name": "교육 정책실",
+    "enemyName": "교육 격차의 벽",
+    "normalEnemyNames": [
+      "교육 격차의 벽",
+      "국가 프로젝트 7구간 서류",
+      "교육 격차의 벽 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "korean",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.55,
+    "description": "국가 프로젝트의 교육 정책실에서 교육 격차의 벽과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-07-segment-08",
+    "chapter": 7,
+    "segment": 8,
+    "name": "보건 정책센터",
+    "enemyName": "의료 자원 배분표",
+    "normalEnemyNames": [
+      "의료 자원 배분표",
+      "국가 프로젝트 8구간 서류",
+      "의료 자원 배분표 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "social",
+      "science"
+    ],
+    "weakSubjects": [
+      "science",
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "english"
+    ],
+    "difficultyMultiplier": 1.56,
+    "description": "국가 프로젝트의 보건 정책센터에서 의료 자원 배분표과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-07-segment-09",
+    "chapter": 7,
+    "segment": 9,
+    "name": "국책 연구소",
+    "enemyName": "연구비 심사관",
+    "normalEnemyNames": [
+      "연구비 심사관",
+      "국가 프로젝트 9구간 서류",
+      "연구비 심사관 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "social",
+      "science"
+    ],
+    "weakSubjects": [
+      "math",
+      "science",
+      "korean"
+    ],
+    "resistSubjects": [
+      "social"
+    ],
+    "difficultyMultiplier": 1.58,
+    "description": "국가 프로젝트의 국책 연구소에서 연구비 심사관과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-07-segment-10",
+    "chapter": 7,
+    "segment": 10,
+    "name": "국가 프로젝트 심의장",
+    "enemyName": "정책 승인 게이트",
+    "normalEnemyNames": [
+      "정책 승인 게이트",
+      "국가 프로젝트 10구간 서류",
+      "국가 프로젝트 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "social",
+      "math",
+      "korean"
+    ],
+    "resistSubjects": [],
+    "difficultyMultiplier": 1.6,
+    "description": "국가 프로젝트의 국가 프로젝트 심의장에서 정책 승인 게이트과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-08-segment-01",
+    "chapter": 8,
+    "segment": 1,
+    "name": "국제공항 터미널",
+    "enemyName": "시차 적응 몬스터",
+    "normalEnemyNames": [
+      "시차 적응 몬스터",
+      "글로벌 허브 1구간 서류",
+      "시차 적응 몬스터 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math"
+    ],
+    "weakSubjects": [
+      "english"
+    ],
+    "resistSubjects": [
+      "math"
+    ],
+    "difficultyMultiplier": 1.52,
+    "description": "글로벌 허브의 국제공항 터미널에서 시차 적응 몬스터과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-08-segment-02",
+    "chapter": 8,
+    "segment": 2,
+    "name": "출입국 서류 심사대",
+    "enemyName": "공항 서류 검문소",
+    "normalEnemyNames": [
+      "공항 서류 검문소",
+      "글로벌 허브 2구간 서류",
+      "공항 서류 검문소 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math"
+    ],
+    "weakSubjects": [
+      "english",
+      "korean"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.54,
+    "description": "글로벌 허브의 출입국 서류 심사대에서 공항 서류 검문소과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-08-segment-03",
+    "chapter": 8,
+    "segment": 3,
+    "name": "무역항",
+    "enemyName": "환율 파도",
+    "normalEnemyNames": [
+      "환율 파도",
+      "글로벌 허브 3구간 서류",
+      "환율 파도 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.55,
+    "description": "글로벌 허브의 무역항에서 환율 파도과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-08-segment-04",
+    "chapter": 8,
+    "segment": 4,
+    "name": "해외 계약 회의실",
+    "enemyName": "해외 계약서 미궁",
+    "normalEnemyNames": [
+      "해외 계약서 미궁",
+      "글로벌 허브 4구간 서류",
+      "해외 계약서 미궁 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "english",
+      "korean",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.57,
+    "description": "글로벌 허브의 해외 계약 회의실에서 해외 계약서 미궁과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-08-segment-05",
+    "chapter": 8,
+    "segment": 5,
+    "name": "글로벌 메일함",
+    "enemyName": "시차 회의 유령",
+    "normalEnemyNames": [
+      "시차 회의 유령",
+      "글로벌 허브 5구간 서류",
+      "시차 회의 유령 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "english",
+      "social"
+    ],
+    "resistSubjects": [
+      "math"
+    ],
+    "difficultyMultiplier": 1.59,
+    "description": "글로벌 허브의 글로벌 메일함에서 시차 회의 유령과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-08-segment-06",
+    "chapter": 8,
+    "segment": 6,
+    "name": "국제 토론장",
+    "enemyName": "국제 토론 기사단",
+    "normalEnemyNames": [
+      "국제 토론 기사단",
+      "글로벌 허브 6구간 서류",
+      "국제 토론 기사단 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "english",
+      "korean",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.61,
+    "description": "글로벌 허브의 국제 토론장에서 국제 토론 기사단과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-08-segment-07",
+    "chapter": 8,
+    "segment": 7,
+    "name": "글로벌 투자 심사실",
+    "enemyName": "글로벌 투자 심사관",
+    "normalEnemyNames": [
+      "글로벌 투자 심사관",
+      "글로벌 허브 7구간 서류",
+      "글로벌 투자 심사관 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "english",
+      "math",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.63,
+    "description": "글로벌 허브의 글로벌 투자 심사실에서 글로벌 투자 심사관과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-08-segment-08",
+    "chapter": 8,
+    "segment": 8,
+    "name": "다국적 프로젝트룸",
+    "enemyName": "문화 차이 미로",
+    "normalEnemyNames": [
+      "문화 차이 미로",
+      "글로벌 허브 8구간 서류",
+      "문화 차이 미로 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "english",
+      "social"
+    ],
+    "resistSubjects": [
+      "math"
+    ],
+    "difficultyMultiplier": 1.64,
+    "description": "글로벌 허브의 다국적 프로젝트룸에서 문화 차이 미로과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-08-segment-09",
+    "chapter": 8,
+    "segment": 9,
+    "name": "글로벌 발표장",
+    "enemyName": "글로벌 발표 압박",
+    "normalEnemyNames": [
+      "글로벌 발표 압박",
+      "글로벌 허브 9구간 서류",
+      "글로벌 발표 압박 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math"
+    ],
+    "weakSubjects": [
+      "english",
+      "korean"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.66,
+    "description": "글로벌 허브의 글로벌 발표장에서 글로벌 발표 압박과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-08-segment-10",
+    "chapter": 8,
+    "segment": 10,
+    "name": "월드 컨퍼런스 홀",
+    "enemyName": "컨퍼런스 승인 게이트",
+    "normalEnemyNames": [
+      "컨퍼런스 승인 게이트",
+      "글로벌 허브 10구간 서류",
+      "글로벌 허브 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "english",
+      "korean",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.68,
+    "description": "글로벌 허브의 월드 컨퍼런스 홀에서 컨퍼런스 승인 게이트과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-09-segment-01",
+    "chapter": 9,
+    "segment": 1,
+    "name": "AI 연구소 입구",
+    "enemyName": "알고리즘 미궁",
+    "normalEnemyNames": [
+      "알고리즘 미궁",
+      "미래 연구도시 1구간 서류",
+      "알고리즘 미궁 전조"
+    ],
+    "focusSubjects": [
+      "english",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "math",
+      "science"
+    ],
+    "resistSubjects": [
+      "social"
+    ],
+    "difficultyMultiplier": 1.6,
+    "description": "미래 연구도시의 AI 연구소 입구에서 알고리즘 미궁과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-09-segment-02",
+    "chapter": 9,
+    "segment": 2,
+    "name": "데이터 센터",
+    "enemyName": "데이터 홍수",
+    "normalEnemyNames": [
+      "데이터 홍수",
+      "미래 연구도시 2구간 서류",
+      "데이터 홍수 전조"
+    ],
+    "focusSubjects": [
+      "english",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "math"
+    ],
+    "resistSubjects": [
+      "korean"
+    ],
+    "difficultyMultiplier": 1.62,
+    "description": "미래 연구도시의 데이터 센터에서 데이터 홍수과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-09-segment-03",
+    "chapter": 9,
+    "segment": 3,
+    "name": "바이오 실험실",
+    "enemyName": "유전자 퍼즐",
+    "normalEnemyNames": [
+      "유전자 퍼즐",
+      "미래 연구도시 3구간 서류",
+      "유전자 퍼즐 전조"
+    ],
+    "focusSubjects": [
+      "english",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "science"
+    ],
+    "resistSubjects": [
+      "social"
+    ],
+    "difficultyMultiplier": 1.63,
+    "description": "미래 연구도시의 바이오 실험실에서 유전자 퍼즐과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-09-segment-04",
+    "chapter": 9,
+    "segment": 4,
+    "name": "로봇 공장",
+    "enemyName": "자동화 라인 폭주",
+    "normalEnemyNames": [
+      "자동화 라인 폭주",
+      "미래 연구도시 4구간 서류",
+      "자동화 라인 폭주 전조"
+    ],
+    "focusSubjects": [
+      "english",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "math",
+      "science"
+    ],
+    "resistSubjects": [
+      "korean"
+    ],
+    "difficultyMultiplier": 1.65,
+    "description": "미래 연구도시의 로봇 공장에서 자동화 라인 폭주과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-09-segment-05",
+    "chapter": 9,
+    "segment": 5,
+    "name": "AI 윤리 재판장",
+    "enemyName": "로봇 윤리 재판",
+    "normalEnemyNames": [
+      "로봇 윤리 재판",
+      "미래 연구도시 5구간 서류",
+      "로봇 윤리 재판 전조"
+    ],
+    "focusSubjects": [
+      "english",
+      "math",
+      "science",
+      "social",
+      "korean"
+    ],
+    "weakSubjects": [
+      "social",
+      "korean",
+      "science"
+    ],
+    "resistSubjects": [
+      "math"
+    ],
+    "difficultyMultiplier": 1.67,
+    "description": "미래 연구도시의 AI 윤리 재판장에서 로봇 윤리 재판과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-09-segment-06",
+    "chapter": 9,
+    "segment": 6,
+    "name": "우주 관제센터",
+    "enemyName": "궤도 계산 타이머",
+    "normalEnemyNames": [
+      "궤도 계산 타이머",
+      "미래 연구도시 6구간 서류",
+      "궤도 계산 타이머 전조"
+    ],
+    "focusSubjects": [
+      "english",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "math",
+      "science"
+    ],
+    "resistSubjects": [
+      "korean"
+    ],
+    "difficultyMultiplier": 1.69,
+    "description": "미래 연구도시의 우주 관제센터에서 궤도 계산 타이머과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-09-segment-07",
+    "chapter": 9,
+    "segment": 7,
+    "name": "양자 서버실",
+    "enemyName": "양자 오류 구름",
+    "normalEnemyNames": [
+      "양자 오류 구름",
+      "미래 연구도시 7구간 서류",
+      "양자 오류 구름 전조"
+    ],
+    "focusSubjects": [
+      "english",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "math",
+      "science"
+    ],
+    "resistSubjects": [
+      "social"
+    ],
+    "difficultyMultiplier": 1.71,
+    "description": "미래 연구도시의 양자 서버실에서 양자 오류 구름과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-09-segment-08",
+    "chapter": 9,
+    "segment": 8,
+    "name": "미래 의학 연구소",
+    "enemyName": "신약 검증 장벽",
+    "normalEnemyNames": [
+      "신약 검증 장벽",
+      "미래 연구도시 8구간 서류",
+      "신약 검증 장벽 전조"
+    ],
+    "focusSubjects": [
+      "english",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "science",
+      "math",
+      "english"
+    ],
+    "resistSubjects": [
+      "korean"
+    ],
+    "difficultyMultiplier": 1.72,
+    "description": "미래 연구도시의 미래 의학 연구소에서 신약 검증 장벽과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-09-segment-09",
+    "chapter": 9,
+    "segment": 9,
+    "name": "우주 엘리베이터",
+    "enemyName": "중력 비용 골렘",
+    "normalEnemyNames": [
+      "중력 비용 골렘",
+      "미래 연구도시 9구간 서류",
+      "중력 비용 골렘 전조"
+    ],
+    "focusSubjects": [
+      "english",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "math",
+      "science"
+    ],
+    "resistSubjects": [
+      "social"
+    ],
+    "difficultyMultiplier": 1.74,
+    "description": "미래 연구도시의 우주 엘리베이터에서 중력 비용 골렘과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-09-segment-10",
+    "chapter": 9,
+    "segment": 10,
+    "name": "특이점 제어실",
+    "enemyName": "AI 코어 안전장치",
+    "normalEnemyNames": [
+      "AI 코어 안전장치",
+      "미래 연구도시 10구간 서류",
+      "미래도시 전조"
+    ],
+    "focusSubjects": [
+      "english",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "math",
+      "science",
+      "english"
+    ],
+    "resistSubjects": [
+      "korean"
+    ],
+    "difficultyMultiplier": 1.76,
+    "description": "미래 연구도시의 특이점 제어실에서 AI 코어 안전장치과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-10-segment-01",
+    "chapter": 10,
+    "segment": 1,
+    "name": "세계 정상회의장 입구",
+    "enemyName": "의전 프로토콜 장벽",
+    "normalEnemyNames": [
+      "의전 프로토콜 장벽",
+      "세계 영향력 1구간 서류",
+      "의전 프로토콜 장벽 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "english",
+      "social"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.68,
+    "description": "세계 영향력의 세계 정상회의장 입구에서 의전 프로토콜 장벽과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-10-segment-02",
+    "chapter": 10,
+    "segment": 2,
+    "name": "세계 경제 위기실",
+    "enemyName": "세계경제 위기",
+    "normalEnemyNames": [
+      "세계경제 위기",
+      "세계 영향력 2구간 서류",
+      "세계경제 위기 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "math",
+      "social",
+      "english"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.7,
+    "description": "세계 영향력의 세계 경제 위기실에서 세계경제 위기과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-10-segment-03",
+    "chapter": 10,
+    "segment": 3,
+    "name": "기후 대응 본부",
+    "enemyName": "기후 재난 프로젝트",
+    "normalEnemyNames": [
+      "기후 재난 프로젝트",
+      "세계 영향력 3구간 서류",
+      "기후 재난 프로젝트 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "science",
+      "social"
+    ],
+    "weakSubjects": [
+      "science",
+      "social",
+      "math"
+    ],
+    "resistSubjects": [
+      "korean"
+    ],
+    "difficultyMultiplier": 1.71,
+    "description": "세계 영향력의 기후 대응 본부에서 기후 재난 프로젝트과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-10-segment-04",
+    "chapter": 10,
+    "segment": 4,
+    "name": "글로벌 보건 회의",
+    "enemyName": "인류 건강 의제",
+    "normalEnemyNames": [
+      "인류 건강 의제",
+      "세계 영향력 4구간 서류",
+      "인류 건강 의제 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "science",
+      "social"
+    ],
+    "weakSubjects": [
+      "science",
+      "english",
+      "social"
+    ],
+    "resistSubjects": [
+      "math"
+    ],
+    "difficultyMultiplier": 1.73,
+    "description": "세계 영향력의 글로벌 보건 회의에서 인류 건강 의제과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-10-segment-05",
+    "chapter": 10,
+    "segment": 5,
+    "name": "세계 교육 재단",
+    "enemyName": "글로벌 교육 격차",
+    "normalEnemyNames": [
+      "글로벌 교육 격차",
+      "세계 영향력 5구간 서류",
+      "글로벌 교육 격차 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "korean",
+      "social",
+      "english"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.75,
+    "description": "세계 영향력의 세계 교육 재단에서 글로벌 교육 격차과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-10-segment-06",
+    "chapter": 10,
+    "segment": 6,
+    "name": "우주 개척 회의",
+    "enemyName": "우주 개척 비용 장벽",
+    "normalEnemyNames": [
+      "우주 개척 비용 장벽",
+      "세계 영향력 6구간 서류",
+      "우주 개척 비용 장벽 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "science"
+    ],
+    "weakSubjects": [
+      "science",
+      "math",
+      "english"
+    ],
+    "resistSubjects": [
+      "korean"
+    ],
+    "difficultyMultiplier": 1.77,
+    "description": "세계 영향력의 우주 개척 회의에서 우주 개척 비용 장벽과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-10-segment-07",
+    "chapter": 10,
+    "segment": 7,
+    "name": "국제 분쟁 조정실",
+    "enemyName": "분쟁 조정 미궁",
+    "normalEnemyNames": [
+      "분쟁 조정 미궁",
+      "세계 영향력 7구간 서류",
+      "분쟁 조정 미궁 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social"
+    ],
+    "weakSubjects": [
+      "social",
+      "korean",
+      "english"
+    ],
+    "resistSubjects": [
+      "science"
+    ],
+    "difficultyMultiplier": 1.79,
+    "description": "세계 영향력의 국제 분쟁 조정실에서 분쟁 조정 미궁과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-10-segment-08",
+    "chapter": 10,
+    "segment": 8,
+    "name": "글로벌 기술 윤리 위원회",
+    "enemyName": "기술 윤리 패러독스",
+    "normalEnemyNames": [
+      "기술 윤리 패러독스",
+      "세계 영향력 8구간 서류",
+      "기술 윤리 패러독스 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "science",
+      "social"
+    ],
+    "weakSubjects": [
+      "science",
+      "social",
+      "korean"
+    ],
+    "resistSubjects": [
+      "math"
+    ],
+    "difficultyMultiplier": 1.8,
+    "description": "세계 영향력의 글로벌 기술 윤리 위원회에서 기술 윤리 패러독스과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-10-segment-09",
+    "chapter": 10,
+    "segment": 9,
+    "name": "인류 미래 포럼",
+    "enemyName": "미래 예측의 안개",
+    "normalEnemyNames": [
+      "미래 예측의 안개",
+      "세계 영향력 9구간 서류",
+      "미래 예측의 안개 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social",
+      "science"
+    ],
+    "weakSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social",
+      "science"
+    ],
+    "resistSubjects": [],
+    "difficultyMultiplier": 1.82,
+    "description": "세계 영향력의 인류 미래 포럼에서 미래 예측의 안개과 반복 장벽을 정리하는 구간."
+  },
+  {
+    "id": "chapter-10-segment-10",
+    "chapter": 10,
+    "segment": 10,
+    "name": "세계 영향력 정상",
+    "enemyName": "세계 의사결정망",
+    "normalEnemyNames": [
+      "세계 의사결정망",
+      "세계 영향력 10구간 서류",
+      "최종 영향력 전조"
+    ],
+    "focusSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social",
+      "science"
+    ],
+    "weakSubjects": [
+      "korean",
+      "english",
+      "math",
+      "social",
+      "science"
+    ],
+    "resistSubjects": [],
+    "difficultyMultiplier": 1.84,
+    "description": "세계 영향력의 세계 영향력 정상에서 세계 의사결정망과 반복 장벽을 정리하는 구간."
+  }
+]
