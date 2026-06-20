@@ -51,3 +51,10 @@
 5. 기존 문서 최신화
     - 기존 구현 내용을 변경하는 경우, 해당 구현과 관련하여 작성한 문서, Tooling 색인, 검증 명령, 사용 예시까지 함께 최신화한다.
     - 문서가 과거 구현 기준을 설명한 채 남아 있으면 이후 agent와 사람이 잘못된 기준으로 작업하게 되므로, 코드 변경과 문서 변경을 같은 작업 범위로 본다.
+
+## Asset Sprite Factory
+- 학생, RPG 캐릭터, 몬스터, 동료처럼 반복 생산하는 스프라이트 작업은 `docs/asset_sprite_factory.md`를 먼저 읽고 `tools/asset-factory/` 명령을 사용한다.
+- 다른 Codex Agent에서 같은 방식이 필요하면 `npm run asset:factory:install-skill`로 repo의 `codex/skills/asset-sprite-factory` Skill을 로컬 Codex 홈에 설치한다.
+- 새 캐릭터 원본은 한 캐릭터씩 `assets/visual-source/characters/`에 넣고, `4 columns x 1 row`, 오른쪽 방향, 형광 초록 배경을 기본으로 한다.
+- 자산 변경 후 최소 검증은 `npm run asset:factory:prepare`, `npm run asset:factory:qa`, `npm run verify:mobile`이다.
+- 축 리뷰 시트는 `artifacts/visual-asset-samples/character-axis-review-page-*.png`에서 확인한다. 한 프레임만 커지거나 작아지면 완료로 보지 않는다.

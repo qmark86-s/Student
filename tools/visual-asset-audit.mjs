@@ -66,8 +66,9 @@ function inspectCell(image, atlas, item) {
   const cell = atlas.cell;
   const index = itemIndex(item);
   const startX = index * cell;
+  const startY = (item.row ?? 0) * cell;
   const endX = Math.min(startX + cell, image.width);
-  const endY = image.height;
+  const endY = Math.min(startY + cell, image.height);
   const colors = new Set();
   let opaque = 0;
   let minX = Number.POSITIVE_INFINITY;
@@ -75,7 +76,7 @@ function inspectCell(image, atlas, item) {
   let maxX = -1;
   let maxY = -1;
 
-  for (let y = 0; y < endY; y += 1) {
+  for (let y = startY; y < endY; y += 1) {
     for (let x = startX; x < endX; x += 1) {
       const p = (y * image.width + x) * 4;
       const a = image.pixels[p + 3];
@@ -83,13 +84,13 @@ function inspectCell(image, atlas, item) {
       opaque += 1;
       colors.add(`${image.pixels[p]},${image.pixels[p + 1]},${image.pixels[p + 2]},${a}`);
       minX = Math.min(minX, x - startX);
-      minY = Math.min(minY, y);
+      minY = Math.min(minY, y - startY);
       maxX = Math.max(maxX, x - startX);
-      maxY = Math.max(maxY, y);
+      maxY = Math.max(maxY, y - startY);
     }
   }
 
-  const total = cell * image.height;
+  const total = cell * cell;
   const boundsWidth = maxX >= minX ? maxX - minX + 1 : 0;
   const boundsHeight = maxY >= minY ? maxY - minY + 1 : 0;
   return {
@@ -159,4 +160,3 @@ if (failures.length > 0) {
 console.log(
   `VISUAL_ASSET_AUDIT_OK atlases=${report.atlases.length} cells=${atlasReports.reduce((sum, atlasReport) => sum + atlasReport.cells.length, 0)} report=${reportPath}`,
 );
-

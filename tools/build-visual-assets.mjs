@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { dirname, relative, resolve, sep } from "node:path";
 import { deflateSync, inflateSync } from "node:zlib";
 
 const outDir = resolve("src/snapshot/assets");
@@ -9,8 +9,13 @@ const manifestPath = resolve("src/snapshot/manifest.json");
 const visualDataPath = resolve("data/visual_assets.json");
 const careersPath = resolve("data/careers.json");
 const gradeVisualsPath = resolve("data/grade_visuals.json");
+const characterAnimationManifestPath = resolve("data/character_animation_manifest.json");
+const characterAxisReportPath = resolve("artifacts/visual-asset-samples/character-axis-report.json");
 const stagesPath = resolve("data/expedition_stages.json");
 const bossesPath = resolve("data/expedition_bosses.json");
+const ageGradeStyleboardPath = resolve("assets/reference/age-grade-pixel-styleboard.png");
+const matteDebugDir = resolve("artifacts/visual-asset-matte");
+const chromaKeyGreen = { r: 0, g: 255, b: 0, a: 255 };
 
 const companionSprites = [
   { id: "helper-book", color: "#818cf8", prop: "book" },
@@ -60,6 +65,10 @@ function sha256(buffer) {
 
 function sanitizeClass(value) {
   return String(value).replace(/[^a-z0-9_-]/gi, "");
+}
+
+function assetRelativePath(path) {
+  return relative(resolve("src/snapshot"), path).split(sep).join("/");
 }
 
 function hexToRgb(hex) {
@@ -299,7 +308,7 @@ function drawCompanion(target, ox, oy, spec, variant = 0) {
   fillRect(target, ox + 72, oy + 42, 4, 20, alpha(hexToRgb("#ffffff"), 45));
 }
 
-function drawCareerPortrait(target, ox, oy, career, index) {
+function drawCareerPortrait(target, ox, oy, career, index, gender = "male") {
   const base = hexToRgb(career.auraColor ?? "#94a3b8");
   const ink = hexToRgb("#17212e");
   const white = hexToRgb("#f8fafc");
@@ -307,8 +316,12 @@ function drawCareerPortrait(target, ox, oy, career, index) {
   const frame = mix(base, white, 0.24);
   const helper = companionSprites.find((sprite) => sprite.id === career.helperSprite) ?? companionSprites[index % companionSprites.length];
   const helperBase = hexToRgb(career.auraColor ?? helper.color);
+  const isFemale = gender === "female";
   const skin = hexToRgb(index % 3 === 0 ? "#ffd39b" : index % 3 === 1 ? "#f0c391" : "#e7b07c");
-  const hair = hexToRgb(index % 5 === 0 ? "#111827" : index % 5 === 1 ? "#263043" : index % 5 === 2 ? "#3b2f2f" : index % 5 === 3 ? "#5b371c" : "#1f2937");
+  const maleHair = ["#111827", "#263043", "#3b2f2f", "#5b371c", "#1f2937"];
+  const femaleHair = ["#1f2937", "#3b2f2f", "#4a2f22", "#111827", "#6b3f24"];
+  const hair = hexToRgb((isFemale ? femaleHair : maleHair)[index % 5]);
+  const hairShade = mix(hair, ink, 0.18);
 
   fillRect(target, ox + 3, oy + 4, 58, 56, alpha(ink, 245));
   fillRect(target, ox + 5, oy + 6, 54, 52, alpha(bg, 235));
@@ -325,12 +338,23 @@ function drawCareerPortrait(target, ox, oy, career, index) {
 
   fillRect(target, ox + 20, oy + 18, 25, 22, ink);
   fillRect(target, ox + 23, oy + 21, 19, 17, skin);
-  fillRect(target, ox + 21, oy + 14, 23, 9, hair);
-  fillRect(target, ox + 18, oy + 20, 8, 9, hair);
-  fillRect(target, ox + 39, oy + 20, 7, 8, hair);
-  fillRect(target, ox + 28, oy + 29, 3, 3, ink);
-  fillRect(target, ox + 37, oy + 29, 3, 3, ink);
-  fillRect(target, ox + 31, oy + 36, 8, 2, mix(skin, ink, 0.55));
+  if (isFemale) {
+    fillRect(target, ox + 18, oy + 16, 8, 25, hairShade);
+    fillRect(target, ox + 39, oy + 17, 7, 23, hairShade);
+    fillRect(target, ox + 21, oy + 13, 24, 11, hair);
+    fillRect(target, ox + 24, oy + 31, 17, 7, hairShade);
+    fillRect(target, ox + 41, oy + 15, 5, 6, mix(hair, white, 0.12));
+    fillRect(target, ox + 17, oy + 26, 5, 5, mix(base, white, 0.28));
+  } else {
+    fillRect(target, ox + 21, oy + 14, 23, 9, hair);
+    fillRect(target, ox + 18, oy + 20, 8, 9, hair);
+    fillRect(target, ox + 39, oy + 20, 7, 8, hair);
+    fillRect(target, ox + 36, oy + 14, 8, 5, mix(hair, white, 0.1));
+  }
+  fillRect(target, ox + 29, oy + 29, 3, 3, ink);
+  fillRect(target, ox + 38, oy + 29, 4, 3, ink);
+  fillRect(target, ox + 42, oy + 32, 3, 2, mix(skin, ink, 0.4));
+  fillRect(target, ox + 32, oy + 36, 8, 2, mix(skin, ink, 0.55));
 
   drawProp(target, helper.prop, ox + 39, oy + 33, helperBase);
   fillRect(target, ox + 47, oy + 12, 8, 34, alpha(white, 44));
@@ -481,17 +505,20 @@ function studentAgeProfile(visual) {
   };
 }
 
-function drawMainStudent(target, ox, oy, visual) {
+function drawMainStudent(target, ox, oy, visual, gender = "male") {
   const index = visual.order - 1;
   const profile = studentAgeProfile(visual);
   const ink = hexToRgb("#17212e");
   const white = hexToRgb("#f8fafc");
+  const isFemale = gender === "female";
   const skin = hexToRgb(index % 3 === 0 ? "#ffd39b" : index % 3 === 1 ? "#f0c391" : "#e7b07c");
   const shirt = hexToRgb(profile.shirt);
   const vest = hexToRgb(profile.vest);
   const pants = hexToRgb(profile.pants);
   const accent = hexToRgb(profile.accent);
-  const hair = hexToRgb(profile.hair);
+  const femaleHair = ["#1f2937", "#3b2f2f", "#4a2f22", "#111827", "#6b3f24"];
+  const hair = hexToRgb(isFemale ? femaleHair[index % femaleHair.length] : profile.hair);
+  const hairShade = mix(hair, ink, 0.16);
   const body = profile.body;
   const head = profile.head;
   const isElementary = profile.band === "lower-elementary" || profile.band === "upper-elementary";
@@ -506,15 +533,17 @@ function drawMainStudent(target, ox, oy, visual) {
     fillRect(target, ox + 18, oy + profile.footY, 14, 6, profile.band === "lower-elementary" ? accent : pants);
     fillRect(target, ox + 35, oy + profile.footY, 15, 6, profile.band === "lower-elementary" ? hexToRgb("#ef4444") : pants);
   } else if (profile.band === "middle") {
-    fillRect(target, ox + 22, oy + profile.legsY, 7, profile.legH, skin);
-    fillRect(target, ox + 38, oy + profile.legsY, 7, profile.legH, skin);
+    fillRect(target, ox + 22, oy + profile.legsY, 7, profile.legH, isFemale ? skin : pants);
+    fillRect(target, ox + 38, oy + profile.legsY, 7, profile.legH, isFemale ? skin : pants);
     fillRect(target, ox + 22, oy + profile.footY - 4, 7, 4, white);
     fillRect(target, ox + 38, oy + profile.footY - 4, 7, 4, white);
+    if (isFemale) fillRect(target, ox + 20, oy + profile.legsY - 5, 28, 8, mix(vest, ink, 0.16));
     fillRect(target, ox + 18, oy + profile.footY, 14, 6, pants);
     fillRect(target, ox + 35, oy + profile.footY, 15, 6, pants);
   } else {
-    fillRect(target, ox + 22, oy + profile.legsY, 7, profile.legH, pants);
-    fillRect(target, ox + 39, oy + profile.legsY, 7, profile.legH, pants);
+    fillRect(target, ox + 22, oy + profile.legsY, 7, profile.legH, isFemale && profile.band !== "repeater" ? skin : pants);
+    fillRect(target, ox + 39, oy + profile.legsY, 7, profile.legH, isFemale && profile.band !== "repeater" ? skin : pants);
+    if (isFemale && profile.band !== "repeater") fillRect(target, ox + 20, oy + profile.legsY - 6, 30, 9, mix(vest, ink, 0.14));
     fillRect(target, ox + 19, oy + profile.footY, 14, 6, profile.band === "repeater" ? hexToRgb("#0f172a") : pants);
     fillRect(target, ox + 36, oy + profile.footY, 15, 6, profile.band === "repeater" ? hexToRgb("#0f172a") : pants);
   }
@@ -555,28 +584,40 @@ function drawMainStudent(target, ox, oy, visual) {
 
   const sleeveLeft = isElementary ? shirt : profile.band === "repeater" ? vest : mix(vest, white, 0.06);
   const sleeveRight = isElementary ? shirt : profile.band === "repeater" ? vest : mix(vest, white, 0.06);
-  fillRect(target, ox + body[0] - 8, oy + body[1] + 5, 7, Math.max(12, body[3] - 8), sleeveLeft);
-  fillRect(target, ox + body[0] + body[2], oy + body[1] + 6, 7, Math.max(11, body[3] - 10), sleeveRight);
+  fillRect(target, ox + body[0] - 7, oy + body[1] + 7, 6, Math.max(11, body[3] - 11), mix(sleeveLeft, ink, 0.05));
+  fillRect(target, ox + body[0] + body[2], oy + body[1] + 4, 8, Math.max(12, body[3] - 8), sleeveRight);
   fillRect(target, ox + body[0] - 8, oy + body[1] + body[3] - 3, 7, 5, skin);
-  fillRect(target, ox + body[0] + body[2], oy + body[1] + body[3] - 3, 7, 5, skin);
+  fillRect(target, ox + body[0] + body[2] + 4, oy + body[1] + body[3] - 5, 8, 5, skin);
 
   const bag = profile.bag;
   fillRect(target, ox + bag[0], oy + bag[1], bag[2], bag[3], ink);
   fillRect(target, ox + bag[0] + 2, oy + bag[1] + 3, bag[2] - 4, bag[3] - 6, profile.band === "lower-elementary" ? hexToRgb("#38bdf8") : mix(vest, white, 0.12));
   fillRect(target, ox + bag[0] + 4, oy + bag[1] + 7, Math.max(4, bag[2] - 8), 3, accent);
 
-  fillRect(target, ox + head[0] - 3, oy + head[1] - 3, head[2] + 7, head[3] + 7, ink);
+  fillRect(target, ox + head[0] - 4, oy + head[1] - 3, head[2] + 9, head[3] + 7, ink);
   fillRect(target, ox + head[0], oy + head[1], head[2], head[3], skin);
-  fillRect(target, ox + head[0] - 2, oy + profile.hairY, head[2] + 4, 10, hair);
-  fillRect(target, ox + head[0] - 4, oy + head[1] + 2, 7, 10, hair);
-  fillRect(target, ox + head[0] + head[2] - 3, oy + head[1] + 2, 6, 9, hair);
-  fillRect(target, ox + head[0] + 6, oy + head[1] + 9, 3, 3, ink);
-  fillRect(target, ox + head[0] + 16, oy + head[1] + 9, 3, 3, ink);
-  fillRect(target, ox + head[0] + 9, oy + head[1] + 16, 8, 2, mix(skin, ink, 0.55));
+  fillRect(target, ox + head[0] + head[2] - 1, oy + head[1] + 10, 5, 4, skin);
+  fillRect(target, ox + head[0] + head[2] + 1, oy + head[1] + 13, 3, 2, mix(skin, ink, 0.28));
+  if (isFemale) {
+    fillRect(target, ox + head[0] - 5, oy + head[1] + 2, 8, 22, hairShade);
+    fillRect(target, ox + head[0] + head[2] - 4, oy + head[1] + 1, 8, 19, hairShade);
+    fillRect(target, ox + head[0] - 2, oy + profile.hairY, head[2] + 6, 10, hair);
+    fillRect(target, ox + head[0] + 2, oy + head[1] + head[3] - 1, 15, 6, hairShade);
+    fillRect(target, ox + head[0] - 7, oy + head[1] + 12, 4, 5, accent);
+  } else {
+    fillRect(target, ox + head[0] - 3, oy + profile.hairY, head[2] + 6, 10, hair);
+    fillRect(target, ox + head[0] - 5, oy + head[1] + 2, 8, 10, hair);
+    fillRect(target, ox + head[0] + head[2] - 2, oy + head[1] + 1, 7, 9, hair);
+    fillRect(target, ox + head[0] + head[2] - 5, oy + profile.hairY + 1, 7, 5, mix(hair, white, 0.1));
+  }
+  fillRect(target, ox + head[0] + 9, oy + head[1] + 9, 2, 3, mix(ink, skin, 0.08));
+  fillRect(target, ox + head[0] + 18, oy + head[1] + 9, 4, 4, ink);
+  fillRect(target, ox + head[0] + 19, oy + head[1] + 10, 1, 1, white);
+  fillRect(target, ox + head[0] + 14, oy + head[1] + 17, 9, 2, mix(skin, ink, 0.55));
 
   if (profile.band === "lower-elementary") {
     fillRect(target, ox + head[0] - 2, oy + 4, head[2] + 5, 6, hexToRgb("#fde047"));
-    fillRect(target, ox + head[0] + head[2] - 1, oy + 8, 10, 4, hexToRgb("#fde047"));
+    fillRect(target, ox + head[0] + head[2] - 1, oy + 8, 12, 4, hexToRgb("#fde047"));
     fillRect(target, ox + 47, oy + 56, 16, 9, accent);
     fillRect(target, ox + 51, oy + 52, 4, 17, hexToRgb("#ef4444"));
   } else if (profile.band === "upper-elementary") {
@@ -864,26 +905,77 @@ function drawAcademicMonster(target, ox, oy, visual, variant, boss = false) {
   drawAcademicMonsterFinish(target, ox, oy, visual, variant, boss);
 }
 
+function loadPreparedStudentAnimations(frameCount) {
+  if (!existsSync(characterAnimationManifestPath)) return new Map();
+  if (!existsSync(characterAxisReportPath)) return new Map();
+  const manifest = JSON.parse(readFileSync(characterAnimationManifestPath, "utf8"));
+  const report = JSON.parse(readFileSync(characterAxisReportPath, "utf8"));
+  const approvedIds = new Set((report.characters ?? []).filter((character) => character.status === "ok").map((character) => character.id));
+  const entries = new Map();
+  for (const character of manifest.characters ?? []) {
+    if (!approvedIds.has(character.id)) continue;
+    const frames = [];
+    for (let index = 0; index < frameCount; index += 1) {
+      const path = resolve(outDir, "individual", "students", sanitizeClass(character.id), `move_${index}.png`);
+      if (!existsSync(path)) break;
+      frames.push(readPngRgba(path));
+    }
+    if (frames.length === frameCount) {
+      entries.set(`${character.gender}:${character.studentFrame}`, { character, frames });
+    }
+  }
+  return entries;
+}
+
+function buildFallbackStudentFrames(visual, gender, cell, frameCount) {
+  const small = canvas(64, 96);
+  drawMainStudent(small, 0, 0, visual, gender);
+  const base = canvas(cell, cell);
+  drawSourceScaled(base, small, 32, 8, 96, 144);
+  return Array.from({ length: frameCount }, () => base);
+}
+
 function buildMainStudentAtlas(gradeVisuals) {
-  const cell = 64;
-  const target = canvas(cell * 16, 96);
-  const items = gradeVisuals
-    .slice()
-    .sort((a, b) => a.studentFrame - b.studentFrame)
-    .map((visual) => {
-      drawMainStudent(target, visual.studentFrame * cell, 0, visual);
-      return {
-        id: `main-student-${String(visual.studentFrame).padStart(3, "0")}`,
-        frame: visual.studentFrame,
+  const genders = ["male", "female"];
+  const cell = 160;
+  const height = 320;
+  const framesPerCharacter = 4;
+  const framesPerGender = 16;
+  const columns = framesPerGender * framesPerCharacter;
+  const rows = genders.length;
+  const target = canvas(cell * columns, cell * rows);
+  const prepared = loadPreparedStudentAnimations(framesPerCharacter);
+  const sorted = gradeVisuals.slice().sort((a, b) => a.studentFrame - b.studentFrame);
+  const items = [];
+  genders.forEach((gender, genderIndex) => {
+    sorted.forEach((visual) => {
+      const frame = visual.studentFrame * framesPerCharacter;
+      const row = genderIndex;
+      const preparedEntry = prepared.get(`${gender}:${visual.studentFrame}`);
+      const frames = preparedEntry?.frames ?? buildFallbackStudentFrames(visual, gender, cell, framesPerCharacter);
+      frames.forEach((sprite, frameOffset) => {
+        blitCanvas(target, sprite, (frame + frameOffset) * cell, row * cell);
+      });
+      items.push({
+        id: gender === "male" ? `main-student-${String(visual.studentFrame).padStart(3, "0")}` : `main-student-female-${String(visual.studentFrame).padStart(3, "0")}`,
+        frame,
+        row,
+        gradeOrder: visual.order,
+        baseFrame: visual.studentFrame,
+        animationFrames: Array.from({ length: framesPerCharacter }, (_unused, frameOffset) => frame + frameOffset),
+        gender,
         phase: visual.phase,
         age: visual.age,
-        title: visual.studentTitle,
+        title: `${visual.studentTitle} ${gender === "female" ? "여" : "남"}`,
         band: studentAgeProfile(visual).band,
-      };
+        source: preparedEntry ? "prepared" : "fallback",
+      });
     });
+  });
   const path = resolve(outDir, "asset-002.png");
   writePng(path, target);
-  return { path, width: target.width, height: target.height, cell, items };
+  writeChromaMattePreview(target, resolve(matteDebugDir, "asset-002-students-chroma.png"));
+  return { path, width: target.width, height: target.height, cell, columns, rows, framesPerGender, framesPerCharacter, genders, items };
 }
 
 function buildMainMonsterAtlas(gradeVisuals) {
@@ -892,7 +984,8 @@ function buildMainMonsterAtlas(gradeVisuals) {
   const items = [];
   for (const visual of gradeVisuals) {
     visual.normalMonsterFrames.forEach((frame, variant) => {
-      drawAcademicMonster(target, frame * cell, 0, visual, variant, false);
+      const ox = frame * cell;
+      drawAcademicMonster(target, ox, 0, visual, variant, false);
       items.push({
         id: `main-monster-${String(frame).padStart(3, "0")}`,
         frame,
@@ -904,7 +997,8 @@ function buildMainMonsterAtlas(gradeVisuals) {
       });
     });
     for (const [type, frame] of Object.entries(visual.examMonsterFrames)) {
-      drawAcademicMonster(target, frame * cell, 0, visual, frame, true);
+      const ox = frame * cell;
+      drawAcademicMonster(target, ox, 0, visual, frame, true);
       items.push({
         id: `main-monster-${String(frame).padStart(3, "0")}`,
         frame,
@@ -918,8 +1012,31 @@ function buildMainMonsterAtlas(gradeVisuals) {
   }
   const path = resolve(outDir, "asset-003.png");
   writePng(path, target);
+  writeChromaMattePreview(target, resolve(matteDebugDir, "asset-003-monsters-chroma.png"));
   items.sort((a, b) => a.frame - b.frame);
   return { path, width: target.width, height: target.height, cell, items };
+}
+
+function blitCanvas(target, source, ox, oy) {
+  for (let y = 0; y < source.height; y += 1) {
+    for (let x = 0; x < source.width; x += 1) {
+      const sp = (y * source.width + x) * 4;
+      const tx = ox + x;
+      const ty = oy + y;
+      if (tx < 0 || ty < 0 || tx >= target.width || ty >= target.height) continue;
+      const dp = (ty * target.width + tx) * 4;
+      target.pixels[dp] = source.pixels[sp];
+      target.pixels[dp + 1] = source.pixels[sp + 1];
+      target.pixels[dp + 2] = source.pixels[sp + 2];
+      target.pixels[dp + 3] = source.pixels[sp + 3];
+    }
+  }
+}
+
+function writeIndividualSprite(kind, id, sprite) {
+  const path = resolve(outDir, "individual", kind, `${sanitizeClass(id)}.png`);
+  writePng(path, sprite);
+  return assetRelativePath(path);
 }
 
 function writePng(path, target) {
@@ -1042,6 +1159,317 @@ function drawSourceScaled(target, source, dx, dy, dw, dh, options = {}) {
   }
 }
 
+function colorDistance(a, b) {
+  return Math.hypot(a.r - b.r, a.g - b.g, a.b - b.b);
+}
+
+function colorChroma(color) {
+  return Math.max(color.r, color.g, color.b) - Math.min(color.r, color.g, color.b);
+}
+
+function readRgbaAt(image, x, y) {
+  const sx = Math.max(0, Math.min(image.width - 1, Math.floor(x)));
+  const sy = Math.max(0, Math.min(image.height - 1, Math.floor(y)));
+  const i = (sy * image.width + sx) * 4;
+  return { r: image.pixels[i], g: image.pixels[i + 1], b: image.pixels[i + 2], a: image.pixels[i + 3] };
+}
+
+function copyCrop(source, rect) {
+  const target = canvas(rect.w, rect.h);
+  for (let y = 0; y < rect.h; y += 1) {
+    for (let x = 0; x < rect.w; x += 1) {
+      const src = ((rect.y + y) * source.width + (rect.x + x)) * 4;
+      const dst = (y * rect.w + x) * 4;
+      target.pixels[dst] = source.pixels[src];
+      target.pixels[dst + 1] = source.pixels[src + 1];
+      target.pixels[dst + 2] = source.pixels[src + 2];
+      target.pixels[dst + 3] = source.pixels[src + 3];
+    }
+  }
+  return target;
+}
+
+function isChromaKeyGreen(color) {
+  return color.g > 215 && color.r < 72 && color.b < 92 && color.g - Math.max(color.r, color.b) > 130;
+}
+
+function isProtectedSpriteColor(color) {
+  if (color.a <= 12) return false;
+  const max = Math.max(color.r, color.g, color.b);
+  const chroma = colorChroma(color);
+  const skin = color.r >= 170 && color.g >= 105 && color.b >= 68 && color.r > color.g + 14 && color.g > color.b + 6 && color.r - color.b > 38;
+  const darkInkOrHair = max < 98;
+  const warmHairOrShadow = color.r >= 82 && color.r > color.g + 8 && color.g >= 38 && color.b < 120 && color.r - color.b > 30;
+  const saturatedPropOrCloth = chroma > 52;
+  return skin || darkInkOrHair || warmHairOrShadow || saturatedPropOrCloth;
+}
+
+function isNeutralStyleboardBackground(color) {
+  if (color.a <= 12 || isChromaKeyGreen(color)) return true;
+  if (isProtectedSpriteColor(color)) return false;
+  const max = Math.max(color.r, color.g, color.b);
+  const min = Math.min(color.r, color.g, color.b);
+  const chroma = max - min;
+  const paper = color.r >= 168 && color.r <= 246 && color.g >= 162 && color.g <= 242 && color.b >= 150 && color.b <= 236 && chroma <= 42;
+  const rowLineOrSoftShadow = max >= 96 && max <= 188 && chroma <= 28;
+  return paper || rowLineOrSoftShadow;
+}
+
+function isLooseNeutralBackdrop(color) {
+  if (!isNeutralStyleboardBackground(color)) return false;
+  const chroma = colorChroma(color);
+  return color.r >= 168 && color.r <= 242 && color.g >= 160 && color.g <= 238 && color.b >= 150 && color.b <= 232 && chroma <= 40;
+}
+
+function clearStyleboardBackground(sprite, threshold = 30, options = {}) {
+  const backgroundSamples = [
+    readRgbaAt(sprite, 2, 2),
+    readRgbaAt(sprite, sprite.width - 3, 2),
+    readRgbaAt(sprite, 2, sprite.height - 3),
+    readRgbaAt(sprite, sprite.width - 3, sprite.height - 3),
+    readRgbaAt(sprite, Math.floor(sprite.width / 2), 2),
+    readRgbaAt(sprite, Math.floor(sprite.width / 2), sprite.height - 3),
+  ];
+  const visited = new Uint8Array(sprite.width * sprite.height);
+  const queue = [];
+  const maybeBackground = (x, y) => {
+    const c = readRgbaAt(sprite, x, y);
+    if (c.a < 12 || isChromaKeyGreen(c)) return true;
+    if (!isNeutralStyleboardBackground(c)) return false;
+    const max = Math.max(c.r, c.g, c.b);
+    const chroma = colorChroma(c);
+    const closeToEdgeMatte = backgroundSamples.some((sample) => colorDistance(c, sample) <= threshold);
+    const beigeBackdrop = c.r >= 170 && c.r <= 246 && c.g >= 164 && c.g <= 242 && c.b >= 154 && c.b <= 236 && chroma <= 34;
+    const rowLineOrCastShadow = max >= 106 && max <= 188 && chroma <= 24;
+    return closeToEdgeMatte || beigeBackdrop || rowLineOrCastShadow;
+  };
+  const push = (x, y) => {
+    if (x < 0 || y < 0 || x >= sprite.width || y >= sprite.height) return;
+    const index = y * sprite.width + x;
+    if (visited[index] || !maybeBackground(x, y)) return;
+    visited[index] = 1;
+    queue.push([x, y]);
+  };
+  for (let x = 0; x < sprite.width; x += 1) {
+    push(x, 0);
+    push(x, sprite.height - 1);
+  }
+  for (let y = 0; y < sprite.height; y += 1) {
+    push(0, y);
+    push(sprite.width - 1, y);
+  }
+  for (let i = 0; i < queue.length; i += 1) {
+    const [x, y] = queue[i];
+    push(x + 1, y);
+    push(x - 1, y);
+    push(x, y + 1);
+    push(x, y - 1);
+  }
+  for (let i = 0; i < visited.length; i += 1) {
+    if (!visited[i] && !options.removeNeutralIslands) continue;
+    const p = i * 4;
+    if (!visited[i] && !isLooseNeutralBackdrop({ r: sprite.pixels[p], g: sprite.pixels[p + 1], b: sprite.pixels[p + 2], a: sprite.pixels[p + 3] })) continue;
+    sprite.pixels[p + 3] = 0;
+  }
+  return sprite;
+}
+
+function writeChromaMattePreview(source, path) {
+  const target = canvas(source.width, source.height);
+  for (let y = 0; y < source.height; y += 1) {
+    for (let x = 0; x < source.width; x += 1) {
+      const p = (y * source.width + x) * 4;
+      const color = source.pixels[p + 3] <= 8
+        ? chromaKeyGreen
+        : { r: source.pixels[p], g: source.pixels[p + 1], b: source.pixels[p + 2], a: source.pixels[p + 3] };
+      setPixel(target, x, y, color);
+    }
+  }
+  mkdirSync(dirname(path), { recursive: true });
+  writePng(path, target);
+}
+
+function spriteBounds(sprite) {
+  let minX = sprite.width;
+  let minY = sprite.height;
+  let maxX = -1;
+  let maxY = -1;
+  for (let y = 0; y < sprite.height; y += 1) {
+    for (let x = 0; x < sprite.width; x += 1) {
+      const a = sprite.pixels[(y * sprite.width + x) * 4 + 3];
+      if (a <= 12) continue;
+      minX = Math.min(minX, x);
+      minY = Math.min(minY, y);
+      maxX = Math.max(maxX, x);
+      maxY = Math.max(maxY, y);
+    }
+  }
+  if (maxX < minX || maxY < minY) return { x: 0, y: 0, w: sprite.width, h: sprite.height };
+  const pad = 4;
+  return {
+    x: Math.max(0, minX - pad),
+    y: Math.max(0, minY - pad),
+    w: Math.min(sprite.width, maxX - minX + 1 + pad * 2),
+    h: Math.min(sprite.height, maxY - minY + 1 + pad * 2),
+  };
+}
+
+function sampleBilinear(image, x, y) {
+  const x0 = Math.max(0, Math.min(image.width - 1, Math.floor(x)));
+  const y0 = Math.max(0, Math.min(image.height - 1, Math.floor(y)));
+  const x1 = Math.max(0, Math.min(image.width - 1, x0 + 1));
+  const y1 = Math.max(0, Math.min(image.height - 1, y0 + 1));
+  const tx = x - x0;
+  const ty = y - y0;
+  const c00 = readRgbaAt(image, x0, y0);
+  const c10 = readRgbaAt(image, x1, y0);
+  const c01 = readRgbaAt(image, x0, y1);
+  const c11 = readRgbaAt(image, x1, y1);
+  const lerp = (a, b, t) => a * (1 - t) + b * t;
+  return {
+    r: Math.round(lerp(lerp(c00.r, c10.r, tx), lerp(c01.r, c11.r, tx), ty)),
+    g: Math.round(lerp(lerp(c00.g, c10.g, tx), lerp(c01.g, c11.g, tx), ty)),
+    b: Math.round(lerp(lerp(c00.b, c10.b, tx), lerp(c01.b, c11.b, tx), ty)),
+    a: Math.round(lerp(lerp(c00.a, c10.a, tx), lerp(c01.a, c11.a, tx), ty)),
+  };
+}
+
+function drawSpriteFitted(target, sprite, cellX, cellY, cellW, cellH, options = {}) {
+  const bounds = spriteBounds(sprite);
+  const maxW = options.maxW ?? Math.round(cellW * 0.86);
+  const maxH = options.maxH ?? Math.round(cellH * 0.9);
+  const scale = Math.min(maxW / bounds.w, maxH / bounds.h);
+  const drawW = Math.max(1, Math.round(bounds.w * scale));
+  const drawH = Math.max(1, Math.round(bounds.h * scale));
+  const dx = cellX + Math.round((cellW - drawW) / 2) + (options.offsetX ?? 0);
+  const dy = cellY + Math.round(cellH - drawH - (options.bottomPad ?? 5)) + (options.offsetY ?? 0);
+  for (let y = 0; y < drawH; y += 1) {
+    const sy = bounds.y + (y / Math.max(1, drawH - 1)) * Math.max(1, bounds.h - 1);
+    for (let x = 0; x < drawW; x += 1) {
+      const sxBase = bounds.x + (x / Math.max(1, drawW - 1)) * Math.max(1, bounds.w - 1);
+      const sx = options.mirrorX ? bounds.x + bounds.w - 1 - (sxBase - bounds.x) : sxBase;
+      let color = sampleBilinear(sprite, sx, sy);
+      if (color.a <= 10) continue;
+      if (options.tint) color = mix(color, options.tint, options.tintRatio ?? 0.12);
+      setPixel(target, dx + x, dy + y, color);
+    }
+  }
+}
+
+function extractStyleboardSprites(source, rects, threshold = 30, options = {}) {
+  return rects.map((rect) => clearStyleboardBackground(copyCrop(source, rect), threshold, options));
+}
+
+const ageGradeStyleboardRects = {
+  students: {
+    lower: [
+      { x: 48, y: 38, w: 130, h: 154 },
+      { x: 230, y: 38, w: 132, h: 154 },
+    ],
+    upper: [
+      { x: 412, y: 38, w: 140, h: 154 },
+      { x: 608, y: 38, w: 134, h: 154 },
+      { x: 50, y: 216, w: 132, h: 158 },
+      { x: 230, y: 216, w: 136, h: 158 },
+    ],
+    middle: [
+      { x: 46, y: 400, w: 140, h: 168 },
+      { x: 230, y: 400, w: 140, h: 168 },
+      { x: 424, y: 400, w: 140, h: 168 },
+    ],
+    high: [
+      { x: 40, y: 600, w: 150, h: 174 },
+      { x: 226, y: 600, w: 146, h: 174 },
+      { x: 418, y: 600, w: 148, h: 174 },
+    ],
+    repeater: [
+      { x: 40, y: 790, w: 154, h: 190 },
+      { x: 224, y: 790, w: 154, h: 190 },
+      { x: 414, y: 790, w: 154, h: 190 },
+      { x: 605, y: 790, w: 150, h: 190 },
+    ],
+  },
+  monsters: {
+    elementary: [
+      { x: 804, y: 48, w: 150, h: 144 },
+      { x: 1034, y: 38, w: 150, h: 154 },
+      { x: 1240, y: 42, w: 156, h: 150 },
+      { x: 786, y: 228, w: 172, h: 150 },
+      { x: 1036, y: 218, w: 156, h: 160 },
+      { x: 1242, y: 224, w: 164, h: 154 },
+    ],
+    middle: [
+      { x: 790, y: 420, w: 170, h: 154 },
+      { x: 1046, y: 394, w: 156, h: 180 },
+      { x: 1246, y: 406, w: 166, h: 168 },
+    ],
+    high: [
+      { x: 786, y: 606, w: 166, h: 174 },
+      { x: 1048, y: 624, w: 158, h: 156 },
+      { x: 1252, y: 624, w: 164, h: 156 },
+    ],
+    repeater: [
+      { x: 760, y: 800, w: 158, h: 178 },
+      { x: 932, y: 790, w: 166, h: 188 },
+      { x: 1136, y: 800, w: 160, h: 178 },
+      { x: 1326, y: 800, w: 154, h: 178 },
+    ],
+  },
+};
+
+let ageGradeStyleboardCache = null;
+
+function loadAgeGradeStyleboardSprites() {
+  if (ageGradeStyleboardCache) return ageGradeStyleboardCache;
+  if (!existsSync(ageGradeStyleboardPath)) return null;
+  const source = readPngRgba(ageGradeStyleboardPath);
+  ageGradeStyleboardCache = {
+    students: Object.fromEntries(
+      Object.entries(ageGradeStyleboardRects.students).map(([key, rects]) => [key, extractStyleboardSprites(source, rects, 30)]),
+    ),
+    monsters: Object.fromEntries(
+      Object.entries(ageGradeStyleboardRects.monsters).map(([key, rects]) => [key, extractStyleboardSprites(source, rects, 30)]),
+    ),
+  };
+  return ageGradeStyleboardCache;
+}
+
+function styleboardStudentSprite(styleboard, visual) {
+  if (visual.phase === "elementary" && visual.age <= 9) return styleboard.students.lower[(visual.order - 1) % styleboard.students.lower.length];
+  if (visual.phase === "elementary") return styleboard.students.upper[(visual.order - 3) % styleboard.students.upper.length];
+  if (visual.phase === "middle") return styleboard.students.middle[(visual.order - 7) % styleboard.students.middle.length];
+  if (visual.phase === "high") return styleboard.students.high[(visual.order - 10) % styleboard.students.high.length];
+  return styleboard.students.repeater[(visual.order - 13) % styleboard.students.repeater.length];
+}
+
+function styleboardMonsterSprites(styleboard, phase) {
+  return styleboard.monsters[phase] ?? styleboard.monsters.repeater;
+}
+
+function drawStyleboardMonsterBadge(target, ox, oy, cell, visual, variant, boss) {
+  const phaseColors = {
+    elementary: "#fde047",
+    middle: "#60a5fa",
+    high: "#facc15",
+    repeater: "#fb923c",
+  };
+  const ink = hexToRgb("#17212e");
+  const accent = hexToRgb(phaseColors[visual.phase] ?? "#fb923c");
+  if (boss) {
+    fillPolygon(target, [[ox + 45, oy + 18], [ox + 52, oy + 7], [ox + 60, oy + 18], [ox + 69, oy + 7], [ox + 78, oy + 18]], ink);
+    fillPolygon(target, [[ox + 48, oy + 17], [ox + 53, oy + 10], [ox + 60, oy + 17], [ox + 68, oy + 10], [ox + 75, oy + 17]], accent);
+    fillRect(target, ox + 49, oy + 18, 27, 5, accent);
+    fillRect(target, ox + 53, oy + 20, 5, 3, hexToRgb("#fff7ed"));
+    fillRect(target, ox + 65, oy + 20, 5, 3, hexToRgb("#fff7ed"));
+  } else if (variant % 3 === 0) {
+    fillEllipse(target, ox + 96, oy + 33, 9, 9, ink);
+    fillEllipse(target, ox + 96, oy + 33, 6, 6, accent);
+  } else if (variant % 3 === 1) {
+    fillRect(target, ox + 91, oy + 28, 15, 12, ink);
+    fillRect(target, ox + 94, oy + 31, 9, 6, accent);
+  }
+}
+
 function samplePixel(target, x, y) {
   const sx = Math.max(0, Math.min(target.width - 1, x));
   const sy = Math.max(0, Math.min(target.height - 1, y));
@@ -1123,12 +1551,25 @@ function buildEnemyAtlas() {
 
 function buildCareerAtlas(careers) {
   const cell = 64;
+  const genders = ["male", "female"];
   const ordered = careers.slice().sort((a, b) => (a.choiceRank ?? 999) - (b.choiceRank ?? 999));
-  const target = canvas(cell * ordered.length, cell);
-  ordered.forEach((career, index) => drawCareerPortrait(target, index * cell, 0, career, index));
+  const target = canvas(cell * ordered.length * genders.length, cell);
+  const items = [];
+  genders.forEach((gender, genderIndex) => {
+    ordered.forEach((career, index) => {
+      const atlasIndex = genderIndex * ordered.length + index;
+      drawCareerPortrait(target, atlasIndex * cell, 0, career, index, gender);
+      items.push({
+        id: gender === "male" ? `career-${career.id}` : `career-${career.id}-female`,
+        careerId: career.id,
+        gender,
+        index: atlasIndex,
+      });
+    });
+  });
   const path = resolve(outDir, "visual-careers.png");
   writePng(path, target);
-  return { path, width: target.width, height: target.height, cell, items: ordered.map((career, index) => ({ id: `career-${career.id}`, careerId: career.id, index })) };
+  return { path, width: target.width, height: target.height, cell, genders, items };
 }
 
 function gradientRect(target, x, y, w, h, top, bottom) {
@@ -1261,10 +1702,10 @@ function positionPercent(index, total) {
   return total <= 1 ? "0%" : `${(index / (total - 1) * 100).toFixed(4).replace(/\.?0+$/, "")}%`;
 }
 
-function buildCss(companions, enemies, careers, mainMonsters, expeditionBackdrops) {
+function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expeditionBackdrops) {
   const lines = [
     "/* generated by tools/build-visual-assets.mjs */",
-    ".expedition-unit-avatar,.helper-sprite:not(.helper-robot){background-image:url(__STUDENT_ASSET_007__);background-repeat:no-repeat;background-size:1300% 100%;background-position:var(--visual-unit-x,0%) 0;image-rendering:pixelated}",
+    ".expedition-unit-avatar,.helper-sprite:not(.helper-robot){background-image:url(__STUDENT_ASSET_007__);background-repeat:no-repeat;background-size:1300% 100%;background-position:var(--visual-unit-x,0%) 0;image-rendering:auto}",
     ".expedition-unit-avatar .unit-shadow,.expedition-unit-avatar .unit-leg,.expedition-unit-avatar .unit-arm,.expedition-unit-avatar .unit-head,.expedition-unit-avatar .unit-hair,.expedition-unit-avatar .unit-body,.expedition-unit-avatar .unit-prop,.helper-sprite:not(.helper-robot)>span{display:none}",
     ".helper-sprite:not(.helper-robot){filter:drop-shadow(4px 5px #00000045);background-size:1300% 100%}",
     ".expedition-arena{background:#111827;border-color:color-mix(in srgb,var(--stage-trim) 74%,#ffffff 8%);box-shadow:inset 0 0 0 1px #ffffff1f,0 12px 28px #0f172a2e}",
@@ -1298,7 +1739,7 @@ function buildCss(companions, enemies, careers, mainMonsters, expeditionBackdrop
   });
 
   lines.push(
-    ".expedition-enemy-visual::before{content:\"\";z-index:1;pointer-events:none;background-image:url(__STUDENT_ASSET_008__);background-repeat:no-repeat;background-size:4000% 100%;background-position:var(--visual-enemy-x,0%) 0;image-rendering:pixelated;position:absolute;inset:-10px -12px 2px -12px}",
+    ".expedition-enemy-visual::before{content:\"\";z-index:1;pointer-events:none;background-image:url(__STUDENT_ASSET_008__);background-repeat:no-repeat;background-size:4000% 100%;background-position:var(--visual-enemy-x,0%) 0;image-rendering:auto;position:absolute;inset:-10px -12px 2px -12px}",
     ".expedition-enemy-visual .enemy-body{display:none}",
     ".expedition-enemy-visual .enemy-shadow{z-index:0}",
     ".expedition-enemy-visual .enemy-name,.expedition-enemy-visual strong,.expedition-enemy-visual small,.expedition-boss-health{z-index:2}",
@@ -1315,14 +1756,20 @@ function buildCss(companions, enemies, careers, mainMonsters, expeditionBackdrop
   });
 
   lines.push(
-    ".career-portrait{background-image:url(__STUDENT_ASSET_009__);background-repeat:no-repeat;background-size:6200% 100%;background-position:var(--visual-career-x,0%) 0;image-rendering:pixelated;background-color:#eef2f7}",
+    `.career-portrait{background-image:url(__STUDENT_ASSET_009__);background-repeat:no-repeat;background-size:${careers.items.length * 100}% 100%;background-position:var(--visual-career-x,0%) 0;image-rendering:auto;background-color:#eef2f7}`,
     ".career-choice.ranked{grid-template-columns:42px 36px minmax(0,1fr) minmax(76px,auto)}",
     ".career-choice-aura{border:1px solid #20293824;border-radius:8px;width:34px;height:34px;box-shadow:inset 0 -8px #00000024,0 2px 7px #0f172a1f}",
-    ".career-emblem{background-size:6200% 100%;background-position:var(--visual-career-x,0%) 0;box-shadow:inset 0 -8px #00000024,0 2px 7px #0f172a1f}",
+    `.career-emblem{background-size:${careers.items.length * 100}% 100%;background-position:var(--visual-career-x,0%) 0;box-shadow:inset 0 -8px #00000024,0 2px 7px #0f172a1f}`,
     "@media (width<=390px){.career-choice.ranked{grid-template-columns:36px 32px minmax(0,1fr);gap:7px}.career-choice-aura{width:32px;height:32px}.career-choice.ranked .career-choice-state{grid-column:3}}",
   );
   careers.items.forEach((item) => {
-    lines.push(`.career-${sanitizeClass(item.careerId)}{--visual-career-x:${positionPercent(item.index, careers.items.length)}}`);
+    const careerClass = `.career-${sanitizeClass(item.careerId)}`;
+    const x = positionPercent(item.index, careers.items.length);
+    if (item.gender === "female") {
+      lines.push(`${careerClass}.career-gender-female,.career-gender-female ${careerClass}{--visual-career-x:${x}}`);
+    } else {
+      lines.push(`${careerClass}{--visual-career-x:${x}}`);
+    }
   });
 
   lines.push(
@@ -1330,7 +1777,7 @@ function buildCss(companions, enemies, careers, mainMonsters, expeditionBackdrop
     ".battle-enemy-card>.battle-enemy-monster{grid-column:1;grid-row:1/4}",
     ".battle-enemy-card>div:first-of-type,.battle-enemy-card>.enemy-hp-bar,.battle-enemy-card>small{grid-column:2}",
     ".battle-enemy-card>div:first-of-type{justify-content:space-between;align-items:center;gap:5px;min-width:0;display:flex}",
-    ".battle-enemy-monster{width:32px;height:32px;display:block;background-image:url(__STUDENT_ASSET_003__);background-repeat:no-repeat;background-size:19200% 100%;background-position:var(--monster-frame-x,0%) 0;image-rendering:pixelated;filter:drop-shadow(2px 3px #00000052)}",
+    ".battle-enemy-monster{width:32px;height:32px;display:block;background-image:url(__STUDENT_ASSET_003__);background-repeat:no-repeat;background-size:19200% 100%;background-position:var(--monster-frame-x,0%) 0;image-rendering:auto;filter:drop-shadow(2px 3px #00000052)}",
     ".battle-enemy-card.boss .battle-enemy-monster,.battle-enemy-card.suneung .battle-enemy-monster{width:36px;height:36px;margin-left:-3px;transform:scale(1.04)}",
     ".pixel-arena .battle-enemy-card{grid-template-columns:24px minmax(0,1fr);column-gap:2px;min-height:35px;padding:2px 3px}",
     ".pixel-arena .battle-enemy-card>.battle-enemy-monster{width:25px;height:25px;margin-left:-3px}",
@@ -1344,7 +1791,7 @@ function buildCss(companions, enemies, careers, mainMonsters, expeditionBackdrop
     ".pixel-arena .pixel-floor{left:0;right:0;background:linear-gradient(180deg,transparent 0%,#0f172a54 82%,#0f172a7a 100%);animation:none;box-shadow:none}",
     ".pixel-arena .pencil-shot,.pixel-arena .pencil-shot.active{opacity:0;animation:none}",
     ".pixel-arena .student-sprite{z-index:8;animation:1.45s steps(6,end) infinite studentCombatLoop}",
-    ".pixel-arena .student-art{transform-origin:50% 100%;animation:.58s steps(2,end) infinite studentSpriteIdle}",
+    ".pixel-arena .student-art{background-size:6400% 200%;background-position:var(--student-frame-a,var(--student-frame-x,0%)) var(--student-frame-y,0%);image-rendering:auto;transform-origin:50% 100%;animation:.64s steps(1,end) infinite studentMoveFrames}",
     ".pixel-arena .student-sprite::before{content:\"\";pointer-events:none;position:absolute;left:30%;bottom:-5px;width:54px;height:14px;opacity:0;background:radial-gradient(ellipse at 35% 60%,#f8fafc99 0 18%,transparent 38%),radial-gradient(ellipse at 70% 50%,#9fd4c98a 0 16%,transparent 36%);filter:blur(.2px);animation:1.45s steps(6,end) infinite studentDashDust}",
     ".pixel-arena .student-sprite::after{content:\"\";pointer-events:none;position:absolute;left:55%;top:27%;width:72px;height:20px;opacity:0;background:linear-gradient(90deg,transparent,#fff 20%,#f4d35e 52%,#ef476f 76%,transparent);clip-path:polygon(0 45%,72% 0,100% 50%,72% 100%,0 55%);transform-origin:left center;filter:drop-shadow(0 0 5px #fff4);animation:1.45s steps(6,end) infinite studentMeleeSlash}",
     ".pixel-arena .helper-party{left:30%;bottom:20%;z-index:7;gap:0;transform:translateX(-50%)}",
@@ -1365,7 +1812,7 @@ function buildCss(companions, enemies, careers, mainMonsters, expeditionBackdrop
     ".battle-scene-enemy.defeated{opacity:.32;filter:grayscale(.75) drop-shadow(2px 3px #00000040);animation:none}",
     ".battle-scene-enemy.defeated .battle-scene-monster-art{animation:none}",
     ".battle-scene-enemy.slot-1{--scene-enemy-delay:-.04s}.battle-scene-enemy.slot-2{--scene-enemy-delay:-.18s}.battle-scene-enemy.slot-3{--scene-enemy-delay:-.31s}.battle-scene-enemy.slot-4{--scene-enemy-delay:-.09s}.battle-scene-enemy.slot-5{--scene-enemy-delay:-.24s}.battle-scene-enemy.slot-6{--scene-enemy-delay:-.39s}.battle-scene-enemy.slot-7{--scene-enemy-delay:-.13s}.battle-scene-enemy.slot-8{--scene-enemy-delay:-.27s}.battle-scene-enemy.slot-9{--scene-enemy-delay:-.43s}.battle-scene-enemy.slot-10{--scene-enemy-delay:-.2s}.battle-scene-enemy.slot-11{--scene-enemy-delay:-.35s}.battle-scene-enemy.slot-12{--scene-enemy-delay:-.49s}",
-    ".battle-scene-monster-art{position:absolute;inset:0;background-image:url(__STUDENT_ASSET_003__);background-repeat:no-repeat;background-size:19200% 100%;background-position:var(--monster-frame-x,0%) 0;image-rendering:pixelated;transform-origin:50% 100%;animation:1.18s steps(3,end) infinite enemyCombatBreath;animation-delay:inherit}",
+    ".battle-scene-monster-art{position:absolute;inset:0;background-image:url(__STUDENT_ASSET_003__);background-repeat:no-repeat;background-size:19200% 100%;background-position:var(--monster-frame-x,0%) 0;image-rendering:auto;transform-origin:50% 100%;animation:1.18s steps(3,end) infinite enemyCombatBreath;animation-delay:inherit}",
     ".battle-scene-enemy.active .battle-scene-monster-art{animation:.72s steps(4,end) infinite enemyHurtLoop}",
     ".battle-scene-hp{position:absolute;left:50%;top:-8px;z-index:2;width:44px;height:6px;padding:1px;background:#17212ed9;border:1px solid #fff6;border-radius:999px;transform:translateX(-50%);box-shadow:0 1px 4px #0008;overflow:hidden}",
     ".battle-scene-hp::after{content:\"\";position:absolute;inset:1px;width:55%;background:linear-gradient(90deg,transparent,#fff7,transparent);transform:translateX(-130%);animation:1.25s linear infinite bossHpShine}",
@@ -1390,6 +1837,7 @@ function buildCss(companions, enemies, careers, mainMonsters, expeditionBackdrop
     "@keyframes gridTreadmill{0%{transform:translateX(0)}100%{transform:translateX(-18px)}}",
     "@keyframes floorTreadmill{0%{transform:translateX(0)}100%{transform:translateX(-28px)}}",
     "@keyframes studentCombatLoop{0%,18%,72%,100%{transform:translateX(-50%) translate(0,0) scale(var(--student-scale))}26%{transform:translateX(-50%) translate(12px,-3px) scale(var(--student-scale))}38%,48%{transform:translateX(-50%) translate(76px,-6px) scale(var(--student-scale))}60%{transform:translateX(-50%) translate(18px,2px) scale(var(--student-scale))}}",
+    "@keyframes studentMoveFrames{0%,24.99%{background-position:var(--student-frame-a,var(--student-frame-x,0%)) var(--student-frame-y,0%)}25%,49.99%{background-position:var(--student-frame-b,var(--student-frame-a,var(--student-frame-x,0%))) var(--student-frame-y,0%)}50%,74.99%{background-position:var(--student-frame-c,var(--student-frame-a,var(--student-frame-x,0%))) var(--student-frame-y,0%)}75%,100%{background-position:var(--student-frame-d,var(--student-frame-a,var(--student-frame-x,0%))) var(--student-frame-y,0%)}}",
     "@keyframes studentSpriteIdle{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.02,.98)}}",
     "@keyframes studentDashDust{0%,26%,64%,100%{opacity:0;transform:translate(0,0) scale(.45)}38%,50%{opacity:.72;transform:translate(60px,3px) scale(1)}}",
     "@keyframes studentMeleeSlash{0%,29%,58%,100%{opacity:0;transform:translate(14px,5px) rotate(-13deg) scaleX(.42)}38%,48%{opacity:.95;transform:translate(84px,-1px) rotate(-13deg) scaleX(1)}}",
@@ -1407,6 +1855,15 @@ function buildCss(companions, enemies, careers, mainMonsters, expeditionBackdrop
     "@media (width<=390px){.battle-enemy-grid.compact{gap:3px}.battle-enemy-card{grid-template-columns:28px minmax(0,1fr)}.battle-enemy-monster{width:29px;height:29px}.pixel-arena .battle-enemy-card{grid-template-columns:22px minmax(0,1fr);min-height:34px}.pixel-arena .battle-enemy-card>.battle-enemy-monster{width:23px;height:23px}}",
     "@media (width<=390px){.battle-scene-enemy{width:36px;height:36px}.battle-scene-enemy.boss,.battle-scene-enemy.suneung{width:50px;height:50px}.battle-scene-lineup.suneung .battle-scene-enemy{width:52px;height:52px}.battle-scene-hp{top:-7px;width:38px;height:5px}}",
   );
+  const studentColumns = mainStudents.columns ?? Math.max(1, Math.round(mainStudents.width / mainStudents.cell));
+  const studentRows = mainStudents.rows ?? 1;
+  mainStudents.items.forEach((item) => {
+    const frames = item.animationFrames ?? [item.frame, item.frame + 1, item.frame + 2, item.frame + 3];
+    const y = positionPercent(item.row ?? 0, studentRows);
+    lines.push(
+      `.student-gender-${item.gender}.student-grade-${item.gradeOrder} .student-art{--student-frame-a:${positionPercent(frames[0], studentColumns)};--student-frame-b:${positionPercent(frames[1] ?? frames[0], studentColumns)};--student-frame-c:${positionPercent(frames[2] ?? frames[0], studentColumns)};--student-frame-d:${positionPercent(frames[3] ?? frames[0], studentColumns)};--student-frame-y:${y}}`,
+    );
+  });
   const mainMonsterTotal = Math.max(1, Math.round(mainMonsters.width / mainMonsters.cell));
   mainMonsters.items.forEach((item) => {
     lines.push(`.${item.id}{--monster-frame-x:${positionPercent(item.frame, mainMonsterTotal)}}`);
@@ -1432,7 +1889,7 @@ function upsertManifestAsset(manifest, token, file, atlas) {
 }
 
 function enrichCareers(careers, careerAtlas) {
-  const byId = new Map(careerAtlas.items.map((item) => [item.careerId, item]));
+  const byId = new Map(careerAtlas.items.filter((item) => item.gender !== "female").map((item) => [item.careerId, item]));
   return careers.map((career) => {
     const item = byId.get(career.id);
     const helper = sanitizeClass(career.helperSprite ?? "helper-files");
@@ -1493,7 +1950,7 @@ const enemyAtlas = buildEnemyAtlas();
 const careerAtlas = buildCareerAtlas(careers);
 const expeditionBackdropAtlas = buildExpeditionBackdropAtlas();
 
-writeFileSync(cssPath, buildCss(companionAtlas, enemyAtlas, careerAtlas, mainMonsterAtlas, expeditionBackdropAtlas), "utf8");
+writeFileSync(cssPath, buildCss(companionAtlas, enemyAtlas, careerAtlas, mainStudentAtlas, mainMonsterAtlas, expeditionBackdropAtlas), "utf8");
 writeFileSync(careersPath, `${JSON.stringify(enrichCareers(careers, careerAtlas), null, 2)}\n`, "utf8");
 writeFileSync(gradeVisualsPath, `${JSON.stringify(enrichGradeVisuals(gradeVisuals), null, 2)}\n`, "utf8");
 writeFileSync(stagesPath, `${JSON.stringify(enrichStages(stages), null, 2)}\n`, "utf8");
@@ -1515,7 +1972,7 @@ const visualData = {
   style: "pixel-voxel",
   generatedBy: "tools/build-visual-assets.mjs",
   atlases: [
-    { id: "mainStudents", token: "__STUDENT_ASSET_002__", file: "assets/asset-002.png", cell: mainStudentAtlas.cell, width: mainStudentAtlas.width, height: mainStudentAtlas.height, items: mainStudentAtlas.items },
+    { id: "mainStudents", token: "__STUDENT_ASSET_002__", file: "assets/asset-002.png", cell: mainStudentAtlas.cell, columns: mainStudentAtlas.columns, rows: mainStudentAtlas.rows, framesPerCharacter: mainStudentAtlas.framesPerCharacter, width: mainStudentAtlas.width, height: mainStudentAtlas.height, items: mainStudentAtlas.items },
     { id: "mainMonsters", token: "__STUDENT_ASSET_003__", file: "assets/asset-003.png", cell: mainMonsterAtlas.cell, width: mainMonsterAtlas.width, height: mainMonsterAtlas.height, items: mainMonsterAtlas.items },
     { id: "companions", token: "__STUDENT_ASSET_007__", file: "assets/visual-companions.png", cell: companionAtlas.cell, width: companionAtlas.width, height: companionAtlas.height, items: companionAtlas.items },
     { id: "enemies", token: "__STUDENT_ASSET_008__", file: "assets/visual-enemies.png", cell: enemyAtlas.cell, width: enemyAtlas.width, height: enemyAtlas.height, items: enemyAtlas.items },

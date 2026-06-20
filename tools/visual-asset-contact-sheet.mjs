@@ -33,15 +33,16 @@ function itemLabel(item) {
 }
 
 function itemMeta(item) {
-  return [item.phase, item.age ? `${item.age}세` : "", item.band, item.type, item.tone].filter(Boolean).join(" / ");
+  return [item.gender, item.phase, item.age ? `${item.age}세` : "", item.band, item.type, item.tone].filter(Boolean).join(" / ");
 }
 
 function renderCell(atlas, item) {
-  const total = atlas.width / atlas.cell;
+  const total = atlas.columns ?? atlas.width / atlas.cell;
+  const rows = atlas.rows ?? 1;
   const index = itemIndex(item);
   const title = [item.id, itemLabel(item), itemMeta(item), item.gradeTitle].filter(Boolean).join(" · ");
   return `<figure class="asset-cell" title="${escapeHtml(title)}">
-    <span class="sprite" style="--sheet:url('${assetUrl(atlas.file)}');--size:${total * 100}% 100%;--x:${posPercent(index, total)};--w:${atlas.cell}px;--h:${atlas.height}px"></span>
+    <span class="sprite" style="--sheet:url('${assetUrl(atlas.file)}');--size:${total * 100}% ${rows * 100}%;--x:${posPercent(index, total)};--y:${posPercent(item.row ?? 0, rows)};--w:${atlas.cell}px;--h:${atlas.cell}px"></span>
     <figcaption><b>${escapeHtml(itemLabel(item))}</b><small>${escapeHtml(itemMeta(item) || `#${index}`)}</small></figcaption>
   </figure>`;
 }
@@ -93,7 +94,7 @@ const html = `<!doctype html>
     .atlas strong{white-space:nowrap;background:#eef2f7;border-radius:6px;padding:5px 7px}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:10px}
     .asset-cell{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px;display:grid;justify-items:center;gap:6px;min-width:0}
-    .sprite{width:var(--w);height:var(--h);max-width:96px;max-height:96px;background-image:var(--sheet);background-size:var(--size);background-position:var(--x) 0;background-repeat:no-repeat;image-rendering:pixelated;filter:drop-shadow(3px 4px 0 #00000024)}
+    .sprite{width:var(--w);height:var(--h);max-width:96px;max-height:96px;background-image:var(--sheet);background-size:var(--size);background-position:var(--x) var(--y,0%);background-repeat:no-repeat;image-rendering:auto;filter:drop-shadow(3px 4px 0 #00000024)}
     .background-preview{width:100%;max-height:240px;object-fit:cover;object-position:left center;border-radius:8px;border:1px solid #e2e8f0;background:#0f172a}
     figcaption{width:100%;display:grid;gap:2px;text-align:center;min-width:0}
     figcaption b,figcaption small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

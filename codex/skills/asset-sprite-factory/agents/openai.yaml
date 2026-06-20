@@ -1,0 +1,4 @@
+interface:
+  display_name: "Asset Sprite Factory"
+  short_description: "Sprite asset pipeline for repeatable game visuals"
+  default_prompt: "Use $asset-sprite-factory to create or validate a reusable sprite asset pipeline."

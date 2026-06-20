@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "cell": 160,
+  "centerX": 80,
+  "baselineY": 148,
+  "maxSpriteWidth": 122,
+  "maxSpriteHeight": 142,
+  "minFrameDifference": 2.5,
+  "animations": {
+    "move": {
+      "frames": 4,
+      "durationMs": 640
+    }
+  },
+  "characters": [
+    {
+      "id": "hero-01-male",
+      "kind": "rpg-hero",
+      "gender": "male",
+      "direction": "right",
+      "title": "오른쪽 방향 남성 전사",
+      "artBrief": "right-facing RPG hero, consistent 4-frame run cycle",
+      "moveSheet": "assets/visual-source/characters/hero-01-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    }
+  ]
+}

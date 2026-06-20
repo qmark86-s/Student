@@ -7,137 +7,620 @@
       "id": "mainStudents",
       "token": "__STUDENT_ASSET_002__",
       "file": "assets/asset-002.png",
-      "cell": 64,
-      "width": 1024,
-      "height": 96,
+      "cell": 160,
+      "columns": 64,
+      "rows": 2,
+      "framesPerCharacter": 4,
+      "width": 10240,
+      "height": 320,
       "items": [
         {
           "id": "main-student-000",
           "frame": 0,
+          "row": 0,
+          "gradeOrder": 1,
+          "baseFrame": 0,
+          "animationFrames": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "gender": "male",
           "phase": "elementary",
           "age": 8,
-          "title": "초1 작은 책가방",
-          "band": "lower-elementary"
+          "title": "초1 작은 책가방 남",
+          "band": "lower-elementary",
+          "source": "prepared"
         },
         {
           "id": "main-student-001",
-          "frame": 1,
+          "frame": 4,
+          "row": 0,
+          "gradeOrder": 2,
+          "baseFrame": 1,
+          "animationFrames": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "gender": "male",
           "phase": "elementary",
           "age": 9,
-          "title": "초2 준비물 가방",
-          "band": "lower-elementary"
+          "title": "초2 준비물 가방 남",
+          "band": "lower-elementary",
+          "source": "prepared"
         },
         {
           "id": "main-student-002",
-          "frame": 2,
+          "frame": 8,
+          "row": 0,
+          "gradeOrder": 3,
+          "baseFrame": 2,
+          "animationFrames": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "gender": "male",
           "phase": "elementary",
           "age": 10,
-          "title": "초3 교과서 가방",
-          "band": "upper-elementary"
+          "title": "초3 교과서 가방 남",
+          "band": "upper-elementary",
+          "source": "prepared"
         },
         {
           "id": "main-student-003",
-          "frame": 3,
+          "frame": 12,
+          "row": 0,
+          "gradeOrder": 4,
+          "baseFrame": 3,
+          "animationFrames": [
+            12,
+            13,
+            14,
+            15
+          ],
+          "gender": "male",
           "phase": "elementary",
           "age": 11,
-          "title": "초4 발표 준비생",
-          "band": "upper-elementary"
+          "title": "초4 발표 준비생 남",
+          "band": "upper-elementary",
+          "source": "prepared"
         },
         {
           "id": "main-student-004",
-          "frame": 4,
+          "frame": 16,
+          "row": 0,
+          "gradeOrder": 5,
+          "baseFrame": 4,
+          "animationFrames": [
+            16,
+            17,
+            18,
+            19
+          ],
+          "gender": "male",
           "phase": "elementary",
           "age": 12,
-          "title": "초5 수행평가 준비생",
-          "band": "upper-elementary"
+          "title": "초5 수행평가 준비생 남",
+          "band": "upper-elementary",
+          "source": "prepared"
         },
         {
           "id": "main-student-005",
-          "frame": 5,
+          "frame": 20,
+          "row": 0,
+          "gradeOrder": 6,
+          "baseFrame": 5,
+          "animationFrames": [
+            20,
+            21,
+            22,
+            23
+          ],
+          "gender": "male",
           "phase": "elementary",
           "age": 13,
-          "title": "초6 졸업반",
-          "band": "upper-elementary"
+          "title": "초6 졸업반 남",
+          "band": "upper-elementary",
+          "source": "prepared"
         },
         {
           "id": "main-student-006",
-          "frame": 6,
+          "frame": 24,
+          "row": 0,
+          "gradeOrder": 7,
+          "baseFrame": 6,
+          "animationFrames": [
+            24,
+            25,
+            26,
+            27
+          ],
+          "gender": "male",
           "phase": "middle",
           "age": 14,
-          "title": "중1 교복 적응",
-          "band": "middle"
+          "title": "중1 교복 적응 남",
+          "band": "middle",
+          "source": "prepared"
         },
         {
           "id": "main-student-007",
-          "frame": 7,
+          "frame": 28,
+          "row": 0,
+          "gradeOrder": 8,
+          "baseFrame": 7,
+          "animationFrames": [
+            28,
+            29,
+            30,
+            31
+          ],
+          "gender": "male",
           "phase": "middle",
           "age": 15,
-          "title": "중2 수행평가 러너",
-          "band": "middle"
+          "title": "중2 수행평가 러너 남",
+          "band": "middle",
+          "source": "prepared"
         },
         {
           "id": "main-student-008",
-          "frame": 8,
+          "frame": 32,
+          "row": 0,
+          "gradeOrder": 9,
+          "baseFrame": 8,
+          "animationFrames": [
+            32,
+            33,
+            34,
+            35
+          ],
+          "gender": "male",
           "phase": "middle",
           "age": 16,
-          "title": "중3 고입 대비",
-          "band": "middle"
+          "title": "중3 고입 대비 남",
+          "band": "middle",
+          "source": "prepared"
         },
         {
           "id": "main-student-009",
-          "frame": 9,
+          "frame": 36,
+          "row": 0,
+          "gradeOrder": 10,
+          "baseFrame": 9,
+          "animationFrames": [
+            36,
+            37,
+            38,
+            39
+          ],
+          "gender": "male",
           "phase": "high",
           "age": 17,
-          "title": "고1 계열 탐색",
-          "band": "high"
+          "title": "고1 계열 탐색 남",
+          "band": "high",
+          "source": "prepared"
         },
         {
           "id": "main-student-010",
-          "frame": 10,
+          "frame": 40,
+          "row": 0,
+          "gradeOrder": 11,
+          "baseFrame": 10,
+          "animationFrames": [
+            40,
+            41,
+            42,
+            43
+          ],
+          "gender": "male",
           "phase": "high",
           "age": 18,
-          "title": "고2 계열 고정",
-          "band": "high"
+          "title": "고2 계열 고정 남",
+          "band": "high",
+          "source": "prepared"
         },
         {
           "id": "main-student-011",
-          "frame": 11,
+          "frame": 44,
+          "row": 0,
+          "gradeOrder": 12,
+          "baseFrame": 11,
+          "animationFrames": [
+            44,
+            45,
+            46,
+            47
+          ],
+          "gender": "male",
           "phase": "high",
           "age": 19,
-          "title": "고3 수험생",
-          "band": "high"
+          "title": "고3 수험생 남",
+          "band": "high",
+          "source": "prepared"
         },
         {
           "id": "main-student-012",
-          "frame": 12,
+          "frame": 48,
+          "row": 0,
+          "gradeOrder": 13,
+          "baseFrame": 12,
+          "animationFrames": [
+            48,
+            49,
+            50,
+            51
+          ],
+          "gender": "male",
           "phase": "repeater",
           "age": 20,
-          "title": "1수 독서실 적응",
-          "band": "repeater"
+          "title": "1수 독서실 적응 남",
+          "band": "repeater",
+          "source": "prepared"
         },
         {
           "id": "main-student-013",
-          "frame": 13,
+          "frame": 52,
+          "row": 0,
+          "gradeOrder": 14,
+          "baseFrame": 13,
+          "animationFrames": [
+            52,
+            53,
+            54,
+            55
+          ],
+          "gender": "male",
           "phase": "repeater",
           "age": 21,
-          "title": "2수 루틴 고정",
-          "band": "repeater"
+          "title": "2수 루틴 고정 남",
+          "band": "repeater",
+          "source": "prepared"
         },
         {
           "id": "main-student-014",
-          "frame": 14,
+          "frame": 56,
+          "row": 0,
+          "gradeOrder": 15,
+          "baseFrame": 14,
+          "animationFrames": [
+            56,
+            57,
+            58,
+            59
+          ],
+          "gender": "male",
           "phase": "repeater",
           "age": 22,
-          "title": "장수생 압축 학습",
-          "band": "repeater"
+          "title": "장수생 압축 학습 남",
+          "band": "repeater",
+          "source": "prepared"
         },
         {
           "id": "main-student-015",
-          "frame": 15,
+          "frame": 60,
+          "row": 0,
+          "gradeOrder": 16,
+          "baseFrame": 15,
+          "animationFrames": [
+            60,
+            61,
+            62,
+            63
+          ],
+          "gender": "male",
           "phase": "repeater",
           "age": 23,
-          "title": "N수 베테랑",
-          "band": "repeater"
+          "title": "N수 베테랑 남",
+          "band": "repeater",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-000",
+          "frame": 0,
+          "row": 1,
+          "gradeOrder": 1,
+          "baseFrame": 0,
+          "animationFrames": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "gender": "female",
+          "phase": "elementary",
+          "age": 8,
+          "title": "초1 작은 책가방 여",
+          "band": "lower-elementary",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-001",
+          "frame": 4,
+          "row": 1,
+          "gradeOrder": 2,
+          "baseFrame": 1,
+          "animationFrames": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "gender": "female",
+          "phase": "elementary",
+          "age": 9,
+          "title": "초2 준비물 가방 여",
+          "band": "lower-elementary",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-002",
+          "frame": 8,
+          "row": 1,
+          "gradeOrder": 3,
+          "baseFrame": 2,
+          "animationFrames": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "gender": "female",
+          "phase": "elementary",
+          "age": 10,
+          "title": "초3 교과서 가방 여",
+          "band": "upper-elementary",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-003",
+          "frame": 12,
+          "row": 1,
+          "gradeOrder": 4,
+          "baseFrame": 3,
+          "animationFrames": [
+            12,
+            13,
+            14,
+            15
+          ],
+          "gender": "female",
+          "phase": "elementary",
+          "age": 11,
+          "title": "초4 발표 준비생 여",
+          "band": "upper-elementary",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-004",
+          "frame": 16,
+          "row": 1,
+          "gradeOrder": 5,
+          "baseFrame": 4,
+          "animationFrames": [
+            16,
+            17,
+            18,
+            19
+          ],
+          "gender": "female",
+          "phase": "elementary",
+          "age": 12,
+          "title": "초5 수행평가 준비생 여",
+          "band": "upper-elementary",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-005",
+          "frame": 20,
+          "row": 1,
+          "gradeOrder": 6,
+          "baseFrame": 5,
+          "animationFrames": [
+            20,
+            21,
+            22,
+            23
+          ],
+          "gender": "female",
+          "phase": "elementary",
+          "age": 13,
+          "title": "초6 졸업반 여",
+          "band": "upper-elementary",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-006",
+          "frame": 24,
+          "row": 1,
+          "gradeOrder": 7,
+          "baseFrame": 6,
+          "animationFrames": [
+            24,
+            25,
+            26,
+            27
+          ],
+          "gender": "female",
+          "phase": "middle",
+          "age": 14,
+          "title": "중1 교복 적응 여",
+          "band": "middle",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-007",
+          "frame": 28,
+          "row": 1,
+          "gradeOrder": 8,
+          "baseFrame": 7,
+          "animationFrames": [
+            28,
+            29,
+            30,
+            31
+          ],
+          "gender": "female",
+          "phase": "middle",
+          "age": 15,
+          "title": "중2 수행평가 러너 여",
+          "band": "middle",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-008",
+          "frame": 32,
+          "row": 1,
+          "gradeOrder": 9,
+          "baseFrame": 8,
+          "animationFrames": [
+            32,
+            33,
+            34,
+            35
+          ],
+          "gender": "female",
+          "phase": "middle",
+          "age": 16,
+          "title": "중3 고입 대비 여",
+          "band": "middle",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-009",
+          "frame": 36,
+          "row": 1,
+          "gradeOrder": 10,
+          "baseFrame": 9,
+          "animationFrames": [
+            36,
+            37,
+            38,
+            39
+          ],
+          "gender": "female",
+          "phase": "high",
+          "age": 17,
+          "title": "고1 계열 탐색 여",
+          "band": "high",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-010",
+          "frame": 40,
+          "row": 1,
+          "gradeOrder": 11,
+          "baseFrame": 10,
+          "animationFrames": [
+            40,
+            41,
+            42,
+            43
+          ],
+          "gender": "female",
+          "phase": "high",
+          "age": 18,
+          "title": "고2 계열 고정 여",
+          "band": "high",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-011",
+          "frame": 44,
+          "row": 1,
+          "gradeOrder": 12,
+          "baseFrame": 11,
+          "animationFrames": [
+            44,
+            45,
+            46,
+            47
+          ],
+          "gender": "female",
+          "phase": "high",
+          "age": 19,
+          "title": "고3 수험생 여",
+          "band": "high",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-012",
+          "frame": 48,
+          "row": 1,
+          "gradeOrder": 13,
+          "baseFrame": 12,
+          "animationFrames": [
+            48,
+            49,
+            50,
+            51
+          ],
+          "gender": "female",
+          "phase": "repeater",
+          "age": 20,
+          "title": "1수 독서실 적응 여",
+          "band": "repeater",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-013",
+          "frame": 52,
+          "row": 1,
+          "gradeOrder": 14,
+          "baseFrame": 13,
+          "animationFrames": [
+            52,
+            53,
+            54,
+            55
+          ],
+          "gender": "female",
+          "phase": "repeater",
+          "age": 21,
+          "title": "2수 루틴 고정 여",
+          "band": "repeater",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-014",
+          "frame": 56,
+          "row": 1,
+          "gradeOrder": 15,
+          "baseFrame": 14,
+          "animationFrames": [
+            56,
+            57,
+            58,
+            59
+          ],
+          "gender": "female",
+          "phase": "repeater",
+          "age": 22,
+          "title": "장수생 압축 학습 여",
+          "band": "repeater",
+          "source": "prepared"
+        },
+        {
+          "id": "main-student-female-015",
+          "frame": 60,
+          "row": 1,
+          "gradeOrder": 16,
+          "baseFrame": 15,
+          "animationFrames": [
+            60,
+            61,
+            62,
+            63
+          ],
+          "gender": "female",
+          "phase": "repeater",
+          "age": 23,
+          "title": "N수 베테랑 여",
+          "band": "repeater",
+          "source": "prepared"
         }
       ]
     },
@@ -2196,318 +2679,752 @@
       "token": "__STUDENT_ASSET_009__",
       "file": "assets/visual-careers.png",
       "cell": 64,
-      "width": 3968,
+      "width": 7936,
       "height": 64,
       "items": [
         {
           "id": "career-doctor",
           "careerId": "doctor",
+          "gender": "male",
           "index": 0
         },
         {
           "id": "career-judge",
           "careerId": "judge",
+          "gender": "male",
           "index": 1
         },
         {
           "id": "career-prosecutor",
           "careerId": "prosecutor",
+          "gender": "male",
           "index": 2
         },
         {
           "id": "career-dentist",
           "careerId": "dentist",
+          "gender": "male",
           "index": 3
         },
         {
           "id": "career-investment_banker",
           "careerId": "investment_banker",
+          "gender": "male",
           "index": 4
         },
         {
           "id": "career-patent_attorney",
           "careerId": "patent_attorney",
+          "gender": "male",
           "index": 5
         },
         {
           "id": "career-attorney",
           "careerId": "attorney",
+          "gender": "male",
           "index": 6
         },
         {
           "id": "career-professor",
           "careerId": "professor",
+          "gender": "male",
           "index": 7
         },
         {
           "id": "career-pharmacist",
           "careerId": "pharmacist",
+          "gender": "male",
           "index": 8
         },
         {
           "id": "career-ai_researcher",
           "careerId": "ai_researcher",
+          "gender": "male",
           "index": 9
         },
         {
           "id": "career-veterinarian",
           "careerId": "veterinarian",
+          "gender": "male",
           "index": 10
         },
         {
           "id": "career-consultant",
           "careerId": "consultant",
+          "gender": "male",
           "index": 11
         },
         {
           "id": "career-diplomat",
           "careerId": "diplomat",
+          "gender": "male",
           "index": 12
         },
         {
           "id": "career-finance_analyst",
           "careerId": "finance_analyst",
+          "gender": "male",
           "index": 13
         },
         {
           "id": "career-robotics_engineer",
           "careerId": "robotics_engineer",
+          "gender": "male",
           "index": 14
         },
         {
           "id": "career-semiconductor_engineer",
           "careerId": "semiconductor_engineer",
+          "gender": "male",
           "index": 15
         },
         {
           "id": "career-actuary",
           "careerId": "actuary",
+          "gender": "male",
           "index": 16
         },
         {
           "id": "career-data_scientist",
           "careerId": "data_scientist",
+          "gender": "male",
           "index": 17
         },
         {
           "id": "career-pilot",
           "careerId": "pilot",
+          "gender": "male",
           "index": 18
         },
         {
           "id": "career-bio_researcher",
           "careerId": "bio_researcher",
+          "gender": "male",
           "index": 19
         },
         {
           "id": "career-chemical_engineer",
           "careerId": "chemical_engineer",
+          "gender": "male",
           "index": 20
         },
         {
           "id": "career-accountant",
           "careerId": "accountant",
+          "gender": "male",
           "index": 21
         },
         {
           "id": "career-software_engineer",
           "careerId": "software_engineer",
+          "gender": "male",
           "index": 22
         },
         {
           "id": "career-electrical_engineer",
           "careerId": "electrical_engineer",
+          "gender": "male",
           "index": 23
         },
         {
           "id": "career-economist",
           "careerId": "economist",
+          "gender": "male",
           "index": 24
         },
         {
           "id": "career-product_manager",
           "careerId": "product_manager",
+          "gender": "male",
           "index": 25
         },
         {
           "id": "career-public_officer_5",
           "careerId": "public_officer_5",
+          "gender": "male",
           "index": 26
         },
         {
           "id": "career-research_scientist",
           "careerId": "research_scientist",
+          "gender": "male",
           "index": 27
         },
         {
           "id": "career-tax_accountant",
           "careerId": "tax_accountant",
+          "gender": "male",
           "index": 28
         },
         {
           "id": "career-mechanical_engineer",
           "careerId": "mechanical_engineer",
+          "gender": "male",
           "index": 29
         },
         {
           "id": "career-architect",
           "careerId": "architect",
+          "gender": "male",
           "index": 30
         },
         {
           "id": "career-teacher",
           "careerId": "teacher",
+          "gender": "male",
           "index": 31
         },
         {
           "id": "career-civil_engineer",
           "careerId": "civil_engineer",
+          "gender": "male",
           "index": 32
         },
         {
           "id": "career-policy_researcher",
           "careerId": "policy_researcher",
+          "gender": "male",
           "index": 33
         },
         {
           "id": "career-startup_founder",
           "careerId": "startup_founder",
+          "gender": "male",
           "index": 34
         },
         {
           "id": "career-game_developer",
           "careerId": "game_developer",
+          "gender": "male",
           "index": 35
         },
         {
           "id": "career-broadcaster",
           "careerId": "broadcaster",
+          "gender": "male",
           "index": 36
         },
         {
           "id": "career-environmental_engineer",
           "careerId": "environmental_engineer",
+          "gender": "male",
           "index": 37
         },
         {
           "id": "career-ux_researcher",
           "careerId": "ux_researcher",
+          "gender": "male",
           "index": 38
         },
         {
           "id": "career-nurse",
           "careerId": "nurse",
+          "gender": "male",
           "index": 39
         },
         {
           "id": "career-military_officer",
           "careerId": "military_officer",
+          "gender": "male",
           "index": 40
         },
         {
           "id": "career-psychologist",
           "careerId": "psychologist",
+          "gender": "male",
           "index": 41
         },
         {
           "id": "career-clinical_lab",
           "careerId": "clinical_lab",
+          "gender": "male",
           "index": 42
         },
         {
           "id": "career-public_officer",
           "careerId": "public_officer",
+          "gender": "male",
           "index": 43
         },
         {
           "id": "career-journalist",
           "careerId": "journalist",
+          "gender": "male",
           "index": 44
         },
         {
           "id": "career-banker",
           "careerId": "banker",
+          "gender": "male",
           "index": 45
         },
         {
           "id": "career-animation_director",
           "careerId": "animation_director",
+          "gender": "male",
           "index": 46
         },
         {
           "id": "career-translator",
           "careerId": "translator",
+          "gender": "male",
           "index": 47
         },
         {
           "id": "career-marketer",
           "careerId": "marketer",
+          "gender": "male",
           "index": 48
         },
         {
           "id": "career-curator",
           "careerId": "curator",
+          "gender": "male",
           "index": 49
         },
         {
           "id": "career-airline_crew",
           "careerId": "airline_crew",
+          "gender": "male",
           "index": 50
         },
         {
           "id": "career-designer",
           "careerId": "designer",
+          "gender": "male",
           "index": 51
         },
         {
           "id": "career-editor",
           "careerId": "editor",
+          "gender": "male",
           "index": 52
         },
         {
           "id": "career-police_officer",
           "careerId": "police_officer",
+          "gender": "male",
           "index": 53
         },
         {
           "id": "career-writer",
           "careerId": "writer",
+          "gender": "male",
           "index": 54
         },
         {
           "id": "career-firefighter",
           "careerId": "firefighter",
+          "gender": "male",
           "index": 55
         },
         {
           "id": "career-librarian",
           "careerId": "librarian",
+          "gender": "male",
           "index": 56
         },
         {
           "id": "career-creator",
           "careerId": "creator",
+          "gender": "male",
           "index": 57
         },
         {
           "id": "career-social_worker",
           "careerId": "social_worker",
+          "gender": "male",
           "index": 58
         },
         {
           "id": "career-chef",
           "careerId": "chef",
+          "gender": "male",
           "index": 59
         },
         {
           "id": "career-sports_coach",
           "careerId": "sports_coach",
+          "gender": "male",
           "index": 60
         },
         {
           "id": "career-local_admin",
           "careerId": "local_admin",
+          "gender": "male",
           "index": 61
+        },
+        {
+          "id": "career-doctor-female",
+          "careerId": "doctor",
+          "gender": "female",
+          "index": 62
+        },
+        {
+          "id": "career-judge-female",
+          "careerId": "judge",
+          "gender": "female",
+          "index": 63
+        },
+        {
+          "id": "career-prosecutor-female",
+          "careerId": "prosecutor",
+          "gender": "female",
+          "index": 64
+        },
+        {
+          "id": "career-dentist-female",
+          "careerId": "dentist",
+          "gender": "female",
+          "index": 65
+        },
+        {
+          "id": "career-investment_banker-female",
+          "careerId": "investment_banker",
+          "gender": "female",
+          "index": 66
+        },
+        {
+          "id": "career-patent_attorney-female",
+          "careerId": "patent_attorney",
+          "gender": "female",
+          "index": 67
+        },
+        {
+          "id": "career-attorney-female",
+          "careerId": "attorney",
+          "gender": "female",
+          "index": 68
+        },
+        {
+          "id": "career-professor-female",
+          "careerId": "professor",
+          "gender": "female",
+          "index": 69
+        },
+        {
+          "id": "career-pharmacist-female",
+          "careerId": "pharmacist",
+          "gender": "female",
+          "index": 70
+        },
+        {
+          "id": "career-ai_researcher-female",
+          "careerId": "ai_researcher",
+          "gender": "female",
+          "index": 71
+        },
+        {
+          "id": "career-veterinarian-female",
+          "careerId": "veterinarian",
+          "gender": "female",
+          "index": 72
+        },
+        {
+          "id": "career-consultant-female",
+          "careerId": "consultant",
+          "gender": "female",
+          "index": 73
+        },
+        {
+          "id": "career-diplomat-female",
+          "careerId": "diplomat",
+          "gender": "female",
+          "index": 74
+        },
+        {
+          "id": "career-finance_analyst-female",
+          "careerId": "finance_analyst",
+          "gender": "female",
+          "index": 75
+        },
+        {
+          "id": "career-robotics_engineer-female",
+          "careerId": "robotics_engineer",
+          "gender": "female",
+          "index": 76
+        },
+        {
+          "id": "career-semiconductor_engineer-female",
+          "careerId": "semiconductor_engineer",
+          "gender": "female",
+          "index": 77
+        },
+        {
+          "id": "career-actuary-female",
+          "careerId": "actuary",
+          "gender": "female",
+          "index": 78
+        },
+        {
+          "id": "career-data_scientist-female",
+          "careerId": "data_scientist",
+          "gender": "female",
+          "index": 79
+        },
+        {
+          "id": "career-pilot-female",
+          "careerId": "pilot",
+          "gender": "female",
+          "index": 80
+        },
+        {
+          "id": "career-bio_researcher-female",
+          "careerId": "bio_researcher",
+          "gender": "female",
+          "index": 81
+        },
+        {
+          "id": "career-chemical_engineer-female",
+          "careerId": "chemical_engineer",
+          "gender": "female",
+          "index": 82
+        },
+        {
+          "id": "career-accountant-female",
+          "careerId": "accountant",
+          "gender": "female",
+          "index": 83
+        },
+        {
+          "id": "career-software_engineer-female",
+          "careerId": "software_engineer",
+          "gender": "female",
+          "index": 84
+        },
+        {
+          "id": "career-electrical_engineer-female",
+          "careerId": "electrical_engineer",
+          "gender": "female",
+          "index": 85
+        },
+        {
+          "id": "career-economist-female",
+          "careerId": "economist",
+          "gender": "female",
+          "index": 86
+        },
+        {
+          "id": "career-product_manager-female",
+          "careerId": "product_manager",
+          "gender": "female",
+          "index": 87
+        },
+        {
+          "id": "career-public_officer_5-female",
+          "careerId": "public_officer_5",
+          "gender": "female",
+          "index": 88
+        },
+        {
+          "id": "career-research_scientist-female",
+          "careerId": "research_scientist",
+          "gender": "female",
+          "index": 89
+        },
+        {
+          "id": "career-tax_accountant-female",
+          "careerId": "tax_accountant",
+          "gender": "female",
+          "index": 90
+        },
+        {
+          "id": "career-mechanical_engineer-female",
+          "careerId": "mechanical_engineer",
+          "gender": "female",
+          "index": 91
+        },
+        {
+          "id": "career-architect-female",
+          "careerId": "architect",
+          "gender": "female",
+          "index": 92
+        },
+        {
+          "id": "career-teacher-female",
+          "careerId": "teacher",
+          "gender": "female",
+          "index": 93
+        },
+        {
+          "id": "career-civil_engineer-female",
+          "careerId": "civil_engineer",
+          "gender": "female",
+          "index": 94
+        },
+        {
+          "id": "career-policy_researcher-female",
+          "careerId": "policy_researcher",
+          "gender": "female",
+          "index": 95
+        },
+        {
+          "id": "career-startup_founder-female",
+          "careerId": "startup_founder",
+          "gender": "female",
+          "index": 96
+        },
+        {
+          "id": "career-game_developer-female",
+          "careerId": "game_developer",
+          "gender": "female",
+          "index": 97
+        },
+        {
+          "id": "career-broadcaster-female",
+          "careerId": "broadcaster",
+          "gender": "female",
+          "index": 98
+        },
+        {
+          "id": "career-environmental_engineer-female",
+          "careerId": "environmental_engineer",
+          "gender": "female",
+          "index": 99
+        },
+        {
+          "id": "career-ux_researcher-female",
+          "careerId": "ux_researcher",
+          "gender": "female",
+          "index": 100
+        },
+        {
+          "id": "career-nurse-female",
+          "careerId": "nurse",
+          "gender": "female",
+          "index": 101
+        },
+        {
+          "id": "career-military_officer-female",
+          "careerId": "military_officer",
+          "gender": "female",
+          "index": 102
+        },
+        {
+          "id": "career-psychologist-female",
+          "careerId": "psychologist",
+          "gender": "female",
+          "index": 103
+        },
+        {
+          "id": "career-clinical_lab-female",
+          "careerId": "clinical_lab",
+          "gender": "female",
+          "index": 104
+        },
+        {
+          "id": "career-public_officer-female",
+          "careerId": "public_officer",
+          "gender": "female",
+          "index": 105
+        },
+        {
+          "id": "career-journalist-female",
+          "careerId": "journalist",
+          "gender": "female",
+          "index": 106
+        },
+        {
+          "id": "career-banker-female",
+          "careerId": "banker",
+          "gender": "female",
+          "index": 107
+        },
+        {
+          "id": "career-animation_director-female",
+          "careerId": "animation_director",
+          "gender": "female",
+          "index": 108
+        },
+        {
+          "id": "career-translator-female",
+          "careerId": "translator",
+          "gender": "female",
+          "index": 109
+        },
+        {
+          "id": "career-marketer-female",
+          "careerId": "marketer",
+          "gender": "female",
+          "index": 110
+        },
+        {
+          "id": "career-curator-female",
+          "careerId": "curator",
+          "gender": "female",
+          "index": 111
+        },
+        {
+          "id": "career-airline_crew-female",
+          "careerId": "airline_crew",
+          "gender": "female",
+          "index": 112
+        },
+        {
+          "id": "career-designer-female",
+          "careerId": "designer",
+          "gender": "female",
+          "index": 113
+        },
+        {
+          "id": "career-editor-female",
+          "careerId": "editor",
+          "gender": "female",
+          "index": 114
+        },
+        {
+          "id": "career-police_officer-female",
+          "careerId": "police_officer",
+          "gender": "female",
+          "index": 115
+        },
+        {
+          "id": "career-writer-female",
+          "careerId": "writer",
+          "gender": "female",
+          "index": 116
+        },
+        {
+          "id": "career-firefighter-female",
+          "careerId": "firefighter",
+          "gender": "female",
+          "index": 117
+        },
+        {
+          "id": "career-librarian-female",
+          "careerId": "librarian",
+          "gender": "female",
+          "index": 118
+        },
+        {
+          "id": "career-creator-female",
+          "careerId": "creator",
+          "gender": "female",
+          "index": 119
+        },
+        {
+          "id": "career-social_worker-female",
+          "careerId": "social_worker",
+          "gender": "female",
+          "index": 120
+        },
+        {
+          "id": "career-chef-female",
+          "careerId": "chef",
+          "gender": "female",
+          "index": 121
+        },
+        {
+          "id": "career-sports_coach-female",
+          "careerId": "sports_coach",
+          "gender": "female",
+          "index": 122
+        },
+        {
+          "id": "career-local_admin-female",
+          "careerId": "local_admin",
+          "gender": "female",
+          "index": 123
         }
       ]
     }

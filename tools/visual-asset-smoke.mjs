@@ -122,7 +122,7 @@ try {
     return {
       studentImage: getComputedStyle(student).backgroundImage.includes("data:image"),
       studentCombatMotion: animationName(studentSprite).includes("studentCombatLoop"),
-      studentSpriteIdle: animationName(student).includes("studentSpriteIdle"),
+      studentSpriteFrames: animationName(student).includes("studentMoveFrames"),
       studentDashDust: animationName(studentSprite, "::before").includes("studentDashDust"),
       studentMeleeSlash: animationName(studentSprite, "::after").includes("studentMeleeSlash"),
       monsterImage: getComputedStyle(monster).backgroundImage.includes("data:image"),
@@ -161,9 +161,15 @@ try {
       if (matrix) return Number(matrix[1].split(",").map((part) => part.trim())[5] ?? 0);
       return 0;
     };
+    const backgroundX = (element) => {
+      const value = getComputedStyle(element).backgroundPositionX;
+      if (value.endsWith("%")) return Number.parseFloat(value);
+      if (value.endsWith("px")) return Number.parseFloat(value);
+      return 0;
+    };
     const sample = () => ({
       studentX: matrixX(getComputedStyle(document.querySelector(".student-sprite")).transform),
-      studentArtY: matrixY(getComputedStyle(document.querySelector(".student-art")).transform),
+      studentArtFrameX: backgroundX(document.querySelector(".student-art")),
       enemyX: matrixX(getComputedStyle(document.querySelector(".battle-scene-enemy.active")).transform),
       normalEnemyArtY: matrixY(getComputedStyle(document.querySelector(".battle-scene-enemy:not(.active):not(.defeated) .battle-scene-monster-art")).transform),
       floorX: matrixX(getComputedStyle(document.querySelector(".pixel-floor")).transform),
@@ -179,7 +185,7 @@ try {
     };
     return {
       studentTravelPx: Number(range("studentX").toFixed(2)),
-      studentSpriteIdlePx: Number(range("studentArtY").toFixed(2)),
+      studentSpriteFrameShift: Number(range("studentArtFrameX").toFixed(2)),
       activeEnemyTravelPx: Number(range("enemyX").toFixed(2)),
       normalEnemyIdlePx: Number(range("normalEnemyArtY").toFixed(2)),
       floorTravelPx: Number(range("floorX").toFixed(2)),
@@ -260,11 +266,11 @@ try {
   const failures = [];
   if (!mainMetrics.studentImage) failures.push("Main student sprite is missing a data image background");
   if (!mainMetrics.studentCombatMotion) failures.push("Main student combat motion is missing");
-  if (!mainMetrics.studentSpriteIdle) failures.push("Main student sprite idle motion is missing");
+  if (!mainMetrics.studentSpriteFrames) failures.push("Main student sprite frame animation is missing");
   if (!mainMetrics.studentDashDust) failures.push("Main student dash dust VFX is missing");
   if (!mainMetrics.studentMeleeSlash) failures.push("Main student melee slash motion is missing");
   if (combatMotionMetrics.studentTravelPx < 24) failures.push(`Main student melee travel is too small: ${combatMotionMetrics.studentTravelPx}px`);
-  if (combatMotionMetrics.studentSpriteIdlePx < 2) failures.push(`Main student idle sprite motion is too small: ${combatMotionMetrics.studentSpriteIdlePx}px`);
+  if (combatMotionMetrics.studentSpriteFrameShift < 1) failures.push(`Main student sprite frame shift is too small: ${combatMotionMetrics.studentSpriteFrameShift}`);
   if (!mainMetrics.monsterImage) failures.push("Main monster sprite is missing a data image background");
   if (mainMetrics.battleLineupCount !== 12) failures.push(`Main battle expected 12 scene enemies, got ${mainMetrics.battleLineupCount}`);
   if (mainMetrics.battleLineupImages !== 12) failures.push(`Main battle expected 12 rendered scene enemy images, got ${mainMetrics.battleLineupImages}`);

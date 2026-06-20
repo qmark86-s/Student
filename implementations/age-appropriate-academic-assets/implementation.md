@@ -3,6 +3,8 @@
 ## 변경 요약
 
 - `imagegen` built-in 도구로 학년군별 픽셀 아트 참조 보드를 생성하고 `assets/reference/age-grade-pixel-styleboard.png`에 보관했다.
+- 메인 학생/몬스터 아틀라스는 참조 보드에서 직접 추출한 반픽셀 스프라이트를 우선 사용하고, 보드가 없을 때만 기존 결정적 드로잉으로 fallback한다.
+- 적용 목표를 레퍼런스 보드 품질 1 대비 0.5~0.7 밀도로 재설정하고, 전투 학생/몬스터/원정대/직업 렌더링의 과도한 `image-rendering:pixelated`를 줄였다.
 - `tools/build-visual-assets.mjs`에 `studentAgeProfile` 기반의 학년군별 학생 생성 규칙을 적용했다.
 - 초등 저학년은 안전모와 밝은 책가방, 초등 고학년은 교과서/노트, 중등은 교복 리본, 고등은 OMR/학교 배지, N수는 후드/헤어밴드/커피로 구분한다.
 - 초등 학생은 긴 바지/재킷형 실루엣을 줄이고 짧은 다리, 반바지, 운동화, 큰 머리 비율로 재조정했다.
@@ -22,6 +24,7 @@
 
 - 참조 자산: `assets/reference/age-grade-pixel-styleboard.png`
 - `artifacts/visual-asset-contact-sheet/index.html`에서 초1~N수 순서로 학생 스프라이트와 몬스터명을 확인한다.
+- 메인 전투 화면에서 학생과 몬스터가 큰 네모 픽셀 덩어리처럼 보이면 실패로 보고, 보드 crop rect와 `image-rendering`을 먼저 확인한다.
 - 초등 구간은 성인 재킷/넥타이처럼 보이는 요소가 없어야 한다.
 - 중고등 구간은 정장보다 학교 교복, 책가방, 시험지 신호가 먼저 보여야 한다.
 - N수 구간은 고등학생과 다르게 독서실/루틴/커피 분위기가 보여야 한다.

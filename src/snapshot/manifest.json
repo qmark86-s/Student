@@ -19,10 +19,10 @@
       "token": "__STUDENT_ASSET_002__",
       "file": "assets/asset-002.png",
       "mime": "image/png",
-      "bytes": 3971,
-      "sha256": "a8b055b65b581260e52651644be4af0c2d93e2021a39688a983795ffe655c3bb",
-      "width": 1024,
-      "height": 96
+      "bytes": 3184077,
+      "sha256": "8eb712d4c4e518117c28be5ff6d57565fe3e664bd6b56aa062b4615aba9a7504",
+      "width": 10240,
+      "height": 320
     },
     {
       "token": "__STUDENT_ASSET_003__",
@@ -82,9 +82,9 @@
       "token": "__STUDENT_ASSET_009__",
       "file": "assets/visual-careers.png",
       "mime": "image/png",
-      "bytes": 18765,
-      "sha256": "5951607efd4ea0f2ecb537924a4d69eeb97afeea69b27f9cd922ffec8145fff2",
-      "width": 3968,
+      "bytes": 31520,
+      "sha256": "07d08e64adbedeae0874aec46ab969b5c6e0c7c6eb075433258815cd5842a7e3",
+      "width": 7936,
       "height": 64
     },
     {

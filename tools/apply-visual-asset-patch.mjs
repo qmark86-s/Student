@@ -47,10 +47,25 @@ replaceExact(
   "career book portrait class",
 );
 
+replaceAnyExact(
+  [
+    "className:`career-choice-aura`,style:{backgroundColor:i?.auraColor??`#94a3b8`}",
+    "className:`career-choice-aura career-portrait career-${(i?.id??e.careerId).replace(/[^a-z0-9_-]/gi,``)}`,style:{backgroundColor:i?.auraColor??`#94a3b8`}",
+  ],
+  "className:`career-choice-aura career-portrait career-gender-${e.avatarGender??`male`} career-${(i?.id??e.careerId).replace(/[^a-z0-9_-]/gi,``)}`,style:{backgroundColor:i?.auraColor??`#94a3b8`}",
+  "career choice gender portrait class",
+);
+
 replaceExact(
-  "className:`career-choice-aura`,style:{backgroundColor:i?.auraColor??`#94a3b8`}",
-  "className:`career-choice-aura career-portrait career-${(i?.id??e.careerId).replace(/[^a-z0-9_-]/gi,``)}`,style:{backgroundColor:i?.auraColor??`#94a3b8`}",
-  "career choice portrait class",
+  "return{gradeId:`E1`,retakeCount:0,",
+  "return{gradeId:`E1`,avatarGender:Math.random()<.5?`male`:`female`,retakeCount:0,",
+  "current avatar gender seed",
+);
+
+replaceExact(
+  "function sr(e){return{...e,studyLevels:e.studyLevels??Dn(),",
+  "function sr(e){return{...e,avatarGender:e.avatarGender===`female`?`female`:`male`,studyLevels:e.studyLevels??Dn(),",
+  "current avatar gender migration",
 );
 
 replaceAnyExact(
@@ -63,6 +78,25 @@ replaceAnyExact(
   ["(0,P.jsx)(la,{battle:r}),!e.current.awaitingDecision", "(0,P.jsx)(la,{battle:r,visual:Ki(e)}),!e.current.awaitingDecision"],
   "(0,P.jsx)(la,{battle:r,visual:Ki(e)}),!e.current.awaitingDecision",
   "battle tab enemy lineup visual data",
+);
+
+replaceAnyExact(
+  [
+    'w={"--enemy-scale":v.toFixed(3),"--monster-frame-x":Ri(C.frame,Mi)},ee={"--student-frame-x":Ri(d.studentFrame,16)},te=',
+    'w={"--enemy-scale":v.toFixed(3),"--monster-frame-x":Ri(C.frame,Mi)},se=e.current.avatarGender===`female`?16:0,ee={"--student-frame-x":Ri((d.studentFrame??0)+se,32)},te=',
+    'w={"--enemy-scale":v.toFixed(3),"--monster-frame-x":Ri(C.frame,Mi)},se=e.current.avatarGender===`female`?16:0,ee={"--student-frame-x":Ri(((d.studentFrame??0)+se)*4,128)},te=',
+  ],
+  'w={"--enemy-scale":v.toFixed(3),"--monster-frame-x":Ri((C.frame??0),Mi)},ee={"--student-frame-x":Ri((d.studentFrame??0)*4,64)},te=',
+  "student gender frame offset",
+);
+
+replaceAnyExact(
+  [
+    "className:`student-sprite ${u.studentClass} student-grade-${Math.min(g,16)}`",
+    "className:`student-sprite ${u.studentClass} student-grade-${Math.min(g,16)} student-gender-${e.current.avatarGender??`male`}`",
+  ],
+  "className:`student-sprite ${u.studentClass} student-grade-${Math.min(g,16)} student-gender-${e.current.avatarGender??`male`}`",
+  "student gender class",
 );
 
 replaceFunctionBefore(

@@ -1,0 +1,594 @@
+{
+  "version": 1,
+  "cell": 160,
+  "centerX": 80,
+  "baselineY": 148,
+  "maxSpriteWidth": 122,
+  "maxSpriteHeight": 142,
+  "minFrameDifference": 2.5,
+  "animations": {
+    "move": {
+      "frames": 4,
+      "durationMs": 640
+    }
+  },
+  "characters": [
+    {
+      "id": "student-01-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 1,
+      "studentFrame": 0,
+      "phase": "elementary",
+      "age": 8,
+      "title": "초1 작은 책가방 남학생",
+      "artBrief": "초등, 8세, 초1 작은 책가방",
+      "source": "assets/visual-source/characters/student-e1-boy-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-01-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      },
+      "alpha": "src/snapshot/assets/individual/students/student-e1-boy-alpha.png"
+    },
+    {
+      "id": "student-01-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 1,
+      "studentFrame": 0,
+      "phase": "elementary",
+      "age": 8,
+      "title": "초1 작은 책가방 여학생",
+      "artBrief": "초등, 8세, 초1 작은 책가방",
+      "source": "assets/visual-source/characters/student-01-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-01-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-02-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 2,
+      "studentFrame": 1,
+      "phase": "elementary",
+      "age": 9,
+      "title": "초2 준비물 가방 남학생",
+      "artBrief": "초등, 9세, 초2 준비물 가방",
+      "source": "assets/visual-source/characters/student-02-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-02-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-02-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 2,
+      "studentFrame": 1,
+      "phase": "elementary",
+      "age": 9,
+      "title": "초2 준비물 가방 여학생",
+      "artBrief": "초등, 9세, 초2 준비물 가방",
+      "source": "assets/visual-source/characters/student-02-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-02-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-03-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 3,
+      "studentFrame": 2,
+      "phase": "elementary",
+      "age": 10,
+      "title": "초3 교과서 가방 남학생",
+      "artBrief": "초등, 10세, 초3 교과서 가방",
+      "source": "assets/visual-source/characters/student-03-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-03-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-03-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 3,
+      "studentFrame": 2,
+      "phase": "elementary",
+      "age": 10,
+      "title": "초3 교과서 가방 여학생",
+      "artBrief": "초등, 10세, 초3 교과서 가방",
+      "source": "assets/visual-source/characters/student-03-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-03-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-04-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 4,
+      "studentFrame": 3,
+      "phase": "elementary",
+      "age": 11,
+      "title": "초4 발표 준비생 남학생",
+      "artBrief": "초등, 11세, 초4 발표 준비생",
+      "source": "assets/visual-source/characters/student-04-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-04-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-04-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 4,
+      "studentFrame": 3,
+      "phase": "elementary",
+      "age": 11,
+      "title": "초4 발표 준비생 여학생",
+      "artBrief": "초등, 11세, 초4 발표 준비생",
+      "source": "assets/visual-source/characters/student-04-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-04-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-05-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 5,
+      "studentFrame": 4,
+      "phase": "elementary",
+      "age": 12,
+      "title": "초5 수행평가 준비생 남학생",
+      "artBrief": "초등, 12세, 초5 수행평가 준비생",
+      "source": "assets/visual-source/characters/student-05-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-05-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-05-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 5,
+      "studentFrame": 4,
+      "phase": "elementary",
+      "age": 12,
+      "title": "초5 수행평가 준비생 여학생",
+      "artBrief": "초등, 12세, 초5 수행평가 준비생",
+      "source": "assets/visual-source/characters/student-05-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-05-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-06-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 6,
+      "studentFrame": 5,
+      "phase": "elementary",
+      "age": 13,
+      "title": "초6 졸업반 남학생",
+      "artBrief": "초등, 13세, 초6 졸업반",
+      "source": "assets/visual-source/characters/student-06-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-06-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-06-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 6,
+      "studentFrame": 5,
+      "phase": "elementary",
+      "age": 13,
+      "title": "초6 졸업반 여학생",
+      "artBrief": "초등, 13세, 초6 졸업반",
+      "source": "assets/visual-source/characters/student-06-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-06-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-07-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 7,
+      "studentFrame": 6,
+      "phase": "middle",
+      "age": 14,
+      "title": "중1 교복 적응 남학생",
+      "artBrief": "중등, 14세, 중1 교복 적응",
+      "source": "assets/visual-source/characters/student-07-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-07-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-07-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 7,
+      "studentFrame": 6,
+      "phase": "middle",
+      "age": 14,
+      "title": "중1 교복 적응 여학생",
+      "artBrief": "중등, 14세, 중1 교복 적응",
+      "source": "assets/visual-source/characters/student-07-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-07-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-08-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 8,
+      "studentFrame": 7,
+      "phase": "middle",
+      "age": 15,
+      "title": "중2 수행평가 러너 남학생",
+      "artBrief": "중등, 15세, 중2 수행평가 러너",
+      "source": "assets/visual-source/characters/student-08-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-08-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-08-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 8,
+      "studentFrame": 7,
+      "phase": "middle",
+      "age": 15,
+      "title": "중2 수행평가 러너 여학생",
+      "artBrief": "중등, 15세, 중2 수행평가 러너",
+      "source": "assets/visual-source/characters/student-08-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-08-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-09-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 9,
+      "studentFrame": 8,
+      "phase": "middle",
+      "age": 16,
+      "title": "중3 고입 대비 남학생",
+      "artBrief": "중등, 16세, 중3 고입 대비",
+      "source": "assets/visual-source/characters/student-09-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-09-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-09-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 9,
+      "studentFrame": 8,
+      "phase": "middle",
+      "age": 16,
+      "title": "중3 고입 대비 여학생",
+      "artBrief": "중등, 16세, 중3 고입 대비",
+      "source": "assets/visual-source/characters/student-09-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-09-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-10-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 10,
+      "studentFrame": 9,
+      "phase": "high",
+      "age": 17,
+      "title": "고1 계열 탐색 남학생",
+      "artBrief": "고등, 17세, 고1 계열 탐색",
+      "source": "assets/visual-source/characters/student-10-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-10-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-10-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 10,
+      "studentFrame": 9,
+      "phase": "high",
+      "age": 17,
+      "title": "고1 계열 탐색 여학생",
+      "artBrief": "고등, 17세, 고1 계열 탐색",
+      "source": "assets/visual-source/characters/student-10-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-10-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-11-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 11,
+      "studentFrame": 10,
+      "phase": "high",
+      "age": 18,
+      "title": "고2 계열 고정 남학생",
+      "artBrief": "고등, 18세, 고2 계열 고정",
+      "source": "assets/visual-source/characters/student-11-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-11-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-11-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 11,
+      "studentFrame": 10,
+      "phase": "high",
+      "age": 18,
+      "title": "고2 계열 고정 여학생",
+      "artBrief": "고등, 18세, 고2 계열 고정",
+      "source": "assets/visual-source/characters/student-11-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-11-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-12-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 12,
+      "studentFrame": 11,
+      "phase": "high",
+      "age": 19,
+      "title": "고3 수험생 남학생",
+      "artBrief": "고등, 19세, 고3 수험생",
+      "source": "assets/visual-source/characters/student-12-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-12-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-12-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 12,
+      "studentFrame": 11,
+      "phase": "high",
+      "age": 19,
+      "title": "고3 수험생 여학생",
+      "artBrief": "고등, 19세, 고3 수험생",
+      "source": "assets/visual-source/characters/student-12-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-12-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-13-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 13,
+      "studentFrame": 12,
+      "phase": "repeater",
+      "age": 20,
+      "title": "1수 독서실 적응 남학생",
+      "artBrief": "N수, 20세, 1수 독서실 적응",
+      "source": "assets/visual-source/characters/student-13-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-13-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-13-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 13,
+      "studentFrame": 12,
+      "phase": "repeater",
+      "age": 20,
+      "title": "1수 독서실 적응 여학생",
+      "artBrief": "N수, 20세, 1수 독서실 적응",
+      "source": "assets/visual-source/characters/student-13-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-13-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-14-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 14,
+      "studentFrame": 13,
+      "phase": "repeater",
+      "age": 21,
+      "title": "2수 루틴 고정 남학생",
+      "artBrief": "N수, 21세, 2수 루틴 고정",
+      "source": "assets/visual-source/characters/student-14-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-14-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-14-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 14,
+      "studentFrame": 13,
+      "phase": "repeater",
+      "age": 21,
+      "title": "2수 루틴 고정 여학생",
+      "artBrief": "N수, 21세, 2수 루틴 고정",
+      "source": "assets/visual-source/characters/student-14-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-14-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-15-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 15,
+      "studentFrame": 14,
+      "phase": "repeater",
+      "age": 22,
+      "title": "장수생 압축 학습 남학생",
+      "artBrief": "N수, 22세, 장수생 압축 학습",
+      "source": "assets/visual-source/characters/student-15-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-15-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-15-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 15,
+      "studentFrame": 14,
+      "phase": "repeater",
+      "age": 22,
+      "title": "장수생 압축 학습 여학생",
+      "artBrief": "N수, 22세, 장수생 압축 학습",
+      "source": "assets/visual-source/characters/student-15-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-15-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-16-male",
+      "kind": "student",
+      "gender": "male",
+      "gradeOrder": 16,
+      "studentFrame": 15,
+      "phase": "repeater",
+      "age": 23,
+      "title": "N수 베테랑 남학생",
+      "artBrief": "N수, 23세, N수 베테랑",
+      "source": "assets/visual-source/characters/student-16-male-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-16-male-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    },
+    {
+      "id": "student-16-female",
+      "kind": "student",
+      "gender": "female",
+      "gradeOrder": 16,
+      "studentFrame": 15,
+      "phase": "repeater",
+      "age": 23,
+      "title": "N수 베테랑 여학생",
+      "artBrief": "N수, 23세, N수 베테랑",
+      "source": "assets/visual-source/characters/student-16-female-source.png",
+      "direction": "right",
+      "moveSheet": "assets/visual-source/characters/student-16-female-move.png",
+      "moveSheetLayout": {
+        "columns": 4,
+        "rows": 1
+      }
+    }
+  ]
+}
