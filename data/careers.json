@@ -28,7 +28,7 @@
     "prestigeIncomeRate": 0.24,
     "prestigePowerRate": 0.006,
     "portraitAsset": "career-doctor",
-    "spriteAsset": "unit-helper-medic",
+    "spriteAsset": "career-unit-doctor",
     "iconAsset": "icon-medic"
   },
   {
@@ -60,7 +60,7 @@
     "prestigeIncomeRate": 0.24,
     "prestigePowerRate": 0.006,
     "portraitAsset": "career-judge",
-    "spriteAsset": "unit-helper-judge",
+    "spriteAsset": "career-unit-judge",
     "iconAsset": "icon-judge"
   },
   {
@@ -92,7 +92,7 @@
     "prestigeIncomeRate": 0.24,
     "prestigePowerRate": 0.006,
     "portraitAsset": "career-prosecutor",
-    "spriteAsset": "unit-helper-judge",
+    "spriteAsset": "career-unit-prosecutor",
     "iconAsset": "icon-judge"
   },
   {
@@ -124,7 +124,7 @@
     "prestigeIncomeRate": 0.24,
     "prestigePowerRate": 0.006,
     "portraitAsset": "career-attorney",
-    "spriteAsset": "unit-helper-files",
+    "spriteAsset": "career-unit-attorney",
     "iconAsset": "icon-files"
   },
   {
@@ -156,7 +156,7 @@
     "prestigeIncomeRate": 0.24,
     "prestigePowerRate": 0.006,
     "portraitAsset": "career-dentist",
-    "spriteAsset": "unit-helper-medic",
+    "spriteAsset": "career-unit-dentist",
     "iconAsset": "icon-medic"
   },
   {
@@ -188,7 +188,7 @@
     "prestigeIncomeRate": 0.24,
     "prestigePowerRate": 0.006,
     "portraitAsset": "career-pharmacist",
-    "spriteAsset": "unit-helper-medic",
+    "spriteAsset": "career-unit-pharmacist",
     "iconAsset": "icon-medic"
   },
   {
@@ -220,7 +220,7 @@
     "prestigeIncomeRate": 0.24,
     "prestigePowerRate": 0.006,
     "portraitAsset": "career-professor",
-    "spriteAsset": "unit-helper-teacher",
+    "spriteAsset": "career-unit-professor",
     "iconAsset": "icon-teacher"
   },
   {
@@ -252,7 +252,7 @@
     "prestigeIncomeRate": 0.24,
     "prestigePowerRate": 0.006,
     "portraitAsset": "career-ai_researcher",
-    "spriteAsset": "unit-helper-laptop",
+    "spriteAsset": "career-unit-ai_researcher",
     "iconAsset": "icon-laptop"
   },
   {
@@ -284,7 +284,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-software_engineer",
-    "spriteAsset": "unit-helper-laptop",
+    "spriteAsset": "career-unit-software_engineer",
     "iconAsset": "icon-laptop"
   },
   {
@@ -316,7 +316,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-semiconductor_engineer",
-    "spriteAsset": "unit-helper-chip",
+    "spriteAsset": "career-unit-semiconductor_engineer",
     "iconAsset": "icon-chip"
   },
   {
@@ -348,7 +348,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-data_scientist",
-    "spriteAsset": "unit-helper-chart",
+    "spriteAsset": "career-unit-data_scientist",
     "iconAsset": "icon-chart"
   },
   {
@@ -380,7 +380,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-finance_analyst",
-    "spriteAsset": "unit-helper-chart",
+    "spriteAsset": "career-unit-finance_analyst",
     "iconAsset": "icon-chart"
   },
   {
@@ -412,7 +412,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-consultant",
-    "spriteAsset": "unit-helper-bulb",
+    "spriteAsset": "career-unit-consultant",
     "iconAsset": "icon-bulb"
   },
   {
@@ -444,7 +444,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-accountant",
-    "spriteAsset": "unit-helper-chart",
+    "spriteAsset": "career-unit-accountant",
     "iconAsset": "icon-chart"
   },
   {
@@ -476,7 +476,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-diplomat",
-    "spriteAsset": "unit-helper-globe",
+    "spriteAsset": "career-unit-diplomat",
     "iconAsset": "icon-globe"
   },
   {
@@ -508,7 +508,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-public_officer_5",
-    "spriteAsset": "unit-helper-files",
+    "spriteAsset": "career-unit-public_officer_5",
     "iconAsset": "icon-files"
   },
   {
@@ -540,7 +540,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-teacher",
-    "spriteAsset": "unit-helper-teacher",
+    "spriteAsset": "career-unit-teacher",
     "iconAsset": "icon-teacher"
   },
   {
@@ -572,7 +572,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-nurse",
-    "spriteAsset": "unit-helper-medic",
+    "spriteAsset": "career-unit-nurse",
     "iconAsset": "icon-medic"
   },
   {
@@ -604,7 +604,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-research_scientist",
-    "spriteAsset": "unit-helper-flask",
+    "spriteAsset": "career-unit-research_scientist",
     "iconAsset": "icon-flask"
   },
   {
@@ -636,7 +636,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-mechanical_engineer",
-    "spriteAsset": "unit-helper-chip",
+    "spriteAsset": "career-unit-mechanical_engineer",
     "iconAsset": "icon-chip"
   },
   {
@@ -668,7 +668,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-architect",
-    "spriteAsset": "unit-helper-palette",
+    "spriteAsset": "career-unit-architect",
     "iconAsset": "icon-palette"
   },
   {
@@ -700,7 +700,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-game_developer",
-    "spriteAsset": "unit-helper-laptop",
+    "spriteAsset": "career-unit-game_developer",
     "iconAsset": "icon-laptop"
   },
   {
@@ -732,7 +732,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-public_officer",
-    "spriteAsset": "unit-helper-files",
+    "spriteAsset": "career-unit-public_officer",
     "iconAsset": "icon-files"
   },
   {
@@ -764,7 +764,7 @@
     "prestigeIncomeRate": 0.15,
     "prestigePowerRate": 0.003,
     "portraitAsset": "career-banker",
-    "spriteAsset": "unit-helper-chart",
+    "spriteAsset": "career-unit-banker",
     "iconAsset": "icon-chart"
   },
   {
@@ -796,7 +796,7 @@
     "prestigeIncomeRate": 0.15,
     "prestigePowerRate": 0.003,
     "portraitAsset": "career-journalist",
-    "spriteAsset": "unit-helper-mic",
+    "spriteAsset": "career-unit-journalist",
     "iconAsset": "icon-mic"
   },
   {
@@ -828,7 +828,7 @@
     "prestigeIncomeRate": 0.15,
     "prestigePowerRate": 0.003,
     "portraitAsset": "career-marketer",
-    "spriteAsset": "unit-helper-bulb",
+    "spriteAsset": "career-unit-marketer",
     "iconAsset": "icon-bulb"
   },
   {
@@ -860,7 +860,7 @@
     "prestigeIncomeRate": 0.15,
     "prestigePowerRate": 0.003,
     "portraitAsset": "career-designer",
-    "spriteAsset": "unit-helper-palette",
+    "spriteAsset": "career-unit-designer",
     "iconAsset": "icon-palette"
   },
   {
@@ -892,7 +892,7 @@
     "prestigeIncomeRate": 0.15,
     "prestigePowerRate": 0.003,
     "portraitAsset": "career-translator",
-    "spriteAsset": "unit-helper-book",
+    "spriteAsset": "career-unit-translator",
     "iconAsset": "icon-book"
   },
   {
@@ -924,7 +924,7 @@
     "prestigeIncomeRate": 0.12,
     "prestigePowerRate": 0.002,
     "portraitAsset": "career-social_worker",
-    "spriteAsset": "unit-helper-files",
+    "spriteAsset": "career-unit-social_worker",
     "iconAsset": "icon-files"
   },
   {
@@ -956,7 +956,7 @@
     "prestigeIncomeRate": 0.12,
     "prestigePowerRate": 0.002,
     "portraitAsset": "career-local_admin",
-    "spriteAsset": "unit-helper-files",
+    "spriteAsset": "career-unit-local_admin",
     "iconAsset": "icon-files"
   },
   {
@@ -988,7 +988,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-startup_founder",
-    "spriteAsset": "unit-helper-bulb",
+    "spriteAsset": "career-unit-startup_founder",
     "iconAsset": "icon-bulb"
   },
   {
@@ -1020,7 +1020,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-pilot",
-    "spriteAsset": "unit-helper-globe",
+    "spriteAsset": "career-unit-pilot",
     "iconAsset": "icon-globe"
   },
   {
@@ -1052,7 +1052,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-veterinarian",
-    "spriteAsset": "unit-helper-medic",
+    "spriteAsset": "career-unit-veterinarian",
     "iconAsset": "icon-medic"
   },
   {
@@ -1084,7 +1084,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-civil_engineer",
-    "spriteAsset": "unit-helper-chip",
+    "spriteAsset": "career-unit-civil_engineer",
     "iconAsset": "icon-chip"
   },
   {
@@ -1116,7 +1116,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-chemical_engineer",
-    "spriteAsset": "unit-helper-flask",
+    "spriteAsset": "career-unit-chemical_engineer",
     "iconAsset": "icon-flask"
   },
   {
@@ -1148,7 +1148,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-electrical_engineer",
-    "spriteAsset": "unit-helper-chip",
+    "spriteAsset": "career-unit-electrical_engineer",
     "iconAsset": "icon-chip"
   },
   {
@@ -1180,7 +1180,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-bio_researcher",
-    "spriteAsset": "unit-helper-flask",
+    "spriteAsset": "career-unit-bio_researcher",
     "iconAsset": "icon-flask"
   },
   {
@@ -1212,7 +1212,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-psychologist",
-    "spriteAsset": "unit-helper-bulb",
+    "spriteAsset": "career-unit-psychologist",
     "iconAsset": "icon-bulb"
   },
   {
@@ -1244,7 +1244,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-clinical_lab",
-    "spriteAsset": "unit-helper-flask",
+    "spriteAsset": "career-unit-clinical_lab",
     "iconAsset": "icon-flask"
   },
   {
@@ -1276,7 +1276,7 @@
     "prestigeIncomeRate": 0.24,
     "prestigePowerRate": 0.006,
     "portraitAsset": "career-patent_attorney",
-    "spriteAsset": "unit-helper-files",
+    "spriteAsset": "career-unit-patent_attorney",
     "iconAsset": "icon-files"
   },
   {
@@ -1308,7 +1308,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-ux_researcher",
-    "spriteAsset": "unit-helper-bulb",
+    "spriteAsset": "career-unit-ux_researcher",
     "iconAsset": "icon-bulb"
   },
   {
@@ -1340,7 +1340,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-product_manager",
-    "spriteAsset": "unit-helper-bulb",
+    "spriteAsset": "career-unit-product_manager",
     "iconAsset": "icon-bulb"
   },
   {
@@ -1372,7 +1372,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-actuary",
-    "spriteAsset": "unit-helper-chart",
+    "spriteAsset": "career-unit-actuary",
     "iconAsset": "icon-chart"
   },
   {
@@ -1404,7 +1404,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-tax_accountant",
-    "spriteAsset": "unit-helper-chart",
+    "spriteAsset": "career-unit-tax_accountant",
     "iconAsset": "icon-chart"
   },
   {
@@ -1436,7 +1436,7 @@
     "prestigeIncomeRate": 0.24,
     "prestigePowerRate": 0.006,
     "portraitAsset": "career-investment_banker",
-    "spriteAsset": "unit-helper-chart",
+    "spriteAsset": "career-unit-investment_banker",
     "iconAsset": "icon-chart"
   },
   {
@@ -1468,7 +1468,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-economist",
-    "spriteAsset": "unit-helper-chart",
+    "spriteAsset": "career-unit-economist",
     "iconAsset": "icon-chart"
   },
   {
@@ -1500,7 +1500,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-policy_researcher",
-    "spriteAsset": "unit-helper-files",
+    "spriteAsset": "career-unit-policy_researcher",
     "iconAsset": "icon-files"
   },
   {
@@ -1532,7 +1532,7 @@
     "prestigeIncomeRate": 0.15,
     "prestigePowerRate": 0.003,
     "portraitAsset": "career-curator",
-    "spriteAsset": "unit-helper-palette",
+    "spriteAsset": "career-unit-curator",
     "iconAsset": "icon-palette"
   },
   {
@@ -1564,7 +1564,7 @@
     "prestigeIncomeRate": 0.15,
     "prestigePowerRate": 0.003,
     "portraitAsset": "career-librarian",
-    "spriteAsset": "unit-helper-book",
+    "spriteAsset": "career-unit-librarian",
     "iconAsset": "icon-book"
   },
   {
@@ -1596,7 +1596,7 @@
     "prestigeIncomeRate": 0.15,
     "prestigePowerRate": 0.003,
     "portraitAsset": "career-writer",
-    "spriteAsset": "unit-helper-book",
+    "spriteAsset": "career-unit-writer",
     "iconAsset": "icon-book"
   },
   {
@@ -1628,7 +1628,7 @@
     "prestigeIncomeRate": 0.15,
     "prestigePowerRate": 0.003,
     "portraitAsset": "career-editor",
-    "spriteAsset": "unit-helper-book",
+    "spriteAsset": "career-unit-editor",
     "iconAsset": "icon-book"
   },
   {
@@ -1660,7 +1660,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-broadcaster",
-    "spriteAsset": "unit-helper-mic",
+    "spriteAsset": "career-unit-broadcaster",
     "iconAsset": "icon-mic"
   },
   {
@@ -1692,7 +1692,7 @@
     "prestigeIncomeRate": 0.15,
     "prestigePowerRate": 0.003,
     "portraitAsset": "career-police_officer",
-    "spriteAsset": "unit-helper-files",
+    "spriteAsset": "career-unit-police_officer",
     "iconAsset": "icon-files"
   },
   {
@@ -1724,7 +1724,7 @@
     "prestigeIncomeRate": 0.15,
     "prestigePowerRate": 0.003,
     "portraitAsset": "career-firefighter",
-    "spriteAsset": "unit-helper-medic",
+    "spriteAsset": "career-unit-firefighter",
     "iconAsset": "icon-medic"
   },
   {
@@ -1756,7 +1756,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-military_officer",
-    "spriteAsset": "unit-helper-files",
+    "spriteAsset": "career-unit-military_officer",
     "iconAsset": "icon-files"
   },
   {
@@ -1788,7 +1788,7 @@
     "prestigeIncomeRate": 0.15,
     "prestigePowerRate": 0.003,
     "portraitAsset": "career-airline_crew",
-    "spriteAsset": "unit-helper-globe",
+    "spriteAsset": "career-unit-airline_crew",
     "iconAsset": "icon-globe"
   },
   {
@@ -1820,7 +1820,7 @@
     "prestigeIncomeRate": 0.12,
     "prestigePowerRate": 0.002,
     "portraitAsset": "career-chef",
-    "spriteAsset": "unit-helper-palette",
+    "spriteAsset": "career-unit-chef",
     "iconAsset": "icon-palette"
   },
   {
@@ -1852,7 +1852,7 @@
     "prestigeIncomeRate": 0.12,
     "prestigePowerRate": 0.002,
     "portraitAsset": "career-sports_coach",
-    "spriteAsset": "unit-helper-bulb",
+    "spriteAsset": "career-unit-sports_coach",
     "iconAsset": "icon-bulb"
   },
   {
@@ -1884,7 +1884,7 @@
     "prestigeIncomeRate": 0.12,
     "prestigePowerRate": 0.002,
     "portraitAsset": "career-creator",
-    "spriteAsset": "unit-helper-mic",
+    "spriteAsset": "career-unit-creator",
     "iconAsset": "icon-mic"
   },
   {
@@ -1916,7 +1916,7 @@
     "prestigeIncomeRate": 0.15,
     "prestigePowerRate": 0.003,
     "portraitAsset": "career-animation_director",
-    "spriteAsset": "unit-helper-palette",
+    "spriteAsset": "career-unit-animation_director",
     "iconAsset": "icon-palette"
   },
   {
@@ -1948,7 +1948,7 @@
     "prestigeIncomeRate": 0.18,
     "prestigePowerRate": 0.004,
     "portraitAsset": "career-environmental_engineer",
-    "spriteAsset": "unit-helper-flask",
+    "spriteAsset": "career-unit-environmental_engineer",
     "iconAsset": "icon-flask"
   },
   {
@@ -1980,7 +1980,7 @@
     "prestigeIncomeRate": 0.21,
     "prestigePowerRate": 0.005,
     "portraitAsset": "career-robotics_engineer",
-    "spriteAsset": "unit-helper-chip",
+    "spriteAsset": "career-unit-robotics_engineer",
     "iconAsset": "icon-chip"
   }
 ]

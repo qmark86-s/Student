@@ -26,10 +26,10 @@ def metric_summary(character: dict) -> str:
     return f"pose {pose:.2f} / center {center:.1f}px / base {baseline:.0f}px / h drift {drift:.0f}px"
 
 
-def labelled_axis_sheet(character: dict) -> Image.Image:
-    axis_sheet = character.get("axisSheet")
+def labelled_axis_sheet(character: dict, sheet_key: str) -> Image.Image:
+    axis_sheet = character.get(sheet_key) or character.get("axisSheet")
     if not axis_sheet:
-        raise ValueError(f"{character.get('id')} missing axisSheet")
+        raise ValueError(f"{character.get('id')} missing {sheet_key}")
 
     image = Image.open(project_path(axis_sheet)).convert("RGBA")
     label_h = 34
@@ -46,7 +46,7 @@ def labelled_axis_sheet(character: dict) -> Image.Image:
     return combined
 
 
-def write_page(rows: list[Image.Image], output_dir: Path, page_index: int) -> Path:
+def write_page(rows: list[Image.Image], output_dir: Path, page_index: int, prefix: str) -> Path:
     width = max(row.width for row in rows)
     height = sum(row.height for row in rows)
     page = Image.new("RGBA", (width, height), (14, 20, 32, 255))
@@ -54,7 +54,7 @@ def write_page(rows: list[Image.Image], output_dir: Path, page_index: int) -> Pa
     for row in rows:
         page.alpha_composite(row, (0, y))
         y += row.height
-    path = output_dir / f"character-axis-review-page-{page_index:02d}.png"
+    path = output_dir / f"{prefix}-page-{page_index:02d}.png"
     page.save(path)
     return path
 
@@ -64,6 +64,8 @@ def main() -> None:
     parser.add_argument("--report", default=str(DEFAULT_REPORT), help="Path to character-axis-report.json")
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT), help="Directory for review PNGs")
     parser.add_argument("--per-page", type=int, default=16, help="Character rows per review page")
+    parser.add_argument("--prefix", default="character-axis-review", help="Output file prefix")
+    parser.add_argument("--sheet-key", default="axisSheet", help="Report image key to pack, e.g. axisSheet or zoomSheet")
     args = parser.parse_args()
 
     report_path = Path(args.report).resolve()
@@ -71,22 +73,22 @@ def main() -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     report = json.loads(report_path.read_text(encoding="utf-8"))
-    characters = report.get("characters") or []
+    characters = report.get("characters") or report.get("items") or []
     if not characters:
-        raise SystemExit("No characters in axis report")
+        raise SystemExit("No characters/items in axis report")
 
     pages = []
     for page_index, start in enumerate(range(0, len(characters), args.per_page), start=1):
-        rows = [labelled_axis_sheet(character) for character in characters[start : start + args.per_page]]
-        pages.append(write_page(rows, output_dir, page_index))
+        rows = [labelled_axis_sheet(character, args.sheet_key) for character in characters[start : start + args.per_page]]
+        pages.append(write_page(rows, output_dir, page_index, args.prefix))
 
-    index_path = output_dir / "character-axis-review-index.json"
+    index_path = output_dir / f"{args.prefix}-index.json"
     index_path.write_text(
         json.dumps(
             {
                 "report": str(report_path.relative_to(ROOT)).replace("\\", "/"),
                 "pages": [str(path.relative_to(ROOT)).replace("\\", "/") for path in pages],
-                "characters": len(characters),
+                "items": len(characters),
                 "perPage": args.per_page,
             },
             ensure_ascii=False,
@@ -96,7 +98,7 @@ def main() -> None:
         encoding="utf-8",
     )
 
-    print(f"ASSET_FACTORY_REVIEW_SHEETS_OK pages={len(pages)} index={index_path}")
+    print(f"ASSET_FACTORY_REVIEW_SHEETS_OK prefix={args.prefix} pages={len(pages)} index={index_path}")
 
 
 if __name__ == "__main__":

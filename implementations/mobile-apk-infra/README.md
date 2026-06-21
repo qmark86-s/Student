@@ -7,7 +7,7 @@
 ## 주요 파일
 
 - `capacitor.config.json`: Capacitor 앱 식별자와 `dist` 웹 번들 경로를 정의한다.
-- `tools/prepare-web.mjs`: `index.html`을 `dist/index.html`로 복사하고 SHA-256 메타데이터를 생성한다.
+- `tools/prepare-web.mjs`: 스냅샷 소스에서 `index.html`, 공유 HTML, `dist/index.html`을 함께 생성하고 SHA-256 메타데이터를 생성한다.
 - `tools/mobile-smoke.mjs`: Playwright Chromium으로 모바일 뷰포트 렌더링, 버튼 수, 가로 overflow, 콘솔 오류를 검사한다.
 - `tools/build-android.mjs`: portable JDK와 사용자 Android SDK를 감지하고, `cap sync android` 후 Gradle 빌드를 실행한다.
 - `tools/install-portable-jdk.ps1`: Adoptium API에서 JDK 17 zip을 받아 검증 후 사용자 로컬 도구 경로에 설치한다.
@@ -17,7 +17,7 @@
 
 ## npm 명령
 
-- `npm run build:web`: Capacitor용 웹 번들 생성
+- `npm run build:web`: 파일 확인용 `index.html`, 공유 HTML, Capacitor용 웹 번들을 함께 생성
 - `npm run verify:mobile`: 기존 검증 + 모바일 smoke test
 - `npm run cap:sync`: 웹 번들을 Android 프로젝트에 복사
 - `npm run cap:open`: Android Studio에서 프로젝트 열기

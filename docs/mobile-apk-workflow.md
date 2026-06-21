@@ -8,7 +8,7 @@
 npm run build:web
 ```
 
-`index.html`을 `dist/index.html`로 복사하고, Capacitor가 사용할 정적 웹 번들을 만든다.
+스냅샷 소스에서 파일 확인용 `index.html`, 공유 HTML, Capacitor가 사용할 `dist/index.html`을 함께 만든다.
 
 ## Mobile Smoke Test
 
@@ -16,7 +16,7 @@ npm run build:web
 npm run verify:mobile
 ```
 
-기준 HTML 감사, 스냅샷 소스 기반 `dist/` 생성, Playwright 모바일 뷰포트 렌더링 검증을 실행한다. 스크린샷은 `artifacts/mobile-smoke/`에 생성된다. reference HTML에서 데이터/번들을 다시 추출하려면 `npm run reference:refresh`를 별도로 실행한다.
+기준 HTML 감사, 스냅샷 소스 기반 단일 HTML 산출물 생성, Playwright 모바일 뷰포트 렌더링 검증을 실행한다. 스크린샷은 `artifacts/mobile-smoke/`에 생성된다. reference HTML에서 데이터/번들을 다시 추출하려면 `npm run reference:refresh`를 별도로 실행한다.
 
 ## Android Setup
 

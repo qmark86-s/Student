@@ -1,0 +1,5135 @@
+{
+  "version": 1,
+  "cell": 160,
+  "centerX": 80,
+  "baselineY": 151,
+  "maxSpriteWidth": 132,
+  "maxSpriteHeight": 146,
+  "minFrameDifference": 2.5,
+  "animations": {
+    "move": {
+      "frames": 4,
+      "durationMs": 640
+    }
+  },
+  "families": [
+    {
+      "id": "companions",
+      "kind": "companion",
+      "items": [
+        {
+          "id": "career-unit-doctor",
+          "type": "career",
+          "careerId": "doctor",
+          "name": "의사",
+          "helperId": "helper-medic",
+          "supportRole": "집중력 회복",
+          "battleProp": "청진기",
+          "tier": 1,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-13",
+              "hairStyle": "side-part",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-05",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-doctor-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-judge",
+          "type": "career",
+          "careerId": "judge",
+          "name": "판사",
+          "helperId": "helper-judge",
+          "supportRole": "오답 판정",
+          "battleProp": "판결봉",
+          "tier": 1,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-11",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-14",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-judge-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-prosecutor",
+          "type": "career",
+          "careerId": "prosecutor",
+          "name": "검사",
+          "helperId": "helper-judge",
+          "supportRole": "근거 추적",
+          "battleProp": "수사기록",
+          "tier": 1,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-01",
+              "hairStyle": "tuft",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-05",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-prosecutor-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-dentist",
+          "type": "career",
+          "careerId": "dentist",
+          "name": "치과의사",
+          "helperId": "helper-medic",
+          "supportRole": "실수 교정",
+          "battleProp": "치경",
+          "tier": 1,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-15",
+              "hairStyle": "round-cap",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-11",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-dentist-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-investment_banker",
+          "type": "career",
+          "careerId": "investment_banker",
+          "name": "투자은행가",
+          "helperId": "helper-chart",
+          "supportRole": "숫자 압축",
+          "battleProp": "딜북",
+          "tier": 1,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-09",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-01",
+              "hairStyle": "bob",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-investment_banker-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-patent_attorney",
+          "type": "career",
+          "careerId": "patent_attorney",
+          "name": "변리사",
+          "helperId": "helper-files",
+          "supportRole": "논리 보호",
+          "battleProp": "특허 명세서",
+          "tier": 1,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-05",
+              "hairStyle": "tuft",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-16",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-patent_attorney-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-attorney",
+          "type": "career",
+          "careerId": "attorney",
+          "name": "변호사",
+          "helperId": "helper-files",
+          "supportRole": "논리 정리",
+          "battleProp": "계약서",
+          "tier": 1,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-16",
+              "hairStyle": "side-part",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-16",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-attorney-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-professor",
+          "type": "career",
+          "careerId": "professor",
+          "name": "교수",
+          "helperId": "helper-teacher",
+          "supportRole": "개념 압축",
+          "battleProp": "논문",
+          "tier": 1,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-09",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-05",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-professor-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-pharmacist",
+          "type": "career",
+          "careerId": "pharmacist",
+          "name": "약사",
+          "helperId": "helper-medic",
+          "supportRole": "암기 처방",
+          "battleProp": "조제 노트",
+          "tier": 1,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-11",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-03",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-pharmacist-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-ai_researcher",
+          "type": "career",
+          "careerId": "ai_researcher",
+          "name": "AI 연구원",
+          "helperId": "helper-laptop",
+          "supportRole": "풀이 최적화",
+          "battleProp": "연산 칩",
+          "tier": 1,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-05",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-13",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-ai_researcher-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-veterinarian",
+          "type": "career",
+          "careerId": "veterinarian",
+          "name": "수의사",
+          "helperId": "helper-medic",
+          "supportRole": "생명 과학",
+          "battleProp": "진료 차트",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-05",
+              "hairStyle": "round-cap",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-01",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-veterinarian-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-consultant",
+          "type": "career",
+          "careerId": "consultant",
+          "name": "전략 컨설턴트",
+          "helperId": "helper-bulb",
+          "supportRole": "전략 수립",
+          "battleProp": "슬라이드",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-03",
+              "hairStyle": "round-cap",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-01",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-consultant-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-diplomat",
+          "type": "career",
+          "careerId": "diplomat",
+          "name": "외교관",
+          "helperId": "helper-globe",
+          "supportRole": "언어 감각",
+          "battleProp": "지구본",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-15",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-14",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-diplomat-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-finance_analyst",
+          "type": "career",
+          "careerId": "finance_analyst",
+          "name": "금융 애널리스트",
+          "helperId": "helper-chart",
+          "supportRole": "점수 분석",
+          "battleProp": "차트",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-15",
+              "hairStyle": "side-part",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-16",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-finance_analyst-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-robotics_engineer",
+          "type": "career",
+          "careerId": "robotics_engineer",
+          "name": "로봇 엔지니어",
+          "helperId": "helper-chip",
+          "supportRole": "자동화 사고",
+          "battleProp": "로봇 팔",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-13",
+              "hairStyle": "tuft",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-03",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-robotics_engineer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-semiconductor_engineer",
+          "type": "career",
+          "careerId": "semiconductor_engineer",
+          "name": "반도체 엔지니어",
+          "helperId": "helper-chip",
+          "supportRole": "공식 회로",
+          "battleProp": "회로판",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-01",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-09",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-semiconductor_engineer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-actuary",
+          "type": "career",
+          "careerId": "actuary",
+          "name": "보험계리사",
+          "helperId": "helper-chart",
+          "supportRole": "확률 감각",
+          "battleProp": "확률표",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-03",
+              "hairStyle": "tuft",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-09",
+              "hairStyle": "bob",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-actuary-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-data_scientist",
+          "type": "career",
+          "careerId": "data_scientist",
+          "name": "데이터 사이언티스트",
+          "helperId": "helper-chart",
+          "supportRole": "오답 예측",
+          "battleProp": "데이터판",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-15",
+              "hairStyle": "side-part",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-05",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-data_scientist-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-pilot",
+          "type": "career",
+          "careerId": "pilot",
+          "name": "항공 조종사",
+          "helperId": "helper-globe",
+          "supportRole": "집중 항로",
+          "battleProp": "비행 지도",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-01",
+              "hairStyle": "side-part",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-13",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-pilot-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-bio_researcher",
+          "type": "career",
+          "careerId": "bio_researcher",
+          "name": "바이오 연구원",
+          "helperId": "helper-flask",
+          "supportRole": "개념 배양",
+          "battleProp": "배양 접시",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-15",
+              "hairStyle": "round-cap",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-13",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-bio_researcher-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-chemical_engineer",
+          "type": "career",
+          "careerId": "chemical_engineer",
+          "name": "화학 엔지니어",
+          "helperId": "helper-flask",
+          "supportRole": "반응 최적화",
+          "battleProp": "반응식",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-05",
+              "hairStyle": "tuft",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-01",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-chemical_engineer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-accountant",
+          "type": "career",
+          "careerId": "accountant",
+          "name": "회계사",
+          "helperId": "helper-chart",
+          "supportRole": "계산 안정화",
+          "battleProp": "계산기",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-01",
+              "hairStyle": "side-part",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-03",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-accountant-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-software_engineer",
+          "type": "career",
+          "careerId": "software_engineer",
+          "name": "소프트웨어 엔지니어",
+          "helperId": "helper-laptop",
+          "supportRole": "반복 자동화",
+          "battleProp": "코드 에디터",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-01",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-05",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-software_engineer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-electrical_engineer",
+          "type": "career",
+          "careerId": "electrical_engineer",
+          "name": "전기전자 엔지니어",
+          "helperId": "helper-chip",
+          "supportRole": "회로 이해",
+          "battleProp": "회로 노트",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-03",
+              "hairStyle": "round-cap",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-13",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-electrical_engineer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-economist",
+          "type": "career",
+          "careerId": "economist",
+          "name": "경제연구원",
+          "helperId": "helper-chart",
+          "supportRole": "흐름 분석",
+          "battleProp": "경제 지표",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-03",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-07",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-economist-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-product_manager",
+          "type": "career",
+          "careerId": "product_manager",
+          "name": "프로덕트 매니저",
+          "helperId": "helper-bulb",
+          "supportRole": "우선순위 정리",
+          "battleProp": "로드맵",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-07",
+              "hairStyle": "side-part",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-03",
+              "hairStyle": "bob",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-product_manager-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-public_officer_5",
+          "type": "career",
+          "careerId": "public_officer_5",
+          "name": "5급 공무원",
+          "helperId": "helper-files",
+          "supportRole": "루틴 관리",
+          "battleProp": "행정 서류",
+          "tier": 2,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-13",
+              "hairStyle": "tuft",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-05",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-public_officer_5-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-research_scientist",
+          "type": "career",
+          "careerId": "research_scientist",
+          "name": "연구원",
+          "helperId": "helper-flask",
+          "supportRole": "실험 사고",
+          "battleProp": "플라스크",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-03",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-01",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-research_scientist-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-tax_accountant",
+          "type": "career",
+          "careerId": "tax_accountant",
+          "name": "세무사",
+          "helperId": "helper-chart",
+          "supportRole": "계산 정리",
+          "battleProp": "세법 노트",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-13",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-11",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-tax_accountant-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-mechanical_engineer",
+          "type": "career",
+          "careerId": "mechanical_engineer",
+          "name": "기계 엔지니어",
+          "helperId": "helper-chip",
+          "supportRole": "구조 이해",
+          "battleProp": "설계도",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-15",
+              "hairStyle": "tuft",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-13",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-mechanical_engineer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-architect",
+          "type": "career",
+          "careerId": "architect",
+          "name": "건축사",
+          "helperId": "helper-palette",
+          "supportRole": "공간 기억",
+          "battleProp": "도면",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-11",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-03",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-architect-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-teacher",
+          "type": "career",
+          "careerId": "teacher",
+          "name": "교사",
+          "helperId": "helper-teacher",
+          "supportRole": "기초 정리",
+          "battleProp": "분필",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-16",
+              "hairStyle": "tuft",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-11",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-teacher-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-civil_engineer",
+          "type": "career",
+          "careerId": "civil_engineer",
+          "name": "토목 엔지니어",
+          "helperId": "helper-chip",
+          "supportRole": "구조 계산",
+          "battleProp": "측량기",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-09",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-05",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-civil_engineer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-policy_researcher",
+          "type": "career",
+          "careerId": "policy_researcher",
+          "name": "정책연구원",
+          "helperId": "helper-files",
+          "supportRole": "근거 정리",
+          "battleProp": "정책 보고서",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-07",
+              "hairStyle": "side-part",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-01",
+              "hairStyle": "bob",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-policy_researcher-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-startup_founder",
+          "type": "career",
+          "careerId": "startup_founder",
+          "name": "스타트업 창업가",
+          "helperId": "helper-bulb",
+          "supportRole": "동기 부여",
+          "battleProp": "전구",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-01",
+              "hairStyle": "round-cap",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-14",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-startup_founder-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-game_developer",
+          "type": "career",
+          "careerId": "game_developer",
+          "name": "게임 개발자",
+          "helperId": "helper-laptop",
+          "supportRole": "반복 자동화",
+          "battleProp": "노트북",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-03",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-11",
+              "hairStyle": "bob",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-game_developer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-broadcaster",
+          "type": "career",
+          "careerId": "broadcaster",
+          "name": "방송 PD",
+          "helperId": "helper-mic",
+          "supportRole": "몰입 연출",
+          "battleProp": "콘티",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-01",
+              "hairStyle": "round-cap",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-01",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-broadcaster-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-environmental_engineer",
+          "type": "career",
+          "careerId": "environmental_engineer",
+          "name": "환경 엔지니어",
+          "helperId": "helper-flask",
+          "supportRole": "원인 추적",
+          "battleProp": "수질표",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-15",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-03",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-environmental_engineer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-ux_researcher",
+          "type": "career",
+          "careerId": "ux_researcher",
+          "name": "UX 리서처",
+          "helperId": "helper-bulb",
+          "supportRole": "문제 관찰",
+          "battleProp": "사용자 노트",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-03",
+              "hairStyle": "side-part",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-13",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-ux_researcher-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-nurse",
+          "type": "career",
+          "careerId": "nurse",
+          "name": "간호사",
+          "helperId": "helper-medic",
+          "supportRole": "컨디션 관리",
+          "battleProp": "체크리스트",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-01",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-07",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-nurse-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-military_officer",
+          "type": "career",
+          "careerId": "military_officer",
+          "name": "장교",
+          "helperId": "helper-files",
+          "supportRole": "루틴 지휘",
+          "battleProp": "작전 지도",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-09",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-03",
+              "hairStyle": "bob",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-military_officer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-psychologist",
+          "type": "career",
+          "careerId": "psychologist",
+          "name": "심리상담가",
+          "helperId": "helper-bulb",
+          "supportRole": "멘탈 정리",
+          "battleProp": "상담 카드",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-07",
+              "hairStyle": "tuft",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-01",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-psychologist-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-clinical_lab",
+          "type": "career",
+          "careerId": "clinical_lab",
+          "name": "임상병리사",
+          "helperId": "helper-flask",
+          "supportRole": "검증 루틴",
+          "battleProp": "검체 노트",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-15",
+              "hairStyle": "tuft",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-13",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-clinical_lab-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-public_officer",
+          "type": "career",
+          "careerId": "public_officer",
+          "name": "공무원",
+          "helperId": "helper-files",
+          "supportRole": "루틴 관리",
+          "battleProp": "서류철",
+          "tier": 3,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-03",
+              "hairStyle": "tuft",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-07",
+              "hairStyle": "bob",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-public_officer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-journalist",
+          "type": "career",
+          "careerId": "journalist",
+          "name": "기자",
+          "helperId": "helper-mic",
+          "supportRole": "요약력",
+          "battleProp": "마이크",
+          "tier": 4,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-03",
+              "hairStyle": "tuft",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-07",
+              "hairStyle": "bob",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-journalist-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-banker",
+          "type": "career",
+          "careerId": "banker",
+          "name": "은행원",
+          "helperId": "helper-chart",
+          "supportRole": "숫자 감각",
+          "battleProp": "통장",
+          "tier": 4,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-13",
+              "hairStyle": "round-cap",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-16",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-banker-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-animation_director",
+          "type": "career",
+          "careerId": "animation_director",
+          "name": "애니메이션 감독",
+          "helperId": "helper-palette",
+          "supportRole": "패턴 연출",
+          "battleProp": "스토리보드",
+          "tier": 4,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-15",
+              "hairStyle": "round-cap",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-16",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-animation_director-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-translator",
+          "type": "career",
+          "careerId": "translator",
+          "name": "전문 번역가",
+          "helperId": "helper-book",
+          "supportRole": "문장 해독",
+          "battleProp": "사전",
+          "tier": 4,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-11",
+              "hairStyle": "tuft",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-09",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-translator-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-marketer",
+          "type": "career",
+          "careerId": "marketer",
+          "name": "마케터",
+          "helperId": "helper-bulb",
+          "supportRole": "동기 부여",
+          "battleProp": "캠페인 보드",
+          "tier": 4,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-07",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-07",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-marketer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-curator",
+          "type": "career",
+          "careerId": "curator",
+          "name": "큐레이터",
+          "helperId": "helper-palette",
+          "supportRole": "맥락 기억",
+          "battleProp": "전시 도록",
+          "tier": 4,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-11",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-05",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-curator-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-airline_crew",
+          "type": "career",
+          "careerId": "airline_crew",
+          "name": "항공 승무원",
+          "helperId": "helper-globe",
+          "supportRole": "언어 루틴",
+          "battleProp": "탑승 명단",
+          "tier": 4,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-03",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-14",
+              "hairStyle": "bob",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-airline_crew-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-designer",
+          "type": "career",
+          "careerId": "designer",
+          "name": "디자이너",
+          "helperId": "helper-palette",
+          "supportRole": "패턴 인식",
+          "battleProp": "팔레트",
+          "tier": 4,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-01",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-13",
+              "hairStyle": "bob",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-designer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-editor",
+          "type": "career",
+          "careerId": "editor",
+          "name": "콘텐츠 에디터",
+          "helperId": "helper-book",
+          "supportRole": "오답 교정",
+          "battleProp": "교정지",
+          "tier": 4,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-07",
+              "hairStyle": "tuft",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-03",
+              "hairStyle": "bob",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-editor-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-police_officer",
+          "type": "career",
+          "careerId": "police_officer",
+          "name": "경찰관",
+          "helperId": "helper-files",
+          "supportRole": "집중 순찰",
+          "battleProp": "수첩",
+          "tier": 4,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-03",
+              "hairStyle": "round-cap",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-11",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-police_officer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-writer",
+          "type": "career",
+          "careerId": "writer",
+          "name": "작가",
+          "helperId": "helper-book",
+          "supportRole": "문장 감각",
+          "battleProp": "원고지",
+          "tier": 4,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-01",
+              "hairStyle": "round-cap",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-05",
+              "hairStyle": "bob",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-writer-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-firefighter",
+          "type": "career",
+          "careerId": "firefighter",
+          "name": "소방관",
+          "helperId": "helper-medic",
+          "supportRole": "위기 대응",
+          "battleProp": "안전 매뉴얼",
+          "tier": 4,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-03",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-07",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-firefighter-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-librarian",
+          "type": "career",
+          "careerId": "librarian",
+          "name": "사서",
+          "helperId": "helper-book",
+          "supportRole": "자료 정리",
+          "battleProp": "분류표",
+          "tier": 4,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-07",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-13",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-librarian-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-creator",
+          "type": "career",
+          "careerId": "creator",
+          "name": "크리에이터",
+          "helperId": "helper-mic",
+          "supportRole": "동기 부여",
+          "battleProp": "카메라",
+          "tier": 5,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-15",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-05",
+              "hairStyle": "bob",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-creator-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-social_worker",
+          "type": "career",
+          "careerId": "social_worker",
+          "name": "사회복지사",
+          "helperId": "helper-files",
+          "supportRole": "멘탈 케어",
+          "battleProp": "상담 기록",
+          "tier": 5,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-01",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-01",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-social_worker-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-chef",
+          "type": "career",
+          "careerId": "chef",
+          "name": "셰프",
+          "helperId": "helper-palette",
+          "supportRole": "감각 훈련",
+          "battleProp": "레시피북",
+          "tier": 5,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-01",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-05",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-chef-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-sports_coach",
+          "type": "career",
+          "careerId": "sports_coach",
+          "name": "스포츠 코치",
+          "helperId": "helper-bulb",
+          "supportRole": "반복 훈련",
+          "battleProp": "훈련표",
+          "tier": 5,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-09",
+              "hairStyle": "round-cap",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-07",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-sports_coach-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "career-unit-local_admin",
+          "type": "career",
+          "careerId": "local_admin",
+          "name": "지역 행정직",
+          "helperId": "helper-files",
+          "supportRole": "기본기 유지",
+          "battleProp": "민원대장",
+          "tier": 5,
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-16",
+              "hairStyle": "tuft",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-09",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/career-unit-local_admin-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "helper-book",
+          "type": "helper",
+          "helperId": "helper-book",
+          "name": "책 도우미",
+          "battleProp": "book",
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-11",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-07",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/helper-book-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "helper-bulb",
+          "type": "helper",
+          "helperId": "helper-bulb",
+          "name": "아이디어 도우미",
+          "battleProp": "bulb",
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-07",
+              "hairStyle": "tuft",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-07",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/helper-bulb-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "helper-chart",
+          "type": "helper",
+          "helperId": "helper-chart",
+          "name": "분석 도우미",
+          "battleProp": "chart",
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-05",
+              "hairStyle": "round-cap",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-01",
+              "hairStyle": "bob",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/helper-chart-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "helper-chip",
+          "type": "helper",
+          "helperId": "helper-chip",
+          "name": "칩 도우미",
+          "battleProp": "chip",
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-05",
+              "hairStyle": "side-part",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-13",
+              "hairStyle": "bob",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/helper-chip-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "helper-files",
+          "type": "helper",
+          "helperId": "helper-files",
+          "name": "자료 도우미",
+          "battleProp": "files",
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-07",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-11",
+              "hairStyle": "bob",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/helper-files-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "helper-flask",
+          "type": "helper",
+          "helperId": "helper-flask",
+          "name": "실험 도우미",
+          "battleProp": "flask",
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-15",
+              "hairStyle": "soft-bob",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-05",
+              "hairStyle": "short-bob",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/helper-flask-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "helper-globe",
+          "type": "helper",
+          "helperId": "helper-globe",
+          "name": "세계 도우미",
+          "battleProp": "globe",
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-13",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-07",
+              "hairStyle": "bob",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/helper-globe-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "helper-judge",
+          "type": "helper",
+          "helperId": "helper-judge",
+          "name": "판정 도우미",
+          "battleProp": "gavel",
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-09",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "hair-clip"
+            },
+            "female": {
+              "baseId": "student-07",
+              "hairStyle": "bob",
+              "hairColor": [
+                73,
+                45,
+                30,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/helper-judge-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "helper-laptop",
+          "type": "helper",
+          "helperId": "helper-laptop",
+          "name": "노트북 도우미",
+          "battleProp": "laptop",
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-05",
+              "hairStyle": "side-part",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-16",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/helper-laptop-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "helper-medic",
+          "type": "helper",
+          "helperId": "helper-medic",
+          "name": "회복 도우미",
+          "battleProp": "medic",
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-05",
+              "hairStyle": "side-part",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-11",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                44,
+                28,
+                22,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/helper-medic-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "helper-mic",
+          "type": "helper",
+          "helperId": "helper-mic",
+          "name": "발표 도우미",
+          "battleProp": "mic",
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-09",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                35,
+                39,
+                47,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-16",
+              "hairStyle": "bob",
+              "hairColor": [
+                88,
+                57,
+                39,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/helper-mic-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "helper-palette",
+          "type": "helper",
+          "helperId": "helper-palette",
+          "name": "창작 도우미",
+          "battleProp": "palette",
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-09",
+              "hairStyle": "tuft",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "pin"
+            },
+            "female": {
+              "baseId": "student-07",
+              "hairStyle": "soft-wave",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                244,
+                190,
+                139,
+                255
+              ],
+              "accessory": "hair-clip"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/helper-palette-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "helper-teacher",
+          "type": "helper",
+          "helperId": "helper-teacher",
+          "name": "선생님 도우미",
+          "battleProp": "teacher",
+          "direction": "right",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "appearanceProfiles": {
+            "male": {
+              "baseId": "student-07",
+              "hairStyle": "short-wave",
+              "hairColor": [
+                55,
+                46,
+                62,
+                255
+              ],
+              "skinColor": [
+                249,
+                204,
+                158,
+                255
+              ],
+              "accessory": "none"
+            },
+            "female": {
+              "baseId": "student-09",
+              "hairStyle": "side-pony",
+              "hairColor": [
+                96,
+                72,
+                49,
+                255
+              ],
+              "skinColor": [
+                236,
+                176,
+                125,
+                255
+              ],
+              "accessory": "none"
+            }
+          },
+          "moveSheet": "assets/visual-source/companions/helper-teacher-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 2,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "expeditionEnemies",
+      "kind": "expeditionEnemy",
+      "items": [
+        {
+          "id": "shelter-mob-1",
+          "type": "mob",
+          "name": "생활 기반 몬스터 1",
+          "tone": "shelter",
+          "motif": "rent",
+          "variant": 1,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/shelter-mob-1-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "shelter-mob-2",
+          "type": "mob",
+          "name": "생활 기반 몬스터 2",
+          "tone": "shelter",
+          "motif": "rent",
+          "variant": 2,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/shelter-mob-2-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "shelter-mob-3",
+          "type": "mob",
+          "name": "생활 기반 몬스터 3",
+          "tone": "shelter",
+          "motif": "rent",
+          "variant": 3,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/shelter-mob-3-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "shelter-boss",
+          "type": "boss",
+          "name": "생활 기반 보스",
+          "tone": "shelter",
+          "motif": "rent",
+          "variant": 0,
+          "boss": true,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/shelter-boss-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "studio-mob-1",
+          "type": "mob",
+          "name": "작업 마감 몬스터 1",
+          "tone": "studio",
+          "motif": "deadline",
+          "variant": 1,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/studio-mob-1-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "studio-mob-2",
+          "type": "mob",
+          "name": "작업 마감 몬스터 2",
+          "tone": "studio",
+          "motif": "deadline",
+          "variant": 2,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/studio-mob-2-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "studio-mob-3",
+          "type": "mob",
+          "name": "작업 마감 몬스터 3",
+          "tone": "studio",
+          "motif": "deadline",
+          "variant": 3,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/studio-mob-3-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "studio-boss",
+          "type": "boss",
+          "name": "작업 마감 보스",
+          "tone": "studio",
+          "motif": "deadline",
+          "variant": 0,
+          "boss": true,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/studio-boss-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "neighborhood-mob-1",
+          "type": "mob",
+          "name": "동네 업무 몬스터 1",
+          "tone": "neighborhood",
+          "motif": "errand",
+          "variant": 1,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/neighborhood-mob-1-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "neighborhood-mob-2",
+          "type": "mob",
+          "name": "동네 업무 몬스터 2",
+          "tone": "neighborhood",
+          "motif": "errand",
+          "variant": 2,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/neighborhood-mob-2-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "neighborhood-mob-3",
+          "type": "mob",
+          "name": "동네 업무 몬스터 3",
+          "tone": "neighborhood",
+          "motif": "errand",
+          "variant": 3,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/neighborhood-mob-3-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "neighborhood-boss",
+          "type": "boss",
+          "name": "동네 업무 보스",
+          "tone": "neighborhood",
+          "motif": "errand",
+          "variant": 0,
+          "boss": true,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/neighborhood-boss-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "company-mob-1",
+          "type": "mob",
+          "name": "회사 업무 몬스터 1",
+          "tone": "company",
+          "motif": "inbox",
+          "variant": 1,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/company-mob-1-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "company-mob-2",
+          "type": "mob",
+          "name": "회사 업무 몬스터 2",
+          "tone": "company",
+          "motif": "inbox",
+          "variant": 2,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/company-mob-2-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "company-mob-3",
+          "type": "mob",
+          "name": "회사 업무 몬스터 3",
+          "tone": "company",
+          "motif": "inbox",
+          "variant": 3,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/company-mob-3-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "company-boss",
+          "type": "boss",
+          "name": "회사 업무 보스",
+          "tone": "company",
+          "motif": "inbox",
+          "variant": 0,
+          "boss": true,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/company-boss-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "office-mob-1",
+          "type": "mob",
+          "name": "회의 업무 몬스터 1",
+          "tone": "office",
+          "motif": "meeting",
+          "variant": 1,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/office-mob-1-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "office-mob-2",
+          "type": "mob",
+          "name": "회의 업무 몬스터 2",
+          "tone": "office",
+          "motif": "meeting",
+          "variant": 2,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/office-mob-2-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "office-mob-3",
+          "type": "mob",
+          "name": "회의 업무 몬스터 3",
+          "tone": "office",
+          "motif": "meeting",
+          "variant": 3,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/office-mob-3-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "office-boss",
+          "type": "boss",
+          "name": "회의 업무 보스",
+          "tone": "office",
+          "motif": "meeting",
+          "variant": 0,
+          "boss": true,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/office-boss-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "asset-mob-1",
+          "type": "mob",
+          "name": "자산 시장 몬스터 1",
+          "tone": "asset",
+          "motif": "market",
+          "variant": 1,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/asset-mob-1-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "asset-mob-2",
+          "type": "mob",
+          "name": "자산 시장 몬스터 2",
+          "tone": "asset",
+          "motif": "market",
+          "variant": 2,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/asset-mob-2-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "asset-mob-3",
+          "type": "mob",
+          "name": "자산 시장 몬스터 3",
+          "tone": "asset",
+          "motif": "market",
+          "variant": 3,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/asset-mob-3-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "asset-boss",
+          "type": "boss",
+          "name": "자산 시장 보스",
+          "tone": "asset",
+          "motif": "market",
+          "variant": 0,
+          "boss": true,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/asset-boss-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "national-mob-1",
+          "type": "mob",
+          "name": "행정 장벽 몬스터 1",
+          "tone": "national",
+          "motif": "permit",
+          "variant": 1,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/national-mob-1-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "national-mob-2",
+          "type": "mob",
+          "name": "행정 장벽 몬스터 2",
+          "tone": "national",
+          "motif": "permit",
+          "variant": 2,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/national-mob-2-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "national-mob-3",
+          "type": "mob",
+          "name": "행정 장벽 몬스터 3",
+          "tone": "national",
+          "motif": "permit",
+          "variant": 3,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/national-mob-3-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "national-boss",
+          "type": "boss",
+          "name": "행정 장벽 보스",
+          "tone": "national",
+          "motif": "permit",
+          "variant": 0,
+          "boss": true,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/national-boss-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "global-mob-1",
+          "type": "mob",
+          "name": "세계 관문 몬스터 1",
+          "tone": "global",
+          "motif": "passport",
+          "variant": 1,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/global-mob-1-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "global-mob-2",
+          "type": "mob",
+          "name": "세계 관문 몬스터 2",
+          "tone": "global",
+          "motif": "passport",
+          "variant": 2,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/global-mob-2-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "global-mob-3",
+          "type": "mob",
+          "name": "세계 관문 몬스터 3",
+          "tone": "global",
+          "motif": "passport",
+          "variant": 3,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/global-mob-3-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "global-boss",
+          "type": "boss",
+          "name": "세계 관문 보스",
+          "tone": "global",
+          "motif": "passport",
+          "variant": 0,
+          "boss": true,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/global-boss-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "future-mob-1",
+          "type": "mob",
+          "name": "미래 회로 몬스터 1",
+          "tone": "future",
+          "motif": "circuit",
+          "variant": 1,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/future-mob-1-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "future-mob-2",
+          "type": "mob",
+          "name": "미래 회로 몬스터 2",
+          "tone": "future",
+          "motif": "circuit",
+          "variant": 2,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/future-mob-2-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "future-mob-3",
+          "type": "mob",
+          "name": "미래 회로 몬스터 3",
+          "tone": "future",
+          "motif": "circuit",
+          "variant": 3,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/future-mob-3-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "future-boss",
+          "type": "boss",
+          "name": "미래 회로 보스",
+          "tone": "future",
+          "motif": "circuit",
+          "variant": 0,
+          "boss": true,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/future-boss-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "summit-mob-1",
+          "type": "mob",
+          "name": "정상 장벽 몬스터 1",
+          "tone": "summit",
+          "motif": "summit",
+          "variant": 1,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/summit-mob-1-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "summit-mob-2",
+          "type": "mob",
+          "name": "정상 장벽 몬스터 2",
+          "tone": "summit",
+          "motif": "summit",
+          "variant": 2,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/summit-mob-2-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "summit-mob-3",
+          "type": "mob",
+          "name": "정상 장벽 몬스터 3",
+          "tone": "summit",
+          "motif": "summit",
+          "variant": 3,
+          "boss": false,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/summit-mob-3-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        },
+        {
+          "id": "summit-boss",
+          "type": "boss",
+          "name": "정상 장벽 보스",
+          "tone": "summit",
+          "motif": "summit",
+          "variant": 0,
+          "boss": true,
+          "direction": "left",
+          "moveSheet": "assets/visual-source/expedition-enemies/summit-boss-move.png",
+          "moveSheetLayout": {
+            "columns": 4,
+            "rows": 1,
+            "cellWidth": 160,
+            "cellHeight": 160,
+            "cellMargin": 0
+          }
+        }
+      ]
+    }
+  ]
+}

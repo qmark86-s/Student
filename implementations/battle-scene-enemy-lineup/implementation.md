@@ -4,11 +4,16 @@
 
 사용자 요청에 맞춰 메인 전투장의 하단 적 체력바 카드를 제거하고, 몬스터가 전투장 안에 캐릭터로 직접 등장하도록 구현했다. 보스와 수능 적만 캐릭터 위에 HP바를 표시한다.
 
+## 현재 기준
+
+이 구현서는 하단 체력바 카드를 캐릭터 편대로 바꾼 1차 작업 기록이다. 현재 메인 전투는 `implementations/battle-road-encounter-flow/implementation.md` 기준으로 동작하며, 학년/N수는 한 화면 3마리 조우 4회, 수능은 1/1/1/2마리 조우 4회로 표시한다.
+
 ## 주요 변경
 
 - 메인 전투장
   - `battle-enemy-card` compact 목록 대신 `battleSceneLineup` 렌더러를 사용한다.
-  - 전투장 안에는 `battle-scene-enemy` 요소가 12개 또는 5개 표시된다.
+  - 현재 Battle Road 적용 후에는 전투장 안에 현재 조우의 `battle-scene-enemy`만 표시된다.
+  - 학년/N수 조우는 3개, 수능 조우는 1개 또는 2개가 표시된다.
   - 기존 단일 `enemy-stack`은 메인 전투장에서 숨긴다.
 
 - 보스 HP바
@@ -34,7 +39,7 @@
   - 전투장 캐릭터 수, 보스 수, HP바 수, 텍스트 카드 제거를 검증한다.
 
 - `tools/retake-year-smoke.mjs`
-  - N수 12개월 전투와 수능 5마리 전투를 새 장면 기준으로 검증한다.
+  - N수 3개월 조우 4회와 수능 4개 순차 조우를 새 장면 기준으로 검증한다.
 
 ## 검증 결과
 
@@ -43,7 +48,7 @@ npm run visual:qa
 npm run retake:smoke
 ```
 
-- 기본 전투: `battleLineupCount=12`, `battleLineupBosses=4`, `battleLineupHpBars=4`, `arenaTextCards=0`
-- N수 전투: `sceneEnemies=12`, `sceneBosses=4`, `normalHpBars=0`
-- 수능 전투: `sceneEnemies=5`, `sceneSuneungEnemies=5`, `sceneHpBars=5`
-
+- 현재 Battle Road 검증은 `npm run visual:smoke`, `npm run retake:smoke`, `npm run verify:mobile`을 기준으로 한다.
+- 기본 전투 첫 조우: `battleLineupCount=3`, `battleLineupBosses=1`, `battleLineupHpBars=1`, `arenaTextCards=0`
+- N수 전투: 3개월 조우 4회 후 수능 1/4로 진입
+- 수능 전투: 1/1/1/2마리 순차 조우 후 결과 대기 복귀

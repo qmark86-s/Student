@@ -2366,61 +2366,1852 @@
       "id": "companions",
       "token": "__STUDENT_ASSET_007__",
       "file": "assets/visual-companions.png",
-      "cell": 96,
-      "width": 1248,
-      "height": 96,
+      "cell": 160,
+      "columns": 64,
+      "rows": 10,
+      "framesPerItem": 4,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "width": 10240,
+      "height": 1600,
       "items": [
         {
+          "id": "career-unit-doctor",
+          "name": "의사",
+          "title": "의사",
+          "index": 0,
+          "row": 0,
+          "frameBase": 0,
+          "animationFrames": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "genderFrameBases": {
+            "male": 0,
+            "female": 300
+          },
+          "type": "career",
+          "careerId": "doctor",
+          "supportRole": "집중력 회복",
+          "battleProp": "청진기",
+          "tier": 1,
+          "helperId": "helper-medic",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-judge",
+          "name": "판사",
+          "title": "판사",
+          "index": 4,
+          "row": 0,
+          "frameBase": 4,
+          "animationFrames": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "genderFrameBases": {
+            "male": 4,
+            "female": 304
+          },
+          "type": "career",
+          "careerId": "judge",
+          "supportRole": "오답 판정",
+          "battleProp": "판결봉",
+          "tier": 1,
+          "helperId": "helper-judge",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-prosecutor",
+          "name": "검사",
+          "title": "검사",
+          "index": 8,
+          "row": 0,
+          "frameBase": 8,
+          "animationFrames": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "genderFrameBases": {
+            "male": 8,
+            "female": 308
+          },
+          "type": "career",
+          "careerId": "prosecutor",
+          "supportRole": "근거 추적",
+          "battleProp": "수사기록",
+          "tier": 1,
+          "helperId": "helper-judge",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-dentist",
+          "name": "치과의사",
+          "title": "치과의사",
+          "index": 12,
+          "row": 0,
+          "frameBase": 12,
+          "animationFrames": [
+            12,
+            13,
+            14,
+            15
+          ],
+          "genderFrameBases": {
+            "male": 12,
+            "female": 312
+          },
+          "type": "career",
+          "careerId": "dentist",
+          "supportRole": "실수 교정",
+          "battleProp": "치경",
+          "tier": 1,
+          "helperId": "helper-medic",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-investment_banker",
+          "name": "투자은행가",
+          "title": "투자은행가",
+          "index": 16,
+          "row": 0,
+          "frameBase": 16,
+          "animationFrames": [
+            16,
+            17,
+            18,
+            19
+          ],
+          "genderFrameBases": {
+            "male": 16,
+            "female": 316
+          },
+          "type": "career",
+          "careerId": "investment_banker",
+          "supportRole": "숫자 압축",
+          "battleProp": "딜북",
+          "tier": 1,
+          "helperId": "helper-chart",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-patent_attorney",
+          "name": "변리사",
+          "title": "변리사",
+          "index": 20,
+          "row": 0,
+          "frameBase": 20,
+          "animationFrames": [
+            20,
+            21,
+            22,
+            23
+          ],
+          "genderFrameBases": {
+            "male": 20,
+            "female": 320
+          },
+          "type": "career",
+          "careerId": "patent_attorney",
+          "supportRole": "논리 보호",
+          "battleProp": "특허 명세서",
+          "tier": 1,
+          "helperId": "helper-files",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-attorney",
+          "name": "변호사",
+          "title": "변호사",
+          "index": 24,
+          "row": 0,
+          "frameBase": 24,
+          "animationFrames": [
+            24,
+            25,
+            26,
+            27
+          ],
+          "genderFrameBases": {
+            "male": 24,
+            "female": 324
+          },
+          "type": "career",
+          "careerId": "attorney",
+          "supportRole": "논리 정리",
+          "battleProp": "계약서",
+          "tier": 1,
+          "helperId": "helper-files",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-professor",
+          "name": "교수",
+          "title": "교수",
+          "index": 28,
+          "row": 0,
+          "frameBase": 28,
+          "animationFrames": [
+            28,
+            29,
+            30,
+            31
+          ],
+          "genderFrameBases": {
+            "male": 28,
+            "female": 328
+          },
+          "type": "career",
+          "careerId": "professor",
+          "supportRole": "개념 압축",
+          "battleProp": "논문",
+          "tier": 1,
+          "helperId": "helper-teacher",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-pharmacist",
+          "name": "약사",
+          "title": "약사",
+          "index": 32,
+          "row": 0,
+          "frameBase": 32,
+          "animationFrames": [
+            32,
+            33,
+            34,
+            35
+          ],
+          "genderFrameBases": {
+            "male": 32,
+            "female": 332
+          },
+          "type": "career",
+          "careerId": "pharmacist",
+          "supportRole": "암기 처방",
+          "battleProp": "조제 노트",
+          "tier": 1,
+          "helperId": "helper-medic",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-ai_researcher",
+          "name": "AI 연구원",
+          "title": "AI 연구원",
+          "index": 36,
+          "row": 0,
+          "frameBase": 36,
+          "animationFrames": [
+            36,
+            37,
+            38,
+            39
+          ],
+          "genderFrameBases": {
+            "male": 36,
+            "female": 336
+          },
+          "type": "career",
+          "careerId": "ai_researcher",
+          "supportRole": "풀이 최적화",
+          "battleProp": "연산 칩",
+          "tier": 1,
+          "helperId": "helper-laptop",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-veterinarian",
+          "name": "수의사",
+          "title": "수의사",
+          "index": 40,
+          "row": 0,
+          "frameBase": 40,
+          "animationFrames": [
+            40,
+            41,
+            42,
+            43
+          ],
+          "genderFrameBases": {
+            "male": 40,
+            "female": 340
+          },
+          "type": "career",
+          "careerId": "veterinarian",
+          "supportRole": "생명 과학",
+          "battleProp": "진료 차트",
+          "tier": 2,
+          "helperId": "helper-medic",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-consultant",
+          "name": "전략 컨설턴트",
+          "title": "전략 컨설턴트",
+          "index": 44,
+          "row": 0,
+          "frameBase": 44,
+          "animationFrames": [
+            44,
+            45,
+            46,
+            47
+          ],
+          "genderFrameBases": {
+            "male": 44,
+            "female": 344
+          },
+          "type": "career",
+          "careerId": "consultant",
+          "supportRole": "전략 수립",
+          "battleProp": "슬라이드",
+          "tier": 2,
+          "helperId": "helper-bulb",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-diplomat",
+          "name": "외교관",
+          "title": "외교관",
+          "index": 48,
+          "row": 0,
+          "frameBase": 48,
+          "animationFrames": [
+            48,
+            49,
+            50,
+            51
+          ],
+          "genderFrameBases": {
+            "male": 48,
+            "female": 348
+          },
+          "type": "career",
+          "careerId": "diplomat",
+          "supportRole": "언어 감각",
+          "battleProp": "지구본",
+          "tier": 2,
+          "helperId": "helper-globe",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-finance_analyst",
+          "name": "금융 애널리스트",
+          "title": "금융 애널리스트",
+          "index": 52,
+          "row": 0,
+          "frameBase": 52,
+          "animationFrames": [
+            52,
+            53,
+            54,
+            55
+          ],
+          "genderFrameBases": {
+            "male": 52,
+            "female": 352
+          },
+          "type": "career",
+          "careerId": "finance_analyst",
+          "supportRole": "점수 분석",
+          "battleProp": "차트",
+          "tier": 2,
+          "helperId": "helper-chart",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-robotics_engineer",
+          "name": "로봇 엔지니어",
+          "title": "로봇 엔지니어",
+          "index": 56,
+          "row": 0,
+          "frameBase": 56,
+          "animationFrames": [
+            56,
+            57,
+            58,
+            59
+          ],
+          "genderFrameBases": {
+            "male": 56,
+            "female": 356
+          },
+          "type": "career",
+          "careerId": "robotics_engineer",
+          "supportRole": "자동화 사고",
+          "battleProp": "로봇 팔",
+          "tier": 2,
+          "helperId": "helper-chip",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-semiconductor_engineer",
+          "name": "반도체 엔지니어",
+          "title": "반도체 엔지니어",
+          "index": 60,
+          "row": 0,
+          "frameBase": 60,
+          "animationFrames": [
+            60,
+            61,
+            62,
+            63
+          ],
+          "genderFrameBases": {
+            "male": 60,
+            "female": 360
+          },
+          "type": "career",
+          "careerId": "semiconductor_engineer",
+          "supportRole": "공식 회로",
+          "battleProp": "회로판",
+          "tier": 2,
+          "helperId": "helper-chip",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-actuary",
+          "name": "보험계리사",
+          "title": "보험계리사",
+          "index": 0,
+          "row": 1,
+          "frameBase": 64,
+          "animationFrames": [
+            64,
+            65,
+            66,
+            67
+          ],
+          "genderFrameBases": {
+            "male": 64,
+            "female": 364
+          },
+          "type": "career",
+          "careerId": "actuary",
+          "supportRole": "확률 감각",
+          "battleProp": "확률표",
+          "tier": 2,
+          "helperId": "helper-chart",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-data_scientist",
+          "name": "데이터 사이언티스트",
+          "title": "데이터 사이언티스트",
+          "index": 4,
+          "row": 1,
+          "frameBase": 68,
+          "animationFrames": [
+            68,
+            69,
+            70,
+            71
+          ],
+          "genderFrameBases": {
+            "male": 68,
+            "female": 368
+          },
+          "type": "career",
+          "careerId": "data_scientist",
+          "supportRole": "오답 예측",
+          "battleProp": "데이터판",
+          "tier": 2,
+          "helperId": "helper-chart",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-pilot",
+          "name": "항공 조종사",
+          "title": "항공 조종사",
+          "index": 8,
+          "row": 1,
+          "frameBase": 72,
+          "animationFrames": [
+            72,
+            73,
+            74,
+            75
+          ],
+          "genderFrameBases": {
+            "male": 72,
+            "female": 372
+          },
+          "type": "career",
+          "careerId": "pilot",
+          "supportRole": "집중 항로",
+          "battleProp": "비행 지도",
+          "tier": 2,
+          "helperId": "helper-globe",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-bio_researcher",
+          "name": "바이오 연구원",
+          "title": "바이오 연구원",
+          "index": 12,
+          "row": 1,
+          "frameBase": 76,
+          "animationFrames": [
+            76,
+            77,
+            78,
+            79
+          ],
+          "genderFrameBases": {
+            "male": 76,
+            "female": 376
+          },
+          "type": "career",
+          "careerId": "bio_researcher",
+          "supportRole": "개념 배양",
+          "battleProp": "배양 접시",
+          "tier": 2,
+          "helperId": "helper-flask",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-chemical_engineer",
+          "name": "화학 엔지니어",
+          "title": "화학 엔지니어",
+          "index": 16,
+          "row": 1,
+          "frameBase": 80,
+          "animationFrames": [
+            80,
+            81,
+            82,
+            83
+          ],
+          "genderFrameBases": {
+            "male": 80,
+            "female": 380
+          },
+          "type": "career",
+          "careerId": "chemical_engineer",
+          "supportRole": "반응 최적화",
+          "battleProp": "반응식",
+          "tier": 2,
+          "helperId": "helper-flask",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-accountant",
+          "name": "회계사",
+          "title": "회계사",
+          "index": 20,
+          "row": 1,
+          "frameBase": 84,
+          "animationFrames": [
+            84,
+            85,
+            86,
+            87
+          ],
+          "genderFrameBases": {
+            "male": 84,
+            "female": 384
+          },
+          "type": "career",
+          "careerId": "accountant",
+          "supportRole": "계산 안정화",
+          "battleProp": "계산기",
+          "tier": 2,
+          "helperId": "helper-chart",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-software_engineer",
+          "name": "소프트웨어 엔지니어",
+          "title": "소프트웨어 엔지니어",
+          "index": 24,
+          "row": 1,
+          "frameBase": 88,
+          "animationFrames": [
+            88,
+            89,
+            90,
+            91
+          ],
+          "genderFrameBases": {
+            "male": 88,
+            "female": 388
+          },
+          "type": "career",
+          "careerId": "software_engineer",
+          "supportRole": "반복 자동화",
+          "battleProp": "코드 에디터",
+          "tier": 2,
+          "helperId": "helper-laptop",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-electrical_engineer",
+          "name": "전기전자 엔지니어",
+          "title": "전기전자 엔지니어",
+          "index": 28,
+          "row": 1,
+          "frameBase": 92,
+          "animationFrames": [
+            92,
+            93,
+            94,
+            95
+          ],
+          "genderFrameBases": {
+            "male": 92,
+            "female": 392
+          },
+          "type": "career",
+          "careerId": "electrical_engineer",
+          "supportRole": "회로 이해",
+          "battleProp": "회로 노트",
+          "tier": 2,
+          "helperId": "helper-chip",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-economist",
+          "name": "경제연구원",
+          "title": "경제연구원",
+          "index": 32,
+          "row": 1,
+          "frameBase": 96,
+          "animationFrames": [
+            96,
+            97,
+            98,
+            99
+          ],
+          "genderFrameBases": {
+            "male": 96,
+            "female": 396
+          },
+          "type": "career",
+          "careerId": "economist",
+          "supportRole": "흐름 분석",
+          "battleProp": "경제 지표",
+          "tier": 2,
+          "helperId": "helper-chart",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-product_manager",
+          "name": "프로덕트 매니저",
+          "title": "프로덕트 매니저",
+          "index": 36,
+          "row": 1,
+          "frameBase": 100,
+          "animationFrames": [
+            100,
+            101,
+            102,
+            103
+          ],
+          "genderFrameBases": {
+            "male": 100,
+            "female": 400
+          },
+          "type": "career",
+          "careerId": "product_manager",
+          "supportRole": "우선순위 정리",
+          "battleProp": "로드맵",
+          "tier": 2,
+          "helperId": "helper-bulb",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-public_officer_5",
+          "name": "5급 공무원",
+          "title": "5급 공무원",
+          "index": 40,
+          "row": 1,
+          "frameBase": 104,
+          "animationFrames": [
+            104,
+            105,
+            106,
+            107
+          ],
+          "genderFrameBases": {
+            "male": 104,
+            "female": 404
+          },
+          "type": "career",
+          "careerId": "public_officer_5",
+          "supportRole": "루틴 관리",
+          "battleProp": "행정 서류",
+          "tier": 2,
+          "helperId": "helper-files",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-research_scientist",
+          "name": "연구원",
+          "title": "연구원",
+          "index": 44,
+          "row": 1,
+          "frameBase": 108,
+          "animationFrames": [
+            108,
+            109,
+            110,
+            111
+          ],
+          "genderFrameBases": {
+            "male": 108,
+            "female": 408
+          },
+          "type": "career",
+          "careerId": "research_scientist",
+          "supportRole": "실험 사고",
+          "battleProp": "플라스크",
+          "tier": 3,
+          "helperId": "helper-flask",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-tax_accountant",
+          "name": "세무사",
+          "title": "세무사",
+          "index": 48,
+          "row": 1,
+          "frameBase": 112,
+          "animationFrames": [
+            112,
+            113,
+            114,
+            115
+          ],
+          "genderFrameBases": {
+            "male": 112,
+            "female": 412
+          },
+          "type": "career",
+          "careerId": "tax_accountant",
+          "supportRole": "계산 정리",
+          "battleProp": "세법 노트",
+          "tier": 3,
+          "helperId": "helper-chart",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-mechanical_engineer",
+          "name": "기계 엔지니어",
+          "title": "기계 엔지니어",
+          "index": 52,
+          "row": 1,
+          "frameBase": 116,
+          "animationFrames": [
+            116,
+            117,
+            118,
+            119
+          ],
+          "genderFrameBases": {
+            "male": 116,
+            "female": 416
+          },
+          "type": "career",
+          "careerId": "mechanical_engineer",
+          "supportRole": "구조 이해",
+          "battleProp": "설계도",
+          "tier": 3,
+          "helperId": "helper-chip",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-architect",
+          "name": "건축사",
+          "title": "건축사",
+          "index": 56,
+          "row": 1,
+          "frameBase": 120,
+          "animationFrames": [
+            120,
+            121,
+            122,
+            123
+          ],
+          "genderFrameBases": {
+            "male": 120,
+            "female": 420
+          },
+          "type": "career",
+          "careerId": "architect",
+          "supportRole": "공간 기억",
+          "battleProp": "도면",
+          "tier": 3,
+          "helperId": "helper-palette",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-teacher",
+          "name": "교사",
+          "title": "교사",
+          "index": 60,
+          "row": 1,
+          "frameBase": 124,
+          "animationFrames": [
+            124,
+            125,
+            126,
+            127
+          ],
+          "genderFrameBases": {
+            "male": 124,
+            "female": 424
+          },
+          "type": "career",
+          "careerId": "teacher",
+          "supportRole": "기초 정리",
+          "battleProp": "분필",
+          "tier": 3,
+          "helperId": "helper-teacher",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-civil_engineer",
+          "name": "토목 엔지니어",
+          "title": "토목 엔지니어",
+          "index": 0,
+          "row": 2,
+          "frameBase": 128,
+          "animationFrames": [
+            128,
+            129,
+            130,
+            131
+          ],
+          "genderFrameBases": {
+            "male": 128,
+            "female": 428
+          },
+          "type": "career",
+          "careerId": "civil_engineer",
+          "supportRole": "구조 계산",
+          "battleProp": "측량기",
+          "tier": 3,
+          "helperId": "helper-chip",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-policy_researcher",
+          "name": "정책연구원",
+          "title": "정책연구원",
+          "index": 4,
+          "row": 2,
+          "frameBase": 132,
+          "animationFrames": [
+            132,
+            133,
+            134,
+            135
+          ],
+          "genderFrameBases": {
+            "male": 132,
+            "female": 432
+          },
+          "type": "career",
+          "careerId": "policy_researcher",
+          "supportRole": "근거 정리",
+          "battleProp": "정책 보고서",
+          "tier": 3,
+          "helperId": "helper-files",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-startup_founder",
+          "name": "스타트업 창업가",
+          "title": "스타트업 창업가",
+          "index": 8,
+          "row": 2,
+          "frameBase": 136,
+          "animationFrames": [
+            136,
+            137,
+            138,
+            139
+          ],
+          "genderFrameBases": {
+            "male": 136,
+            "female": 436
+          },
+          "type": "career",
+          "careerId": "startup_founder",
+          "supportRole": "동기 부여",
+          "battleProp": "전구",
+          "tier": 3,
+          "helperId": "helper-bulb",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-game_developer",
+          "name": "게임 개발자",
+          "title": "게임 개발자",
+          "index": 12,
+          "row": 2,
+          "frameBase": 140,
+          "animationFrames": [
+            140,
+            141,
+            142,
+            143
+          ],
+          "genderFrameBases": {
+            "male": 140,
+            "female": 440
+          },
+          "type": "career",
+          "careerId": "game_developer",
+          "supportRole": "반복 자동화",
+          "battleProp": "노트북",
+          "tier": 3,
+          "helperId": "helper-laptop",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-broadcaster",
+          "name": "방송 PD",
+          "title": "방송 PD",
+          "index": 16,
+          "row": 2,
+          "frameBase": 144,
+          "animationFrames": [
+            144,
+            145,
+            146,
+            147
+          ],
+          "genderFrameBases": {
+            "male": 144,
+            "female": 444
+          },
+          "type": "career",
+          "careerId": "broadcaster",
+          "supportRole": "몰입 연출",
+          "battleProp": "콘티",
+          "tier": 3,
+          "helperId": "helper-mic",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-environmental_engineer",
+          "name": "환경 엔지니어",
+          "title": "환경 엔지니어",
+          "index": 20,
+          "row": 2,
+          "frameBase": 148,
+          "animationFrames": [
+            148,
+            149,
+            150,
+            151
+          ],
+          "genderFrameBases": {
+            "male": 148,
+            "female": 448
+          },
+          "type": "career",
+          "careerId": "environmental_engineer",
+          "supportRole": "원인 추적",
+          "battleProp": "수질표",
+          "tier": 3,
+          "helperId": "helper-flask",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-ux_researcher",
+          "name": "UX 리서처",
+          "title": "UX 리서처",
+          "index": 24,
+          "row": 2,
+          "frameBase": 152,
+          "animationFrames": [
+            152,
+            153,
+            154,
+            155
+          ],
+          "genderFrameBases": {
+            "male": 152,
+            "female": 452
+          },
+          "type": "career",
+          "careerId": "ux_researcher",
+          "supportRole": "문제 관찰",
+          "battleProp": "사용자 노트",
+          "tier": 3,
+          "helperId": "helper-bulb",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-nurse",
+          "name": "간호사",
+          "title": "간호사",
+          "index": 28,
+          "row": 2,
+          "frameBase": 156,
+          "animationFrames": [
+            156,
+            157,
+            158,
+            159
+          ],
+          "genderFrameBases": {
+            "male": 156,
+            "female": 456
+          },
+          "type": "career",
+          "careerId": "nurse",
+          "supportRole": "컨디션 관리",
+          "battleProp": "체크리스트",
+          "tier": 3,
+          "helperId": "helper-medic",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-military_officer",
+          "name": "장교",
+          "title": "장교",
+          "index": 32,
+          "row": 2,
+          "frameBase": 160,
+          "animationFrames": [
+            160,
+            161,
+            162,
+            163
+          ],
+          "genderFrameBases": {
+            "male": 160,
+            "female": 460
+          },
+          "type": "career",
+          "careerId": "military_officer",
+          "supportRole": "루틴 지휘",
+          "battleProp": "작전 지도",
+          "tier": 3,
+          "helperId": "helper-files",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-psychologist",
+          "name": "심리상담가",
+          "title": "심리상담가",
+          "index": 36,
+          "row": 2,
+          "frameBase": 164,
+          "animationFrames": [
+            164,
+            165,
+            166,
+            167
+          ],
+          "genderFrameBases": {
+            "male": 164,
+            "female": 464
+          },
+          "type": "career",
+          "careerId": "psychologist",
+          "supportRole": "멘탈 정리",
+          "battleProp": "상담 카드",
+          "tier": 3,
+          "helperId": "helper-bulb",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-clinical_lab",
+          "name": "임상병리사",
+          "title": "임상병리사",
+          "index": 40,
+          "row": 2,
+          "frameBase": 168,
+          "animationFrames": [
+            168,
+            169,
+            170,
+            171
+          ],
+          "genderFrameBases": {
+            "male": 168,
+            "female": 468
+          },
+          "type": "career",
+          "careerId": "clinical_lab",
+          "supportRole": "검증 루틴",
+          "battleProp": "검체 노트",
+          "tier": 3,
+          "helperId": "helper-flask",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-public_officer",
+          "name": "공무원",
+          "title": "공무원",
+          "index": 44,
+          "row": 2,
+          "frameBase": 172,
+          "animationFrames": [
+            172,
+            173,
+            174,
+            175
+          ],
+          "genderFrameBases": {
+            "male": 172,
+            "female": 472
+          },
+          "type": "career",
+          "careerId": "public_officer",
+          "supportRole": "루틴 관리",
+          "battleProp": "서류철",
+          "tier": 3,
+          "helperId": "helper-files",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-journalist",
+          "name": "기자",
+          "title": "기자",
+          "index": 48,
+          "row": 2,
+          "frameBase": 176,
+          "animationFrames": [
+            176,
+            177,
+            178,
+            179
+          ],
+          "genderFrameBases": {
+            "male": 176,
+            "female": 476
+          },
+          "type": "career",
+          "careerId": "journalist",
+          "supportRole": "요약력",
+          "battleProp": "마이크",
+          "tier": 4,
+          "helperId": "helper-mic",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-banker",
+          "name": "은행원",
+          "title": "은행원",
+          "index": 52,
+          "row": 2,
+          "frameBase": 180,
+          "animationFrames": [
+            180,
+            181,
+            182,
+            183
+          ],
+          "genderFrameBases": {
+            "male": 180,
+            "female": 480
+          },
+          "type": "career",
+          "careerId": "banker",
+          "supportRole": "숫자 감각",
+          "battleProp": "통장",
+          "tier": 4,
+          "helperId": "helper-chart",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-animation_director",
+          "name": "애니메이션 감독",
+          "title": "애니메이션 감독",
+          "index": 56,
+          "row": 2,
+          "frameBase": 184,
+          "animationFrames": [
+            184,
+            185,
+            186,
+            187
+          ],
+          "genderFrameBases": {
+            "male": 184,
+            "female": 484
+          },
+          "type": "career",
+          "careerId": "animation_director",
+          "supportRole": "패턴 연출",
+          "battleProp": "스토리보드",
+          "tier": 4,
+          "helperId": "helper-palette",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-translator",
+          "name": "전문 번역가",
+          "title": "전문 번역가",
+          "index": 60,
+          "row": 2,
+          "frameBase": 188,
+          "animationFrames": [
+            188,
+            189,
+            190,
+            191
+          ],
+          "genderFrameBases": {
+            "male": 188,
+            "female": 488
+          },
+          "type": "career",
+          "careerId": "translator",
+          "supportRole": "문장 해독",
+          "battleProp": "사전",
+          "tier": 4,
+          "helperId": "helper-book",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-marketer",
+          "name": "마케터",
+          "title": "마케터",
+          "index": 0,
+          "row": 3,
+          "frameBase": 192,
+          "animationFrames": [
+            192,
+            193,
+            194,
+            195
+          ],
+          "genderFrameBases": {
+            "male": 192,
+            "female": 492
+          },
+          "type": "career",
+          "careerId": "marketer",
+          "supportRole": "동기 부여",
+          "battleProp": "캠페인 보드",
+          "tier": 4,
+          "helperId": "helper-bulb",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-curator",
+          "name": "큐레이터",
+          "title": "큐레이터",
+          "index": 4,
+          "row": 3,
+          "frameBase": 196,
+          "animationFrames": [
+            196,
+            197,
+            198,
+            199
+          ],
+          "genderFrameBases": {
+            "male": 196,
+            "female": 496
+          },
+          "type": "career",
+          "careerId": "curator",
+          "supportRole": "맥락 기억",
+          "battleProp": "전시 도록",
+          "tier": 4,
+          "helperId": "helper-palette",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-airline_crew",
+          "name": "항공 승무원",
+          "title": "항공 승무원",
+          "index": 8,
+          "row": 3,
+          "frameBase": 200,
+          "animationFrames": [
+            200,
+            201,
+            202,
+            203
+          ],
+          "genderFrameBases": {
+            "male": 200,
+            "female": 500
+          },
+          "type": "career",
+          "careerId": "airline_crew",
+          "supportRole": "언어 루틴",
+          "battleProp": "탑승 명단",
+          "tier": 4,
+          "helperId": "helper-globe",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-designer",
+          "name": "디자이너",
+          "title": "디자이너",
+          "index": 12,
+          "row": 3,
+          "frameBase": 204,
+          "animationFrames": [
+            204,
+            205,
+            206,
+            207
+          ],
+          "genderFrameBases": {
+            "male": 204,
+            "female": 504
+          },
+          "type": "career",
+          "careerId": "designer",
+          "supportRole": "패턴 인식",
+          "battleProp": "팔레트",
+          "tier": 4,
+          "helperId": "helper-palette",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-editor",
+          "name": "콘텐츠 에디터",
+          "title": "콘텐츠 에디터",
+          "index": 16,
+          "row": 3,
+          "frameBase": 208,
+          "animationFrames": [
+            208,
+            209,
+            210,
+            211
+          ],
+          "genderFrameBases": {
+            "male": 208,
+            "female": 508
+          },
+          "type": "career",
+          "careerId": "editor",
+          "supportRole": "오답 교정",
+          "battleProp": "교정지",
+          "tier": 4,
+          "helperId": "helper-book",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-police_officer",
+          "name": "경찰관",
+          "title": "경찰관",
+          "index": 20,
+          "row": 3,
+          "frameBase": 212,
+          "animationFrames": [
+            212,
+            213,
+            214,
+            215
+          ],
+          "genderFrameBases": {
+            "male": 212,
+            "female": 512
+          },
+          "type": "career",
+          "careerId": "police_officer",
+          "supportRole": "집중 순찰",
+          "battleProp": "수첩",
+          "tier": 4,
+          "helperId": "helper-files",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-writer",
+          "name": "작가",
+          "title": "작가",
+          "index": 24,
+          "row": 3,
+          "frameBase": 216,
+          "animationFrames": [
+            216,
+            217,
+            218,
+            219
+          ],
+          "genderFrameBases": {
+            "male": 216,
+            "female": 516
+          },
+          "type": "career",
+          "careerId": "writer",
+          "supportRole": "문장 감각",
+          "battleProp": "원고지",
+          "tier": 4,
+          "helperId": "helper-book",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-firefighter",
+          "name": "소방관",
+          "title": "소방관",
+          "index": 28,
+          "row": 3,
+          "frameBase": 220,
+          "animationFrames": [
+            220,
+            221,
+            222,
+            223
+          ],
+          "genderFrameBases": {
+            "male": 220,
+            "female": 520
+          },
+          "type": "career",
+          "careerId": "firefighter",
+          "supportRole": "위기 대응",
+          "battleProp": "안전 매뉴얼",
+          "tier": 4,
+          "helperId": "helper-medic",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-librarian",
+          "name": "사서",
+          "title": "사서",
+          "index": 32,
+          "row": 3,
+          "frameBase": 224,
+          "animationFrames": [
+            224,
+            225,
+            226,
+            227
+          ],
+          "genderFrameBases": {
+            "male": 224,
+            "female": 524
+          },
+          "type": "career",
+          "careerId": "librarian",
+          "supportRole": "자료 정리",
+          "battleProp": "분류표",
+          "tier": 4,
+          "helperId": "helper-book",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-creator",
+          "name": "크리에이터",
+          "title": "크리에이터",
+          "index": 36,
+          "row": 3,
+          "frameBase": 228,
+          "animationFrames": [
+            228,
+            229,
+            230,
+            231
+          ],
+          "genderFrameBases": {
+            "male": 228,
+            "female": 528
+          },
+          "type": "career",
+          "careerId": "creator",
+          "supportRole": "동기 부여",
+          "battleProp": "카메라",
+          "tier": 5,
+          "helperId": "helper-mic",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-social_worker",
+          "name": "사회복지사",
+          "title": "사회복지사",
+          "index": 40,
+          "row": 3,
+          "frameBase": 232,
+          "animationFrames": [
+            232,
+            233,
+            234,
+            235
+          ],
+          "genderFrameBases": {
+            "male": 232,
+            "female": 532
+          },
+          "type": "career",
+          "careerId": "social_worker",
+          "supportRole": "멘탈 케어",
+          "battleProp": "상담 기록",
+          "tier": 5,
+          "helperId": "helper-files",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-chef",
+          "name": "셰프",
+          "title": "셰프",
+          "index": 44,
+          "row": 3,
+          "frameBase": 236,
+          "animationFrames": [
+            236,
+            237,
+            238,
+            239
+          ],
+          "genderFrameBases": {
+            "male": 236,
+            "female": 536
+          },
+          "type": "career",
+          "careerId": "chef",
+          "supportRole": "감각 훈련",
+          "battleProp": "레시피북",
+          "tier": 5,
+          "helperId": "helper-palette",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-sports_coach",
+          "name": "스포츠 코치",
+          "title": "스포츠 코치",
+          "index": 48,
+          "row": 3,
+          "frameBase": 240,
+          "animationFrames": [
+            240,
+            241,
+            242,
+            243
+          ],
+          "genderFrameBases": {
+            "male": 240,
+            "female": 540
+          },
+          "type": "career",
+          "careerId": "sports_coach",
+          "supportRole": "반복 훈련",
+          "battleProp": "훈련표",
+          "tier": 5,
+          "helperId": "helper-bulb",
+          "direction": "right"
+        },
+        {
+          "id": "career-unit-local_admin",
+          "name": "지역 행정직",
+          "title": "지역 행정직",
+          "index": 52,
+          "row": 3,
+          "frameBase": 244,
+          "animationFrames": [
+            244,
+            245,
+            246,
+            247
+          ],
+          "genderFrameBases": {
+            "male": 244,
+            "female": 544
+          },
+          "type": "career",
+          "careerId": "local_admin",
+          "supportRole": "기본기 유지",
+          "battleProp": "민원대장",
+          "tier": 5,
+          "helperId": "helper-files",
+          "direction": "right"
+        },
+        {
           "id": "helper-book",
-          "index": 0
+          "name": "helper-book",
+          "title": "helper-book",
+          "index": 56,
+          "row": 3,
+          "frameBase": 248,
+          "animationFrames": [
+            248,
+            249,
+            250,
+            251
+          ],
+          "genderFrameBases": {
+            "male": 248,
+            "female": 548
+          },
+          "type": "helper",
+          "battleProp": "book",
+          "helperId": "helper-book",
+          "direction": "right"
         },
         {
           "id": "helper-bulb",
-          "index": 1
+          "name": "helper-bulb",
+          "title": "helper-bulb",
+          "index": 60,
+          "row": 3,
+          "frameBase": 252,
+          "animationFrames": [
+            252,
+            253,
+            254,
+            255
+          ],
+          "genderFrameBases": {
+            "male": 252,
+            "female": 552
+          },
+          "type": "helper",
+          "battleProp": "bulb",
+          "helperId": "helper-bulb",
+          "direction": "right"
         },
         {
           "id": "helper-chart",
-          "index": 2
+          "name": "helper-chart",
+          "title": "helper-chart",
+          "index": 0,
+          "row": 4,
+          "frameBase": 256,
+          "animationFrames": [
+            256,
+            257,
+            258,
+            259
+          ],
+          "genderFrameBases": {
+            "male": 256,
+            "female": 556
+          },
+          "type": "helper",
+          "battleProp": "chart",
+          "helperId": "helper-chart",
+          "direction": "right"
         },
         {
           "id": "helper-chip",
-          "index": 3
+          "name": "helper-chip",
+          "title": "helper-chip",
+          "index": 4,
+          "row": 4,
+          "frameBase": 260,
+          "animationFrames": [
+            260,
+            261,
+            262,
+            263
+          ],
+          "genderFrameBases": {
+            "male": 260,
+            "female": 560
+          },
+          "type": "helper",
+          "battleProp": "chip",
+          "helperId": "helper-chip",
+          "direction": "right"
         },
         {
           "id": "helper-files",
-          "index": 4
+          "name": "helper-files",
+          "title": "helper-files",
+          "index": 8,
+          "row": 4,
+          "frameBase": 264,
+          "animationFrames": [
+            264,
+            265,
+            266,
+            267
+          ],
+          "genderFrameBases": {
+            "male": 264,
+            "female": 564
+          },
+          "type": "helper",
+          "battleProp": "files",
+          "helperId": "helper-files",
+          "direction": "right"
         },
         {
           "id": "helper-flask",
-          "index": 5
+          "name": "helper-flask",
+          "title": "helper-flask",
+          "index": 12,
+          "row": 4,
+          "frameBase": 268,
+          "animationFrames": [
+            268,
+            269,
+            270,
+            271
+          ],
+          "genderFrameBases": {
+            "male": 268,
+            "female": 568
+          },
+          "type": "helper",
+          "battleProp": "flask",
+          "helperId": "helper-flask",
+          "direction": "right"
         },
         {
           "id": "helper-globe",
-          "index": 6
+          "name": "helper-globe",
+          "title": "helper-globe",
+          "index": 16,
+          "row": 4,
+          "frameBase": 272,
+          "animationFrames": [
+            272,
+            273,
+            274,
+            275
+          ],
+          "genderFrameBases": {
+            "male": 272,
+            "female": 572
+          },
+          "type": "helper",
+          "battleProp": "globe",
+          "helperId": "helper-globe",
+          "direction": "right"
         },
         {
           "id": "helper-judge",
-          "index": 7
+          "name": "helper-judge",
+          "title": "helper-judge",
+          "index": 20,
+          "row": 4,
+          "frameBase": 276,
+          "animationFrames": [
+            276,
+            277,
+            278,
+            279
+          ],
+          "genderFrameBases": {
+            "male": 276,
+            "female": 576
+          },
+          "type": "helper",
+          "battleProp": "gavel",
+          "helperId": "helper-judge",
+          "direction": "right"
         },
         {
           "id": "helper-laptop",
-          "index": 8
+          "name": "helper-laptop",
+          "title": "helper-laptop",
+          "index": 24,
+          "row": 4,
+          "frameBase": 280,
+          "animationFrames": [
+            280,
+            281,
+            282,
+            283
+          ],
+          "genderFrameBases": {
+            "male": 280,
+            "female": 580
+          },
+          "type": "helper",
+          "battleProp": "laptop",
+          "helperId": "helper-laptop",
+          "direction": "right"
         },
         {
           "id": "helper-medic",
-          "index": 9
+          "name": "helper-medic",
+          "title": "helper-medic",
+          "index": 28,
+          "row": 4,
+          "frameBase": 284,
+          "animationFrames": [
+            284,
+            285,
+            286,
+            287
+          ],
+          "genderFrameBases": {
+            "male": 284,
+            "female": 584
+          },
+          "type": "helper",
+          "battleProp": "medic",
+          "helperId": "helper-medic",
+          "direction": "right"
         },
         {
           "id": "helper-mic",
-          "index": 10
+          "name": "helper-mic",
+          "title": "helper-mic",
+          "index": 32,
+          "row": 4,
+          "frameBase": 288,
+          "animationFrames": [
+            288,
+            289,
+            290,
+            291
+          ],
+          "genderFrameBases": {
+            "male": 288,
+            "female": 588
+          },
+          "type": "helper",
+          "battleProp": "mic",
+          "helperId": "helper-mic",
+          "direction": "right"
         },
         {
           "id": "helper-palette",
-          "index": 11
+          "name": "helper-palette",
+          "title": "helper-palette",
+          "index": 36,
+          "row": 4,
+          "frameBase": 292,
+          "animationFrames": [
+            292,
+            293,
+            294,
+            295
+          ],
+          "genderFrameBases": {
+            "male": 292,
+            "female": 592
+          },
+          "type": "helper",
+          "battleProp": "palette",
+          "helperId": "helper-palette",
+          "direction": "right"
         },
         {
           "id": "helper-teacher",
-          "index": 12
+          "name": "helper-teacher",
+          "title": "helper-teacher",
+          "index": 40,
+          "row": 4,
+          "frameBase": 296,
+          "animationFrames": [
+            296,
+            297,
+            298,
+            299
+          ],
+          "genderFrameBases": {
+            "male": 296,
+            "female": 596
+          },
+          "type": "helper",
+          "battleProp": "teacher",
+          "helperId": "helper-teacher",
+          "direction": "right"
         }
       ]
     },
@@ -2428,249 +4219,692 @@
       "id": "enemies",
       "token": "__STUDENT_ASSET_008__",
       "file": "assets/visual-enemies.png",
-      "cell": 96,
-      "width": 3840,
-      "height": 96,
+      "cell": 160,
+      "columns": 64,
+      "rows": 3,
+      "framesPerItem": 4,
+      "width": 10240,
+      "height": 480,
       "items": [
         {
           "id": "shelter-mob-1",
+          "name": "shelter 몬스터 1",
           "index": 0,
+          "row": 0,
+          "frameBase": 0,
+          "animationFrames": [
+            0,
+            1,
+            2,
+            3
+          ],
           "tone": "shelter",
-          "boss": false
+          "motif": "rent",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "shelter-mob-2",
-          "index": 1,
+          "name": "shelter 몬스터 2",
+          "index": 4,
+          "row": 0,
+          "frameBase": 4,
+          "animationFrames": [
+            4,
+            5,
+            6,
+            7
+          ],
           "tone": "shelter",
-          "boss": false
+          "motif": "rent",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "shelter-mob-3",
-          "index": 2,
+          "name": "shelter 몬스터 3",
+          "index": 8,
+          "row": 0,
+          "frameBase": 8,
+          "animationFrames": [
+            8,
+            9,
+            10,
+            11
+          ],
           "tone": "shelter",
-          "boss": false
+          "motif": "rent",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "shelter-boss",
-          "index": 3,
+          "name": "shelter 보스",
+          "index": 12,
+          "row": 0,
+          "frameBase": 12,
+          "animationFrames": [
+            12,
+            13,
+            14,
+            15
+          ],
           "tone": "shelter",
-          "boss": true
+          "motif": "rent",
+          "boss": true,
+          "direction": "left"
         },
         {
           "id": "studio-mob-1",
-          "index": 4,
+          "name": "studio 몬스터 1",
+          "index": 16,
+          "row": 0,
+          "frameBase": 16,
+          "animationFrames": [
+            16,
+            17,
+            18,
+            19
+          ],
           "tone": "studio",
-          "boss": false
+          "motif": "deadline",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "studio-mob-2",
-          "index": 5,
+          "name": "studio 몬스터 2",
+          "index": 20,
+          "row": 0,
+          "frameBase": 20,
+          "animationFrames": [
+            20,
+            21,
+            22,
+            23
+          ],
           "tone": "studio",
-          "boss": false
+          "motif": "deadline",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "studio-mob-3",
-          "index": 6,
+          "name": "studio 몬스터 3",
+          "index": 24,
+          "row": 0,
+          "frameBase": 24,
+          "animationFrames": [
+            24,
+            25,
+            26,
+            27
+          ],
           "tone": "studio",
-          "boss": false
+          "motif": "deadline",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "studio-boss",
-          "index": 7,
+          "name": "studio 보스",
+          "index": 28,
+          "row": 0,
+          "frameBase": 28,
+          "animationFrames": [
+            28,
+            29,
+            30,
+            31
+          ],
           "tone": "studio",
-          "boss": true
+          "motif": "deadline",
+          "boss": true,
+          "direction": "left"
         },
         {
           "id": "neighborhood-mob-1",
-          "index": 8,
+          "name": "neighborhood 몬스터 1",
+          "index": 32,
+          "row": 0,
+          "frameBase": 32,
+          "animationFrames": [
+            32,
+            33,
+            34,
+            35
+          ],
           "tone": "neighborhood",
-          "boss": false
+          "motif": "errand",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "neighborhood-mob-2",
-          "index": 9,
+          "name": "neighborhood 몬스터 2",
+          "index": 36,
+          "row": 0,
+          "frameBase": 36,
+          "animationFrames": [
+            36,
+            37,
+            38,
+            39
+          ],
           "tone": "neighborhood",
-          "boss": false
+          "motif": "errand",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "neighborhood-mob-3",
-          "index": 10,
+          "name": "neighborhood 몬스터 3",
+          "index": 40,
+          "row": 0,
+          "frameBase": 40,
+          "animationFrames": [
+            40,
+            41,
+            42,
+            43
+          ],
           "tone": "neighborhood",
-          "boss": false
+          "motif": "errand",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "neighborhood-boss",
-          "index": 11,
+          "name": "neighborhood 보스",
+          "index": 44,
+          "row": 0,
+          "frameBase": 44,
+          "animationFrames": [
+            44,
+            45,
+            46,
+            47
+          ],
           "tone": "neighborhood",
-          "boss": true
+          "motif": "errand",
+          "boss": true,
+          "direction": "left"
         },
         {
           "id": "company-mob-1",
-          "index": 12,
+          "name": "company 몬스터 1",
+          "index": 48,
+          "row": 0,
+          "frameBase": 48,
+          "animationFrames": [
+            48,
+            49,
+            50,
+            51
+          ],
           "tone": "company",
-          "boss": false
+          "motif": "inbox",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "company-mob-2",
-          "index": 13,
+          "name": "company 몬스터 2",
+          "index": 52,
+          "row": 0,
+          "frameBase": 52,
+          "animationFrames": [
+            52,
+            53,
+            54,
+            55
+          ],
           "tone": "company",
-          "boss": false
+          "motif": "inbox",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "company-mob-3",
-          "index": 14,
+          "name": "company 몬스터 3",
+          "index": 56,
+          "row": 0,
+          "frameBase": 56,
+          "animationFrames": [
+            56,
+            57,
+            58,
+            59
+          ],
           "tone": "company",
-          "boss": false
+          "motif": "inbox",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "company-boss",
-          "index": 15,
+          "name": "company 보스",
+          "index": 60,
+          "row": 0,
+          "frameBase": 60,
+          "animationFrames": [
+            60,
+            61,
+            62,
+            63
+          ],
           "tone": "company",
-          "boss": true
+          "motif": "inbox",
+          "boss": true,
+          "direction": "left"
         },
         {
           "id": "office-mob-1",
-          "index": 16,
+          "name": "office 몬스터 1",
+          "index": 0,
+          "row": 1,
+          "frameBase": 64,
+          "animationFrames": [
+            64,
+            65,
+            66,
+            67
+          ],
           "tone": "office",
-          "boss": false
+          "motif": "meeting",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "office-mob-2",
-          "index": 17,
+          "name": "office 몬스터 2",
+          "index": 4,
+          "row": 1,
+          "frameBase": 68,
+          "animationFrames": [
+            68,
+            69,
+            70,
+            71
+          ],
           "tone": "office",
-          "boss": false
+          "motif": "meeting",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "office-mob-3",
-          "index": 18,
+          "name": "office 몬스터 3",
+          "index": 8,
+          "row": 1,
+          "frameBase": 72,
+          "animationFrames": [
+            72,
+            73,
+            74,
+            75
+          ],
           "tone": "office",
-          "boss": false
+          "motif": "meeting",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "office-boss",
-          "index": 19,
+          "name": "office 보스",
+          "index": 12,
+          "row": 1,
+          "frameBase": 76,
+          "animationFrames": [
+            76,
+            77,
+            78,
+            79
+          ],
           "tone": "office",
-          "boss": true
+          "motif": "meeting",
+          "boss": true,
+          "direction": "left"
         },
         {
           "id": "asset-mob-1",
-          "index": 20,
+          "name": "asset 몬스터 1",
+          "index": 16,
+          "row": 1,
+          "frameBase": 80,
+          "animationFrames": [
+            80,
+            81,
+            82,
+            83
+          ],
           "tone": "asset",
-          "boss": false
+          "motif": "market",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "asset-mob-2",
-          "index": 21,
+          "name": "asset 몬스터 2",
+          "index": 20,
+          "row": 1,
+          "frameBase": 84,
+          "animationFrames": [
+            84,
+            85,
+            86,
+            87
+          ],
           "tone": "asset",
-          "boss": false
+          "motif": "market",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "asset-mob-3",
-          "index": 22,
+          "name": "asset 몬스터 3",
+          "index": 24,
+          "row": 1,
+          "frameBase": 88,
+          "animationFrames": [
+            88,
+            89,
+            90,
+            91
+          ],
           "tone": "asset",
-          "boss": false
+          "motif": "market",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "asset-boss",
-          "index": 23,
+          "name": "asset 보스",
+          "index": 28,
+          "row": 1,
+          "frameBase": 92,
+          "animationFrames": [
+            92,
+            93,
+            94,
+            95
+          ],
           "tone": "asset",
-          "boss": true
+          "motif": "market",
+          "boss": true,
+          "direction": "left"
         },
         {
           "id": "national-mob-1",
-          "index": 24,
+          "name": "national 몬스터 1",
+          "index": 32,
+          "row": 1,
+          "frameBase": 96,
+          "animationFrames": [
+            96,
+            97,
+            98,
+            99
+          ],
           "tone": "national",
-          "boss": false
+          "motif": "permit",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "national-mob-2",
-          "index": 25,
+          "name": "national 몬스터 2",
+          "index": 36,
+          "row": 1,
+          "frameBase": 100,
+          "animationFrames": [
+            100,
+            101,
+            102,
+            103
+          ],
           "tone": "national",
-          "boss": false
+          "motif": "permit",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "national-mob-3",
-          "index": 26,
+          "name": "national 몬스터 3",
+          "index": 40,
+          "row": 1,
+          "frameBase": 104,
+          "animationFrames": [
+            104,
+            105,
+            106,
+            107
+          ],
           "tone": "national",
-          "boss": false
+          "motif": "permit",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "national-boss",
-          "index": 27,
+          "name": "national 보스",
+          "index": 44,
+          "row": 1,
+          "frameBase": 108,
+          "animationFrames": [
+            108,
+            109,
+            110,
+            111
+          ],
           "tone": "national",
-          "boss": true
+          "motif": "permit",
+          "boss": true,
+          "direction": "left"
         },
         {
           "id": "global-mob-1",
-          "index": 28,
+          "name": "global 몬스터 1",
+          "index": 48,
+          "row": 1,
+          "frameBase": 112,
+          "animationFrames": [
+            112,
+            113,
+            114,
+            115
+          ],
           "tone": "global",
-          "boss": false
+          "motif": "passport",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "global-mob-2",
-          "index": 29,
+          "name": "global 몬스터 2",
+          "index": 52,
+          "row": 1,
+          "frameBase": 116,
+          "animationFrames": [
+            116,
+            117,
+            118,
+            119
+          ],
           "tone": "global",
-          "boss": false
+          "motif": "passport",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "global-mob-3",
-          "index": 30,
+          "name": "global 몬스터 3",
+          "index": 56,
+          "row": 1,
+          "frameBase": 120,
+          "animationFrames": [
+            120,
+            121,
+            122,
+            123
+          ],
           "tone": "global",
-          "boss": false
+          "motif": "passport",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "global-boss",
-          "index": 31,
+          "name": "global 보스",
+          "index": 60,
+          "row": 1,
+          "frameBase": 124,
+          "animationFrames": [
+            124,
+            125,
+            126,
+            127
+          ],
           "tone": "global",
-          "boss": true
+          "motif": "passport",
+          "boss": true,
+          "direction": "left"
         },
         {
           "id": "future-mob-1",
-          "index": 32,
+          "name": "future 몬스터 1",
+          "index": 0,
+          "row": 2,
+          "frameBase": 128,
+          "animationFrames": [
+            128,
+            129,
+            130,
+            131
+          ],
           "tone": "future",
-          "boss": false
+          "motif": "circuit",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "future-mob-2",
-          "index": 33,
+          "name": "future 몬스터 2",
+          "index": 4,
+          "row": 2,
+          "frameBase": 132,
+          "animationFrames": [
+            132,
+            133,
+            134,
+            135
+          ],
           "tone": "future",
-          "boss": false
+          "motif": "circuit",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "future-mob-3",
-          "index": 34,
+          "name": "future 몬스터 3",
+          "index": 8,
+          "row": 2,
+          "frameBase": 136,
+          "animationFrames": [
+            136,
+            137,
+            138,
+            139
+          ],
           "tone": "future",
-          "boss": false
+          "motif": "circuit",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "future-boss",
-          "index": 35,
+          "name": "future 보스",
+          "index": 12,
+          "row": 2,
+          "frameBase": 140,
+          "animationFrames": [
+            140,
+            141,
+            142,
+            143
+          ],
           "tone": "future",
-          "boss": true
+          "motif": "circuit",
+          "boss": true,
+          "direction": "left"
         },
         {
           "id": "summit-mob-1",
-          "index": 36,
+          "name": "summit 몬스터 1",
+          "index": 16,
+          "row": 2,
+          "frameBase": 144,
+          "animationFrames": [
+            144,
+            145,
+            146,
+            147
+          ],
           "tone": "summit",
-          "boss": false
+          "motif": "summit",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "summit-mob-2",
-          "index": 37,
+          "name": "summit 몬스터 2",
+          "index": 20,
+          "row": 2,
+          "frameBase": 148,
+          "animationFrames": [
+            148,
+            149,
+            150,
+            151
+          ],
           "tone": "summit",
-          "boss": false
+          "motif": "summit",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "summit-mob-3",
-          "index": 38,
+          "name": "summit 몬스터 3",
+          "index": 24,
+          "row": 2,
+          "frameBase": 152,
+          "animationFrames": [
+            152,
+            153,
+            154,
+            155
+          ],
           "tone": "summit",
-          "boss": false
+          "motif": "summit",
+          "boss": false,
+          "direction": "left"
         },
         {
           "id": "summit-boss",
-          "index": 39,
+          "name": "summit 보스",
+          "index": 28,
+          "row": 2,
+          "frameBase": 156,
+          "animationFrames": [
+            156,
+            157,
+            158,
+            159
+          ],
           "tone": "summit",
-          "boss": true
+          "motif": "summit",
+          "boss": true,
+          "direction": "left"
         }
       ]
     },
@@ -3487,6 +5721,84 @@
           "id": "expedition-backdrop-summit",
           "backdrop": "summit",
           "row": 0
+        }
+      ]
+    },
+    {
+      "id": "battleRoadBackdrops",
+      "token": "__STUDENT_ASSET_011__",
+      "file": "assets/visual-battle-road-backdrop-elementary.png",
+      "width": 6688,
+      "height": 1200,
+      "rowHeight": 300,
+      "items": [
+        {
+          "id": "battle-road-backdrop-elementary",
+          "backdrop": "elementary",
+          "sceneClass": "scene-elementary",
+          "row": 0,
+          "token": "__STUDENT_ASSET_011__",
+          "file": "assets/visual-battle-road-backdrop-elementary.png",
+          "path": "C:\\Users\\상원\\Downloads\\Student\\src\\snapshot\\assets\\visual-battle-road-backdrop-elementary.png",
+          "width": 6688,
+          "height": 300,
+          "roadOverlay": {
+            "topPercent": 60,
+            "bottomPercent": 100,
+            "opacity": 0.86,
+            "detailPx": 108
+          }
+        },
+        {
+          "id": "battle-road-backdrop-middle",
+          "backdrop": "middle",
+          "sceneClass": "scene-middle",
+          "row": 1,
+          "token": "__STUDENT_ASSET_012__",
+          "file": "assets/visual-battle-road-backdrop-middle.png",
+          "path": "C:\\Users\\상원\\Downloads\\Student\\src\\snapshot\\assets\\visual-battle-road-backdrop-middle.png",
+          "width": 6688,
+          "height": 300,
+          "roadOverlay": {
+            "topPercent": 60,
+            "bottomPercent": 100,
+            "opacity": 0.86,
+            "detailPx": 108
+          }
+        },
+        {
+          "id": "battle-road-backdrop-high",
+          "backdrop": "high",
+          "sceneClass": "scene-high",
+          "row": 2,
+          "token": "__STUDENT_ASSET_013__",
+          "file": "assets/visual-battle-road-backdrop-high.png",
+          "path": "C:\\Users\\상원\\Downloads\\Student\\src\\snapshot\\assets\\visual-battle-road-backdrop-high.png",
+          "width": 6688,
+          "height": 300,
+          "roadOverlay": {
+            "topPercent": 60,
+            "bottomPercent": 100,
+            "opacity": 0.86,
+            "detailPx": 108
+          }
+        },
+        {
+          "id": "battle-road-backdrop-repeater",
+          "backdrop": "repeater",
+          "sceneClass": "scene-repeater",
+          "row": 3,
+          "token": "__STUDENT_ASSET_014__",
+          "file": "assets/visual-battle-road-backdrop-repeater.png",
+          "path": "C:\\Users\\상원\\Downloads\\Student\\src\\snapshot\\assets\\visual-battle-road-backdrop-repeater.png",
+          "width": 6688,
+          "height": 300,
+          "roadOverlay": {
+            "topPercent": 60,
+            "bottomPercent": 100,
+            "opacity": 0.86,
+            "detailPx": 108
+          }
         }
       ]
     }

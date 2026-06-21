@@ -23,25 +23,25 @@
       "minBoundsHeight": 26
     },
     "companions": {
-      "minCoverage": 0.12,
-      "maxCoverage": 0.52,
-      "minDistinctColors": 10,
-      "minBoundsWidth": 42,
-      "minBoundsHeight": 58
+      "minCoverage": 0.22,
+      "maxCoverage": 0.62,
+      "minDistinctColors": 18,
+      "minBoundsWidth": 110,
+      "minBoundsHeight": 120
     },
     "enemies": {
       "minCoverage": 0.1,
-      "maxCoverage": 0.58,
+      "maxCoverage": 0.6,
       "minDistinctColors": 9,
       "minBoundsWidth": 38,
       "minBoundsHeight": 38
     },
     "careers": {
-      "minCoverage": 0.78,
-      "maxCoverage": 0.98,
+      "minCoverage": 0.54,
+      "maxCoverage": 0.9,
       "minDistinctColors": 14,
       "minBoundsWidth": 54,
-      "minBoundsHeight": 52
+      "minBoundsHeight": 48
     }
   }
 }

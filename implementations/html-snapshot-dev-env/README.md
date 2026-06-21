@@ -23,7 +23,7 @@
 - `npm run reference:refresh`: reference HTML에서 `data/`, `extracted/`를 명시적으로 갱신.
 - `npm run verify`: reference 감사 후 스냅샷 재조립.
 - `npm run verify:mobile`: 개발 중 기본 검증. 데이터 편집분을 덮어쓰지 않는다.
-- `npm run build:web`: 스냅샷 소스에서 Capacitor용 `dist/index.html` 생성.
+- `npm run build:web`: 스냅샷 소스에서 파일 확인용 `index.html`, 공유 HTML, Capacitor용 `dist/index.html`을 함께 생성.
 
 ## 검증 결과
 

@@ -204,10 +204,19 @@ try {
   });
   await page.waitForTimeout(300);
 
-  const afterRetake = await page.evaluate(() => {
+  await page.evaluate(() => {
+    const autoButton = [...document.querySelectorAll(".scene-controls .hud-button")].find((button) =>
+      button.innerText.trim() === "자동",
+    );
+    autoButton?.click();
+  });
+  await page.waitForTimeout(250);
+
+  const collectBattleSnapshot = () => page.evaluate(() => {
     const text = document.body.innerText;
     const sceneEnemies = [...document.querySelectorAll(".battle-scene-enemy")];
     const sceneMonsterArt = [...document.querySelectorAll(".battle-scene-monster-art")];
+    const state = JSON.parse(localStorage.getItem("student-idle-rpg-save-v1"));
     return {
       text,
       battleCards: document.querySelectorAll(".battle-enemy-card").length,
@@ -217,11 +226,22 @@ try {
       sceneEnemyImages: sceneMonsterArt.filter((monster) => getComputedStyle(monster).backgroundImage.includes("data:image")).length,
       sceneEnemyFrames: new Set(sceneMonsterArt.map((monster) => [...monster.classList].find((item) => item.startsWith("main-monster-"))).filter(Boolean)).size,
       sceneBosses: sceneEnemies.filter((enemy) => enemy.classList.contains("boss")).length,
+      sceneSuneungEnemies: sceneEnemies.filter((enemy) => enemy.classList.contains("suneung")).length,
       sceneHpBars: document.querySelectorAll(".battle-scene-enemy .battle-scene-hp").length,
       normalHpBars: document.querySelectorAll(".battle-scene-enemy.normal .battle-scene-hp").length,
-      gradeId: JSON.parse(localStorage.getItem("student-idle-rpg-save-v1")).current.gradeId,
+      battleKind: state.current.battle?.kind ?? (sceneEnemies.some((enemy) => enemy.classList.contains("suneung")) ? "suneung" : sceneEnemies.length > 0 ? "grade" : ""),
+      gradeId: state.current.gradeId,
+      retakeCount: state.current.retakeCount,
+      awaitingDecision: state.current.awaitingDecision,
+      outcomeCareerCount: state.current.outcome?.careerCandidates?.length ?? 0,
+      roadMode: state.current.road?.mode ?? "",
+      roadEncounterIndex: state.current.road?.encounterIndex ?? -1,
+      roadEncounterTotal: state.current.road?.encounterTotal ?? -1,
+      roadPhaseClass: document.querySelector(".battle-road-lineup")?.getAttribute("data-road-phase") ?? "",
     };
   });
+
+  const afterRetake = await collectBattleSnapshot();
 
   const clickBattleComplete = async () => {
     await page.evaluate(() => {
@@ -229,35 +249,53 @@ try {
       if (!button) throw new Error("Battle complete button not found");
       button.click();
     });
-    await page.waitForTimeout(500);
+  };
+
+  const waitForEncounter = async ({ kind, index, enemies }) => {
+    try {
+      await page.waitForFunction(
+        ({ kind, index, enemies }) => {
+          const lineup = document.querySelector(".battle-road-lineup");
+          if (!lineup) return false;
+          if (kind && !lineup.classList.contains(kind)) return false;
+          if (Number(lineup.getAttribute("data-encounter-index")) !== index) return false;
+          return document.querySelectorAll(".battle-scene-enemy").length === enemies;
+        },
+        { kind, index, enemies },
+        { timeout: 6000 },
+      );
+    } catch (error) {
+      const snapshot = await collectBattleSnapshot();
+      throw new Error(`Expected ${kind} encounter ${index} with ${enemies} enemies, got ${JSON.stringify(snapshot)}`, {
+        cause: error,
+      });
+    }
+    await page.waitForTimeout(150);
   };
 
   await clickBattleComplete();
-
-  const afterYearComplete = await page.evaluate(() => {
-    const text = document.body.innerText;
-    const state = JSON.parse(localStorage.getItem("student-idle-rpg-save-v1"));
-    const sceneEnemies = [...document.querySelectorAll(".battle-scene-enemy")];
-    const sceneMonsterArt = [...document.querySelectorAll(".battle-scene-monster-art")];
-    return {
-      text,
-      battleCards: document.querySelectorAll(".battle-enemy-card").length,
-      arenaTextCards: document.querySelectorAll(".pixel-arena .battle-enemy-card").length,
-      suneungCards: document.querySelectorAll(".battle-enemy-card.suneung").length,
-      sceneEnemies: sceneEnemies.length,
-      sceneEnemyImages: sceneMonsterArt.filter((monster) => getComputedStyle(monster).backgroundImage.includes("data:image")).length,
-      sceneEnemyFrames: new Set(sceneMonsterArt.map((monster) => [...monster.classList].find((item) => item.startsWith("main-monster-"))).filter(Boolean)).size,
-      sceneSuneungEnemies: sceneEnemies.filter((enemy) => enemy.classList.contains("suneung")).length,
-      sceneHpBars: document.querySelectorAll(".battle-scene-enemy .battle-scene-hp").length,
-      awaitingDecision: state.current.awaitingDecision,
-      gradeId: state.current.gradeId,
-      retakeCount: state.current.retakeCount,
-      battleKind: state.current.battle?.kind ?? "",
-      outcomeCareerCount: state.current.outcome?.careerCandidates?.length ?? 0,
-    };
-  });
-
+  await waitForEncounter({ kind: "grade", index: 1, enemies: 3 });
+  const afterRetakeFirstEncounter = await collectBattleSnapshot();
   await clickBattleComplete();
+  await waitForEncounter({ kind: "grade", index: 2, enemies: 3 });
+  await clickBattleComplete();
+  await waitForEncounter({ kind: "grade", index: 3, enemies: 3 });
+  await clickBattleComplete();
+  await waitForEncounter({ kind: "suneung", index: 0, enemies: 1 });
+  const afterYearComplete = await collectBattleSnapshot();
+  await clickBattleComplete();
+  await waitForEncounter({ kind: "suneung", index: 1, enemies: 1 });
+  await clickBattleComplete();
+  await waitForEncounter({ kind: "suneung", index: 2, enemies: 1 });
+  await clickBattleComplete();
+  await waitForEncounter({ kind: "suneung", index: 3, enemies: 2 });
+  const beforeFinalSuneung = await collectBattleSnapshot();
+  await clickBattleComplete();
+  await page.waitForFunction(
+    () => JSON.parse(localStorage.getItem("student-idle-rpg-save-v1")).current.awaitingDecision === true,
+    null,
+    { timeout: 6000 },
+  );
 
   const afterSuneungComplete = await page.evaluate(() => {
     const decisionText = `${String.fromCharCode(0xacb0, 0xacfc)} ${String.fromCharCode(0xb300, 0xae30)}`;
@@ -274,26 +312,36 @@ try {
 
   const failures = [];
   if (afterRetake.gradeId !== "REPEATER") failures.push(`Expected REPEATER after retake, got ${afterRetake.gradeId}`);
-  if (!afterRetake.text.includes("12개월")) failures.push("Retake year does not show 12-month battle copy");
+  if (!afterRetake.text.includes("3개월 조우")) failures.push("Retake year does not show 3-month encounter copy");
   if (afterRetake.text.includes("수능 5과목")) failures.push("Retake immediately shows suneung battle copy");
   if (afterRetake.arenaTextCards !== 0) failures.push(`Expected no retake-year text cards in arena, got ${afterRetake.arenaTextCards}`);
-  if (afterRetake.sceneEnemies !== 12) failures.push(`Expected 12 retake-year scene enemies, got ${afterRetake.sceneEnemies}`);
-  if (afterRetake.sceneEnemyImages !== 12) failures.push(`Expected 12 rendered retake-year scene enemy images, got ${afterRetake.sceneEnemyImages}`);
-  if (afterRetake.sceneEnemyFrames < 8) failures.push(`Expected varied retake-year scene enemy frames, got ${afterRetake.sceneEnemyFrames}`);
-  if (afterRetake.sceneBosses !== 4) failures.push(`Expected 4 retake-year scene bosses, got ${afterRetake.sceneBosses}`);
-  if (afterRetake.sceneHpBars !== 4) failures.push(`Expected 4 retake-year boss HP bars, got ${afterRetake.sceneHpBars}`);
+  if (afterRetake.sceneEnemies !== 3) failures.push(`Expected 3 retake-year encounter enemies, got ${afterRetake.sceneEnemies}`);
+  if (afterRetake.sceneEnemyImages !== 3) failures.push(`Expected 3 rendered retake-year scene enemy images, got ${afterRetake.sceneEnemyImages}`);
+  if (afterRetake.sceneEnemyFrames < 2) failures.push(`Expected varied retake-year scene enemy frames, got ${afterRetake.sceneEnemyFrames}`);
+  if (afterRetake.sceneBosses !== 1) failures.push(`Expected 1 retake-year scene boss, got ${afterRetake.sceneBosses}`);
+  if (afterRetake.sceneHpBars !== 1) failures.push(`Expected 1 retake-year boss HP bar, got ${afterRetake.sceneHpBars}`);
   if (afterRetake.normalHpBars !== 0) failures.push(`Expected no normal monster HP bars, got ${afterRetake.normalHpBars}`);
   if (afterRetake.suneungCards !== 0) failures.push(`Expected no immediate suneung cards, got ${afterRetake.suneungCards}`);
+  if (afterRetake.roadMode !== "school") failures.push(`Expected retake road mode school, got ${afterRetake.roadMode}`);
+  if (afterRetake.roadEncounterIndex !== 0) failures.push(`Expected first retake encounter index 0, got ${afterRetake.roadEncounterIndex}`);
+  if (afterRetake.roadEncounterTotal !== 4) failures.push(`Expected 4 retake encounters, got ${afterRetake.roadEncounterTotal}`);
+  if (afterRetakeFirstEncounter.roadEncounterIndex !== 1) failures.push(`Expected retake second encounter index 1 after one completion, got ${afterRetakeFirstEncounter.roadEncounterIndex}`);
+  if (afterRetakeFirstEncounter.sceneEnemies !== 3) failures.push(`Expected 3 enemies in second retake encounter, got ${afterRetakeFirstEncounter.sceneEnemies}`);
   if (afterYearComplete.awaitingDecision) failures.push("Retake year completion returned to decision UI before suneung battle");
   if (afterYearComplete.battleKind !== "suneung") failures.push(`Expected suneung battle after retake year, got ${afterYearComplete.battleKind}`);
   if (afterYearComplete.arenaTextCards !== 0) failures.push(`Expected no suneung text cards in arena, got ${afterYearComplete.arenaTextCards}`);
-  if (afterYearComplete.sceneEnemies !== 5) failures.push(`Expected 5 suneung scene enemies after retake year, got ${afterYearComplete.sceneEnemies}`);
-  if (afterYearComplete.sceneSuneungEnemies !== 5) failures.push(`Expected 5 suneung scene enemy classes, got ${afterYearComplete.sceneSuneungEnemies}`);
-  if (afterYearComplete.sceneEnemyImages !== 5) failures.push(`Expected 5 rendered suneung scene enemy images, got ${afterYearComplete.sceneEnemyImages}`);
-  if (afterYearComplete.sceneEnemyFrames < 4) failures.push(`Expected varied suneung scene enemy frames, got ${afterYearComplete.sceneEnemyFrames}`);
-  if (afterYearComplete.sceneHpBars !== 5) failures.push(`Expected 5 suneung HP bars, got ${afterYearComplete.sceneHpBars}`);
-  if (!afterYearComplete.text.includes("수능 5과목")) failures.push("Retake year completion does not show suneung battle copy");
+  if (afterYearComplete.sceneEnemies !== 1) failures.push(`Expected 1 suneung scene enemy after retake year, got ${afterYearComplete.sceneEnemies}`);
+  if (afterYearComplete.sceneSuneungEnemies !== 1) failures.push(`Expected 1 suneung scene enemy class, got ${afterYearComplete.sceneSuneungEnemies}`);
+  if (afterYearComplete.sceneEnemyImages !== 1) failures.push(`Expected 1 rendered suneung scene enemy image, got ${afterYearComplete.sceneEnemyImages}`);
+  if (afterYearComplete.sceneHpBars !== 1) failures.push(`Expected 1 suneung HP bar, got ${afterYearComplete.sceneHpBars}`);
+  if (!afterYearComplete.text.includes("수능 1/4")) failures.push("Retake year completion does not show first suneung encounter copy");
+  if (afterYearComplete.roadMode !== "suneung") failures.push(`Expected suneung road mode after retake year, got ${afterYearComplete.roadMode}`);
+  if (afterYearComplete.roadEncounterIndex !== 0) failures.push(`Expected first suneung encounter index 0, got ${afterYearComplete.roadEncounterIndex}`);
   if (afterYearComplete.outcomeCareerCount !== 0) failures.push(`Expected no outcome before retake suneung result, got ${afterYearComplete.outcomeCareerCount}`);
+  if (beforeFinalSuneung.sceneEnemies !== 2) failures.push(`Expected 2 final inquiry enemies, got ${beforeFinalSuneung.sceneEnemies}`);
+  if (beforeFinalSuneung.sceneSuneungEnemies !== 2) failures.push(`Expected 2 final inquiry suneung classes, got ${beforeFinalSuneung.sceneSuneungEnemies}`);
+  if (beforeFinalSuneung.sceneHpBars !== 2) failures.push(`Expected 2 final inquiry HP bars, got ${beforeFinalSuneung.sceneHpBars}`);
+  if (beforeFinalSuneung.roadEncounterIndex !== 3) failures.push(`Expected final suneung encounter index 3, got ${beforeFinalSuneung.roadEncounterIndex}`);
   if (!afterSuneungComplete.hasDecisionText) failures.push("Retake suneung completion did not return to decision-ready UI");
   if (!afterSuneungComplete.awaitingDecision) failures.push("Retake suneung completion did not set awaitingDecision");
   if (afterSuneungComplete.gradeId !== "REPEATER") failures.push(`Expected gradeId to remain REPEATER after suneung completion, got ${afterSuneungComplete.gradeId}`);
@@ -301,14 +349,14 @@ try {
   if (afterSuneungComplete.outcomeCareerCount !== careers.length) failures.push(`Expected ${careers.length} career candidates after retake suneung result, got ${afterSuneungComplete.outcomeCareerCount}`);
   if (consoleErrors.length > 0) failures.push(`Console errors: ${consoleErrors.slice(0, 3).join(" | ")}`);
 
-  console.log(JSON.stringify({ baseUrl: `http://127.0.0.1:${port}/`, afterRetake, afterYearComplete, afterSuneungComplete, failures }, null, 2));
+  console.log(JSON.stringify({ baseUrl: `http://127.0.0.1:${port}/`, afterRetake, afterRetakeFirstEncounter, afterYearComplete, beforeFinalSuneung, afterSuneungComplete, failures }, null, 2));
 
   if (failures.length > 0) {
     console.error(`RETAKE_YEAR_SMOKE_FAILED failures=${failures.length}`);
     process.exit(1);
   }
 
-  console.log(`RETAKE_YEAR_SMOKE_OK yearSceneEnemies=${afterRetake.sceneEnemies} suneungSceneEnemies=${afterYearComplete.sceneEnemies} retakeCount=${afterSuneungComplete.retakeCount}`);
+  console.log(`RETAKE_YEAR_SMOKE_OK yearSceneEnemies=${afterRetake.sceneEnemies} suneungFirstEnemies=${afterYearComplete.sceneEnemies} suneungFinalEnemies=${beforeFinalSuneung.sceneEnemies} retakeCount=${afterSuneungComplete.retakeCount}`);
 } finally {
   await browser.close();
   await closeServer(server);

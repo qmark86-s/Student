@@ -7,6 +7,8 @@ from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw
 
+from sprite_style_utils import apply_cute_sd_style, fit_frames_to_common_axis, load_sprite_style_profile, sprite_style_metrics
+
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "data" / "character_animation_manifest.json"
@@ -30,17 +32,50 @@ def remove_green_key(image: Image.Image) -> Image.Image:
     ]
     key = max(corners, key=lambda color: color[1] - max(color[0], color[2]))
     kr, kg, kb, _ = key
+    if max(color[3] for color in corners) <= 8:
+        return rgba
 
     for y in range(rgba.height):
         for x in range(rgba.width):
             r, g, b, a = pixels[x, y]
             distance = math.sqrt((r - kr) ** 2 + (g - kg) ** 2 + (b - kb) ** 2)
             green_bias = g - max(r, b)
-            if distance < 44 or green_bias > 92:
+            is_key_pixel = distance < 44
+            is_neon_matte = green_bias > 92
+            is_hard_key = g >= 210 and r < 80 and b < 80
+            if is_key_pixel or is_neon_matte or is_hard_key:
                 pixels[x, y] = (r, g, b, 0)
             elif green_bias > 42:
                 new_alpha = max(0, min(a, int((green_bias - 42) * 2.4)))
                 pixels[x, y] = (r, g, b, 255 - new_alpha)
+    return rgba
+
+
+def scrub_neon_green_matte(image: Image.Image) -> Image.Image:
+    rgba = image.convert("RGBA")
+    pixels = rgba.load()
+    for y in range(rgba.height):
+        for x in range(rgba.width):
+            r, g, b, a = pixels[x, y]
+            green_bias = g - max(r, b)
+            is_neon_key = g >= 235 and r <= 80 and b <= 80 and green_bias >= 130
+            is_tiny_alpha_key_shadow = a <= 10 and g >= 50 and green_bias >= 20
+            is_low_alpha_green_edge = a <= 32 and g >= 180 and green_bias >= 80
+            is_low_alpha_key_shadow = a <= 64 and r <= 50 and b <= 50 and g >= 110 and green_bias >= 70
+            is_dark_key_shadow = a <= 80 and r <= 35 and b <= 35 and 90 <= g <= 150 and green_bias >= 75
+            if a > 0 and (is_neon_key or is_tiny_alpha_key_shadow or is_low_alpha_green_edge or is_low_alpha_key_shadow or is_dark_key_shadow):
+                pixels[x, y] = (r, g, b, 0)
+    return rgba
+
+
+def stabilize_final_alpha(image: Image.Image) -> Image.Image:
+    rgba = image.convert("RGBA")
+    pixels = rgba.load()
+    for y in range(rgba.height):
+        for x in range(rgba.width):
+            r, g, b, a = pixels[x, y]
+            if a > 10:
+                pixels[x, y] = (r, g, b, max(a, 184))
     return rgba
 
 
@@ -176,11 +211,20 @@ def load_move_sources(character: dict, frame_count: int) -> tuple[list[Image.Ima
     return None, "missing"
 
 
-def prepare_frame(frame: Image.Image, config: dict) -> Image.Image:
+def prepare_frame(frame: Image.Image, config: dict, style_profile: dict) -> Image.Image:
     cleaned = remove_sheet_guides(frame)
     normalized = reanchor_to_axis(normalize_to_axis(cleaned, config), config)
     cleaned_normalized = remove_sheet_guides(normalized)
-    return reanchor_to_axis(normalize_to_axis(cleaned_normalized, config), config)
+    restyled = apply_cute_sd_style(reanchor_to_axis(normalize_to_axis(cleaned_normalized, config), config), config, style_profile, "characters")
+    return reanchor_to_axis(restyled, config)
+
+
+def prepare_frames(frames: list[Image.Image], config: dict, style_profile: dict) -> list[Image.Image]:
+    styled = [prepare_frame(frame, config, style_profile) for frame in frames]
+    return [
+        reanchor_to_axis(stabilize_final_alpha(scrub_neon_green_matte(reanchor_to_axis(frame, config))), config)
+        for frame in fit_frames_to_common_axis(styled, config, style_profile, "characters")
+    ]
 
 
 def frame_difference(a: Image.Image, b: Image.Image) -> float:
@@ -262,7 +306,14 @@ def main() -> None:
         "baselineY": manifest["baselineY"],
         "frameCount": frame_count,
         "minFrameDifference": min_frame_difference,
+        "styleProfile": None,
         "characters": [],
+    }
+    style_profile = load_sprite_style_profile()
+    report["styleProfile"] = {
+        "id": style_profile.get("id"),
+        "enabled": bool(style_profile.get("enabled")),
+        "reference": style_profile.get("reference"),
     }
 
     for character in manifest["characters"]:
@@ -285,7 +336,7 @@ def main() -> None:
             )
             continue
 
-        frames = [prepare_frame(frame, manifest) for frame in raw_frames]
+        frames = prepare_frames(raw_frames, manifest, style_profile)
         pose_delta = pose_difference_report(frames)
         if pose_delta["minimum"] < min_frame_difference:
             if out_dir.exists():
@@ -311,7 +362,9 @@ def main() -> None:
             path = out_dir / f"move_{index}.png"
             frame.save(path)
             frame_paths.append(str(path.relative_to(ROOT)).replace("\\", "/"))
-            metrics.append(frame_metrics(frame, manifest))
+            metric = frame_metrics(frame, manifest)
+            metric["style"] = sprite_style_metrics(frame)
+            metrics.append(metric)
 
         sheet = write_axis_sheet(character["id"], frames, manifest)
         report["characters"].append(

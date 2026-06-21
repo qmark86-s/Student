@@ -1,8 +1,12 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname, relative, resolve, sep } from "node:path";
+import { pathToFileURL } from "node:url";
+import { chromium } from "@playwright/test";
 
 const visual = JSON.parse(readFileSync(resolve("data/visual_assets.json"), "utf8"));
 const outputPath = resolve("artifacts/visual-asset-contact-sheet/index.html");
+const screenshotPath = resolve("artifacts/visual-asset-contact-sheet/contact-sheet.png");
+const screenshotPagePrefix = resolve("artifacts/visual-asset-contact-sheet/contact-sheet-page");
 
 function posPercent(index, total) {
   return total <= 1 ? "0%" : `${(index / (total - 1)) * 100}%`;
@@ -61,6 +65,10 @@ function renderAtlas(atlas) {
 }
 
 function renderBackground(background) {
+  const itemPreviews = (background.items ?? []).filter((item) => item.file);
+  const preview = itemPreviews.length > 0
+    ? `<div class="background-grid">${itemPreviews.map((item) => `<figure class="background-tile"><img class="background-preview" src="${assetUrl(item.file)}" alt="${escapeHtml(item.id)}" /><figcaption><b>${escapeHtml(item.backdrop ?? item.id)}</b><small>${escapeHtml(item.token ?? item.sceneClass ?? "")}</small></figcaption></figure>`).join("\n")}</div>`
+    : `<img class="background-preview" src="${assetUrl(background.file)}" alt="${background.id}" />`;
   return `<section class="atlas">
     <header>
       <div>
@@ -69,7 +77,7 @@ function renderBackground(background) {
       </div>
       <strong>${background.token}</strong>
     </header>
-    <img class="background-preview" src="${assetUrl(background.file)}" alt="${background.id}" />
+    ${preview}
   </section>`;
 }
 
@@ -93,7 +101,9 @@ const html = `<!doctype html>
     .atlas p,.atlas strong{color:#667085;font-size:12px}
     .atlas strong{white-space:nowrap;background:#eef2f7;border-radius:6px;padding:5px 7px}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:10px}
+    .background-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
     .asset-cell{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px;display:grid;justify-items:center;gap:6px;min-width:0}
+    .background-tile{display:grid;gap:6px}
     .sprite{width:var(--w);height:var(--h);max-width:96px;max-height:96px;background-image:var(--sheet);background-size:var(--size);background-position:var(--x) var(--y,0%);background-repeat:no-repeat;image-rendering:auto;filter:drop-shadow(3px 4px 0 #00000024)}
     .background-preview{width:100%;max-height:240px;object-fit:cover;object-position:left center;border-radius:8px;border:1px solid #e2e8f0;background:#0f172a}
     figcaption{width:100%;display:grid;gap:2px;text-align:center;min-width:0}
@@ -117,4 +127,38 @@ const html = `<!doctype html>
 
 mkdirSync(dirname(outputPath), { recursive: true });
 writeFileSync(outputPath, html, "utf8");
-console.log(`VISUAL_ASSET_CONTACT_SHEET_OK ${outputPath}`);
+for (const entry of readdirSync(dirname(outputPath), { withFileTypes: true })) {
+  if (entry.isFile() && /^contact-sheet(?:-page-\d+)?\.png$/.test(entry.name)) {
+    unlinkSync(resolve(dirname(outputPath), entry.name));
+  }
+}
+
+const browser = await chromium.launch();
+const screenshotPages = [];
+try {
+  const page = await browser.newPage({ viewport: { width: 1500, height: 1000 }, deviceScaleFactor: 1 });
+  await page.goto(pathToFileURL(outputPath).href);
+  await page.waitForLoadState("networkidle");
+  const dimensions = await page.evaluate(() => ({
+    width: Math.ceil(document.documentElement.scrollWidth),
+    height: Math.ceil(document.documentElement.scrollHeight),
+  }));
+  const chunkHeight = 12000;
+  const pageCount = Math.max(1, Math.ceil(dimensions.height / chunkHeight));
+  for (let index = 0; index < pageCount; index += 1) {
+    const y = index * chunkHeight;
+    const height = Math.min(chunkHeight, dimensions.height - y);
+    const path = pageCount === 1 ? screenshotPath : `${screenshotPagePrefix}-${String(index + 1).padStart(2, "0")}.png`;
+    await page.screenshot({
+      path,
+      clip: { x: 0, y, width: Math.min(dimensions.width, 1500), height },
+      animations: "disabled",
+      caret: "hide",
+    });
+    screenshotPages.push(path);
+  }
+} finally {
+  await browser.close();
+}
+
+console.log(`VISUAL_ASSET_CONTACT_SHEET_OK html=${outputPath} screenshots=${screenshotPages.join(",")}`);

@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "activeProfile": "cute-sd-reference",
+  "profiles": {
+    "cute-sd-reference": {
+      "enabled": true,
+      "reference": "assets/reference/character-ref-cute-sd.png",
+      "description": "레퍼런스처럼 큰 머리, 짧은 몸통, 짧은 팔다리의 귀여운 SD 비율을 적용한다.",
+      "characters": {
+        "enabled": true,
+        "headCutRatio": 0.46,
+        "lowerStartRatio": 0.74,
+        "headScaleX": 1.2,
+        "headScaleY": 1.12,
+        "bodyScaleX": 0.94,
+        "bodyScaleY": 0.8,
+        "lowerScaleX": 0.92,
+        "lowerScaleY": 0.72,
+        "overlap": 8,
+        "lowerOverlap": 2,
+        "headOffsetY": 0,
+        "bodyOffsetY": -2,
+        "lowerOffsetY": 0,
+        "uprightRotateDegrees": 10,
+        "maxUpscale": 1.2,
+        "maxFrameEqualizeScale": 1.16,
+        "minFrameEqualizeScale": 0.92,
+        "heightOnlyEqualize": true,
+        "heightOnlyTarget": 139,
+        "maxOutputWidth": 144,
+        "maxOutputHeight": 143
+      },
+      "companions": {
+        "enabled": false,
+        "reason": "직업동료 원본은 SD 학생 베이스에 직업 오버레이를 얹어 생성하므로, 두 번째 강한 SD 변환을 적용하지 않는다.",
+        "headCutRatio": 0.48,
+        "lowerStartRatio": 0.71,
+        "headScaleX": 1.08,
+        "headScaleY": 1.06,
+        "bodyScaleX": 0.96,
+        "bodyScaleY": 0.86,
+        "lowerScaleX": 0.94,
+        "lowerScaleY": 0.78,
+        "overlap": 8,
+        "lowerOverlap": 3,
+        "headOffsetY": 0,
+        "bodyOffsetY": -3,
+        "lowerOffsetY": 0,
+        "maxUpscale": 1.08,
+        "maxFrameEqualizeScale": 1.04,
+        "minFrameEqualizeScale": 0.97,
+        "maxOutputWidth": 142,
+        "maxOutputHeight": 142
+      },
+      "monsters": {
+        "enabled": false,
+        "bodyScaleX": 1.08,
+        "bodyScaleY": 0.9,
+        "limbScale": 0.72,
+        "eyeScale": 1.18,
+        "heightOnlyEqualize": true,
+        "heightOnlyTarget": 142,
+        "maxFrameEqualizeScale": 1.14,
+        "minFrameEqualizeScale": 0.94,
+        "maxOutputWidth": 134,
+        "maxOutputHeight": 142
+      }
+    }
+  }
+}

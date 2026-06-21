@@ -56,17 +56,37 @@ replaceAnyExact(
   "career choice gender portrait class",
 );
 
+replaceAnyExact(
+  [
+    "function Qi(e){let t=O.careerById[e.sourceCareerId],n=t?.helperSprite??`helper-files`,r=n.replace(/^helper-/,``).replace(/[^a-z0-9_-]/gi,``);return{color:t?.auraColor??`#7cc3b4`,prop:t?.battleProp??`도구`,role:t?.supportRole??`지원`,spriteClass:`sprite-${n.replace(/[^a-z0-9_-]/gi,``)}`,propClass:`prop-${r}`}}",
+    "function Qi(e){let t=O.careerById[e.sourceCareerId],n=t?.helperSprite??`helper-files`,r=n.replace(/^helper-/,``).replace(/[^a-z0-9_-]/gi,``),i=(t?.id??e.sourceCareerId??``).replace(/[^a-z0-9_-]/gi,``);return{color:t?.auraColor??`#7cc3b4`,prop:t?.battleProp??`도구`,role:t?.supportRole??`지원`,spriteClass:t?.id?`career-unit-${i}`:`sprite-${n.replace(/[^a-z0-9_-]/gi,``)}`,propClass:`prop-${r}`}}",
+  ],
+  "function Qi(e){let t=O.careerById[e.sourceCareerId],n=t?.helperSprite??`helper-files`,r=n.replace(/^helper-/,``).replace(/[^a-z0-9_-]/gi,``),i=(t?.id??e.sourceCareerId??``).replace(/[^a-z0-9_-]/gi,``);return{color:t?.auraColor??`#7cc3b4`,prop:t?.battleProp??`도구`,role:t?.supportRole??`지원`,spriteClass:t?.id?`career-unit-${i}`:`sprite-${n.replace(/[^a-z0-9_-]/gi,``)}`,propClass:`prop-${r}`}}",
+  "expedition career unit sprite class",
+);
+
+replaceAnyExact(
+  [
+    "className:`expedition-unit-avatar ${t} ${r.spriteClass} unit-${n+1}`",
+    "className:`expedition-unit-avatar ${t} ${r.spriteClass} unit-gender-${e.avatarGender??`male`} unit-${n+1}`",
+  ],
+  "className:`expedition-unit-avatar ${t} ${r.spriteClass} unit-gender-${e.avatarGender??`male`} unit-${n+1}`",
+  "expedition unit gender sprite row",
+);
+
 replaceExact(
   "return{gradeId:`E1`,retakeCount:0,",
   "return{gradeId:`E1`,avatarGender:Math.random()<.5?`male`:`female`,retakeCount:0,",
   "current avatar gender seed",
 );
 
-replaceExact(
-  "function sr(e){return{...e,studyLevels:e.studyLevels??Dn(),",
-  "function sr(e){return{...e,avatarGender:e.avatarGender===`female`?`female`:`male`,studyLevels:e.studyLevels??Dn(),",
-  "current avatar gender migration",
-);
+if (!source.includes("function sr(e){let t=e.road")) {
+  replaceExact(
+    "function sr(e){return{...e,studyLevels:e.studyLevels??Dn(),",
+    "function sr(e){return{...e,avatarGender:e.avatarGender===`female`?`female`:`male`,studyLevels:e.studyLevels??Dn(),",
+    "current avatar gender migration",
+  );
+}
 
 replaceAnyExact(
   ["(0,P.jsx)(la,{battle:c,compact:!0})", "(0,P.jsx)(la,{battle:c,compact:!0,visual:d})"],

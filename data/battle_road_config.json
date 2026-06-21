@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "camera": {
+    "playerAnchorX": 31,
+    "combatAnchorX": 34,
+    "enemyMeetX": 72,
+    "enemySpawnX": 118,
+    "parallaxDistancePx": 128
+  },
+  "timing": {
+    "travelMs": 2600,
+    "approachMs": 1450,
+    "combatLoopMs": 450,
+    "clearHoldMs": 1400
+  },
+  "presentation": {
+    "description": "학생탭 배틀로드 화면 연출 파라미터입니다. 값 변경 후 npm run visual:build를 실행하면 CSS와 스냅샷에 반영됩니다.",
+    "backdrop": {
+      "panWidthPercent": 720,
+      "panLoopPercent": -50,
+      "panDurationSec": 76,
+      "roadTopPercent": 60,
+      "roadBottomPercent": 100,
+      "roadOpacity": 0.86,
+      "roadDetailPx": 108,
+      "travelFilter": "saturate(1.15) contrast(1.06)",
+      "defaultFilter": "saturate(1.1) contrast(1.04)",
+      "help": {
+        "panWidthPercent": "배경 파노라마가 화면에서 차지하는 가로 폭입니다. 값이 너무 크면 배경이 과확대되어 캐릭터와 따로 놀 수 있습니다.",
+        "panLoopPercent": "루프 종료 위치입니다. 4구간 원본/반전 루프에서는 -50을 사용합니다.",
+        "panDurationSec": "배경 한 루프 이동 시간입니다.",
+        "roadTopPercent": "전투용 러닝 레인이 시작되는 세로 위치입니다. 낮을수록 길이 화면 위쪽까지 올라옵니다.",
+        "roadBottomPercent": "전투용 러닝 레인이 끝나는 세로 위치입니다. 보통 100으로 두어 하단까지 바닥을 채웁니다.",
+        "roadOpacity": "원화 위에 합성되는 러닝 레인의 농도입니다. 높을수록 캐릭터 접지감이 강해집니다.",
+        "roadDetailPx": "러닝 레인 타일/나무결 디테일의 반복 간격입니다. 값이 작을수록 바닥 패턴이 촘촘합니다.",
+        "travelFilter": "이동 중 배경 색감 보정값입니다.",
+        "defaultFilter": "접근/전투 중 기본 배경 색감 보정값입니다."
+      }
+    },
+    "studentDisplay": {
+      "scaleMultiplier": 0.8,
+      "baseBottomPercent": 15,
+      "elementaryBottomPercent": 15,
+      "middleBottomPercent": 14,
+      "highBottomPercent": 14,
+      "repeaterBottomPercent": 14,
+      "helperPartyLeftPercent": 30,
+      "helperBottomPercent": 13,
+      "helperSizePx": 78,
+      "help": {
+        "scaleMultiplier": "학생탭 전투 화면에서 학생 스프라이트에 곱하는 표시 배율입니다.",
+        "baseBottomPercent": "학생 스프라이트 발 기준선의 기본 하단 위치입니다.",
+        "elementaryBottomPercent": "초등 과정 학생 발 기준선의 하단 위치입니다.",
+        "middleBottomPercent": "중등 과정 학생 발 기준선의 하단 위치입니다.",
+        "highBottomPercent": "고등 과정 학생 발 기준선의 하단 위치입니다.",
+        "repeaterBottomPercent": "N수 과정 학생 발 기준선의 하단 위치입니다.",
+        "helperPartyLeftPercent": "학습 도우미 파티의 가로 기준 위치입니다. 학생 뒤쪽 동료처럼 보이도록 조정합니다.",
+        "helperBottomPercent": "학습 도우미 파티의 하단 위치입니다.",
+        "helperSizePx": "학습 도우미 한 명의 표시 셀 크기입니다. 정사각형으로 유지해 원본 스프라이트가 찌그러지지 않게 합니다."
+      }
+    },
+    "enemyDisplay": {
+      "normalSizePx": 80,
+      "bossSizePx": 94,
+      "suneungSizePx": 88,
+      "mobileNormalSizePx": 78,
+      "mobileBossSizePx": 92,
+      "mobileSuneungSizePx": 86,
+      "defeatedOpacity": 0,
+      "help": {
+        "normalSizePx": "학생탭 일반 몬스터의 기본 표시 크기입니다. 기존 모바일 32px 대비 약 2.5배 수준으로 맞춥니다.",
+        "bossSizePx": "학생탭 보스 몬스터의 기본 표시 크기입니다. 일반 몬스터보다 작아 보이지 않게 합니다.",
+        "suneungSizePx": "수능 조우 몬스터의 기본 표시 크기입니다.",
+        "mobileNormalSizePx": "390px 이하 모바일 화면에서 일반 몬스터 표시 크기입니다.",
+        "mobileBossSizePx": "390px 이하 모바일 화면에서 보스 몬스터 표시 크기입니다.",
+        "mobileSuneungSizePx": "390px 이하 모바일 화면에서 수능 몬스터 표시 크기입니다.",
+        "defeatedOpacity": "처치된 몬스터 잔상 투명도입니다. 유령처럼 보이면 0에 가깝게 낮춥니다."
+      }
+    },
+    "studentAttack": {
+      "windupPx": 4,
+      "dashPx": 25,
+      "recoverPx": 6,
+      "dustPx": 20,
+      "slashPx": 28,
+      "help": {
+        "windupPx": "공격 준비 동작의 짧은 전진 거리입니다.",
+        "dashPx": "공격 순간 학생이 앞으로 이동하는 최대 거리입니다. 기존 긴 전진의 약 1/3 수준입니다.",
+        "recoverPx": "공격 후 복귀 직전 남는 전진 거리입니다.",
+        "dustPx": "공격 먼지 이펙트가 앞으로 이동하는 거리입니다.",
+        "slashPx": "베기 VFX가 앞으로 표시되는 거리입니다."
+      }
+    },
+    "enemySlots": {
+      "school": [[56, 82, 0.98], [69, 78, 0.92], [83, 82, 1]],
+      "suneungSingle": [[76, 82, 1]],
+      "suneungPair": [[66, 82, 0.96], [83, 82, 0.94]],
+      "help": {
+        "school": "일반 학년 조우의 몬스터 위치입니다. [left%, top%, scale] 순서입니다.",
+        "suneungSingle": "수능 단일 과목 조우 몬스터 위치입니다.",
+        "suneungPair": "탐구처럼 두 몬스터가 함께 나오는 수능 조우 위치입니다."
+      }
+    }
+  },
+  "schoolYear": {
+    "encounters": [
+      {
+        "id": "q1",
+        "label": "1분기",
+        "monthRange": [1, 3],
+        "normalMonths": [1, 2],
+        "bossMonth": 3,
+        "bossKey": "march_eval"
+      },
+      {
+        "id": "q2",
+        "label": "2분기",
+        "monthRange": [4, 6],
+        "normalMonths": [4, 5],
+        "bossMonth": 6,
+        "bossKey": "midterm"
+      },
+      {
+        "id": "q3",
+        "label": "3분기",
+        "monthRange": [7, 9],
+        "normalMonths": [7, 8],
+        "bossMonth": 9,
+        "bossKey": "final"
+      },
+      {
+        "id": "q4",
+        "label": "4분기",
+        "monthRange": [10, 12],
+        "normalMonths": [10, 11],
+        "bossMonth": 12,
+        "bossKey": "year_boss"
+      }
+    ]
+  },
+  "suneung": {
+    "encounters": [
+      {
+        "id": "korean",
+        "label": "국어",
+        "enemies": [
+          { "id": "korean", "label": "국어영역", "subjects": ["korean"], "visualMonth": 1 }
+        ]
+      },
+      {
+        "id": "math",
+        "label": "수학",
+        "enemies": [
+          { "id": "math", "label": "수학영역", "subjects": ["math"], "visualMonth": 2 }
+        ]
+      },
+      {
+        "id": "english",
+        "label": "영어",
+        "enemies": [
+          { "id": "english", "label": "영어영역", "subjects": ["english"], "visualMonth": 3 }
+        ]
+      },
+      {
+        "id": "inquiry",
+        "label": "탐구",
+        "enemies": [
+          { "id": "social", "label": "사회탐구", "subjects": ["social"], "visualMonth": 4 },
+          { "id": "science", "label": "과학탐구", "subjects": ["science"], "visualMonth": 5 }
+        ]
+      }
+    ]
+  }
+}

@@ -47,7 +47,7 @@ const manifest = {
   version: previous.version ?? 1,
   cell: previous.cell ?? 160,
   centerX: previous.centerX ?? 80,
-  baselineY: previous.baselineY ?? 148,
+  baselineY: previous.baselineY ?? 151,
   maxSpriteWidth: previous.maxSpriteWidth ?? 122,
   maxSpriteHeight: previous.maxSpriteHeight ?? 142,
   minFrameDifference: previous.minFrameDifference ?? 2.5,

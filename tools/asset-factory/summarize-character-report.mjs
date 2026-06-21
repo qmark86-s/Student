@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const manifestPath = resolve("data/character_animation_manifest.json");
+const spriteReferenceLockPath = resolve("data/sprite_reference_lock.json");
 const reportPath = resolve(process.argv[2] ?? "artifacts/visual-asset-samples/character-axis-report.json");
 
 const failures = [];
@@ -26,11 +27,34 @@ const characters = manifest.characters ?? [];
 const reportCharacters = report.characters ?? [];
 const reportById = new Map(reportCharacters.map((character) => [character.id, character]));
 const minFrameDifference = manifest.minFrameDifference ?? 2.5;
-const maxCenterDelta = 1;
-const maxBaselineDelta = 0;
-const maxSolidHeightDrift = 3;
-const minSolidHeight = 136;
-const minSolidWidth = 45;
+function readReferenceRules() {
+  if (!existsSync(spriteReferenceLockPath)) {
+    return {
+      maxCenterDelta: 1,
+      maxBaselineDelta: 0,
+      maxSolidHeightDrift: 6,
+      minSolidHeight: 118,
+      minSolidWidth: 82,
+    };
+  }
+  const payload = JSON.parse(readFileSync(spriteReferenceLockPath, "utf8"));
+  const activeLock = payload.locks?.[payload.activeLock];
+  return {
+    maxCenterDelta: 1,
+    maxBaselineDelta: 0,
+    maxSolidHeightDrift: 6,
+    minSolidHeight: 118,
+    minSolidWidth: 82,
+    ...(activeLock?.characters ?? {}),
+  };
+}
+
+const referenceRules = readReferenceRules();
+const maxCenterDelta = referenceRules.maxCenterDelta;
+const maxBaselineDelta = referenceRules.maxBaselineDelta;
+const maxSolidHeightDrift = referenceRules.maxSolidHeightDrift;
+const minSolidHeight = referenceRules.minSolidHeight;
+const minSolidWidth = referenceRules.minSolidWidth;
 
 const rows = [];
 

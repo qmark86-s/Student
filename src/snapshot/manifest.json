@@ -19,8 +19,8 @@
       "token": "__STUDENT_ASSET_002__",
       "file": "assets/asset-002.png",
       "mime": "image/png",
-      "bytes": 3184077,
-      "sha256": "8eb712d4c4e518117c28be5ff6d57565fe3e664bd6b56aa062b4615aba9a7504",
+      "bytes": 4321396,
+      "sha256": "8c3eb8021fa9c823c9eb2804701216346bbf90422af4d922b28bd0699e7d651c",
       "width": 10240,
       "height": 320
     },
@@ -28,8 +28,8 @@
       "token": "__STUDENT_ASSET_003__",
       "file": "assets/asset-003.png",
       "mime": "image/png",
-      "bytes": 59377,
-      "sha256": "d6878ef639da615164765269073a2cf3665b60d75e12db103528f2736b925849",
+      "bytes": 446435,
+      "sha256": "be9a4fb11e092b21584f24c3249ed46c5100ddcaf1653ab45c45992e90bd2500",
       "width": 18432,
       "height": 96
     },
@@ -64,26 +64,26 @@
       "token": "__STUDENT_ASSET_007__",
       "file": "assets/visual-companions.png",
       "mime": "image/png",
-      "bytes": 4537,
-      "sha256": "20097f73995a1ac1ea73b64dc3e0d8284aff284792a65e179b565b550e6ffb2c",
-      "width": 1248,
-      "height": 96
+      "bytes": 17270777,
+      "sha256": "ad5fb0296667799b36ea77a9c66f7cdb18f3f9fc7613914914874049769a1a6f",
+      "width": 10240,
+      "height": 1600
     },
     {
       "token": "__STUDENT_ASSET_008__",
       "file": "assets/visual-enemies.png",
       "mime": "image/png",
-      "bytes": 17563,
-      "sha256": "cb60b404fa562859460464b077d26de3a6670240deca67617a3035f029ec2590",
-      "width": 3840,
-      "height": 96
+      "bytes": 3924774,
+      "sha256": "1efcd8f29a29dc72e5f02c0dd335dbf4d4055223627b9d1c026e77b08107e108",
+      "width": 10240,
+      "height": 480
     },
     {
       "token": "__STUDENT_ASSET_009__",
       "file": "assets/visual-careers.png",
       "mime": "image/png",
-      "bytes": 31520,
-      "sha256": "07d08e64adbedeae0874aec46ab969b5c6e0c7c6eb075433258815cd5842a7e3",
+      "bytes": 760694,
+      "sha256": "8547c61ab2831d2a0d982c6a48c3a50044c020824d93023db7aba275f614e0db",
       "width": 7936,
       "height": 64
     },
@@ -95,6 +95,42 @@
       "sha256": "55cc3ea49830b9c2c3fd4fa64094b96b4e4525c801f4d6023d96817e8d2e8afc",
       "width": 5016,
       "height": 540
+    },
+    {
+      "token": "__STUDENT_ASSET_011__",
+      "file": "assets/visual-battle-road-backdrop-elementary.png",
+      "mime": "image/png",
+      "bytes": 1828143,
+      "sha256": "fcea438698850cef4fede41898137406e8708faa76b1c4c3eb4332d513a1efb2",
+      "width": 6688,
+      "height": 300
+    },
+    {
+      "token": "__STUDENT_ASSET_012__",
+      "file": "assets/visual-battle-road-backdrop-middle.png",
+      "mime": "image/png",
+      "bytes": 1651687,
+      "sha256": "edca34391d48e4f77b0bfa218db8c84be25dacdbbea059f035151ae3437f3c2b",
+      "width": 6688,
+      "height": 300
+    },
+    {
+      "token": "__STUDENT_ASSET_013__",
+      "file": "assets/visual-battle-road-backdrop-high.png",
+      "mime": "image/png",
+      "bytes": 1662328,
+      "sha256": "d1a14f3a3a6ab3513549f5fc2dbecc4f049bfb21da6f7292381f1a9928b3fa96",
+      "width": 6688,
+      "height": 300
+    },
+    {
+      "token": "__STUDENT_ASSET_014__",
+      "file": "assets/visual-battle-road-backdrop-repeater.png",
+      "mime": "image/png",
+      "bytes": 1816615,
+      "sha256": "4d027390394333438f32d7558407f79e1941acb0ef7bd7e12e93ab0518af065b",
+      "width": 6688,
+      "height": 300
     }
   ],
   "dataTables": [

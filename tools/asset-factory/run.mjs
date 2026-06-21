@@ -9,24 +9,140 @@ const workflows = {
   prepare: [
     [npmBin, ["run", "visual:build"]],
     ["node", ["tools/asset-factory/summarize-character-report.mjs"]],
+    ["node", ["tools/asset-factory/check-reference-lock.mjs"]],
     [pythonBin, ["tools/asset-factory/make-character-review-sheet.py"]],
+    ["node", ["tools/asset-factory/summarize-professional-report.mjs"]],
+    [
+      pythonBin,
+      [
+        "tools/asset-factory/make-character-review-sheet.py",
+        "--report",
+        "artifacts/visual-asset-samples/professional-axis-report.json",
+        "--prefix",
+        "professional-axis-review",
+        "--per-page",
+        "18",
+      ],
+    ],
+    [
+      pythonBin,
+      [
+        "tools/asset-factory/make-character-review-sheet.py",
+        "--report",
+        "artifacts/visual-asset-samples/professional-axis-report.json",
+        "--prefix",
+        "professional-zoom-review",
+        "--per-page",
+        "4",
+        "--sheet-key",
+        "zoomSheet",
+      ],
+    ],
+    [pythonBin, ["tools/asset-factory/audit-sprite-integrity.py"]],
   ],
   review: [
     ["node", ["tools/asset-factory/summarize-character-report.mjs"]],
+    ["node", ["tools/asset-factory/check-reference-lock.mjs"]],
     [pythonBin, ["tools/asset-factory/make-character-review-sheet.py"]],
+    ["node", ["tools/asset-factory/summarize-professional-report.mjs"]],
+    [
+      pythonBin,
+      [
+        "tools/asset-factory/make-character-review-sheet.py",
+        "--report",
+        "artifacts/visual-asset-samples/professional-axis-report.json",
+        "--prefix",
+        "professional-axis-review",
+        "--per-page",
+        "18",
+      ],
+    ],
+    [
+      pythonBin,
+      [
+        "tools/asset-factory/make-character-review-sheet.py",
+        "--report",
+        "artifacts/visual-asset-samples/professional-axis-report.json",
+        "--prefix",
+        "professional-zoom-review",
+        "--per-page",
+        "4",
+        "--sheet-key",
+        "zoomSheet",
+      ],
+    ],
+    [pythonBin, ["tools/asset-factory/audit-sprite-integrity.py"]],
   ],
   qa: [
     [npmBin, ["run", "build:web"]],
     [npmBin, ["run", "visual:verify"]],
     [npmBin, ["run", "visual:sheet"]],
     ["node", ["tools/asset-factory/summarize-character-report.mjs"]],
+    ["node", ["tools/asset-factory/check-reference-lock.mjs"]],
     [pythonBin, ["tools/asset-factory/make-character-review-sheet.py"]],
+    ["node", ["tools/asset-factory/summarize-professional-report.mjs"]],
+    [
+      pythonBin,
+      [
+        "tools/asset-factory/make-character-review-sheet.py",
+        "--report",
+        "artifacts/visual-asset-samples/professional-axis-report.json",
+        "--prefix",
+        "professional-axis-review",
+        "--per-page",
+        "18",
+      ],
+    ],
+    [
+      pythonBin,
+      [
+        "tools/asset-factory/make-character-review-sheet.py",
+        "--report",
+        "artifacts/visual-asset-samples/professional-axis-report.json",
+        "--prefix",
+        "professional-zoom-review",
+        "--per-page",
+        "4",
+        "--sheet-key",
+        "zoomSheet",
+      ],
+    ],
+    [pythonBin, ["tools/asset-factory/audit-sprite-integrity.py"]],
     [npmBin, ["run", "visual:smoke"]],
   ],
   doctor: [
     [npmBin, ["run", "visual:verify"]],
     ["node", ["tools/asset-factory/summarize-character-report.mjs"]],
+    ["node", ["tools/asset-factory/check-reference-lock.mjs"]],
     [pythonBin, ["tools/asset-factory/make-character-review-sheet.py"]],
+    ["node", ["tools/asset-factory/summarize-professional-report.mjs"]],
+    [
+      pythonBin,
+      [
+        "tools/asset-factory/make-character-review-sheet.py",
+        "--report",
+        "artifacts/visual-asset-samples/professional-axis-report.json",
+        "--prefix",
+        "professional-axis-review",
+        "--per-page",
+        "18",
+      ],
+    ],
+    [
+      pythonBin,
+      [
+        "tools/asset-factory/make-character-review-sheet.py",
+        "--report",
+        "artifacts/visual-asset-samples/professional-axis-report.json",
+        "--prefix",
+        "professional-zoom-review",
+        "--per-page",
+        "4",
+        "--sheet-key",
+        "zoomSheet",
+      ],
+    ],
+    [pythonBin, ["tools/asset-factory/audit-sprite-integrity.py"]],
   ],
   "install-skill": [["node", ["tools/asset-factory/install-codex-skill.mjs"]]],
 };
@@ -38,8 +154,8 @@ Usage:
   node tools/asset-factory/run.mjs <command>
 
 Commands:
-  prepare        Rebuild visual assets, summarize character axis quality, write review sheets
-  review         Summarize the latest character report and write review sheets
+  prepare        Rebuild visual assets, summarize axis quality, write review sheets
+  review         Summarize the latest axis reports and write review sheets
   qa             Run the full visual QA path used before shipping asset changes
   doctor         Check current generated outputs without rebuilding the web snapshot
   install-skill  Install the repo skill into the local Codex skills directory

@@ -6,5 +6,7 @@ artifacts/
 *.log
 *.tmp
 *.bak
+__pycache__/
+*.pyc
 *.keystore
 *.jks

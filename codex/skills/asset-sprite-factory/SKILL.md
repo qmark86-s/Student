@@ -18,7 +18,8 @@ Use this skill to keep sprite production repeatable. AI image generation may cre
 5. Use bright green `#00FF00` or a similarly clean matte background. Do not crop multiple characters from a collage for final production.
 6. Run `npm run asset:factory:prepare`.
 7. Inspect `artifacts/visual-asset-samples/character-axis-review-page-*.png`.
-8. Run `npm run asset:factory:qa`, then `npm run verify:mobile` for release-facing changes.
+8. For companions and monsters, inspect both `artifacts/visual-asset-samples/professional-axis-review-page-*.png` and `artifacts/visual-asset-samples/professional-zoom-review-page-*.png`.
+9. Run `npm run asset:factory:qa`, then `npm run verify:mobile` for release-facing changes.
 
 ## Quality Gates
 
@@ -27,6 +28,8 @@ Use this skill to keep sprite production repeatable. AI image generation may cre
 - Center drift must stay within 1px.
 - Baseline drift must be 0px.
 - Solid body height drift must stay within 3px.
+- Companions and monsters must keep at least 8px top/bottom alpha margin after normalization.
+- Companion/monster zoom review must show source 4 frames and normalized 4 frames without clipping, matte leaks, or one-frame scale jumps.
 - One frame visibly growing or shrinking is a failure even if the app still runs.
 - Browser/mobile screenshots must not show horizontal overflow or text/sprite overlap.
 
@@ -48,7 +51,10 @@ Use `asset:factory:install-skill` when another Codex Agent should discover this 
 - `tools/asset-factory/summarize-character-report.mjs`: axis quality summary
 - `tools/asset-factory/make-character-review-sheet.py`: review sheet generator
 - `tools/prepare-character-sprites.py`: matte cleanup and normalization
+- `tools/generate-professional-sprite-sources.py`: deterministic companion and expedition enemy source generation
+- `tools/prepare-professional-sprites.py`: professional sprite normalization and source-vs-normalized zoom sheets
 - `data/character_animation_manifest.json`: character set table
+- `data/professional_sprite_manifest.json`: companion and expedition enemy table
 
 ## Expansion
 
