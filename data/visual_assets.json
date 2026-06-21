@@ -639,7 +639,8 @@
           "age": 8,
           "gradeTitle": "초1 작은 책가방",
           "name": "받아쓰기장",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-001",
@@ -648,7 +649,8 @@
           "age": 8,
           "gradeTitle": "초1 작은 책가방",
           "name": "색종이 문제집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-002",
@@ -657,7 +659,8 @@
           "age": 8,
           "gradeTitle": "초1 작은 책가방",
           "name": "알림장 슬라임",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-003",
@@ -666,7 +669,8 @@
           "age": 8,
           "gradeTitle": "초1 작은 책가방",
           "name": "숫자 카드",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-004",
@@ -675,7 +679,8 @@
           "age": 8,
           "gradeTitle": "초1 작은 책가방",
           "name": "크레파스 숙제통",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-005",
@@ -684,7 +689,8 @@
           "age": 8,
           "gradeTitle": "초1 작은 책가방",
           "name": "스티커 시험지",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-006",
@@ -693,7 +699,8 @@
           "age": 8,
           "gradeTitle": "초1 작은 책가방",
           "name": "종이비행기 노트",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-007",
@@ -702,7 +709,8 @@
           "age": 8,
           "gradeTitle": "초1 작은 책가방",
           "name": "연필깎이 문제함",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-008",
@@ -711,7 +719,8 @@
           "age": 9,
           "gradeTitle": "초2 준비물 가방",
           "name": "곱셈 카드",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-009",
@@ -720,7 +729,8 @@
           "age": 9,
           "gradeTitle": "초2 준비물 가방",
           "name": "받아쓰기 공책",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-010",
@@ -729,7 +739,8 @@
           "age": 9,
           "gradeTitle": "초2 준비물 가방",
           "name": "독서록 더미",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-011",
@@ -738,7 +749,8 @@
           "age": 9,
           "gradeTitle": "초2 준비물 가방",
           "name": "알파벳 책",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-012",
@@ -747,7 +759,8 @@
           "age": 9,
           "gradeTitle": "초2 준비물 가방",
           "name": "구구단 타워",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-013",
@@ -756,7 +769,8 @@
           "age": 9,
           "gradeTitle": "초2 준비물 가방",
           "name": "그림일기 묶음",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-014",
@@ -765,7 +779,8 @@
           "age": 9,
           "gradeTitle": "초2 준비물 가방",
           "name": "받침 괴물장",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-015",
@@ -774,7 +789,8 @@
           "age": 9,
           "gradeTitle": "초2 준비물 가방",
           "name": "시계 읽기 퍼즐",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-016",
@@ -783,7 +799,8 @@
           "age": 10,
           "gradeTitle": "초3 교과서 가방",
           "name": "사회 그림책",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-017",
@@ -792,7 +809,8 @@
           "age": 10,
           "gradeTitle": "초3 교과서 가방",
           "name": "나눗셈 문제장",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-018",
@@ -801,7 +819,8 @@
           "age": 10,
           "gradeTitle": "초3 교과서 가방",
           "name": "영단어 카드",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-019",
@@ -810,7 +829,8 @@
           "age": 10,
           "gradeTitle": "초3 교과서 가방",
           "name": "실험 관찰장",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-020",
@@ -819,7 +839,8 @@
           "age": 10,
           "gradeTitle": "초3 교과서 가방",
           "name": "지도 퍼즐북",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-021",
@@ -828,7 +849,8 @@
           "age": 10,
           "gradeTitle": "초3 교과서 가방",
           "name": "원고지 벌집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-022",
@@ -837,7 +859,8 @@
           "age": 10,
           "gradeTitle": "초3 교과서 가방",
           "name": "측정 단위자",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-023",
@@ -846,7 +869,8 @@
           "age": 10,
           "gradeTitle": "초3 교과서 가방",
           "name": "과학 스티커북",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-024",
@@ -855,7 +879,8 @@
           "age": 11,
           "gradeTitle": "초4 발표 준비생",
           "name": "분수 문제집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-025",
@@ -864,7 +889,8 @@
           "age": 11,
           "gradeTitle": "초4 발표 준비생",
           "name": "독후감 노트",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-026",
@@ -873,7 +899,8 @@
           "age": 11,
           "gradeTitle": "초4 발표 준비생",
           "name": "단원평가 묶음",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-027",
@@ -882,7 +909,8 @@
           "age": 11,
           "gradeTitle": "초4 발표 준비생",
           "name": "영어 리딩북",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-028",
@@ -891,7 +919,8 @@
           "age": 11,
           "gradeTitle": "초4 발표 준비생",
           "name": "각도기 함정지",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-029",
@@ -900,7 +929,8 @@
           "age": 11,
           "gradeTitle": "초4 발표 준비생",
           "name": "발표 대본집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-030",
@@ -909,7 +939,8 @@
           "age": 11,
           "gradeTitle": "초4 발표 준비생",
           "name": "도형 카드팩",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-031",
@@ -918,7 +949,8 @@
           "age": 11,
           "gradeTitle": "초4 발표 준비생",
           "name": "요약 공책탑",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-032",
@@ -927,7 +959,8 @@
           "age": 12,
           "gradeTitle": "초5 수행평가 준비생",
           "name": "소수 문제집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-033",
@@ -936,7 +969,8 @@
           "age": 12,
           "gradeTitle": "초5 수행평가 준비생",
           "name": "과학 관찰록",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-034",
@@ -945,7 +979,8 @@
           "age": 12,
           "gradeTitle": "초5 수행평가 준비생",
           "name": "역사 인물 카드",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-035",
@@ -954,7 +989,8 @@
           "age": 12,
           "gradeTitle": "초5 수행평가 준비생",
           "name": "영어 문장책",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-036",
@@ -963,7 +999,8 @@
           "age": 12,
           "gradeTitle": "초5 수행평가 준비생",
           "name": "실험 보고서통",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-037",
@@ -972,7 +1009,8 @@
           "age": 12,
           "gradeTitle": "초5 수행평가 준비생",
           "name": "비율 퍼즐집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-038",
@@ -981,7 +1019,8 @@
           "age": 12,
           "gradeTitle": "초5 수행평가 준비생",
           "name": "한자 급수장",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-039",
@@ -990,7 +1029,8 @@
           "age": 12,
           "gradeTitle": "초5 수행평가 준비생",
           "name": "암기 포스트잇",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-040",
@@ -999,7 +1039,8 @@
           "age": 13,
           "gradeTitle": "초6 졸업반",
           "name": "중학 예비 문제집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-041",
@@ -1008,7 +1049,8 @@
           "age": 13,
           "gradeTitle": "초6 졸업반",
           "name": "졸업시험지",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-042",
@@ -1017,7 +1059,8 @@
           "age": 13,
           "gradeTitle": "초6 졸업반",
           "name": "비문학 책자",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-043",
@@ -1026,7 +1069,8 @@
           "age": 13,
           "gradeTitle": "초6 졸업반",
           "name": "수학 총정리",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-044",
@@ -1035,7 +1079,8 @@
           "age": 13,
           "gradeTitle": "초6 졸업반",
           "name": "서술형 대비서",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-045",
@@ -1044,7 +1089,8 @@
           "age": 13,
           "gradeTitle": "초6 졸업반",
           "name": "어휘 압축팩",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-046",
@@ -1053,7 +1099,8 @@
           "age": 13,
           "gradeTitle": "초6 졸업반",
           "name": "예비중 체크북",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-047",
@@ -1062,7 +1109,8 @@
           "age": 13,
           "gradeTitle": "초6 졸업반",
           "name": "졸업 앨범 과제",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-048",
@@ -1071,7 +1119,8 @@
           "age": 14,
           "gradeTitle": "중1 교복 적응",
           "name": "중등 국어 노트",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-049",
@@ -1080,7 +1129,8 @@
           "age": 14,
           "gradeTitle": "중1 교복 적응",
           "name": "영문법 카드",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-050",
@@ -1089,7 +1139,8 @@
           "age": 14,
           "gradeTitle": "중1 교복 적응",
           "name": "방정식 책",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-051",
@@ -1098,7 +1149,8 @@
           "age": 14,
           "gradeTitle": "중1 교복 적응",
           "name": "사회 지도책",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-052",
@@ -1107,7 +1159,8 @@
           "age": 14,
           "gradeTitle": "중1 교복 적응",
           "name": "과학 용어장",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-053",
@@ -1116,7 +1169,8 @@
           "age": 14,
           "gradeTitle": "중1 교복 적응",
           "name": "수행평가 파일",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-054",
@@ -1125,7 +1179,8 @@
           "age": 14,
           "gradeTitle": "중1 교복 적응",
           "name": "서술형 노트",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-055",
@@ -1134,7 +1189,8 @@
           "age": 14,
           "gradeTitle": "중1 교복 적응",
           "name": "암기장 스택",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-056",
@@ -1143,7 +1199,8 @@
           "age": 15,
           "gradeTitle": "중2 수행평가 러너",
           "name": "연립방정식 책",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-057",
@@ -1152,7 +1209,8 @@
           "age": 15,
           "gradeTitle": "중2 수행평가 러너",
           "name": "과학 실험지",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-058",
@@ -1161,7 +1219,8 @@
           "age": 15,
           "gradeTitle": "중2 수행평가 러너",
           "name": "역사 연표",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-059",
@@ -1170,7 +1229,8 @@
           "age": 15,
           "gradeTitle": "중2 수행평가 러너",
           "name": "영어 독해집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-060",
@@ -1179,7 +1239,8 @@
           "age": 15,
           "gradeTitle": "중2 수행평가 러너",
           "name": "문법 오답통",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-061",
@@ -1188,7 +1249,8 @@
           "age": 15,
           "gradeTitle": "중2 수행평가 러너",
           "name": "도덕 활동지",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-062",
@@ -1197,7 +1259,8 @@
           "age": 15,
           "gradeTitle": "중2 수행평가 러너",
           "name": "함수 예고편",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-063",
@@ -1206,7 +1269,8 @@
           "age": 15,
           "gradeTitle": "중2 수행평가 러너",
           "name": "실험 결과표",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-064",
@@ -1215,7 +1279,8 @@
           "age": 16,
           "gradeTitle": "중3 고입 대비",
           "name": "고입 대비서",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-065",
@@ -1224,7 +1289,8 @@
           "age": 16,
           "gradeTitle": "중3 고입 대비",
           "name": "문법 총정리",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-066",
@@ -1233,7 +1299,8 @@
           "age": 16,
           "gradeTitle": "중3 고입 대비",
           "name": "이차방정식 책",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-067",
@@ -1242,7 +1309,8 @@
           "age": 16,
           "gradeTitle": "중3 고입 대비",
           "name": "과학 개념서",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-068",
@@ -1251,7 +1319,8 @@
           "age": 16,
           "gradeTitle": "중3 고입 대비",
           "name": "내신 파이널북",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-069",
@@ -1260,7 +1329,8 @@
           "age": 16,
           "gradeTitle": "중3 고입 대비",
           "name": "역사 사건카드",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-070",
@@ -1269,7 +1339,8 @@
           "age": 16,
           "gradeTitle": "중3 고입 대비",
           "name": "모의고사 맛보기",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-071",
@@ -1278,7 +1349,8 @@
           "age": 16,
           "gradeTitle": "중3 고입 대비",
           "name": "진로 탐색지",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-072",
@@ -1287,7 +1359,8 @@
           "age": 17,
           "gradeTitle": "고1 계열 탐색",
           "name": "고등 공통국어",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-073",
@@ -1296,7 +1369,8 @@
           "age": 17,
           "gradeTitle": "고1 계열 탐색",
           "name": "수학 상",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-074",
@@ -1305,7 +1379,8 @@
           "age": 17,
           "gradeTitle": "고1 계열 탐색",
           "name": "통합사회 문제집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-075",
@@ -1314,7 +1389,8 @@
           "age": 17,
           "gradeTitle": "고1 계열 탐색",
           "name": "통합과학 문제집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-076",
@@ -1323,7 +1399,8 @@
           "age": 17,
           "gradeTitle": "고1 계열 탐색",
           "name": "영어 모의지",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-077",
@@ -1332,7 +1409,8 @@
           "age": 17,
           "gradeTitle": "고1 계열 탐색",
           "name": "한국사 연표팩",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-078",
@@ -1341,7 +1419,8 @@
           "age": 17,
           "gradeTitle": "고1 계열 탐색",
           "name": "계열 선택지",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-079",
@@ -1350,7 +1429,8 @@
           "age": 17,
           "gradeTitle": "고1 계열 탐색",
           "name": "공통과목 벽돌책",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-080",
@@ -1359,7 +1439,8 @@
           "age": 18,
           "gradeTitle": "고2 계열 고정",
           "name": "선택과목 문제집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-081",
@@ -1368,7 +1449,8 @@
           "age": 18,
           "gradeTitle": "고2 계열 고정",
           "name": "문학 독서 세트",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-082",
@@ -1377,7 +1459,8 @@
           "age": 18,
           "gradeTitle": "고2 계열 고정",
           "name": "미적분 예열집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-083",
@@ -1386,7 +1469,8 @@
           "age": 18,
           "gradeTitle": "고2 계열 고정",
           "name": "탐구 개념서",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-084",
@@ -1395,7 +1479,8 @@
           "age": 18,
           "gradeTitle": "고2 계열 고정",
           "name": "확통 노트",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-085",
@@ -1404,7 +1489,8 @@
           "age": 18,
           "gradeTitle": "고2 계열 고정",
           "name": "생윤 카드팩",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-086",
@@ -1413,7 +1499,8 @@
           "age": 18,
           "gradeTitle": "고2 계열 고정",
           "name": "물화생지 샘플러",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-087",
@@ -1422,7 +1509,8 @@
           "age": 18,
           "gradeTitle": "고2 계열 고정",
           "name": "수행평가 보고서",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-088",
@@ -1431,7 +1519,8 @@
           "age": 19,
           "gradeTitle": "고3 수험생",
           "name": "수능특강",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-089",
@@ -1440,7 +1529,8 @@
           "age": 19,
           "gradeTitle": "고3 수험생",
           "name": "기출 모음집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-090",
@@ -1449,7 +1539,8 @@
           "age": 19,
           "gradeTitle": "고3 수험생",
           "name": "킬러문항 봉투",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-091",
@@ -1458,7 +1549,8 @@
           "age": 19,
           "gradeTitle": "고3 수험생",
           "name": "탐구 실전서",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-092",
@@ -1467,7 +1559,8 @@
           "age": 19,
           "gradeTitle": "고3 수험생",
           "name": "수능완성",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-093",
@@ -1476,7 +1569,8 @@
           "age": 19,
           "gradeTitle": "고3 수험생",
           "name": "오답노트 괴수",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-094",
@@ -1485,7 +1579,8 @@
           "age": 19,
           "gradeTitle": "고3 수험생",
           "name": "실모 봉투팩",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-095",
@@ -1494,7 +1589,8 @@
           "age": 19,
           "gradeTitle": "고3 수험생",
           "name": "시간관리 시계",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-096",
@@ -1503,7 +1599,8 @@
           "age": 20,
           "gradeTitle": "1수 독서실 적응",
           "name": "기출 1회독",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-097",
@@ -1512,7 +1609,8 @@
           "age": 20,
           "gradeTitle": "1수 독서실 적응",
           "name": "오답노트",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-098",
@@ -1521,7 +1619,8 @@
           "age": 20,
           "gradeTitle": "1수 독서실 적응",
           "name": "스터디카페 모의고사",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-099",
@@ -1530,7 +1629,8 @@
           "age": 20,
           "gradeTitle": "1수 독서실 적응",
           "name": "탐구 압축팩",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-100",
@@ -1539,7 +1639,8 @@
           "age": 20,
           "gradeTitle": "1수 독서실 적응",
           "name": "개념 재정리집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-101",
@@ -1548,7 +1649,8 @@
           "age": 20,
           "gradeTitle": "1수 독서실 적응",
           "name": "멘탈 체크표",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-102",
@@ -1557,7 +1659,8 @@
           "age": 20,
           "gradeTitle": "1수 독서실 적응",
           "name": "6월 대비 봉투",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-103",
@@ -1566,7 +1669,8 @@
           "age": 20,
           "gradeTitle": "1수 독서실 적응",
           "name": "약점 형광펜",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-104",
@@ -1575,7 +1679,8 @@
           "age": 21,
           "gradeTitle": "2수 루틴 고정",
           "name": "기출 2회독",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-105",
@@ -1584,7 +1689,8 @@
           "age": 21,
           "gradeTitle": "2수 루틴 고정",
           "name": "실전 봉투",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-106",
@@ -1593,7 +1699,8 @@
           "age": 21,
           "gradeTitle": "2수 루틴 고정",
           "name": "약점 체크리스트",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-107",
@@ -1602,7 +1709,8 @@
           "age": 21,
           "gradeTitle": "2수 루틴 고정",
           "name": "오답 재압축",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-108",
@@ -1611,7 +1719,8 @@
           "age": 21,
           "gradeTitle": "2수 루틴 고정",
           "name": "시간표 압박장",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-109",
@@ -1620,7 +1729,8 @@
           "age": 21,
           "gradeTitle": "2수 루틴 고정",
           "name": "평가원 분석집",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-110",
@@ -1629,7 +1739,8 @@
           "age": 21,
           "gradeTitle": "2수 루틴 고정",
           "name": "수면 관리표",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-111",
@@ -1638,7 +1749,8 @@
           "age": 21,
           "gradeTitle": "2수 루틴 고정",
           "name": "탐구 스피드팩",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-112",
@@ -1647,7 +1759,8 @@
           "age": 22,
           "gradeTitle": "장수생 압축 학습",
           "name": "장수 기출팩",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-113",
@@ -1656,7 +1769,8 @@
           "age": 22,
           "gradeTitle": "장수생 압축 학습",
           "name": "멘탈 관리표",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-114",
@@ -1665,7 +1779,8 @@
           "age": 22,
           "gradeTitle": "장수생 압축 학습",
           "name": "시간표 보스",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-115",
@@ -1674,7 +1789,8 @@
           "age": 22,
           "gradeTitle": "장수생 압축 학습",
           "name": "실모 더미",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-116",
@@ -1683,7 +1799,8 @@
           "age": 22,
           "gradeTitle": "장수생 압축 학습",
           "name": "불안 노트",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-117",
@@ -1692,7 +1809,8 @@
           "age": 22,
           "gradeTitle": "장수생 압축 학습",
           "name": "루틴 점검표",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-118",
@@ -1701,7 +1819,8 @@
           "age": 22,
           "gradeTitle": "장수생 압축 학습",
           "name": "파이널 압축서",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-119",
@@ -1710,7 +1829,8 @@
           "age": 22,
           "gradeTitle": "장수생 압축 학습",
           "name": "기억력 체커",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-120",
@@ -1719,7 +1839,8 @@
           "age": 23,
           "gradeTitle": "N수 베테랑",
           "name": "N수 파이널팩",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-121",
@@ -1728,7 +1849,8 @@
           "age": 23,
           "gradeTitle": "N수 베테랑",
           "name": "마지막 오답장",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-122",
@@ -1737,7 +1859,8 @@
           "age": 23,
           "gradeTitle": "N수 베테랑",
           "name": "실전 시계",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-123",
@@ -1746,7 +1869,8 @@
           "age": 23,
           "gradeTitle": "N수 베테랑",
           "name": "최종 봉투",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-124",
@@ -1755,7 +1879,8 @@
           "age": 23,
           "gradeTitle": "N수 베테랑",
           "name": "초압축 기출서",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-125",
@@ -1764,7 +1889,8 @@
           "age": 23,
           "gradeTitle": "N수 베테랑",
           "name": "체력 관리표",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-126",
@@ -1773,7 +1899,8 @@
           "age": 23,
           "gradeTitle": "N수 베테랑",
           "name": "막판 실모팩",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-127",
@@ -1782,7 +1909,8 @@
           "age": 23,
           "gradeTitle": "N수 베테랑",
           "name": "수능장 시뮬레이터",
-          "type": "normal"
+          "type": "normal",
+          "direction": "left"
         },
         {
           "id": "main-monster-128",
@@ -1791,7 +1919,8 @@
           "age": 8,
           "gradeTitle": "초1 작은 책가방",
           "name": "3월 받아쓰기 보스",
-          "type": "march_eval"
+          "type": "march_eval",
+          "direction": "left"
         },
         {
           "id": "main-monster-129",
@@ -1800,7 +1929,8 @@
           "age": 8,
           "gradeTitle": "초1 작은 책가방",
           "name": "중간 색종이 왕",
-          "type": "midterm"
+          "type": "midterm",
+          "direction": "left"
         },
         {
           "id": "main-monster-130",
@@ -1809,7 +1939,8 @@
           "age": 8,
           "gradeTitle": "초1 작은 책가방",
           "name": "기말 알림장",
-          "type": "final"
+          "type": "final",
+          "direction": "left"
         },
         {
           "id": "main-monster-131",
@@ -1818,7 +1949,8 @@
           "age": 8,
           "gradeTitle": "초1 작은 책가방",
           "name": "1학년 학년고사장",
-          "type": "year_boss"
+          "type": "year_boss",
+          "direction": "left"
         },
         {
           "id": "main-monster-132",
@@ -1827,7 +1959,8 @@
           "age": 9,
           "gradeTitle": "초2 준비물 가방",
           "name": "3월 곱셈 카드",
-          "type": "march_eval"
+          "type": "march_eval",
+          "direction": "left"
         },
         {
           "id": "main-monster-133",
@@ -1836,7 +1969,8 @@
           "age": 9,
           "gradeTitle": "초2 준비물 가방",
           "name": "중간 독서록장",
-          "type": "midterm"
+          "type": "midterm",
+          "direction": "left"
         },
         {
           "id": "main-monster-134",
@@ -1845,7 +1979,8 @@
           "age": 9,
           "gradeTitle": "초2 준비물 가방",
           "name": "기말 공책 골렘",
-          "type": "final"
+          "type": "final",
+          "direction": "left"
         },
         {
           "id": "main-monster-135",
@@ -1854,7 +1989,8 @@
           "age": 9,
           "gradeTitle": "초2 준비물 가방",
           "name": "2학년 학년고사장",
-          "type": "year_boss"
+          "type": "year_boss",
+          "direction": "left"
         },
         {
           "id": "main-monster-136",
@@ -1863,7 +1999,8 @@
           "age": 10,
           "gradeTitle": "초3 교과서 가방",
           "name": "3월 나눗셈 기사",
-          "type": "march_eval"
+          "type": "march_eval",
+          "direction": "left"
         },
         {
           "id": "main-monster-137",
@@ -1872,7 +2009,8 @@
           "age": 10,
           "gradeTitle": "초3 교과서 가방",
           "name": "중간 사회 지도",
-          "type": "midterm"
+          "type": "midterm",
+          "direction": "left"
         },
         {
           "id": "main-monster-138",
@@ -1881,7 +2019,8 @@
           "age": 10,
           "gradeTitle": "초3 교과서 가방",
           "name": "기말 실험장",
-          "type": "final"
+          "type": "final",
+          "direction": "left"
         },
         {
           "id": "main-monster-139",
@@ -1890,7 +2029,8 @@
           "age": 10,
           "gradeTitle": "초3 교과서 가방",
           "name": "3학년 학년고사장",
-          "type": "year_boss"
+          "type": "year_boss",
+          "direction": "left"
         },
         {
           "id": "main-monster-140",
@@ -1899,7 +2039,8 @@
           "age": 11,
           "gradeTitle": "초4 발표 준비생",
           "name": "3월 분수 장군",
-          "type": "march_eval"
+          "type": "march_eval",
+          "direction": "left"
         },
         {
           "id": "main-monster-141",
@@ -1908,7 +2049,8 @@
           "age": 11,
           "gradeTitle": "초4 발표 준비생",
           "name": "중간 단원평가",
-          "type": "midterm"
+          "type": "midterm",
+          "direction": "left"
         },
         {
           "id": "main-monster-142",
@@ -1917,7 +2059,8 @@
           "age": 11,
           "gradeTitle": "초4 발표 준비생",
           "name": "기말 독후감",
-          "type": "final"
+          "type": "final",
+          "direction": "left"
         },
         {
           "id": "main-monster-143",
@@ -1926,7 +2069,8 @@
           "age": 11,
           "gradeTitle": "초4 발표 준비생",
           "name": "4학년 학년고사장",
-          "type": "year_boss"
+          "type": "year_boss",
+          "direction": "left"
         },
         {
           "id": "main-monster-144",
@@ -1935,7 +2079,8 @@
           "age": 12,
           "gradeTitle": "초5 수행평가 준비생",
           "name": "3월 소수 보스",
-          "type": "march_eval"
+          "type": "march_eval",
+          "direction": "left"
         },
         {
           "id": "main-monster-145",
@@ -1944,7 +2089,8 @@
           "age": 12,
           "gradeTitle": "초5 수행평가 준비생",
           "name": "중간 과학 관찰장",
-          "type": "midterm"
+          "type": "midterm",
+          "direction": "left"
         },
         {
           "id": "main-monster-146",
@@ -1953,7 +2099,8 @@
           "age": 12,
           "gradeTitle": "초5 수행평가 준비생",
           "name": "기말 역사 카드",
-          "type": "final"
+          "type": "final",
+          "direction": "left"
         },
         {
           "id": "main-monster-147",
@@ -1962,7 +2109,8 @@
           "age": 12,
           "gradeTitle": "초5 수행평가 준비생",
           "name": "5학년 학년고사장",
-          "type": "year_boss"
+          "type": "year_boss",
+          "direction": "left"
         },
         {
           "id": "main-monster-148",
@@ -1971,7 +2119,8 @@
           "age": 13,
           "gradeTitle": "초6 졸업반",
           "name": "3월 예비중 보스",
-          "type": "march_eval"
+          "type": "march_eval",
+          "direction": "left"
         },
         {
           "id": "main-monster-149",
@@ -1980,7 +2129,8 @@
           "age": 13,
           "gradeTitle": "초6 졸업반",
           "name": "중간 총정리장",
-          "type": "midterm"
+          "type": "midterm",
+          "direction": "left"
         },
         {
           "id": "main-monster-150",
@@ -1989,7 +2139,8 @@
           "age": 13,
           "gradeTitle": "초6 졸업반",
           "name": "기말 졸업시험",
-          "type": "final"
+          "type": "final",
+          "direction": "left"
         },
         {
           "id": "main-monster-151",
@@ -1998,7 +2149,8 @@
           "age": 13,
           "gradeTitle": "초6 졸업반",
           "name": "초등 졸업고사",
-          "type": "year_boss"
+          "type": "year_boss",
+          "direction": "left"
         },
         {
           "id": "main-monster-152",
@@ -2007,7 +2159,8 @@
           "age": 14,
           "gradeTitle": "중1 교복 적응",
           "name": "3월 적응평가",
-          "type": "march_eval"
+          "type": "march_eval",
+          "direction": "left"
         },
         {
           "id": "main-monster-153",
@@ -2016,7 +2169,8 @@
           "age": 14,
           "gradeTitle": "중1 교복 적응",
           "name": "중간고사 노트",
-          "type": "midterm"
+          "type": "midterm",
+          "direction": "left"
         },
         {
           "id": "main-monster-154",
@@ -2025,7 +2179,8 @@
           "age": 14,
           "gradeTitle": "중1 교복 적응",
           "name": "기말고사 더미",
-          "type": "final"
+          "type": "final",
+          "direction": "left"
         },
         {
           "id": "main-monster-155",
@@ -2034,7 +2189,8 @@
           "age": 14,
           "gradeTitle": "중1 교복 적응",
           "name": "중1 학년고사장",
-          "type": "year_boss"
+          "type": "year_boss",
+          "direction": "left"
         },
         {
           "id": "main-monster-156",
@@ -2043,7 +2199,8 @@
           "age": 15,
           "gradeTitle": "중2 수행평가 러너",
           "name": "3월 연립문제",
-          "type": "march_eval"
+          "type": "march_eval",
+          "direction": "left"
         },
         {
           "id": "main-monster-157",
@@ -2052,7 +2209,8 @@
           "age": 15,
           "gradeTitle": "중2 수행평가 러너",
           "name": "중간 실험보고서",
-          "type": "midterm"
+          "type": "midterm",
+          "direction": "left"
         },
         {
           "id": "main-monster-158",
@@ -2061,7 +2219,8 @@
           "age": 15,
           "gradeTitle": "중2 수행평가 러너",
           "name": "기말 연표장",
-          "type": "final"
+          "type": "final",
+          "direction": "left"
         },
         {
           "id": "main-monster-159",
@@ -2070,7 +2229,8 @@
           "age": 15,
           "gradeTitle": "중2 수행평가 러너",
           "name": "중2 학년고사장",
-          "type": "year_boss"
+          "type": "year_boss",
+          "direction": "left"
         },
         {
           "id": "main-monster-160",
@@ -2079,7 +2239,8 @@
           "age": 16,
           "gradeTitle": "중3 고입 대비",
           "name": "3월 고입 예열",
-          "type": "march_eval"
+          "type": "march_eval",
+          "direction": "left"
         },
         {
           "id": "main-monster-161",
@@ -2088,7 +2249,8 @@
           "age": 16,
           "gradeTitle": "중3 고입 대비",
           "name": "중간 총정리장",
-          "type": "midterm"
+          "type": "midterm",
+          "direction": "left"
         },
         {
           "id": "main-monster-162",
@@ -2097,7 +2259,8 @@
           "age": 16,
           "gradeTitle": "중3 고입 대비",
           "name": "기말 내신 보스",
-          "type": "final"
+          "type": "final",
+          "direction": "left"
         },
         {
           "id": "main-monster-163",
@@ -2106,7 +2269,8 @@
           "age": 16,
           "gradeTitle": "중3 고입 대비",
           "name": "중등 졸업고사",
-          "type": "year_boss"
+          "type": "year_boss",
+          "direction": "left"
         },
         {
           "id": "main-monster-164",
@@ -2115,7 +2279,8 @@
           "age": 17,
           "gradeTitle": "고1 계열 탐색",
           "name": "3월 모의고사",
-          "type": "march_mock"
+          "type": "march_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-165",
@@ -2124,7 +2289,8 @@
           "age": 17,
           "gradeTitle": "고1 계열 탐색",
           "name": "6월 모의평가",
-          "type": "june_mock"
+          "type": "june_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-166",
@@ -2133,7 +2299,8 @@
           "age": 17,
           "gradeTitle": "고1 계열 탐색",
           "name": "9월 모의평가",
-          "type": "september_mock"
+          "type": "september_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-167",
@@ -2142,7 +2309,8 @@
           "age": 17,
           "gradeTitle": "고1 계열 탐색",
           "name": "고1 전국연합 보스",
-          "type": "suneung"
+          "type": "suneung",
+          "direction": "left"
         },
         {
           "id": "main-monster-168",
@@ -2151,7 +2319,8 @@
           "age": 18,
           "gradeTitle": "고2 계열 고정",
           "name": "3월 선택과목 보스",
-          "type": "march_mock"
+          "type": "march_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-169",
@@ -2160,7 +2329,8 @@
           "age": 18,
           "gradeTitle": "고2 계열 고정",
           "name": "6월 계열평가",
-          "type": "june_mock"
+          "type": "june_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-170",
@@ -2169,7 +2339,8 @@
           "age": 18,
           "gradeTitle": "고2 계열 고정",
           "name": "9월 탐구평가",
-          "type": "september_mock"
+          "type": "september_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-171",
@@ -2178,7 +2349,8 @@
           "age": 18,
           "gradeTitle": "고2 계열 고정",
           "name": "고2 전국연합 보스",
-          "type": "suneung"
+          "type": "suneung",
+          "direction": "left"
         },
         {
           "id": "main-monster-172",
@@ -2187,7 +2359,8 @@
           "age": 19,
           "gradeTitle": "고3 수험생",
           "name": "3월 모의고사장",
-          "type": "march_mock"
+          "type": "march_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-173",
@@ -2196,7 +2369,8 @@
           "age": 19,
           "gradeTitle": "고3 수험생",
           "name": "6월 평가원 보스",
-          "type": "june_mock"
+          "type": "june_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-174",
@@ -2205,7 +2379,8 @@
           "age": 19,
           "gradeTitle": "고3 수험생",
           "name": "9월 평가원 보스",
-          "type": "september_mock"
+          "type": "september_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-175",
@@ -2214,7 +2389,8 @@
           "age": 19,
           "gradeTitle": "고3 수험생",
           "name": "수능 시험장",
-          "type": "suneung"
+          "type": "suneung",
+          "direction": "left"
         },
         {
           "id": "main-monster-176",
@@ -2223,7 +2399,8 @@
           "age": 20,
           "gradeTitle": "1수 독서실 적응",
           "name": "N수 3월 진단",
-          "type": "march_mock"
+          "type": "march_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-177",
@@ -2232,7 +2409,8 @@
           "age": 20,
           "gradeTitle": "1수 독서실 적응",
           "name": "N수 6월 평가원",
-          "type": "june_mock"
+          "type": "june_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-178",
@@ -2241,7 +2419,8 @@
           "age": 20,
           "gradeTitle": "1수 독서실 적응",
           "name": "N수 9월 평가원",
-          "type": "september_mock"
+          "type": "september_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-179",
@@ -2250,7 +2429,8 @@
           "age": 20,
           "gradeTitle": "1수 독서실 적응",
           "name": "N수 수능 시험장",
-          "type": "suneung"
+          "type": "suneung",
+          "direction": "left"
         },
         {
           "id": "main-monster-180",
@@ -2259,7 +2439,8 @@
           "age": 21,
           "gradeTitle": "2수 루틴 고정",
           "name": "2수 3월 진단",
-          "type": "march_mock"
+          "type": "march_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-181",
@@ -2268,7 +2449,8 @@
           "age": 21,
           "gradeTitle": "2수 루틴 고정",
           "name": "2수 6월 평가원",
-          "type": "june_mock"
+          "type": "june_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-182",
@@ -2277,7 +2459,8 @@
           "age": 21,
           "gradeTitle": "2수 루틴 고정",
           "name": "2수 9월 평가원",
-          "type": "september_mock"
+          "type": "september_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-183",
@@ -2286,7 +2469,8 @@
           "age": 21,
           "gradeTitle": "2수 루틴 고정",
           "name": "2수 수능 시험장",
-          "type": "suneung"
+          "type": "suneung",
+          "direction": "left"
         },
         {
           "id": "main-monster-184",
@@ -2295,7 +2479,8 @@
           "age": 22,
           "gradeTitle": "장수생 압축 학습",
           "name": "장수 3월 진단",
-          "type": "march_mock"
+          "type": "march_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-185",
@@ -2304,7 +2489,8 @@
           "age": 22,
           "gradeTitle": "장수생 압축 학습",
           "name": "장수 6월 평가원",
-          "type": "june_mock"
+          "type": "june_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-186",
@@ -2313,7 +2499,8 @@
           "age": 22,
           "gradeTitle": "장수생 압축 학습",
           "name": "장수 9월 평가원",
-          "type": "september_mock"
+          "type": "september_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-187",
@@ -2322,7 +2509,8 @@
           "age": 22,
           "gradeTitle": "장수생 압축 학습",
           "name": "장수 수능 시험장",
-          "type": "suneung"
+          "type": "suneung",
+          "direction": "left"
         },
         {
           "id": "main-monster-188",
@@ -2331,7 +2519,8 @@
           "age": 23,
           "gradeTitle": "N수 베테랑",
           "name": "N수 3월 파이널",
-          "type": "march_mock"
+          "type": "march_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-189",
@@ -2340,7 +2529,8 @@
           "age": 23,
           "gradeTitle": "N수 베테랑",
           "name": "N수 6월 파이널",
-          "type": "june_mock"
+          "type": "june_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-190",
@@ -2349,7 +2539,8 @@
           "age": 23,
           "gradeTitle": "N수 베테랑",
           "name": "N수 9월 파이널",
-          "type": "september_mock"
+          "type": "september_mock",
+          "direction": "left"
         },
         {
           "id": "main-monster-191",
@@ -2358,7 +2549,8 @@
           "age": 23,
           "gradeTitle": "N수 베테랑",
           "name": "N수 수능 시험장",
-          "type": "suneung"
+          "type": "suneung",
+          "direction": "left"
         }
       ]
     },

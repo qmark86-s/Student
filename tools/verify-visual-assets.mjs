@@ -10,10 +10,12 @@ const stages = JSON.parse(readFileSync(resolve("data/expedition_stages.json"), "
 const bosses = JSON.parse(readFileSync(resolve("data/expedition_bosses.json"), "utf8"));
 const battleRoadConfig = JSON.parse(readFileSync(resolve("data/battle_road_config.json"), "utf8"));
 const css = readFileSync(resolve("src/snapshot/visual-assets.css"), "utf8");
+const packageJson = JSON.parse(readFileSync(resolve("package.json"), "utf8"));
 const characterManifestPath = resolve("data/character_animation_manifest.json");
 const characterAxisReportPath = resolve("artifacts/visual-asset-samples/character-axis-report.json");
 const professionalAxisReportPath = resolve("artifacts/visual-asset-samples/professional-axis-report.json");
 const spriteReferenceLockPath = resolve("data/sprite_reference_lock.json");
+const mainMonsterGreenSourcePath = resolve("assets/visual-source/main-monsters/main-monsters-green.png");
 
 const failures = [];
 
@@ -56,6 +58,8 @@ if (!css.includes(".battle-scene-enemy")) failures.push("battle scene enemy css 
 if (!css.includes(".battle-scene-hp")) failures.push("battle scene boss hp css is missing");
 if (!css.includes("__STUDENT_ASSET_003__")) failures.push("battle scene enemy atlas token is missing from css");
 if (!css.includes(".main-monster-191")) failures.push("main monster frame css mapping is incomplete");
+if (!existsSync(mainMonsterGreenSourcePath)) failures.push("main battle monster green source sheet is missing");
+if (!packageJson.scripts?.["visual:build"]?.includes("generate-main-monster-sources.py")) failures.push("visual:build must regenerate the main battle monster green source sheet");
 if (!css.includes("@keyframes studentCombatLoop")) failures.push("student melee combat motion is missing");
 if (!css.includes("@keyframes studentMoveFrames")) failures.push("student sprite frame animation is missing");
 if (!css.includes("@keyframes enemyCombatStep")) failures.push("scene enemy idle combat motion is missing");
@@ -73,6 +77,8 @@ const battleBackdrop = battlePresentation.backdrop ?? {};
 const studentAttack = battlePresentation.studentAttack ?? {};
 const studentDisplay = battlePresentation.studentDisplay ?? {};
 const enemyDisplay = battlePresentation.enemyDisplay ?? {};
+const enemyReaction = battlePresentation.enemyReaction ?? {};
+const enemyHpBar = battlePresentation.enemyHpBar ?? {};
 if (!css.includes(`--battle-road-pan-width:${battleBackdrop.panWidthPercent}%`)) failures.push("battle road backdrop pan width is not config-driven");
 if ((battleBackdrop.panWidthPercent ?? 9999) > 900) failures.push(`battle road backdrop pan width is too zoomed-in for student road view: ${battleBackdrop.panWidthPercent}%`);
 if (!css.includes(`translate3d(${battleBackdrop.panLoopPercent}%`)) failures.push("battle road backdrop loop percent is not config-driven");
@@ -83,6 +89,10 @@ if (!css.includes(`--battle-normal-enemy-size:${enemyDisplay.normalSizePx}px`)) 
 if (!css.includes(`--battle-boss-enemy-size:${enemyDisplay.bossSizePx}px`)) failures.push("battle boss enemy display size is not config-driven");
 if (!css.includes(`--battle-suneung-enemy-size:${enemyDisplay.suneungSizePx}px`)) failures.push("battle suneung enemy display size is not config-driven");
 if (!css.includes(`--battle-defeated-opacity:${enemyDisplay.defeatedOpacity}`)) failures.push("battle defeated enemy opacity is not config-driven");
+if (!css.includes(`width:${enemyHpBar.widthPx}px;height:${enemyHpBar.heightPx}px`)) failures.push("battle enemy HP bar size is not config-driven");
+if (!css.includes(`width:${enemyHpBar.mobileWidthPx}px;height:${enemyHpBar.mobileHeightPx}px`)) failures.push("battle enemy mobile HP bar size is not config-driven");
+if (!css.includes(`--enemy-rim-opacity:${enemyReaction.rimOpacity}`)) failures.push("battle enemy rim opacity is not config-driven");
+if (css.includes("translate(-24px,-7px)") || css.includes("rotate(-9deg)") || css.includes("brightness(1.95)")) failures.push("battle enemy reaction still uses the old exaggerated hit motion");
 if (!css.includes(`.pixel-arena .helper-sprite{width:${studentDisplay.helperSizePx}px;height:${studentDisplay.helperSizePx}px`)) failures.push("helper companion display size is not config-driven");
 if (!css.includes("@keyframes expeditionAllyMeleeA")) failures.push("expedition ally melee motion is missing");
 if (!css.includes("@keyframes expeditionEnemyShock")) failures.push("expedition enemy shock vfx is missing");
@@ -164,6 +174,10 @@ if (mainStudents) {
     if (!["male", "female"].includes(item.gender)) failures.push(`${item.id} missing valid gender`);
     if (!Number.isInteger(item.gradeOrder) || item.gradeOrder < 1 || item.gradeOrder > 16) failures.push(`${item.id} missing valid gradeOrder`);
   }
+}
+
+for (const item of atlasById.get("mainMonsters")?.items ?? []) {
+  if (item.direction !== "left") failures.push(`${item.id} main battle monster should face left`);
 }
 
 if (!existsSync(characterManifestPath)) failures.push("character animation manifest is missing");

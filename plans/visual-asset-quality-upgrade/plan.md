@@ -45,7 +45,7 @@
    - `careers.json`: `portraitAsset`, `spriteAsset`, `iconAsset`
    - `expedition_stages.json`: `enemyAsset`, `enemyVariant`
    - `expedition_bosses.json`: `bossAsset`
-   - 앱 로직은 키가 없으면 기존 CSS 도형으로 fallback한다.
+   - 앱 로직은 필수 자산 키가 없으면 기존 CSS 도형으로 조용히 fallback하지 않고 검증 실패로 드러낸다.
 
 6. 생성/검수 파이프라인
    - `assets/source/`에 원본 PNG를 두고, `tools/build-assets.mjs`가 WebP/PNG와 매니페스트를 생성한다.
@@ -155,8 +155,8 @@
 
 - 완료일: 2026-06-20
 - 사용자가 지적한 과도한 픽셀화 문제를 반영해, 레퍼런스 보드 품질 1 대비 실제 적용 목표를 0.5~0.7 밀도로 재설정했다.
-- `assets/reference/age-grade-pixel-styleboard.png`에서 학생 16프레임과 메인 몬스터 192프레임을 직접 추출하는 보드 기반 아틀라스 경로를 추가했다.
-- crop rect를 학년군/몬스터군별 테이블로 관리해 이후 보드 교체나 좌표 보정이 쉽게 했다.
-- 보드가 없을 때는 기존 결정적 드로잉을 fallback으로 유지해 빌드 안정성을 보장한다.
+- 학생 16프레임은 `assets/reference/age-grade-pixel-styleboard.png` 보드 기반 아틀라스 경로를 사용한다.
+- 메인 몬스터 192프레임은 이후 품질 기준 변경으로 `assets/reference/character-ref-cute-sd.png` 우측 몬스터 cutout과 `assets/visual-source/main-monsters/main-monsters-green.png` 형광 녹색 소스 시트 경로로 교체했다.
+- 메인 몬스터는 보드 누락이나 배경 분리 실패를 기존 결정적 드로잉으로 조용히 fallback하지 않는다. 누락은 빌드 실패로 드러내고 원본/전처리를 수정한다.
 - 메인 전투 학생/몬스터와 원정대/직업 렌더링의 강제 `pixelated`를 줄여 큰 네모 픽셀로 뭉개지는 느낌을 완화했다.
 - `npm run visual:verify`, `npm run visual:smoke`, `npm run mobile:smoke`로 아틀라스, 실제 전투장, 모바일 360/412px 화면을 검증했다.

@@ -62,6 +62,10 @@ function itemIndex(item) {
   return 0;
 }
 
+function isChromaKeyResidue(r, g, b, a) {
+  return a > 8 && g > 220 && r < 48 && b < 48 && g - Math.max(r, b) > 170;
+}
+
 function inspectCell(image, atlas, item) {
   const cell = atlas.cell;
   const index = itemIndex(item);
@@ -75,12 +79,14 @@ function inspectCell(image, atlas, item) {
   let minY = Number.POSITIVE_INFINITY;
   let maxX = -1;
   let maxY = -1;
+  let chromaKeyResidue = 0;
 
   for (let y = startY; y < endY; y += 1) {
     for (let x = startX; x < endX; x += 1) {
       const p = (y * image.width + x) * 4;
       const a = image.pixels[p + 3];
       if (a <= 8) continue;
+      if (isChromaKeyResidue(image.pixels[p], image.pixels[p + 1], image.pixels[p + 2], a)) chromaKeyResidue += 1;
       opaque += 1;
       colors.add(`${image.pixels[p]},${image.pixels[p + 1]},${image.pixels[p + 2]},${a}`);
       minX = Math.min(minX, x - startX);
@@ -100,6 +106,11 @@ function inspectCell(image, atlas, item) {
     distinctColors: colors.size,
     boundsWidth,
     boundsHeight,
+    leftMargin: maxX >= minX ? minX : 0,
+    rightMargin: maxX >= minX ? cell - maxX - 1 : 0,
+    topMargin: maxY >= minY ? minY : 0,
+    bottomMargin: maxY >= minY ? cell - maxY - 1 : 0,
+    chromaKeyResidue,
   };
 }
 
@@ -118,6 +129,13 @@ function inspectAtlas(atlas, gates) {
     if (cell.distinctColors < gate.minDistinctColors) failures.push(`${atlas.id}/${cell.id}: colors ${cell.distinctColors} < ${gate.minDistinctColors}`);
     if (cell.boundsWidth < gate.minBoundsWidth) failures.push(`${atlas.id}/${cell.id}: width ${cell.boundsWidth} < ${gate.minBoundsWidth}`);
     if (cell.boundsHeight < gate.minBoundsHeight) failures.push(`${atlas.id}/${cell.id}: height ${cell.boundsHeight} < ${gate.minBoundsHeight}`);
+    if (Number.isFinite(gate.minEdgeMargin)) {
+      const minMargin = Math.min(cell.leftMargin, cell.rightMargin, cell.topMargin, cell.bottomMargin);
+      if (minMargin < gate.minEdgeMargin) failures.push(`${atlas.id}/${cell.id}: edge margin ${minMargin} < ${gate.minEdgeMargin}`);
+    }
+    if (Number.isFinite(gate.maxChromaKeyResidue) && cell.chromaKeyResidue > gate.maxChromaKeyResidue) {
+      failures.push(`${atlas.id}/${cell.id}: chroma key residue ${cell.chromaKeyResidue} > ${gate.maxChromaKeyResidue}`);
+    }
     return cell;
   });
 
@@ -132,6 +150,8 @@ function inspectAtlas(atlas, gates) {
     maxDistinctColors: Math.max(...cells.map((cell) => cell.distinctColors)),
     minBoundsWidth: Math.min(...cells.map((cell) => cell.boundsWidth)),
     minBoundsHeight: Math.min(...cells.map((cell) => cell.boundsHeight)),
+    minEdgeMargin: Math.min(...cells.flatMap((cell) => [cell.leftMargin, cell.rightMargin, cell.topMargin, cell.bottomMargin])),
+    maxChromaKeyResidue: Math.max(...cells.map((cell) => cell.chromaKeyResidue)),
     failures,
   };
   return { summary, cells };

@@ -23,8 +23,10 @@
 - 원본 자산: `assets/visual-source/characters/`
 - 직업동료/학습도우미 원본 자산: `assets/visual-source/companions/`
 - 원정대 몬스터 원본 자산: `assets/visual-source/expedition-enemies/`
+- 학생전투 몬스터 녹색 소스 시트: `assets/visual-source/main-monsters/main-monsters-green.png`
 - 전처리: `tools/prepare-character-sprites.py`
 - 직업동료/몬스터 원본 생성: `tools/generate-professional-sprite-sources.py`
+- 학생전투 몬스터 원본 생성: `tools/generate-main-monster-sources.py`
 - 직업동료/몬스터 전처리: `tools/prepare-professional-sprites.py`
 - SD 스타일 변환 유틸: `tools/sprite_style_utils.py`
 - manifest 동기화: `tools/sync-character-animation-manifest.mjs`
@@ -46,6 +48,7 @@ npm run asset:factory:qa
 npm run asset:factory:install-skill
 ```
 
+- 학생전투 몬스터 cutout 생성에는 Python `cv2`/OpenCV가 필요하다. 누락되면 `tools/generate-main-monster-sources.py`에서 명시적으로 실패시키고, 배경을 임의 fallback으로 숨기지 않는다.
 - `asset:factory:prepare`: 비주얼 자산을 재생성하고 학생/직업동료/몬스터 축 리포트와 리뷰 시트를 만든다.
 - `asset:factory:review`: 이미 생성된 학생/직업동료/몬스터 리포트를 요약하고 리뷰 시트를 다시 만든다.
 - `asset:factory:qa`: 웹 빌드, manifest 검증, 컨택트시트, 학생/직업동료/몬스터 리뷰, 브라우저 스모크를 모두 실행한다.
@@ -92,6 +95,9 @@ npm run asset:factory:install-skill
 - 직업동료 헤어/얼굴 다양화는 얼굴 중앙을 덮지 않는 범위에서만 한다. 직업 가독성은 모자, 의상 실루엣, 손소품, 색상, 배지로 확보한다.
 - 얼굴 근처 원형 아티팩트 방지를 위해 `data/professional_sprite_manifest.json`의 `appearanceProfiles`는 `round-glasses`, `earpiece`, `small-ribbon`, `star-pin`, 여자 `bun`, `twin-tail`, `pony`를 사용하지 않는다. `npm run asset:integrity`는 이 face-safe 규칙을 위반하면 실패해야 한다.
 - 원정대 몬스터는 레퍼런스처럼 귀엽고 피규어 같은 학습/생활 오브젝트형 SD 몬스터가 기준이다. 손발은 짧은 장갑/발판 정도로만 사용하고, 긴 막대 팔다리나 넓은 외부 소품 때문에 몸통이 축소되면 실패로 본다.
+- 학생전투 몬스터는 `assets/reference/character-ref-cute-sd.png`의 몬스터를 기준으로 한다. `tools/generate-main-monster-sources.py`가 레퍼런스 우측 몬스터를 한 개씩 crop하고 OpenCV GrabCut으로 분리해 `assets/visual-source/main-monsters/main-monsters-green.png`를 만든다.
+- 학생전투 몬스터 소스 시트는 형광 녹색 `#00FF00` 배경이어야 하며, 최종 `asset-003.png`에는 녹색 잔여 픽셀이 0개여야 한다. `visual:audit`의 `maxChromaKeyResidue`가 이 기준을 검사한다.
+- 학생전투 몬스터 crop은 주변 몬스터, 반쪽 소품, 배경선, 의미 없는 작은 조각을 포함하면 실패다. 품질 확인은 `artifacts/visual-asset-samples/reference-main-monster-cutouts-preview.png`와 `main-monster-green-source-vs-final.png`를 확대해 본다.
 - 학생 전투 화면의 학습 도우미 표시 크기는 `data/battle_road_config.json`의 `presentation.studentDisplay.helperSizePx`에서 관리한다. 생성 CSS는 `width/height`뿐 아니라 `flex-basis`, `min-width`, `aspect-ratio`를 함께 고정해 실제 전투장 flex 배치에서 찌그러지지 않아야 한다.
 - 학생 전투 화면의 일반/보스/수능 몬스터 표시 크기는 `presentation.enemyDisplay`에서 관리한다. `npm run visual:smoke`는 학습 도우미 3명 테스트 세이브로 실제 도우미 최소 62x62px, 일반 몬스터 최소 70x70px, 보스/수능 최소 86x86px, 클리핑 0건을 검사한다.
 - 학생 전투 배경은 `presentation.backdrop.panWidthPercent`로 화면 줌을 관리한다. 현재 기준은 720%이며 900%를 넘기면 모바일 화면에서 배경이 과확대되어 캐릭터와 분리되어 보이므로 `visual:smoke`가 실패해야 한다.

@@ -18,7 +18,7 @@
 - `tools/build-visual-assets.mjs`
   - `visual-companions.png`를 4프레임/남녀 행 아틀라스로 패킹
   - `visual-enemies.png`를 4프레임 원정대 몬스터 아틀라스로 패킹
-  - 학생 전투 몬스터를 스타일 보드 기반 PNG 컷으로 교체
+  - 학생 전투 몬스터는 현재 `tools/generate-main-monster-sources.py`가 만든 `assets/visual-source/main-monsters/main-monsters-green.png`를 `asset-003.png`로 패킹한다.
 - `tools/apply-visual-asset-patch.mjs`
   - 원정대 직업동료에 `unit-gender-male`/`unit-gender-female` 클래스를 부여
 - `tools/verify-visual-assets.mjs`
@@ -53,4 +53,4 @@
 - 직업동료/학습도우미는 학생 캐릭터 최종본을 기반으로 직업별 복장, 큰 소품, 모자, 색상 차이를 얹어 직업 인지가 되도록 했다.
 - 직업동료/학습도우미는 항상 오른쪽을 보고, 원정대 몬스터는 항상 왼쪽을 본다.
 - 모든 정규화 프레임은 같은 중심축과 같은 발 기준선을 사용한다.
-- 원정대 몬스터는 실제 4프레임을 순환한다. 학생 전투 몬스터는 스타일 보드 PNG 기반 외형과 전투장 transform/VFX를 함께 사용한다.
+- 원정대 몬스터는 실제 4프레임을 순환한다. 학생 전투 몬스터는 `character-ref-cute-sd.png` 레퍼런스 cutout 기반 외형과 전투장 transform/VFX를 함께 사용한다.

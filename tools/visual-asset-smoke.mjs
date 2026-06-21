@@ -1,4 +1,4 @@
-import { createReadStream, existsSync, mkdirSync, statSync } from "node:fs";
+import { createReadStream, existsSync, mkdirSync, readFileSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
 import { chromium } from "@playwright/test";
@@ -7,6 +7,9 @@ const root = resolve("dist");
 const outputDir = resolve("artifacts/visual-asset-smoke");
 const preferredPort = Number(process.env.VISUAL_ASSET_SMOKE_PORT || 5588);
 const saveKey = "student-idle-rpg-save-v1";
+const battleRoadConfig = JSON.parse(readFileSync(resolve("data/battle_road_config.json"), "utf8"));
+const enemyReactionConfig = battleRoadConfig.presentation?.enemyReaction ?? {};
+const enemyHpBarConfig = battleRoadConfig.presentation?.enemyHpBar ?? {};
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -208,6 +211,8 @@ try {
       .filter(Boolean)
       .map((item) => rectMetrics(item));
     const helperSizes = helperRects.map((rect) => ({ width: rect.width, height: rect.height }));
+    const hpBarRects = [...document.querySelectorAll(".battle-scene-enemy .battle-scene-hp")].map((item) => rectMetrics(item));
+    const hpBarSizes = hpBarRects.map((rect) => ({ width: rect.width, height: rect.height }));
     const enemyRects = battleLineup.map((enemy) => {
       const rect = rectMetrics(enemy);
       const style = getComputedStyle(enemy);
@@ -289,6 +294,8 @@ try {
       battleLineupFrames: new Set(sceneMonsterArt.map((item) => [...item.classList].find((className) => className.startsWith("main-monster-"))).filter(Boolean)).size,
       battleLineupBosses: battleLineup.filter((item) => item.classList.contains("boss")).length,
       battleLineupHpBars: document.querySelectorAll(".battle-scene-enemy .battle-scene-hp").length,
+      battleHpBarMinWidth: minRounded(hpBarSizes.map((size) => size.width)),
+      battleHpBarMinHeight: minRounded(hpBarSizes.map((size) => size.height)),
       battleLineupAnimatedEnemies: battleLineup.filter((item) => animationName(item) !== "none").length,
       battleLineupAnimatedArt: sceneMonsterArt.filter((item) => animationName(item) !== "none").length,
       activeEnemyImpact: animationName(activeEnemy, "::after").includes("enemyHitSpark"),
@@ -577,8 +584,10 @@ try {
   if (mainMetrics.battleLineupHpBars !== 1) failures.push(`Main battle expected 1 boss HP bar, got ${mainMetrics.battleLineupHpBars}`);
   if (mainMetrics.battleLineupAnimatedEnemies < 3) failures.push(`Main battle expected animated enemy lineup, got ${mainMetrics.battleLineupAnimatedEnemies}`);
   if (mainMetrics.battleLineupAnimatedArt < 3) failures.push(`Main battle expected animated enemy art, got ${mainMetrics.battleLineupAnimatedArt}`);
-  if (!mainMetrics.activeEnemyImpact) failures.push("Main battle active enemy impact motion is missing");
-  if (!mainMetrics.activeEnemyShockRing) failures.push("Main battle active enemy shock ring VFX is missing");
+  if (!mainMetrics.activeEnemyImpact) failures.push("Main battle active enemy edge sparkle is missing");
+  if (!mainMetrics.activeEnemyShockRing) failures.push("Main battle active enemy rim light VFX is missing");
+  if (mainMetrics.battleHpBarMinWidth < (enemyHpBarConfig.mobileWidthPx ?? 96) - 4) failures.push(`Main battle boss HP bar width is too small: ${mainMetrics.battleHpBarMinWidth}px`);
+  if (mainMetrics.battleHpBarMinHeight < (enemyHpBarConfig.mobileHeightPx ?? 12) - 2) failures.push(`Main battle boss HP bar height is too small: ${mainMetrics.battleHpBarMinHeight}px`);
   if (!mainMetrics.battleDustVfx) failures.push("Main battle dust burst VFX is missing");
   if (!mainMetrics.battleBackdropImage) failures.push("Main battle long backdrop atlas is missing");
   if (!mainMetrics.battleBackdropMotion) failures.push("Main battle long backdrop pan motion is missing");
@@ -595,7 +604,9 @@ try {
   if (!mainMetrics.oldBattleBackgroundHidden) failures.push("Main battle old background image should be hidden");
   if (!mainMetrics.arenaGridHidden) failures.push("Main battle CSS grid overlay should be hidden");
   if (!mainMetrics.floorOverlayReduced) failures.push("Main battle floor grid animation should be removed");
-  if (combatMotionMetrics.activeEnemyTravelPx < 20) failures.push(`Main active enemy travel is too small: ${combatMotionMetrics.activeEnemyTravelPx}px`);
+  const activeEnemyMaxTravel = Math.max((enemyReactionConfig.engagedTravelPx ?? 4) * 2.4, 14);
+  if (combatMotionMetrics.activeEnemyTravelPx < 2) failures.push(`Main active enemy reaction is too static: ${combatMotionMetrics.activeEnemyTravelPx}px`);
+  if (combatMotionMetrics.activeEnemyTravelPx > activeEnemyMaxTravel) failures.push(`Main active enemy reaction is too large: ${combatMotionMetrics.activeEnemyTravelPx}px`);
   if (mainMetrics.battleRoadPhase === "travel" && combatMotionMetrics.roadPackTravelPx < 8) failures.push(`Main battle road pack travel is too small: ${combatMotionMetrics.roadPackTravelPx}px`);
   if (combatMotionMetrics.battleBackdropTravelPx < 4) failures.push(`Main battle backdrop travel is too small: ${combatMotionMetrics.battleBackdropTravelPx}px`);
   if (combatMotionMetrics.normalEnemyIdlePx < 2) failures.push(`Main normal enemy idle motion is too small: ${combatMotionMetrics.normalEnemyIdlePx}px`);
@@ -617,8 +628,9 @@ try {
   if (expeditionMetrics.backdropTravelPx < 4) failures.push(`Expedition backdrop travel is too small: ${expeditionMetrics.backdropTravelPx}px`);
   if (!expeditionMetrics.oldBackgroundHidden) failures.push("Expedition old background image should be hidden");
   if (!expeditionMetrics.enemyBeforeMotion) failures.push("Expedition enemy sprite motion is missing");
-  if (!expeditionMetrics.enemyShockVfx) failures.push("Expedition enemy shock VFX is missing");
-  if (expeditionMetrics.enemySpriteTravelPx < 2) failures.push(`Expedition enemy sprite travel is too small: ${expeditionMetrics.enemySpriteTravelPx}px`);
+  if (!expeditionMetrics.enemyShockVfx) failures.push("Expedition enemy rim light VFX is missing");
+  if (expeditionMetrics.enemySpriteTravelPx < 0.4) failures.push(`Expedition enemy sprite reaction is too static: ${expeditionMetrics.enemySpriteTravelPx}px`);
+  if (expeditionMetrics.enemySpriteTravelPx > 4) failures.push(`Expedition enemy sprite reaction is too large: ${expeditionMetrics.enemySpriteTravelPx}px`);
   if (!expeditionMetrics.careerUnitImage) failures.push("Expedition career unit atlas is missing");
   if (!expeditionMetrics.allyMotionReady) failures.push("Expedition ally melee motion is missing");
   if (!expeditionMetrics.allySparkReady) failures.push("Expedition ally spark VFX is missing");

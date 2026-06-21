@@ -71,7 +71,7 @@
 
 ## 학년군 자산 기준
 
-- 기준 참조 보드: `assets/reference/age-grade-pixel-styleboard.png`
+- 기준 참조 보드: 학생/학년군 컨셉은 `assets/reference/age-grade-pixel-styleboard.png`, 현재 메인 학생전투 몬스터 최종 기준은 `assets/reference/character-ref-cute-sd.png`
 - 초1~초2는 작은 체형, 큰 머리, 노란 안전모, 밝은 책가방, 크레파스/연필 같은 저학년 소품을 우선한다.
 - 초3~초6은 저학년보다 살짝 커진 체형, 캐주얼 티셔츠, 운동화, 교과서/발표 노트/실험 관찰장 같은 학교 과제 소품을 우선한다.
 - 중1~중3은 회사원 정장처럼 보이지 않도록 긴 넥타이와 재킷 라펠을 피하고, 교복 리본, 조끼, 운동화, 학생 가방, 수행평가 파일로 읽히게 한다.
@@ -177,7 +177,11 @@
 - 원정대 몬스터는 `data/sprite_style_profiles.json`의 `monsters.heightOnlyEqualize` 기준으로 4프레임 높이를 맞춘다. 한 프레임만 작아지거나 커지면 실패다.
 - 원정대 몬스터는 노트, 폴더, 타이머, 모니터, 차트, 여권, 회로, 산봉우리 같은 motif를 몸통 자체에 통합한다. 외부 소품은 작게 보조하고, 긴 막대 팔다리나 큰 외부 prop 때문에 전체가 축소되면 실패다.
 - 원정대 몬스터는 손발이 없어도 되지만 큰 눈, 볼 터치, 짧은 장갑/발판, 스티커/탭 디테일로 전투 가능한 캐릭터처럼 읽혀야 한다.
-- 학생 전투 몬스터는 `assets/reference/age-grade-pixel-styleboard.png` 기반 PNG 컷을 사용한다. 기본 모션은 전투장 transform/VFX가 담당하고, 외형 밀도는 직업동료와 같은 컨택트시트 기준으로 검수한다.
+- 학생 전투 몬스터는 `assets/reference/character-ref-cute-sd.png` 우측 몬스터를 개별 crop/GrabCut cutout으로 분리한 뒤 `assets/visual-source/main-monsters/main-monsters-green.png` 형광 녹색 소스 시트로 재생성한다.
+- 메인 학생전투 몬스터 crop은 한 몬스터씩만 잡는다. 줄 전체나 주변 오브젝트를 함께 crop하면 반쪽 소품, 배경 잔여, 몸통 내부 투명화가 생기므로 실패로 본다.
+- `tools/generate-main-monster-sources.py`는 OpenCV GrabCut으로 흰 종이/스티커/OMR 몸통을 보존하고, 작은 분리 조각을 제거한 뒤 레퍼런스 방향을 유지한다. 이전 출력 대비 좌우대칭된 현재 기준이 학생 쪽(`<-`)을 향하는 방향이다.
+- 최종 `asset-003.png`에는 형광 녹색 픽셀이 남으면 안 된다. `data/visual_asset_quality_gates.json`의 `mainMonsters.maxChromaKeyResidue`와 `visual:audit`가 이를 검사한다.
+- 기본 모션은 전투장 transform/VFX가 담당하고, 외형 밀도는 레퍼런스 몬스터와 같은 컨택트시트 기준으로 검수한다.
 
 ## AI 이미지 생성 사용 기준
 

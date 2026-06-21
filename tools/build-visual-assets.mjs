@@ -15,7 +15,7 @@ const characterAxisReportPath = resolve("artifacts/visual-asset-samples/characte
 const professionalAxisReportPath = resolve("artifacts/visual-asset-samples/professional-axis-report.json");
 const stagesPath = resolve("data/expedition_stages.json");
 const bossesPath = resolve("data/expedition_bosses.json");
-const ageGradeStyleboardPath = resolve("assets/reference/age-grade-pixel-styleboard.png");
+const mainMonsterSourcePath = resolve("assets/visual-source/main-monsters/main-monsters-green.png");
 const matteDebugDir = resolve("artifacts/visual-asset-matte");
 const chromaKeyGreen = { r: 0, g: 255, b: 0, a: 255 };
 
@@ -96,6 +96,8 @@ function battleRoadPresentation(config) {
   const display = presentation.studentDisplay ?? {};
   const attack = presentation.studentAttack ?? {};
   const enemyDisplay = presentation.enemyDisplay ?? {};
+  const enemyReaction = presentation.enemyReaction ?? {};
+  const enemyHpBar = presentation.enemyHpBar ?? {};
   const enemySlots = presentation.enemySlots ?? {};
   return {
     backdrop: {
@@ -135,6 +137,19 @@ function battleRoadPresentation(config) {
       mobileBossSizePx: clampNumber(enemyDisplay.mobileBossSizePx, 92, 36, 160),
       mobileSuneungSizePx: clampNumber(enemyDisplay.mobileSuneungSizePx, 86, 36, 160),
       defeatedOpacity: clampNumber(enemyDisplay.defeatedOpacity, 0, 0, 1),
+    },
+    enemyReaction: {
+      engagedTravelPx: clampNumber(enemyReaction.engagedTravelPx, 4, 0, 40),
+      hurtTravelPx: clampNumber(enemyReaction.hurtTravelPx, 1.5, 0, 30),
+      rimOpacity: clampNumber(enemyReaction.rimOpacity, 0.72, 0, 1),
+    },
+    enemyHpBar: {
+      widthPx: clampNumber(enemyHpBar.widthPx, 72, 24, 160),
+      heightPx: clampNumber(enemyHpBar.heightPx, 10, 4, 24),
+      topPx: clampNumber(enemyHpBar.topPx, -14, -40, 20),
+      mobileWidthPx: clampNumber(enemyHpBar.mobileWidthPx, 96, 24, 180),
+      mobileHeightPx: clampNumber(enemyHpBar.mobileHeightPx, 12, 4, 28),
+      mobileTopPx: clampNumber(enemyHpBar.mobileTopPx, -16, -44, 20),
     },
     enemySlots: {
       school: Array.isArray(enemySlots.school) ? enemySlots.school : [[60, 80, 1], [73, 76, 1.08], [85, 80, 1]],
@@ -1720,27 +1735,14 @@ function buildMainMonsterAtlas(gradeVisuals) {
   const cell = 96;
   const target = canvas(cell * 192, cell);
   const items = [];
-  const styleboard = loadAgeGradeStyleboardSprites();
-  const drawMonsterFrame = (ox, visual, variant, boss) => {
-    const sprites = styleboard ? styleboardMonsterSprites(styleboard, visual.phase) : null;
-    const source = sprites?.[Math.abs(variant) % sprites.length];
-    if (source) {
-      drawSpriteFitted(target, source, ox, 0, cell, cell, {
-        mirrorX: true,
-        maxW: boss ? 84 : 82,
-        maxH: boss ? 84 : 80,
-        bottomPad: boss ? 3 : 6,
-        offsetY: boss ? -2 : 0,
-      });
-      drawStyleboardMonsterBadge(target, ox, 0, cell, visual, variant, boss);
-      return;
-    }
-    drawAcademicMonster(target, ox, 0, visual, variant, boss);
+  const sourceSheet = loadMainMonsterSourceSheet(cell, 192);
+  const drawMonsterFrame = (ox, frame) => {
+    blitCrop(target, sourceSheet, frame * cell, 0, cell, cell, ox, 0);
   };
   for (const visual of gradeVisuals) {
     visual.normalMonsterFrames.forEach((frame, variant) => {
       const ox = frame * cell;
-      drawMonsterFrame(ox, visual, variant, false);
+      drawMonsterFrame(ox, frame);
       items.push({
         id: `main-monster-${String(frame).padStart(3, "0")}`,
         frame,
@@ -1749,11 +1751,12 @@ function buildMainMonsterAtlas(gradeVisuals) {
         gradeTitle: visual.studentTitle,
         name: visual.normalMonsterNames[variant],
         type: "normal",
+        direction: "left",
       });
     });
     for (const [type, frame] of Object.entries(visual.examMonsterFrames)) {
       const ox = frame * cell;
-      drawMonsterFrame(ox, visual, frame, true);
+      drawMonsterFrame(ox, frame);
       items.push({
         id: `main-monster-${String(frame).padStart(3, "0")}`,
         frame,
@@ -1762,6 +1765,7 @@ function buildMainMonsterAtlas(gradeVisuals) {
         gradeTitle: visual.studentTitle,
         name: visual.examMonsterNames[type],
         type,
+        direction: "left",
       });
     }
   }
@@ -1770,6 +1774,56 @@ function buildMainMonsterAtlas(gradeVisuals) {
   writeChromaMattePreview(target, resolve(matteDebugDir, "asset-003-monsters-chroma.png"));
   items.sort((a, b) => a.frame - b.frame);
   return { path, width: target.width, height: target.height, cell, items };
+}
+
+function clearChromaKeyGreenMatte(source) {
+  const target = canvas(source.width, source.height);
+  for (let y = 0; y < source.height; y += 1) {
+    for (let x = 0; x < source.width; x += 1) {
+      const p = (y * source.width + x) * 4;
+      const color = {
+        r: source.pixels[p],
+        g: source.pixels[p + 1],
+        b: source.pixels[p + 2],
+        a: source.pixels[p + 3],
+      };
+      const greenDominance = color.g - Math.max(color.r, color.b);
+      const matteGreen = isChromaKeyGreen(color) || (color.g > 170 && color.r < 96 && color.b < 112 && greenDominance > 72);
+      target.pixels[p] = color.r;
+      target.pixels[p + 1] = color.g;
+      target.pixels[p + 2] = color.b;
+      target.pixels[p + 3] = matteGreen ? 0 : color.a;
+    }
+  }
+  return target;
+}
+
+function loadMainMonsterSourceSheet(cell, expectedFrames) {
+  if (!existsSync(mainMonsterSourcePath)) {
+    throw new Error(`Main monster green source sheet is missing: ${relative(resolve("."), mainMonsterSourcePath)}. Run python tools/generate-main-monster-sources.py first.`);
+  }
+  const source = readPngRgba(mainMonsterSourcePath);
+  const expectedWidth = cell * expectedFrames;
+  if (source.width !== expectedWidth || source.height !== cell) {
+    throw new Error(`Main monster green source sheet must be ${expectedWidth}x${cell}, got ${source.width}x${source.height}.`);
+  }
+  return clearChromaKeyGreenMatte(source);
+}
+
+function blitCrop(target, source, sx, sy, w, h, ox, oy) {
+  for (let y = 0; y < h; y += 1) {
+    for (let x = 0; x < w; x += 1) {
+      const src = ((sy + y) * source.width + (sx + x)) * 4;
+      const tx = ox + x;
+      const ty = oy + y;
+      if (tx < 0 || ty < 0 || tx >= target.width || ty >= target.height) continue;
+      const dst = (ty * target.width + tx) * 4;
+      target.pixels[dst] = source.pixels[src];
+      target.pixels[dst + 1] = source.pixels[src + 1];
+      target.pixels[dst + 2] = source.pixels[src + 2];
+      target.pixels[dst + 3] = source.pixels[src + 3];
+    }
+  }
 }
 
 function blitCanvas(target, source, ox, oy) {
@@ -1918,14 +1972,6 @@ function drawSourceScaled(target, source, dx, dy, dw, dh, options = {}) {
   }
 }
 
-function colorDistance(a, b) {
-  return Math.hypot(a.r - b.r, a.g - b.g, a.b - b.b);
-}
-
-function colorChroma(color) {
-  return Math.max(color.r, color.g, color.b) - Math.min(color.r, color.g, color.b);
-}
-
 function readRgbaAt(image, x, y) {
   const sx = Math.max(0, Math.min(image.width - 1, Math.floor(x)));
   const sy = Math.max(0, Math.min(image.height - 1, Math.floor(y)));
@@ -1950,87 +1996,6 @@ function copyCrop(source, rect) {
 
 function isChromaKeyGreen(color) {
   return color.g > 215 && color.r < 72 && color.b < 92 && color.g - Math.max(color.r, color.b) > 130;
-}
-
-function isProtectedSpriteColor(color) {
-  if (color.a <= 12) return false;
-  const max = Math.max(color.r, color.g, color.b);
-  const chroma = colorChroma(color);
-  const skin = color.r >= 170 && color.g >= 105 && color.b >= 68 && color.r > color.g + 14 && color.g > color.b + 6 && color.r - color.b > 38;
-  const darkInkOrHair = max < 98;
-  const warmHairOrShadow = color.r >= 82 && color.r > color.g + 8 && color.g >= 38 && color.b < 120 && color.r - color.b > 30;
-  const saturatedPropOrCloth = chroma > 52;
-  return skin || darkInkOrHair || warmHairOrShadow || saturatedPropOrCloth;
-}
-
-function isNeutralStyleboardBackground(color) {
-  if (color.a <= 12 || isChromaKeyGreen(color)) return true;
-  if (isProtectedSpriteColor(color)) return false;
-  const max = Math.max(color.r, color.g, color.b);
-  const min = Math.min(color.r, color.g, color.b);
-  const chroma = max - min;
-  const paper = color.r >= 168 && color.r <= 246 && color.g >= 162 && color.g <= 242 && color.b >= 150 && color.b <= 236 && chroma <= 42;
-  const rowLineOrSoftShadow = max >= 96 && max <= 188 && chroma <= 28;
-  return paper || rowLineOrSoftShadow;
-}
-
-function isLooseNeutralBackdrop(color) {
-  if (!isNeutralStyleboardBackground(color)) return false;
-  const chroma = colorChroma(color);
-  return color.r >= 168 && color.r <= 242 && color.g >= 160 && color.g <= 238 && color.b >= 150 && color.b <= 232 && chroma <= 40;
-}
-
-function clearStyleboardBackground(sprite, threshold = 30, options = {}) {
-  const backgroundSamples = [
-    readRgbaAt(sprite, 2, 2),
-    readRgbaAt(sprite, sprite.width - 3, 2),
-    readRgbaAt(sprite, 2, sprite.height - 3),
-    readRgbaAt(sprite, sprite.width - 3, sprite.height - 3),
-    readRgbaAt(sprite, Math.floor(sprite.width / 2), 2),
-    readRgbaAt(sprite, Math.floor(sprite.width / 2), sprite.height - 3),
-  ];
-  const visited = new Uint8Array(sprite.width * sprite.height);
-  const queue = [];
-  const maybeBackground = (x, y) => {
-    const c = readRgbaAt(sprite, x, y);
-    if (c.a < 12 || isChromaKeyGreen(c)) return true;
-    if (!isNeutralStyleboardBackground(c)) return false;
-    const max = Math.max(c.r, c.g, c.b);
-    const chroma = colorChroma(c);
-    const closeToEdgeMatte = backgroundSamples.some((sample) => colorDistance(c, sample) <= threshold);
-    const beigeBackdrop = c.r >= 170 && c.r <= 246 && c.g >= 164 && c.g <= 242 && c.b >= 154 && c.b <= 236 && chroma <= 34;
-    const rowLineOrCastShadow = max >= 106 && max <= 188 && chroma <= 24;
-    return closeToEdgeMatte || beigeBackdrop || rowLineOrCastShadow;
-  };
-  const push = (x, y) => {
-    if (x < 0 || y < 0 || x >= sprite.width || y >= sprite.height) return;
-    const index = y * sprite.width + x;
-    if (visited[index] || !maybeBackground(x, y)) return;
-    visited[index] = 1;
-    queue.push([x, y]);
-  };
-  for (let x = 0; x < sprite.width; x += 1) {
-    push(x, 0);
-    push(x, sprite.height - 1);
-  }
-  for (let y = 0; y < sprite.height; y += 1) {
-    push(0, y);
-    push(sprite.width - 1, y);
-  }
-  for (let i = 0; i < queue.length; i += 1) {
-    const [x, y] = queue[i];
-    push(x + 1, y);
-    push(x - 1, y);
-    push(x, y + 1);
-    push(x, y - 1);
-  }
-  for (let i = 0; i < visited.length; i += 1) {
-    if (!visited[i] && !options.removeNeutralIslands) continue;
-    const p = i * 4;
-    if (!visited[i] && !isLooseNeutralBackdrop({ r: sprite.pixels[p], g: sprite.pixels[p + 1], b: sprite.pixels[p + 2], a: sprite.pixels[p + 3] })) continue;
-    sprite.pixels[p + 3] = 0;
-  }
-  return sprite;
 }
 
 function writeChromaMattePreview(source, path) {
@@ -2112,120 +2077,6 @@ function drawSpriteFitted(target, sprite, cellX, cellY, cellW, cellH, options = 
       if (options.tint) color = mix(color, options.tint, options.tintRatio ?? 0.12);
       setPixel(target, dx + x, dy + y, color);
     }
-  }
-}
-
-function extractStyleboardSprites(source, rects, threshold = 30, options = {}) {
-  return rects.map((rect) => clearStyleboardBackground(copyCrop(source, rect), threshold, options));
-}
-
-const ageGradeStyleboardRects = {
-  students: {
-    lower: [
-      { x: 48, y: 38, w: 130, h: 154 },
-      { x: 230, y: 38, w: 132, h: 154 },
-    ],
-    upper: [
-      { x: 412, y: 38, w: 140, h: 154 },
-      { x: 608, y: 38, w: 134, h: 154 },
-      { x: 50, y: 216, w: 132, h: 158 },
-      { x: 230, y: 216, w: 136, h: 158 },
-    ],
-    middle: [
-      { x: 46, y: 400, w: 140, h: 168 },
-      { x: 230, y: 400, w: 140, h: 168 },
-      { x: 424, y: 400, w: 140, h: 168 },
-    ],
-    high: [
-      { x: 40, y: 600, w: 150, h: 174 },
-      { x: 226, y: 600, w: 146, h: 174 },
-      { x: 418, y: 600, w: 148, h: 174 },
-    ],
-    repeater: [
-      { x: 40, y: 790, w: 154, h: 190 },
-      { x: 224, y: 790, w: 154, h: 190 },
-      { x: 414, y: 790, w: 154, h: 190 },
-      { x: 605, y: 790, w: 150, h: 190 },
-    ],
-  },
-  monsters: {
-    elementary: [
-      { x: 804, y: 48, w: 150, h: 144 },
-      { x: 1034, y: 38, w: 150, h: 154 },
-      { x: 1240, y: 42, w: 156, h: 150 },
-      { x: 786, y: 228, w: 172, h: 150 },
-      { x: 1036, y: 218, w: 156, h: 160 },
-      { x: 1242, y: 224, w: 164, h: 154 },
-    ],
-    middle: [
-      { x: 790, y: 420, w: 170, h: 154 },
-      { x: 1046, y: 394, w: 156, h: 180 },
-      { x: 1246, y: 406, w: 166, h: 168 },
-    ],
-    high: [
-      { x: 786, y: 606, w: 166, h: 174 },
-      { x: 1048, y: 624, w: 158, h: 156 },
-      { x: 1252, y: 624, w: 164, h: 156 },
-    ],
-    repeater: [
-      { x: 760, y: 800, w: 158, h: 178 },
-      { x: 932, y: 790, w: 166, h: 188 },
-      { x: 1136, y: 800, w: 160, h: 178 },
-      { x: 1326, y: 800, w: 154, h: 178 },
-    ],
-  },
-};
-
-let ageGradeStyleboardCache = null;
-
-function loadAgeGradeStyleboardSprites() {
-  if (ageGradeStyleboardCache) return ageGradeStyleboardCache;
-  if (!existsSync(ageGradeStyleboardPath)) return null;
-  const source = readPngRgba(ageGradeStyleboardPath);
-  ageGradeStyleboardCache = {
-    students: Object.fromEntries(
-      Object.entries(ageGradeStyleboardRects.students).map(([key, rects]) => [key, extractStyleboardSprites(source, rects, 30)]),
-    ),
-    monsters: Object.fromEntries(
-      Object.entries(ageGradeStyleboardRects.monsters).map(([key, rects]) => [key, extractStyleboardSprites(source, rects, 30)]),
-    ),
-  };
-  return ageGradeStyleboardCache;
-}
-
-function styleboardStudentSprite(styleboard, visual) {
-  if (visual.phase === "elementary" && visual.age <= 9) return styleboard.students.lower[(visual.order - 1) % styleboard.students.lower.length];
-  if (visual.phase === "elementary") return styleboard.students.upper[(visual.order - 3) % styleboard.students.upper.length];
-  if (visual.phase === "middle") return styleboard.students.middle[(visual.order - 7) % styleboard.students.middle.length];
-  if (visual.phase === "high") return styleboard.students.high[(visual.order - 10) % styleboard.students.high.length];
-  return styleboard.students.repeater[(visual.order - 13) % styleboard.students.repeater.length];
-}
-
-function styleboardMonsterSprites(styleboard, phase) {
-  return styleboard.monsters[phase] ?? styleboard.monsters.repeater;
-}
-
-function drawStyleboardMonsterBadge(target, ox, oy, cell, visual, variant, boss) {
-  const phaseColors = {
-    elementary: "#fde047",
-    middle: "#60a5fa",
-    high: "#facc15",
-    repeater: "#fb923c",
-  };
-  const ink = hexToRgb("#17212e");
-  const accent = hexToRgb(phaseColors[visual.phase] ?? "#fb923c");
-  if (boss) {
-    fillPolygon(target, [[ox + 45, oy + 18], [ox + 52, oy + 7], [ox + 60, oy + 18], [ox + 69, oy + 7], [ox + 78, oy + 18]], ink);
-    fillPolygon(target, [[ox + 48, oy + 17], [ox + 53, oy + 10], [ox + 60, oy + 17], [ox + 68, oy + 10], [ox + 75, oy + 17]], accent);
-    fillRect(target, ox + 49, oy + 18, 27, 5, accent);
-    fillRect(target, ox + 53, oy + 20, 5, 3, hexToRgb("#fff7ed"));
-    fillRect(target, ox + 65, oy + 20, 5, 3, hexToRgb("#fff7ed"));
-  } else if (variant % 3 === 0) {
-    fillEllipse(target, ox + 96, oy + 33, 9, 9, ink);
-    fillEllipse(target, ox + 96, oy + 33, 6, 6, accent);
-  } else if (variant % 3 === 1) {
-    fillRect(target, ox + 91, oy + 28, 15, 12, ink);
-    fillRect(target, ox + 94, oy + 31, 9, 6, accent);
   }
 }
 
@@ -2727,6 +2578,8 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
   const studentDisplay = battleRoad.studentDisplay;
   const studentAttack = battleRoad.studentAttack;
   const enemyDisplay = battleRoad.enemyDisplay;
+  const enemyReaction = battleRoad.enemyReaction;
+  const enemyHpBar = battleRoad.enemyHpBar;
   const companionColumns = companions.columns ?? companions.items.length;
   const companionRows = companions.rows ?? 1;
   const companionFrames = companions.framesPerItem ?? 1;
@@ -2760,11 +2613,11 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
     ".expedition-enemy-group .expedition-enemy-visual,.expedition-enemy-visual.boss{filter:drop-shadow(4px 5px #00000052)}",
     ".expedition-enemy-group .expedition-enemy-visual{animation:1.2s steps(4,end) infinite expeditionEnemyIdle}",
     ".expedition-enemy-group .expedition-enemy-visual::before,.expedition-enemy-visual.boss::before{transform-origin:50% 100%;animation:1.18s step-end infinite expeditionEnemySpriteIdle}",
-    ".expedition-enemy-group .expedition-enemy-visual:first-child{animation:.78s steps(4,end) infinite expeditionEnemyKnockback}",
-    ".expedition-enemy-group .expedition-enemy-visual:first-child::before,.expedition-enemy-visual.boss::before{animation:.78s step-end infinite expeditionEnemyHurtSprite}",
-    ".expedition-enemy-group .expedition-enemy-visual:first-child::after,.expedition-enemy-visual.boss::after{content:\"\";pointer-events:none;position:absolute;left:50%;top:43%;z-index:3;width:90%;height:58%;border:2px solid #fff9;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.38);box-shadow:0 0 0 3px #ffd16655,0 0 17px #ef476f70;animation:.78s steps(4,end) infinite expeditionEnemyShock}",
-    ".expedition-impact{z-index:7;opacity:.95;background:linear-gradient(90deg,transparent,#fff 18%,#ffd166 52%,#ef476f 78%,transparent);width:74px;height:24px;top:40%;left:54%;clip-path:polygon(0 45%,78% 0,100% 50%,78% 100%,0 58%);filter:drop-shadow(0 0 8px #fff8);animation:.78s steps(4,end) infinite expeditionImpactSlash}",
-    ".expedition-impact.ready{opacity:1;background:linear-gradient(90deg,transparent,#fff 15%,#fef3c7 42%,#9fd4c9 70%,transparent)}",
+    ".expedition-enemy-group .expedition-enemy-visual:first-child{animation:.88s steps(4,end) infinite expeditionEnemyKnockback}",
+    ".expedition-enemy-group .expedition-enemy-visual:first-child::before,.expedition-enemy-visual.boss::before{animation:.88s step-end infinite expeditionEnemyHurtSprite}",
+    ".expedition-enemy-group .expedition-enemy-visual:first-child::after,.expedition-enemy-visual.boss::after{content:\"\";pointer-events:none;position:absolute;left:50%;top:50%;z-index:3;width:78%;height:76%;border:1px solid #fff8;border-radius:24px;opacity:0;transform:translate(-50%,-50%) scale(.96);box-shadow:inset 0 0 0 1px #fff5,0 0 8px #9fd4c980;animation:.88s steps(4,end) infinite expeditionEnemyShock}",
+    ".expedition-impact{z-index:7;opacity:.55;background:linear-gradient(90deg,transparent,#fff 22%,#9fd4c9 62%,transparent);width:42px;height:14px;top:42%;left:55%;clip-path:polygon(0 45%,74% 0,100% 50%,74% 100%,0 58%);filter:drop-shadow(0 0 4px #fff5);animation:.88s steps(4,end) infinite expeditionImpactSlash}",
+    ".expedition-impact.ready{opacity:.72;background:linear-gradient(90deg,transparent,#fff 16%,#fef3c7 46%,#9fd4c9 74%,transparent)}",
   ];
   expeditionBackdrops.items.forEach((item) => {
     lines.push(`.expedition-scene.backdrop-${item.backdrop}{--expedition-bg-y:${positionPercent(item.row, expeditionBackdrops.items.length)}}`);
@@ -2878,16 +2731,16 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
     ".battle-scene-enemy{position:absolute;left:var(--scene-enemy-left,70%);top:var(--scene-enemy-top,70%);z-index:var(--scene-enemy-z,10);width:var(--battle-normal-enemy-size,80px);height:var(--battle-normal-enemy-size,80px);transform:translate(-50%,-100%) scale(var(--scene-enemy-scale,1));transform-origin:50% 100%;filter:drop-shadow(4px 7px #0000005c);animation:1.36s steps(4,end) infinite enemyCombatStep;animation-delay:var(--scene-enemy-delay,0s)}",
     ".battle-scene-enemy.boss{width:var(--battle-boss-enemy-size,94px);height:var(--battle-boss-enemy-size,94px);filter:drop-shadow(5px 8px #00000066)}",
     ".battle-scene-enemy.suneung{width:var(--battle-suneung-enemy-size,88px);height:var(--battle-suneung-enemy-size,88px);filter:drop-shadow(5px 8px #00000066)}",
-    ".battle-scene-enemy.active{animation:.72s steps(4,end) infinite enemyEngagedStep}",
-    ".battle-scene-enemy.active::before{content:\"\";pointer-events:none;position:absolute;left:50%;top:45%;z-index:2;width:92%;height:62%;border:2px solid #fff9;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.38);box-shadow:0 0 0 3px #ffd16655,0 0 18px #ef476f66;animation:.72s steps(4,end) infinite enemyShockRing}",
-    ".battle-scene-enemy.active::after{content:\"\";pointer-events:none;position:absolute;left:-22%;top:18%;z-index:3;width:130%;height:42%;opacity:0;background:linear-gradient(90deg,transparent,#fff 24%,#ffd166 52%,#ef476f 74%,transparent);clip-path:polygon(0 45%,72% 0,100% 50%,72% 100%,0 56%);transform:rotate(-16deg);filter:drop-shadow(0 0 6px #fff8);animation:.72s steps(4,end) infinite enemyHitSpark}",
-    ".battle-scene-enemy.boss.active::after,.battle-scene-enemy.suneung.active::after{left:-16%;top:20%;width:140%;height:38%}",
+    ".battle-scene-enemy.active{animation:.9s steps(4,end) infinite enemyEngagedStep}",
+    `.battle-scene-enemy.active::before{content:"";pointer-events:none;position:absolute;inset:7%;z-index:2;border:1px solid #fff8;border-radius:18px;opacity:0;box-shadow:inset 0 0 0 1px #fff5,0 0 8px #9fd4c980;animation:.9s steps(4,end) infinite enemyShockRing;--enemy-rim-opacity:${cssNumber(enemyReaction.rimOpacity, 3)}}`,
+    ".battle-scene-enemy.active::after{content:\"\";pointer-events:none;position:absolute;left:12%;top:22%;z-index:3;width:30%;height:46%;opacity:0;background:linear-gradient(180deg,transparent,#fff 22%,#9fd4c9 56%,transparent);border-radius:999px;filter:drop-shadow(0 0 4px #fff6);animation:.9s steps(4,end) infinite enemyHitSpark}",
+    ".battle-scene-enemy.boss.active::after,.battle-scene-enemy.suneung.active::after{left:10%;top:20%;width:28%;height:48%}",
     ".battle-scene-enemy.defeated{opacity:var(--battle-defeated-opacity,0);filter:grayscale(.75) drop-shadow(2px 3px #00000040);animation:none}",
     ".battle-scene-enemy.defeated .battle-scene-monster-art{animation:none}",
     ".battle-scene-enemy.slot-1{--scene-enemy-delay:-.04s}.battle-scene-enemy.slot-2{--scene-enemy-delay:-.18s}.battle-scene-enemy.slot-3{--scene-enemy-delay:-.31s}.battle-scene-enemy.slot-4{--scene-enemy-delay:-.09s}.battle-scene-enemy.slot-5{--scene-enemy-delay:-.24s}.battle-scene-enemy.slot-6{--scene-enemy-delay:-.39s}.battle-scene-enemy.slot-7{--scene-enemy-delay:-.13s}.battle-scene-enemy.slot-8{--scene-enemy-delay:-.27s}.battle-scene-enemy.slot-9{--scene-enemy-delay:-.43s}.battle-scene-enemy.slot-10{--scene-enemy-delay:-.2s}.battle-scene-enemy.slot-11{--scene-enemy-delay:-.35s}.battle-scene-enemy.slot-12{--scene-enemy-delay:-.49s}",
     ".battle-scene-monster-art{position:absolute;inset:0;background-image:url(__STUDENT_ASSET_003__);background-repeat:no-repeat;background-size:19200% 100%;background-position:var(--monster-frame-x,0%) 0;image-rendering:auto;transform-origin:50% 100%;animation:1.18s steps(3,end) infinite enemyCombatBreath;animation-delay:inherit}",
-    ".battle-scene-enemy.active .battle-scene-monster-art{animation:.72s steps(4,end) infinite enemyHurtLoop}",
-    ".battle-scene-hp{position:absolute;left:50%;top:-7px;z-index:2;width:36px;height:5px;padding:1px;background:#17212ed9;border:1px solid #fff6;border-radius:999px;transform:translateX(-50%);box-shadow:0 1px 4px #0008;overflow:hidden}",
+    ".battle-scene-enemy.active .battle-scene-monster-art{animation:.9s steps(4,end) infinite enemyHurtLoop}",
+    `.battle-scene-hp{position:absolute;left:50%;top:${cssNumber(enemyHpBar.topPx)}px;z-index:4;width:${cssNumber(enemyHpBar.widthPx)}px;height:${cssNumber(enemyHpBar.heightPx)}px;padding:2px;background:#17212ee8;border:1px solid #fff8;border-radius:999px;transform:translateX(-50%);box-shadow:0 2px 7px #0009;overflow:hidden}`,
     ".battle-scene-hp::after{content:\"\";position:absolute;inset:1px;width:55%;background:linear-gradient(90deg,transparent,#fff7,transparent);transform:translateX(-130%);animation:1.25s linear infinite bossHpShine}",
     ".battle-scene-hp i{display:block;height:100%;min-width:2px;background:linear-gradient(90deg,#ef476f,#ffd166);border-radius:inherit}",
     ".battle-scene-enemy.normal .battle-scene-hp{display:none}",
@@ -2902,10 +2755,10 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
     "@keyframes expeditionAllySpark{0%,30%,68%,100%{opacity:0;transform:translateX(-8px) scaleX(.45)}38%,52%{opacity:.95;transform:translateX(18px) scaleX(1.1)}}",
     "@keyframes expeditionEnemyIdle{0%,100%{transform:translate(0,0)}30%{transform:translate(-2px,-3px)}62%{transform:translate(2px,1px)}}",
     "@keyframes expeditionEnemySpriteIdle{0%,32.99%,100%{background-position:var(--visual-enemy-frame-a,var(--visual-enemy-x,0%)) var(--visual-enemy-frame-a-y,var(--visual-enemy-y,0%));filter:brightness(1);transform:translateY(0) scale(1)}33%,65.99%{background-position:var(--visual-enemy-frame-b,var(--visual-enemy-frame-a,var(--visual-enemy-x,0%))) var(--visual-enemy-frame-b-y,var(--visual-enemy-y,0%));filter:brightness(1.06);transform:translateY(-2px) scale(1.03,.98)}66%,99.99%{background-position:var(--visual-enemy-frame-c,var(--visual-enemy-frame-a,var(--visual-enemy-x,0%))) var(--visual-enemy-frame-c-y,var(--visual-enemy-y,0%));filter:brightness(1.08);transform:translateY(-3px) scale(1.04,.97)}}",
-    "@keyframes expeditionEnemyKnockback{0%,100%{transform:translate(0,0) rotate(0)}30%{transform:translate(-20px,-5px) rotate(-7deg)}52%{transform:translate(8px,2px) rotate(4deg)}72%{transform:translate(-5px,1px) rotate(-2deg)}}",
-    "@keyframes expeditionEnemyHurtSprite{0%,24.99%,100%{background-position:var(--visual-enemy-frame-a,var(--visual-enemy-x,0%)) var(--visual-enemy-frame-a-y,var(--visual-enemy-y,0%));filter:brightness(1);transform:translateY(0) rotate(0) scale(1)}25%,49.99%{background-position:var(--visual-enemy-frame-c,var(--visual-enemy-frame-a,var(--visual-enemy-x,0%))) var(--visual-enemy-frame-c-y,var(--visual-enemy-y,0%));filter:brightness(1.95) saturate(1.45);transform:translate(-8px,-3px) rotate(-8deg) scale(.92,1.06)}50%,69.99%{background-position:var(--visual-enemy-frame-d,var(--visual-enemy-frame-a,var(--visual-enemy-x,0%))) var(--visual-enemy-frame-d-y,var(--visual-enemy-y,0%));filter:brightness(1.22);transform:translate(5px,2px) rotate(4deg) scale(1.04,.96)}70%,99.99%{background-position:var(--visual-enemy-frame-b,var(--visual-enemy-frame-a,var(--visual-enemy-x,0%))) var(--visual-enemy-frame-b-y,var(--visual-enemy-y,0%));filter:brightness(1.08);transform:translate(-2px,1px) rotate(-2deg) scale(.98)}}",
-    "@keyframes expeditionEnemyShock{0%,24%,70%,100%{opacity:0;transform:translate(-50%,-50%) scale(.35)}34%,52%{opacity:.9;transform:translate(-50%,-50%) scale(1.2)}}",
-    "@keyframes expeditionImpactSlash{0%,28%,68%,100%{opacity:0;transform:rotate(-14deg) translateX(-14px) scaleX(.45)}38%,52%{opacity:1;transform:rotate(-14deg) translateX(12px) scaleX(1.12)}}",
+    "@keyframes expeditionEnemyKnockback{0%,100%{transform:translate(0,0) rotate(0)}30%{transform:translate(-5px,-2px) rotate(-2deg)}52%{transform:translate(3px,1px) rotate(1deg)}72%{transform:translate(-2px,0) rotate(-1deg)}}",
+    "@keyframes expeditionEnemyHurtSprite{0%,24.99%,100%{background-position:var(--visual-enemy-frame-a,var(--visual-enemy-x,0%)) var(--visual-enemy-frame-a-y,var(--visual-enemy-y,0%));filter:brightness(1);transform:translateY(0) rotate(0) scale(1)}25%,49.99%{background-position:var(--visual-enemy-frame-c,var(--visual-enemy-frame-a,var(--visual-enemy-x,0%))) var(--visual-enemy-frame-c-y,var(--visual-enemy-y,0%));filter:brightness(1.22) drop-shadow(0 0 3px #fff8);transform:translate(-2px,-1px) rotate(-2deg) scale(.99,1.01)}50%,69.99%{background-position:var(--visual-enemy-frame-d,var(--visual-enemy-frame-a,var(--visual-enemy-x,0%))) var(--visual-enemy-frame-d-y,var(--visual-enemy-y,0%));filter:brightness(1.1);transform:translate(1px,0) rotate(1deg) scale(1.01,.99)}70%,99.99%{background-position:var(--visual-enemy-frame-b,var(--visual-enemy-frame-a,var(--visual-enemy-x,0%))) var(--visual-enemy-frame-b-y,var(--visual-enemy-y,0%));filter:brightness(1.04);transform:translate(-1px,0) rotate(-.5deg) scale(1)}}",
+    "@keyframes expeditionEnemyShock{0%,24%,70%,100%{opacity:0;transform:translate(-50%,-50%) scale(.94)}34%,52%{opacity:.72;transform:translate(-50%,-50%) scale(1)}}",
+    "@keyframes expeditionImpactSlash{0%,28%,68%,100%{opacity:0;transform:rotate(-12deg) translateX(-5px) scaleX(.45)}38%,52%{opacity:.58;transform:rotate(-12deg) translateX(5px) scaleX(.86)}}",
     "@keyframes expeditionDustBurst{0%,30%,64%,100%{opacity:0;transform:translateX(0) scale(.7)}40%,54%{opacity:.72;transform:translateX(-10px) scale(1.08)}}",
     "@keyframes arenaTreadmill{0%{transform:translateX(0)}100%{transform:translateX(-24px)}}",
     "@keyframes gridTreadmill{0%{transform:translateX(0)}100%{transform:translateX(-18px)}}",
@@ -2926,16 +2779,16 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
     "@keyframes helperAllyLoop{0%,19.99%,75%,100%{background-position:var(--visual-unit-frame-a,var(--visual-unit-x,0%)) var(--visual-unit-frame-a-y,var(--visual-unit-y,0%));transform:translate(var(--helper-x),var(--helper-y)) scale(var(--helper-scale))}20%,34.99%{background-position:var(--visual-unit-frame-b,var(--visual-unit-frame-a,var(--visual-unit-x,0%))) var(--visual-unit-frame-b-y,var(--visual-unit-y,0%));transform:translate(var(--helper-x),calc(var(--helper-y) - 3px)) scale(var(--helper-scale))}35%,54.99%{background-position:var(--visual-unit-frame-c,var(--visual-unit-frame-a,var(--visual-unit-x,0%))) var(--visual-unit-frame-c-y,var(--visual-unit-y,0%));transform:translate(calc(var(--helper-x) + 20px),calc(var(--helper-y) - 5px)) scale(var(--helper-scale))}55%,74.99%{background-position:var(--visual-unit-frame-d,var(--visual-unit-frame-a,var(--visual-unit-x,0%))) var(--visual-unit-frame-d-y,var(--visual-unit-y,0%));transform:translate(calc(var(--helper-x) + 6px),calc(var(--helper-y) + 1px)) scale(var(--helper-scale))}}",
     "@keyframes helperAssistSpark{0%,34%,62%,100%{opacity:0;transform:translate(0,0) scaleX(.5)}42%,52%{opacity:.82;transform:translate(22px,-3px) scaleX(1)}}",
     "@keyframes enemyCombatStep{0%,100%{transform:translate(-50%,-100%) translate(0,0) scale(var(--scene-enemy-scale,1))}24%{transform:translate(-50%,-100%) translate(-3px,-4px) scale(var(--scene-enemy-scale,1))}50%{transform:translate(-50%,-100%) translate(2px,1px) scale(var(--scene-enemy-scale,1))}74%{transform:translate(-50%,-100%) translate(-1px,-2px) scale(var(--scene-enemy-scale,1))}}",
-    "@keyframes enemyEngagedStep{0%,100%{transform:translate(-50%,-100%) translate(0,0) rotate(0) scale(var(--scene-enemy-scale,1))}28%{transform:translate(-50%,-100%) translate(-24px,-7px) rotate(-7deg) scale(var(--scene-enemy-scale,1))}50%{transform:translate(-50%,-100%) translate(10px,3px) rotate(4deg) scale(var(--scene-enemy-scale,1))}70%{transform:translate(-50%,-100%) translate(-8px,-2px) rotate(-3deg) scale(var(--scene-enemy-scale,1))}}",
+    `@keyframes enemyEngagedStep{0%,100%{transform:translate(-50%,-100%) translate(0,0) scale(var(--scene-enemy-scale,1))}28%{transform:translate(-50%,-100%) translate(-${cssNumber(enemyReaction.engagedTravelPx)}px,-1px) scale(var(--scene-enemy-scale,1))}50%{transform:translate(-50%,-100%) translate(${cssNumber(enemyReaction.engagedTravelPx / 2)}px,1px) scale(var(--scene-enemy-scale,1))}70%{transform:translate(-50%,-100%) translate(-${cssNumber(enemyReaction.engagedTravelPx / 3)}px,0) scale(var(--scene-enemy-scale,1))}}`,
     "@keyframes enemyCombatBreath{0%,100%{filter:brightness(1);transform:translateY(0) scale(1)}50%{filter:brightness(1.08);transform:translateY(-3px) scale(1.05,.96)}}",
-    "@keyframes enemyHurtLoop{0%,100%{filter:brightness(1);transform:translate(0,0) rotate(0) scale(1)}30%{filter:brightness(1.95) saturate(1.45);transform:translate(-12px,-3px) rotate(-9deg) scale(.91,1.06)}52%{filter:brightness(1.25);transform:translate(7px,2px) rotate(5deg) scale(1.05,.96)}70%{filter:brightness(1.12);transform:translate(-4px,1px) rotate(-3deg) scale(.98)}}",
-    "@keyframes enemyShockRing{0%,26%,72%,100%{opacity:0;transform:translate(-50%,-50%) scale(.35)}34%,50%{opacity:.9;transform:translate(-50%,-50%) scale(1.18)}}",
-    "@keyframes enemyHitSpark{0%,26%,68%,100%{opacity:0;transform:rotate(-16deg) translateX(-14px) scaleX(.45)}34%,50%{opacity:1;transform:rotate(-16deg) translateX(14px) scaleX(1.18)}}",
+    `@keyframes enemyHurtLoop{0%,100%{filter:brightness(1);transform:translate(0,0) scale(1)}30%{filter:brightness(1.18) saturate(1.05) drop-shadow(0 0 3px #fff8);transform:translate(-${cssNumber(enemyReaction.hurtTravelPx)}px,0) scale(1)}52%{filter:brightness(1.08);transform:translate(${cssNumber(enemyReaction.hurtTravelPx / 2)}px,0) scale(1)}70%{filter:brightness(1.04);transform:translate(-${cssNumber(enemyReaction.hurtTravelPx / 3)}px,0) scale(1)}}`,
+    "@keyframes enemyShockRing{0%,26%,72%,100%{opacity:0;transform:scale(.96)}34%,50%{opacity:var(--enemy-rim-opacity,.72);transform:scale(1)}}",
+    "@keyframes enemyHitSpark{0%,26%,68%,100%{opacity:0;transform:translateX(-4px) scaleY(.7)}34%,50%{opacity:.62;transform:translateX(0) scaleY(1)}}",
     "@keyframes battleDustBurst{0%,30%,62%,100%{opacity:0;transform:translateX(0) scale(.72)}40%,52%{opacity:.62;transform:translateX(-8px) scale(1.08)}}",
     "@keyframes battleImpactFlash{0%,35%,58%,100%{opacity:0;transform:scale(.7)}44%,50%{opacity:.42;transform:scale(1)}}",
     "@keyframes bossHpShine{0%{transform:translateX(-130%)}100%{transform:translateX(210%)}}",
     "@media (width<=390px){.battle-enemy-grid.compact{gap:3px}.battle-enemy-card{grid-template-columns:28px minmax(0,1fr)}.battle-enemy-monster{width:29px;height:29px}.pixel-arena .battle-enemy-card{grid-template-columns:22px minmax(0,1fr);min-height:34px}.pixel-arena .battle-enemy-card>.battle-enemy-monster{width:23px;height:23px}}",
-    `@media (width<=390px){.pixel-arena{--battle-normal-enemy-size:${cssNumber(enemyDisplay.mobileNormalSizePx)}px;--battle-boss-enemy-size:${cssNumber(enemyDisplay.mobileBossSizePx)}px;--battle-suneung-enemy-size:${cssNumber(enemyDisplay.mobileSuneungSizePx)}px}.battle-scene-hp{top:-8px;width:48px;height:6px}}`,
+    `@media (width<=390px){.pixel-arena{--battle-normal-enemy-size:${cssNumber(enemyDisplay.mobileNormalSizePx)}px;--battle-boss-enemy-size:${cssNumber(enemyDisplay.mobileBossSizePx)}px;--battle-suneung-enemy-size:${cssNumber(enemyDisplay.mobileSuneungSizePx)}px}.battle-scene-hp{top:${cssNumber(enemyHpBar.mobileTopPx)}px;width:${cssNumber(enemyHpBar.mobileWidthPx)}px;height:${cssNumber(enemyHpBar.mobileHeightPx)}px}}`,
   );
   const studentColumns = mainStudents.columns ?? Math.max(1, Math.round(mainStudents.width / mainStudents.cell));
   const studentRows = mainStudents.rows ?? 1;

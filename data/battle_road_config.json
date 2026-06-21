@@ -77,6 +77,32 @@
         "defeatedOpacity": "처치된 몬스터 잔상 투명도입니다. 유령처럼 보이면 0에 가깝게 낮춥니다."
       }
     },
+    "enemyReaction": {
+      "engagedTravelPx": 4,
+      "hurtTravelPx": 1.5,
+      "rimOpacity": 0.72,
+      "help": {
+        "engagedTravelPx": "피격 중인 몬스터 몸체가 좌우로 흔들리는 최대 거리입니다. 과하면 공격/피격 구분이 어려워집니다.",
+        "hurtTravelPx": "몬스터 스프라이트 내부 피격 떨림의 최대 거리입니다. 0에 가까울수록 림라이트만 남습니다.",
+        "rimOpacity": "피격 시 몬스터 외곽에 표시되는 림라이트 밝기입니다."
+      }
+    },
+    "enemyHpBar": {
+      "widthPx": 72,
+      "heightPx": 10,
+      "topPx": -14,
+      "mobileWidthPx": 96,
+      "mobileHeightPx": 12,
+      "mobileTopPx": -16,
+      "help": {
+        "widthPx": "보스/수능 몬스터 HP바 가로 크기입니다. 일반 몬스터는 HP바를 표시하지 않습니다.",
+        "heightPx": "보스/수능 몬스터 HP바 세로 크기입니다.",
+        "topPx": "보스/수능 몬스터 HP바의 위쪽 위치입니다.",
+        "mobileWidthPx": "390px 이하 모바일 화면에서 HP바 가로 크기입니다.",
+        "mobileHeightPx": "390px 이하 모바일 화면에서 HP바 세로 크기입니다.",
+        "mobileTopPx": "390px 이하 모바일 화면에서 HP바 위쪽 위치입니다."
+      }
+    },
     "studentAttack": {
       "windupPx": 4,
       "dashPx": 25,

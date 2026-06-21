@@ -58,5 +58,5 @@ npm run mobile:smoke
 - `visual-companions.png`와 `visual-enemies.png`는 아이템당 4프레임을 담는 PNG 스프라이트 아틀라스로 교체했다.
 - 직업동료/학습도우미는 남/여 행을 모두 가지고, 런타임에서 `avatarGender`에 맞는 행을 선택한다.
 - 원정대 몬스터는 `<-` 방향 4프레임을 사용하고 idle/hurt 애니메이션에서 실제 프레임을 순환한다.
-- 학생 전투 몬스터는 스타일 보드 기반 PNG 컷으로 품질을 끌어올리고 기존 전투 모션/VFX에 연결했다.
+- 학생 전투 몬스터는 이후 `character-ref-cute-sd.png` 레퍼런스 cutout 기반 녹색 소스 시트로 교체했고, 기존 전투 모션/VFX에 연결되어 있다.
 - `asset:factory:review`와 `asset:factory:qa`가 학생 축 리포트와 직업동료/몬스터 축 리포트를 함께 검사한다.

@@ -17,10 +17,12 @@
     },
     "mainMonsters": {
       "minCoverage": 0.08,
-      "maxCoverage": 0.58,
+      "maxCoverage": 0.66,
       "minDistinctColors": 9,
       "minBoundsWidth": 28,
-      "minBoundsHeight": 26
+      "minBoundsHeight": 26,
+      "minEdgeMargin": 2,
+      "maxChromaKeyResidue": 0
     },
     "companions": {
       "minCoverage": 0.22,

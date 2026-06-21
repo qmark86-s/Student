@@ -19,7 +19,8 @@ Use this skill to keep sprite production repeatable. AI image generation may cre
 6. Run `npm run asset:factory:prepare`.
 7. Inspect `artifacts/visual-asset-samples/character-axis-review-page-*.png`.
 8. For companions and monsters, inspect both `artifacts/visual-asset-samples/professional-axis-review-page-*.png` and `artifacts/visual-asset-samples/professional-zoom-review-page-*.png`.
-9. Run `npm run asset:factory:qa`, then `npm run verify:mobile` for release-facing changes.
+9. For main student-battle monsters, inspect `artifacts/visual-asset-samples/reference-main-monster-cutouts-preview.png` and `artifacts/visual-asset-samples/main-monster-green-source-vs-final.png`.
+10. Run `npm run asset:factory:qa`, then `npm run verify:mobile` for release-facing changes.
 
 ## Quality Gates
 
@@ -30,6 +31,7 @@ Use this skill to keep sprite production repeatable. AI image generation may cre
 - Solid body height drift must stay within 3px.
 - Companions and monsters must keep at least 8px top/bottom alpha margin after normalization.
 - Companion/monster zoom review must show source 4 frames and normalized 4 frames without clipping, matte leaks, or one-frame scale jumps.
+- Main student-battle monsters are generated from `assets/reference/character-ref-cute-sd.png` into `assets/visual-source/main-monsters/main-monsters-green.png`; final `asset-003.png` must have zero green matte residue.
 - One frame visibly growing or shrinking is a failure even if the app still runs.
 - Browser/mobile screenshots must not show horizontal overflow or text/sprite overlap.
 
@@ -53,6 +55,7 @@ Use `asset:factory:install-skill` when another Codex Agent should discover this 
 - `tools/prepare-character-sprites.py`: matte cleanup and normalization
 - `tools/generate-professional-sprite-sources.py`: deterministic companion and expedition enemy source generation
 - `tools/prepare-professional-sprites.py`: professional sprite normalization and source-vs-normalized zoom sheets
+- `tools/generate-main-monster-sources.py`: reference cutout generation for main student-battle monsters
 - `data/character_animation_manifest.json`: character set table
 - `data/professional_sprite_manifest.json`: companion and expedition enemy table
 

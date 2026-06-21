@@ -15,7 +15,7 @@
     "patch:visual-assets": "node tools/apply-visual-asset-patch.mjs",
     "patch:battle-road": "node tools/apply-battle-road-patch.mjs",
     "battle-road:verify": "node tools/validate-battle-road-config.mjs",
-    "visual:build": "npm run patch:visual-assets && npm run patch:battle-road && node tools/sync-character-animation-manifest.mjs && python tools/prepare-character-sprites.py && python tools/generate-professional-sprite-sources.py && python tools/prepare-professional-sprites.py && node tools/build-visual-assets.mjs",
+    "visual:build": "npm run patch:visual-assets && npm run patch:battle-road && node tools/sync-character-animation-manifest.mjs && python tools/prepare-character-sprites.py && python tools/generate-professional-sprite-sources.py && python tools/prepare-professional-sprites.py && python tools/generate-main-monster-sources.py && node tools/build-visual-assets.mjs",
     "visual:audit": "node tools/visual-asset-audit.mjs",
     "visual:sheet": "node tools/visual-asset-contact-sheet.mjs",
     "visual:verify": "node tools/verify-visual-assets.mjs && npm run visual:audit",
