@@ -286,6 +286,7 @@ try {
       if (originalSceneClass) stageScene.classList.add(originalSceneClass);
     }
     helperProbe.remove();
+    const studentSlashBackground = studentSprite ? getComputedStyle(studentSprite, "::after").backgroundImage : "";
     return {
       studentImage: getComputedStyle(student).backgroundImage.includes("data:image"),
       studentCombatMotion: ["studentCombatLoop", "studentRoadRunLoop", "studentRoadBrakeLoop"].some((name) =>
@@ -299,6 +300,7 @@ try {
       studentMeleeSlash:
         (battleLineupElement?.getAttribute("data-road-phase") ?? "") === "travel" ||
         animationName(studentSprite, "::after").includes("studentMeleeSlash"),
+      studentSlashBackground,
       monsterImage: getComputedStyle(monster).backgroundImage.includes("data:image"),
       battleRoadLineup: battleLineupElement?.classList.contains("battle-road-lineup") ?? false,
       battleRoadPhase: phase,
@@ -446,6 +448,7 @@ try {
     const curriculumToken = document.querySelector(".curriculum-attack-vfx-token");
     const curriculumStyle = curriculumToken ? getComputedStyle(curriculumToken) : null;
     const curriculumRect = curriculumToken?.getBoundingClientRect();
+    const arenaStyle = arena ? getComputedStyle(arena) : null;
     return {
       battleDamagedEnemyCount,
       phase,
@@ -458,6 +461,7 @@ try {
       curriculumVfxAnimation: curriculumStyle?.animationName ?? "",
       curriculumVfxStyleClass: curriculumToken ? [...curriculumToken.classList].find((className) => className.startsWith("curriculum-vfx-")) ?? "" : "",
       curriculumVfxSubject: curriculumLayer?.getAttribute("data-subject") ?? "",
+      curriculumVfxSourceY: Number.parseFloat(arenaStyle?.getPropertyValue("--curriculum-vfx-source-y") ?? "0"),
       curriculumVfxWidth: Math.round(curriculumRect?.width ?? 0),
       curriculumVfxHeight: Math.round(curriculumRect?.height ?? 0),
     };
@@ -488,6 +492,7 @@ try {
     };
     const animationName = (element, pseudo) => (element ? getComputedStyle(element, pseudo).animationName : "");
     const arena = document.querySelector(".expedition-arena");
+    const arenaDustBackground = arena ? getComputedStyle(arena, "::after").backgroundImage : "";
     const backgroundSheet = document.querySelector(".expedition-background-sheet");
     const enemy = document.querySelector(".expedition-enemy-visual");
     const enemyRect = enemy?.getBoundingClientRect();
@@ -603,6 +608,7 @@ try {
     return {
       enemyCount: document.querySelectorAll(".expedition-enemy-visual").length,
       enemyBeforeImage: beforeImage.includes("data:image"),
+      arenaDustBackground,
       backdropImage: getComputedStyle(arena, "::before").backgroundImage.includes("data:image"),
       backdropMotion: animationName(arena, "::before").includes("expeditionBackdropPan"),
       backdropTravelPx: Number(range("backdropX").toFixed(2)),
@@ -647,6 +653,10 @@ try {
   if (!mainMetrics.studentSpriteFrames) failures.push("Main student sprite frame animation is missing");
   if (!mainMetrics.studentDashDust) failures.push("Main student dash dust VFX is missing");
   if (!mainMetrics.studentMeleeSlash) failures.push("Main student melee slash motion is missing");
+  const fireLikeSlashColors = ["rgb(239, 71, 111)", "rgb(244, 211, 94)", "rgb(255, 209, 102)", "rgb(249, 115, 22)", "rgb(254, 243, 199)", "rgb(255, 224, 130)"];
+  if (fireLikeSlashColors.some((color) => mainMetrics.studentSlashBackground.includes(color))) {
+    failures.push(`Main student slash still uses fire-like warm colors: ${mainMetrics.studentSlashBackground}`);
+  }
   if (mainMetrics.battleRoadPhase === "travel") {
     if (combatMotionMetrics.studentTravelPx < 6) failures.push(`Main student travel run is too small: ${combatMotionMetrics.studentTravelPx}px`);
   } else if (combatMotionMetrics.studentTravelPx < 24) {
@@ -685,6 +695,9 @@ try {
   }
   if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && !damagePhaseMetrics.curriculumVfxAnimation.includes("curriculumVfx")) {
     failures.push(`Curriculum attack VFX animation is missing: ${damagePhaseMetrics.curriculumVfxAnimation}`);
+  }
+  if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && damagePhaseMetrics.curriculumVfxSourceY > 0) {
+    failures.push(`Curriculum attack VFX source Y should originate from the student body, got ${damagePhaseMetrics.curriculumVfxSourceY}`);
   }
   if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && !damagePhaseMetrics.curriculumVfxStyleClass) {
     failures.push("Curriculum attack VFX style class is missing");
@@ -745,6 +758,9 @@ try {
   if (!expeditionMetrics.oldBackgroundHidden) failures.push("Expedition old background image should be hidden");
   if (!expeditionMetrics.enemyBeforeMotion) failures.push("Expedition enemy sprite motion is missing");
   if (!expeditionMetrics.enemyShockVfx) failures.push("Expedition enemy rim light VFX is missing");
+  if (fireLikeSlashColors.some((color) => expeditionMetrics.arenaDustBackground.includes(color))) {
+    failures.push(`Expedition arena dust still uses fire-like warm colors: ${expeditionMetrics.arenaDustBackground}`);
+  }
   if (expeditionMetrics.enemyTextVisibleCount > 0) failures.push(`Expedition enemy attached text is visible: ${expeditionMetrics.enemyTextVisibleCount}`);
   if (expeditionMetrics.enemySpriteTravelPx < 0.4) failures.push(`Expedition enemy sprite reaction is too static: ${expeditionMetrics.enemySpriteTravelPx}px`);
   if (expeditionMetrics.enemySpriteTravelPx > 4) failures.push(`Expedition enemy sprite reaction is too large: ${expeditionMetrics.enemySpriteTravelPx}px`);

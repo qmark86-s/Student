@@ -21,6 +21,13 @@ const mainMonsterGreenSourcePath = resolve("assets/visual-source/main-monsters/m
 
 const failures = [];
 
+function cssRule(selector) {
+  const start = css.indexOf(selector);
+  if (start < 0) return "";
+  const end = css.indexOf("\n", start);
+  return css.slice(start, end < 0 ? css.length : end);
+}
+
 function readCharacterReferenceRules() {
   if (!existsSync(spriteReferenceLockPath)) {
     return {
@@ -96,6 +103,8 @@ if (css.includes("translate(76px,-6px)") || css.includes("translate(84px,-1px)")
 if (!css.includes(`--curriculum-vfx-duration:${curriculumAttackVfx.durationMs}ms`)) failures.push("curriculum attack VFX duration is not config-driven");
 if (!css.includes(`--curriculum-vfx-base-font:${curriculumAttackVfx.baseFontPx}px`)) failures.push("curriculum attack VFX font size is not config-driven");
 if (!css.includes(`--curriculum-vfx-source-x:${curriculumAttackVfx.sourceOffsetXPx}px`)) failures.push("curriculum attack VFX source offset is not config-driven");
+if (!css.includes(`--curriculum-vfx-source-y:${curriculumAttackVfx.sourceOffsetYPx}px`)) failures.push("curriculum attack VFX source Y offset is not config-driven");
+if ((curriculumAttackVfx.sourceOffsetYPx ?? 0) > 0) failures.push("curriculum attack VFX should originate from the student body, not below the target");
 if (!css.includes(".phone-frame.reduced-effects .curriculum-attack-vfx-token")) failures.push("curriculum attack VFX is missing reduced-effects rule");
 if (!css.includes(`--battle-normal-enemy-size:${enemyDisplay.normalSizePx}px`)) failures.push("battle normal enemy display size is not config-driven");
 if (!css.includes(`--battle-boss-enemy-size:${enemyDisplay.bossSizePx}px`)) failures.push("battle boss enemy display size is not config-driven");
@@ -106,6 +115,14 @@ if (!css.includes(`width:${enemyHpBar.mobileWidthPx}px;height:${enemyHpBar.mobil
 if (!css.includes(`--enemy-rim-opacity:${enemyReaction.rimOpacity}`)) failures.push("battle enemy rim opacity is not config-driven");
 if (css.includes("translate(-24px,-7px)") || css.includes("rotate(-9deg)") || css.includes("brightness(1.95)")) failures.push("battle enemy reaction still uses the old exaggerated hit motion");
 if (!css.includes(`.pixel-arena .helper-sprite{width:${studentDisplay.helperSizePx}px;height:${studentDisplay.helperSizePx}px`)) failures.push("helper companion display size is not config-driven");
+const studentSlashRule = cssRule(".pixel-arena .student-sprite::after");
+for (const warmColor of ["#ef476f", "#f4d35e", "#f97316", "#ffd166"]) {
+  if (studentSlashRule.includes(warmColor)) failures.push(`student attack slash should not use fire-like warm color ${warmColor}`);
+}
+const expeditionDustRule = cssRule(".expedition-arena::after");
+for (const warmColor of ["#ef476f", "#f4d35e", "#f97316", "#ffd166", "#fef3c7"]) {
+  if (expeditionDustRule.includes(warmColor)) failures.push(`expedition arena dust should not use fire-like warm color ${warmColor}`);
+}
 if (!css.includes("@keyframes expeditionAllyMeleeA")) failures.push("expedition ally melee motion is missing");
 if (!css.includes("@keyframes expeditionEnemyShock")) failures.push("expedition enemy shock vfx is missing");
 const expeditionEnemyLegacyHideRule = ".expedition-enemy-visual .enemy-body,.expedition-enemy-visual .enemy-eye,.expedition-enemy-visual .enemy-mouth,.expedition-enemy-visual .enemy-mark,.expedition-enemy-visual .enemy-horn,.expedition-enemy-visual .enemy-name,.expedition-enemy-visual>strong,.expedition-enemy-visual>small,.expedition-enemy-visual strong,.expedition-enemy-visual small{display:none!important}";

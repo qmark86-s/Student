@@ -99,6 +99,9 @@ if ((curriculumAttackVfx.maxWidthPx ?? 0) < (curriculumAttackVfx.minWidthPx ?? 0
   fail("presentation.curriculumAttackVfx.maxWidthPx must be greater than or equal to minWidthPx");
 }
 if ((curriculumAttackVfx.durationMs ?? 0) > 1600) fail("presentation.curriculumAttackVfx.durationMs should stay short for attack readability");
+if ((curriculumAttackVfx.sourceOffsetYPx ?? 0) > 0) {
+  fail("presentation.curriculumAttackVfx.sourceOffsetYPx must be 0 or less so tokens originate from the student body, not the floor");
+}
 requireHelp(
   curriculumAttackVfx,
   [

@@ -17,6 +17,7 @@
 - `data/battle_road_config.json`
   - `presentation.curriculumAttackVfx`를 추가했다.
   - `enabled`, `cycleMs`, `durationMs`, `baseFontPx`, `minWidthPx`, `maxWidthPx`, source/impact/target offset을 한글 help와 함께 관리한다.
+  - 현재 `sourceOffsetYPx`는 `-14`로 두어 토큰이 바닥이 아니라 학생 상체/손 쪽에서 날아오는 것처럼 보이게 한다.
 
 - `tools/apply-battle-road-patch.mjs`
   - 스냅샷 번들에 `curriculumAttackVfxTable`을 주입한다.
