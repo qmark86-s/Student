@@ -196,6 +196,13 @@ try {
     };
     const arenaRect = arena?.getBoundingClientRect();
     const phase = battleLineupElement?.getAttribute("data-road-phase") ?? "";
+    let savedBattleEnemies = [];
+    try {
+      const saved = JSON.parse(localStorage.getItem("student-idle-rpg-save-v1") ?? "{}");
+      savedBattleEnemies = saved?.current?.battle?.enemies ?? [];
+    } catch {
+      savedBattleEnemies = [];
+    }
     const helperProbe = document.createElement("span");
     helperProbe.className = "helper-sprite helper-slot-1 helper-book";
     helperProbe.style.position = "absolute";
@@ -244,6 +251,13 @@ try {
     });
     const normalEnemyRects = enemyRects.filter((item) => item.isNormal);
     const bossEnemyRects = enemyRects.filter((item) => item.isBoss || item.isSuneung);
+    const domDefeatedEnemyCount = battleLineup.filter((item) => item.classList.contains("defeated")).length;
+    const savedDamagedEnemyCount = savedBattleEnemies.filter((enemy) => {
+      const remainingHp = Number(enemy.remainingHp ?? 0);
+      const maxHp = Number(enemy.maxHp ?? 0);
+      return maxHp > 0 && remainingHp < maxHp;
+    }).length;
+    const battleDamagedEnemyCount = Math.max(domDefeatedEnemyCount, savedDamagedEnemyCount);
     const enemyClipCount = enemyRects.filter((item) => {
       if (item.opacity <= 0.05 || !item.intersectsArena) return false;
       const verticalClip = item.clip.top > 3 || item.clip.bottom > 3;
@@ -277,6 +291,7 @@ try {
       studentCombatMotion: ["studentCombatLoop", "studentRoadRunLoop", "studentRoadBrakeLoop"].some((name) =>
         animationName(studentSprite).includes(name),
       ),
+      studentAnimation: animationName(studentSprite),
       studentSpriteFrames: animationName(student).includes("studentMoveFrames"),
       studentDashDust: ["studentDashDust", "roadRunDust", "roadBrakeDust"].some((name) =>
         animationName(studentSprite, "::before").includes(name),
@@ -287,6 +302,7 @@ try {
       monsterImage: getComputedStyle(monster).backgroundImage.includes("data:image"),
       battleRoadLineup: battleLineupElement?.classList.contains("battle-road-lineup") ?? false,
       battleRoadPhase: phase,
+      battleDamagedEnemyCount,
       battleRoadEncounterIndex: Number(battleLineupElement?.getAttribute("data-encounter-index") ?? -1),
       arenaRoadTravel: arena?.classList.contains("road-travel") ?? false,
       battleLineupCount: battleLineup.length,
@@ -388,7 +404,64 @@ try {
       floorTravelPx: Number(range("floorX").toFixed(2)),
     };
   });
-  await page.waitForTimeout(650);
+  await page
+    .waitForFunction(
+      () => {
+        const domDefeatedEnemyCount = document.querySelectorAll(".battle-scene-enemy.defeated").length;
+        let savedBattleEnemies = [];
+        try {
+          savedBattleEnemies = JSON.parse(localStorage.getItem("student-idle-rpg-save-v1") ?? "{}")?.current?.battle?.enemies ?? [];
+        } catch {
+          savedBattleEnemies = [];
+        }
+        const savedDamagedEnemyCount = savedBattleEnemies.filter((enemy) => {
+          const remainingHp = Number(enemy.remainingHp ?? 0);
+          const maxHp = Number(enemy.maxHp ?? 0);
+          return maxHp > 0 && remainingHp < maxHp;
+        }).length;
+        return Math.max(domDefeatedEnemyCount, savedDamagedEnemyCount) > 0;
+      },
+      null,
+      { timeout: 8000 },
+    )
+    .catch(() => {});
+  const damagePhaseMetrics = await page.evaluate(() => {
+    let savedBattleEnemies = [];
+    try {
+      savedBattleEnemies = JSON.parse(localStorage.getItem("student-idle-rpg-save-v1") ?? "{}")?.current?.battle?.enemies ?? [];
+    } catch {
+      savedBattleEnemies = [];
+    }
+    const domDefeatedEnemyCount = document.querySelectorAll(".battle-scene-enemy.defeated").length;
+    const savedDamagedEnemyCount = savedBattleEnemies.filter((enemy) => {
+      const remainingHp = Number(enemy.remainingHp ?? 0);
+      const maxHp = Number(enemy.maxHp ?? 0);
+      return maxHp > 0 && remainingHp < maxHp;
+    }).length;
+    const battleDamagedEnemyCount = Math.max(domDefeatedEnemyCount, savedDamagedEnemyCount);
+    const phase = document.querySelector(".battle-road-lineup")?.getAttribute("data-road-phase") ?? "";
+    const student = document.querySelector(".student-sprite");
+    const arena = document.querySelector(".pixel-arena");
+    const curriculumLayer = document.querySelector(".curriculum-attack-vfx-layer");
+    const curriculumToken = document.querySelector(".curriculum-attack-vfx-token");
+    const curriculumStyle = curriculumToken ? getComputedStyle(curriculumToken) : null;
+    const curriculumRect = curriculumToken?.getBoundingClientRect();
+    return {
+      battleDamagedEnemyCount,
+      phase,
+      studentAnimation: student ? getComputedStyle(student).animationName : "",
+      arenaRoadCombat: arena?.classList.contains("road-combat") ?? false,
+      arenaRoadTravel: arena?.classList.contains("road-travel") ?? false,
+      curriculumVfxLayerCount: document.querySelectorAll(".curriculum-attack-vfx-layer").length,
+      curriculumVfxTokenCount: document.querySelectorAll(".curriculum-attack-vfx-token").length,
+      curriculumVfxText: curriculumToken?.textContent ?? "",
+      curriculumVfxAnimation: curriculumStyle?.animationName ?? "",
+      curriculumVfxStyleClass: curriculumToken ? [...curriculumToken.classList].find((className) => className.startsWith("curriculum-vfx-")) ?? "" : "",
+      curriculumVfxSubject: curriculumLayer?.getAttribute("data-subject") ?? "",
+      curriculumVfxWidth: Math.round(curriculumRect?.width ?? 0),
+      curriculumVfxHeight: Math.round(curriculumRect?.height ?? 0),
+    };
+  });
   const mainScreenshotPath = resolve(outputDir, "main-battle.png");
   await page.screenshot({ path: mainScreenshotPath, fullPage: true });
 
@@ -582,6 +655,43 @@ try {
   if (combatMotionMetrics.studentSpriteFrameShift < 1) failures.push(`Main student sprite frame shift is too small: ${combatMotionMetrics.studentSpriteFrameShift}`);
   if (!mainMetrics.monsterImage) failures.push("Main monster sprite is missing a data image background");
   if (!mainMetrics.battleRoadLineup) failures.push("Main battle road lineup class is missing");
+  if (mainMetrics.battleDamagedEnemyCount > 0 && mainMetrics.battleRoadPhase === "travel") {
+    failures.push("Main battle road phase stays travel after enemies are damaged");
+  }
+  if (mainMetrics.battleDamagedEnemyCount > 0 && !mainMetrics.studentAnimation.includes("studentCombatLoop")) {
+    failures.push(`Main student should use combat animation after enemy damage, got ${mainMetrics.studentAnimation}`);
+  }
+  if (damagePhaseMetrics.battleDamagedEnemyCount < 1) failures.push("Main battle did not reach a damaged enemy state for phase smoke");
+  if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && damagePhaseMetrics.phase === "travel") {
+    failures.push("Main battle delayed phase stays travel after enemies are damaged");
+  }
+  if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && !damagePhaseMetrics.studentAnimation.includes("studentCombatLoop")) {
+    failures.push(`Main delayed student should use combat animation after enemy damage, got ${damagePhaseMetrics.studentAnimation}`);
+  }
+  if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && !damagePhaseMetrics.arenaRoadCombat) {
+    failures.push("Main battle arena should use road-combat class after enemy damage");
+  }
+  if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && damagePhaseMetrics.curriculumVfxLayerCount !== 1) {
+    failures.push(`Curriculum attack VFX expected 1 layer after damage, got ${damagePhaseMetrics.curriculumVfxLayerCount}`);
+  }
+  if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && damagePhaseMetrics.curriculumVfxTokenCount !== 1) {
+    failures.push(`Curriculum attack VFX expected 1 token after damage, got ${damagePhaseMetrics.curriculumVfxTokenCount}`);
+  }
+  if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && !damagePhaseMetrics.curriculumVfxText) {
+    failures.push("Curriculum attack VFX token text is missing");
+  }
+  if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && damagePhaseMetrics.curriculumVfxText.length > 8) {
+    failures.push(`Curriculum attack VFX token is too long: ${damagePhaseMetrics.curriculumVfxText}`);
+  }
+  if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && !damagePhaseMetrics.curriculumVfxAnimation.includes("curriculumVfx")) {
+    failures.push(`Curriculum attack VFX animation is missing: ${damagePhaseMetrics.curriculumVfxAnimation}`);
+  }
+  if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && !damagePhaseMetrics.curriculumVfxStyleClass) {
+    failures.push("Curriculum attack VFX style class is missing");
+  }
+  if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && (damagePhaseMetrics.curriculumVfxWidth < 16 || damagePhaseMetrics.curriculumVfxHeight < 10)) {
+    failures.push(`Curriculum attack VFX token box is too small: ${damagePhaseMetrics.curriculumVfxWidth}x${damagePhaseMetrics.curriculumVfxHeight}`);
+  }
   if (mainMetrics.battleRoadEncounterIndex !== 0) failures.push(`Main battle expected first encounter index 0, got ${mainMetrics.battleRoadEncounterIndex}`);
   if (mainMetrics.battleLineupCount !== 3) failures.push(`Main battle expected 3 encounter enemies, got ${mainMetrics.battleLineupCount}`);
   if (mainMetrics.battleLineupImages !== 3) failures.push(`Main battle expected 3 rendered scene enemy images, got ${mainMetrics.battleLineupImages}`);
@@ -663,6 +773,7 @@ try {
         baseUrl: `http://127.0.0.1:${port}/`,
         mainMetrics,
         combatMotionMetrics,
+        damagePhaseMetrics,
         expeditionMetrics,
         screenshots: {
           main: mainScreenshotPath,

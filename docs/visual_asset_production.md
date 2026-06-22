@@ -104,6 +104,24 @@
 - 모바일 성능을 위해 가능한 모션은 `transform`, `opacity` 중심으로 만든다.
 - 학생 프레임 애니메이션은 `background-position` 기반의 `studentMoveFrames`로 처리한다.
 
+## 교과 공격 VFX 기준
+
+- 학생탭 공격 VFX 토큰은 `data/curriculum_attack_vfx.json`에서 관리한다.
+- 현재 렌더러는 `runtime.renderer=dom_text_layer`이며, 전투장에는 `.curriculum-attack-vfx-layer` 1개와 `.curriculum-attack-vfx-token` 1개만 표시한다.
+- 공격 1회에는 현재 학년의 토큰 풀에서 1개만 랜덤 선택해 표시한다. 여러 글자나 단어를 한 번에 흩뿌리는 방식은 기본값이 아니다.
+- 현재 공격 루프 기준은 별도 `attackSerial`이 생기기 전까지 `presentation.curriculumAttackVfx.cycleMs`와 `battle.elapsedMs`로 계산한다.
+- 학년별 토큰 풀은 `gradeOrder` 기준으로 초1~고3, N수 단계까지 모두 있어야 한다.
+- 토큰은 모바일 전투장에서 겹치지 않도록 짧게 유지한다. 현재 검증 기준은 8글자 이하이다.
+- 수학과 탐구 계열 토큰은 한글 설명어보다 `1+1=2`, `f'(x)`, `H2O`, `F=ma`, `GDP`처럼 공식, 기호, 약어를 우선한다.
+- 스타일은 `glyph`, `word`, `formula`, `card`, `burst`를 사용한다.
+- 보스/시험 조우의 강조 스타일은 `bossStyleByVisualKey`에서 관리한다.
+- 탐구 계열 subject alias는 `rules.inquirySubjectAliases`에서 관리한다. 사회/과학 탐구가 분리되어 있어도 탐구 VFX 풀을 함께 사용할 수 있어야 한다.
+- 표시 크기, 지속 시간, 출발/도착 offset은 `data/battle_road_config.json`의 `presentation.curriculumAttackVfx`에서 한글 help와 함께 관리한다.
+- 생성 CSS는 `tools/build-visual-assets.mjs`에서 만들며, `glyph`, `word`, `formula`, `card`, `burst` 각각의 keyframes와 `reduced-effects` 규칙을 포함해야 한다.
+- 이 테이블은 런타임 fallback으로 숨기지 않고 `npm run curriculum-vfx:verify`에서 누락, 중복, 긴 토큰, 알 수 없는 style을 실패로 드러낸다.
+- `npm run visual:smoke`는 피해 발생 이후 curriculum layer/token count가 각각 1인지, token text와 animation name이 존재하는지 검사한다.
+- 사람이 학년별 방향을 검수할 때는 `docs/curriculum_attack_vfx_mapping.md`를 먼저 본다.
+
 ## 학생 이동 스프라이트 기준
 
 - 학생 원본은 캐릭터 한 명당 `assets/visual-source/characters/student-XX-gender-move.png` 한 장으로 관리한다.

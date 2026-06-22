@@ -87,6 +87,12 @@
         "rimOpacity": "피격 시 몬스터 외곽에 표시되는 림라이트 밝기입니다."
       }
     },
+    "phasePolicy": {
+      "damageStartsCombat": true,
+      "help": {
+        "damageStartsCombat": "적이 피해를 받거나 처치되면 표시 phase를 전투 상태로 전환합니다. 전투가 이미 진행됐는데 학생과 도우미가 계속 달리는 레이아웃으로 남는 것을 막습니다."
+      }
+    },
     "enemyHpBar": {
       "widthPx": 72,
       "heightPx": 10,
@@ -115,6 +121,38 @@
         "recoverPx": "공격 후 복귀 직전 남는 전진 거리입니다.",
         "dustPx": "공격 먼지 이펙트가 앞으로 이동하는 거리입니다.",
         "slashPx": "베기 VFX가 앞으로 표시되는 거리입니다."
+      }
+    },
+    "curriculumAttackVfx": {
+      "enabled": true,
+      "cycleMs": 900,
+      "durationMs": 900,
+      "baseFontPx": 18,
+      "minWidthPx": 34,
+      "maxWidthPx": 92,
+      "sourceOffsetXPx": -150,
+      "sourceOffsetYPx": 42,
+      "impactOffsetXPx": -4,
+      "impactOffsetYPx": -6,
+      "normalTargetXOffsetPercent": -7,
+      "normalTargetYOffsetPercent": 32,
+      "bossTargetXOffsetPercent": -4,
+      "bossTargetYOffsetPercent": 36,
+      "help": {
+        "enabled": "학생탭 Battle Road에서 교과 공격 VFX 토큰을 표시할지 정합니다.",
+        "cycleMs": "교과 토큰을 새 공격으로 간주해 교체하는 주기입니다. 실제 공격 이벤트 훅이 생기기 전까지 이 값으로 공격 루프를 나눕니다.",
+        "durationMs": "교과 토큰 하나가 화면에 표시되는 애니메이션 시간입니다.",
+        "baseFontPx": "교과 토큰의 기본 글자 크기입니다. 긴 단어는 CSS에서 폭 안에 맞춥니다.",
+        "minWidthPx": "교과 토큰 표시 박스의 최소 가로 크기입니다.",
+        "maxWidthPx": "교과 토큰 표시 박스의 최대 가로 크기입니다.",
+        "sourceOffsetXPx": "토큰이 학생 쪽에서 날아오는 시작 X 이동량입니다.",
+        "sourceOffsetYPx": "토큰이 학생 쪽에서 날아오는 시작 Y 이동량입니다.",
+        "impactOffsetXPx": "토큰이 타격 지점에 닿을 때의 X 이동량입니다.",
+        "impactOffsetYPx": "토큰이 타격 지점에 닿을 때의 Y 이동량입니다.",
+        "normalTargetXOffsetPercent": "일반 몬스터 기준 타격 지점의 가로 보정값입니다.",
+        "normalTargetYOffsetPercent": "일반 몬스터 기준 타격 지점의 세로 보정값입니다.",
+        "bossTargetXOffsetPercent": "보스/수능 몬스터 기준 타격 지점의 가로 보정값입니다.",
+        "bossTargetYOffsetPercent": "보스/수능 몬스터 기준 타격 지점의 세로 보정값입니다."
       }
     },
     "enemySlots": {

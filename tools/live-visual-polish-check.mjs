@@ -65,6 +65,19 @@ async function capture(page, name, extra = {}) {
     const expeditionStyle = style(".expedition-arena", "::before");
     const studentStyle = style(".student-sprite");
     const studentArtStyle = style(".student-art");
+    let savedBattleEnemies = [];
+    try {
+      const saved = JSON.parse(localStorage.getItem("student-idle-rpg-save-v1") ?? "{}");
+      savedBattleEnemies = saved?.current?.battle?.enemies ?? [];
+    } catch {
+      savedBattleEnemies = [];
+    }
+    const domDefeatedEnemyCount = [...document.querySelectorAll(".battle-scene-enemy.defeated")].length;
+    const savedDamagedEnemyCount = savedBattleEnemies.filter((enemy) => {
+      const remainingHp = Number(enemy.remainingHp ?? 0);
+      const maxHp = Number(enemy.maxHp ?? 0);
+      return maxHp > 0 && remainingHp < maxHp;
+    }).length;
     return {
       title: document.title,
       bodyTextSample: document.body.innerText.trim().replace(/\s+/g, " ").slice(0, 180),
@@ -85,6 +98,7 @@ async function capture(page, name, extra = {}) {
         enemies: rects(".battle-scene-enemy"),
         enemyArts: rects(".battle-scene-monster-art"),
         roadPhase: document.querySelector(".battle-scene-lineup")?.getAttribute("data-road-phase") ?? null,
+        damagedEnemyCount: Math.max(domDefeatedEnemyCount, savedDamagedEnemyCount),
         backgroundImage: arenaStyle?.backgroundImage.includes("data:image") ?? false,
         backgroundTransform: arenaStyle?.transform ?? null,
         studentScale: studentStyle?.getPropertyValue("--student-motion-scale").trim() ?? null,
@@ -118,6 +132,9 @@ async function capture(page, name, extra = {}) {
     if (bottomGap < 8) notes.push(`학생 스프라이트 하단 여백 부족 ${Math.round(bottomGap)}px`);
     const speechOverlap = overlapRatio(studentSprite, speech);
     if (speechOverlap > 0.05) notes.push(`말풍선이 학생을 ${Math.round(speechOverlap * 100)}% 덮음`);
+    if (metrics.student.damagedEnemyCount > 0 && metrics.student.roadPhase === "travel") {
+      notes.push("적 피해 이후에도 Battle Road phase가 travel로 남음");
+    }
   }
   if (studentArena) {
     for (const enemy of metrics.student.enemyArts) {

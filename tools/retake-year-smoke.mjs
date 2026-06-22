@@ -205,8 +205,8 @@ try {
   await page.waitForTimeout(300);
 
   await page.evaluate(() => {
-    const autoButton = [...document.querySelectorAll(".scene-controls .hud-button")].find((button) =>
-      button.innerText.trim() === "자동",
+    const autoButton = [...document.querySelectorAll(".battle-auto-toggle, .scene-controls .hud-button")].find((button) =>
+      ["Auto", "자동"].includes(button.innerText.trim()),
     );
     autoButton?.click();
   });
@@ -229,6 +229,12 @@ try {
       sceneSuneungEnemies: sceneEnemies.filter((enemy) => enemy.classList.contains("suneung")).length,
       sceneHpBars: document.querySelectorAll(".battle-scene-enemy .battle-scene-hp").length,
       normalHpBars: document.querySelectorAll(".battle-scene-enemy.normal .battle-scene-hp").length,
+      sceneHudVisible: [...document.querySelectorAll(".stage-scene > .scene-hud")].some((element) => getComputedStyle(element).display !== "none"),
+      sceneControls: document.querySelectorAll(".scene-controls").length,
+      autoToggleText: document.querySelector(".battle-auto-toggle")?.innerText.trim() ?? "",
+      debugCompleteText: document.querySelector(".battle-debug-complete")?.innerText.trim() ?? "",
+      hasAutoAllocateText: text.includes("자동 분배") || text.includes("수동 분배"),
+      hasBattleCompleteText: text.includes("전투 완료"),
       battleKind: state.current.battle?.kind ?? (sceneEnemies.some((enemy) => enemy.classList.contains("suneung")) ? "suneung" : sceneEnemies.length > 0 ? "grade" : ""),
       gradeId: state.current.gradeId,
       retakeCount: state.current.retakeCount,
@@ -245,7 +251,7 @@ try {
 
   const clickBattleComplete = async () => {
     await page.evaluate(() => {
-      const button = document.querySelector(".hud-action.secondary");
+      const button = document.querySelector(".battle-debug-complete, .hud-action.secondary");
       if (!button) throw new Error("Battle complete button not found");
       button.click();
     });
@@ -297,11 +303,15 @@ try {
     { timeout: 6000 },
   );
 
+  await page.evaluate((index) => document.querySelectorAll("button.tab")[index].click(), resultTabIndex);
+  await page.waitForSelector(".panel.decision", { timeout: 6000 });
+
   const afterSuneungComplete = await page.evaluate(() => {
-    const decisionText = `${String.fromCharCode(0xacb0, 0xacfc)} ${String.fromCharCode(0xb300, 0xae30)}`;
     const state = JSON.parse(localStorage.getItem("student-idle-rpg-save-v1"));
     return {
-      hasDecisionText: document.body.innerText.includes(decisionText),
+      hasDecisionPanel: !!document.querySelector(".panel.decision"),
+      hasSuneungResultText: document.body.innerText.includes("수능 결과"),
+      careerChoiceCount: document.querySelectorAll(".career-choice-ranked").length,
       awaitingDecision: state.current.awaitingDecision,
       gradeId: state.current.gradeId,
       retakeCount: state.current.retakeCount,
@@ -312,9 +322,14 @@ try {
 
   const failures = [];
   if (afterRetake.gradeId !== "REPEATER") failures.push(`Expected REPEATER after retake, got ${afterRetake.gradeId}`);
-  if (!afterRetake.text.includes("3개월 조우")) failures.push("Retake year does not show 3-month encounter copy");
   if (afterRetake.text.includes("수능 5과목")) failures.push("Retake immediately shows suneung battle copy");
   if (afterRetake.arenaTextCards !== 0) failures.push(`Expected no retake-year text cards in arena, got ${afterRetake.arenaTextCards}`);
+  if (afterRetake.sceneHudVisible) failures.push("Expected hidden battle scene HUD in polished layout");
+  if (afterRetake.sceneControls !== 0) failures.push(`Expected no legacy scene controls, got ${afterRetake.sceneControls}`);
+  if (afterRetake.autoToggleText !== "Auto") failures.push(`Expected Auto overlay button, got ${afterRetake.autoToggleText}`);
+  if (afterRetake.debugCompleteText !== "DEBUG") failures.push(`Expected DEBUG overlay button, got ${afterRetake.debugCompleteText}`);
+  if (afterRetake.hasAutoAllocateText) failures.push("Expected no auto allocation copy in battle layout");
+  if (afterRetake.hasBattleCompleteText) failures.push("Expected no battle-complete copy in battle layout");
   if (afterRetake.sceneEnemies !== 3) failures.push(`Expected 3 retake-year encounter enemies, got ${afterRetake.sceneEnemies}`);
   if (afterRetake.sceneEnemyImages !== 3) failures.push(`Expected 3 rendered retake-year scene enemy images, got ${afterRetake.sceneEnemyImages}`);
   if (afterRetake.sceneEnemyFrames < 2) failures.push(`Expected varied retake-year scene enemy frames, got ${afterRetake.sceneEnemyFrames}`);
@@ -334,7 +349,6 @@ try {
   if (afterYearComplete.sceneSuneungEnemies !== 1) failures.push(`Expected 1 suneung scene enemy class, got ${afterYearComplete.sceneSuneungEnemies}`);
   if (afterYearComplete.sceneEnemyImages !== 1) failures.push(`Expected 1 rendered suneung scene enemy image, got ${afterYearComplete.sceneEnemyImages}`);
   if (afterYearComplete.sceneHpBars !== 1) failures.push(`Expected 1 suneung HP bar, got ${afterYearComplete.sceneHpBars}`);
-  if (!afterYearComplete.text.includes("수능 1/4")) failures.push("Retake year completion does not show first suneung encounter copy");
   if (afterYearComplete.roadMode !== "suneung") failures.push(`Expected suneung road mode after retake year, got ${afterYearComplete.roadMode}`);
   if (afterYearComplete.roadEncounterIndex !== 0) failures.push(`Expected first suneung encounter index 0, got ${afterYearComplete.roadEncounterIndex}`);
   if (afterYearComplete.outcomeCareerCount !== 0) failures.push(`Expected no outcome before retake suneung result, got ${afterYearComplete.outcomeCareerCount}`);
@@ -342,7 +356,9 @@ try {
   if (beforeFinalSuneung.sceneSuneungEnemies !== 2) failures.push(`Expected 2 final inquiry suneung classes, got ${beforeFinalSuneung.sceneSuneungEnemies}`);
   if (beforeFinalSuneung.sceneHpBars !== 2) failures.push(`Expected 2 final inquiry HP bars, got ${beforeFinalSuneung.sceneHpBars}`);
   if (beforeFinalSuneung.roadEncounterIndex !== 3) failures.push(`Expected final suneung encounter index 3, got ${beforeFinalSuneung.roadEncounterIndex}`);
-  if (!afterSuneungComplete.hasDecisionText) failures.push("Retake suneung completion did not return to decision-ready UI");
+  if (!afterSuneungComplete.hasDecisionPanel) failures.push("Retake suneung completion did not expose decision panel in result tab");
+  if (!afterSuneungComplete.hasSuneungResultText) failures.push("Retake suneung completion did not show suneung result copy in result tab");
+  if (afterSuneungComplete.careerChoiceCount === 0) failures.push("Retake suneung completion did not show career choices in result tab");
   if (!afterSuneungComplete.awaitingDecision) failures.push("Retake suneung completion did not set awaitingDecision");
   if (afterSuneungComplete.gradeId !== "REPEATER") failures.push(`Expected gradeId to remain REPEATER after suneung completion, got ${afterSuneungComplete.gradeId}`);
   if (afterSuneungComplete.retakeCount !== 1) failures.push(`Expected retakeCount 1, got ${afterSuneungComplete.retakeCount}`);

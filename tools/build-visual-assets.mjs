@@ -99,6 +99,7 @@ function battleRoadPresentation(config) {
   const enemyReaction = presentation.enemyReaction ?? {};
   const enemyHpBar = presentation.enemyHpBar ?? {};
   const enemySlots = presentation.enemySlots ?? {};
+  const curriculumVfx = presentation.curriculumAttackVfx ?? {};
   return {
     backdrop: {
       panWidthPercent: clampNumber(backdrop.panWidthPercent, 720, 400, 1200),
@@ -128,6 +129,22 @@ function battleRoadPresentation(config) {
       recoverPx: clampNumber(attack.recoverPx, 6, 0, 120),
       dustPx: clampNumber(attack.dustPx, 20, 0, 120),
       slashPx: clampNumber(attack.slashPx, 28, 0, 140),
+    },
+    curriculumAttackVfx: {
+      enabled: curriculumVfx.enabled !== false,
+      cycleMs: clampNumber(curriculumVfx.cycleMs, 900, 120, 2400),
+      durationMs: clampNumber(curriculumVfx.durationMs, 900, 120, 1600),
+      baseFontPx: clampNumber(curriculumVfx.baseFontPx, 18, 10, 28),
+      minWidthPx: clampNumber(curriculumVfx.minWidthPx, 34, 20, 120),
+      maxWidthPx: clampNumber(curriculumVfx.maxWidthPx, 92, 32, 160),
+      sourceOffsetXPx: clampNumber(curriculumVfx.sourceOffsetXPx, -150, -260, 40),
+      sourceOffsetYPx: clampNumber(curriculumVfx.sourceOffsetYPx, 42, -80, 160),
+      impactOffsetXPx: clampNumber(curriculumVfx.impactOffsetXPx, -4, -80, 80),
+      impactOffsetYPx: clampNumber(curriculumVfx.impactOffsetYPx, -6, -80, 80),
+      normalTargetXOffsetPercent: clampNumber(curriculumVfx.normalTargetXOffsetPercent, -7, -50, 50),
+      normalTargetYOffsetPercent: clampNumber(curriculumVfx.normalTargetYOffsetPercent, 32, 0, 80),
+      bossTargetXOffsetPercent: clampNumber(curriculumVfx.bossTargetXOffsetPercent, -4, -50, 50),
+      bossTargetYOffsetPercent: clampNumber(curriculumVfx.bossTargetYOffsetPercent, 36, 0, 80),
     },
     enemyDisplay: {
       normalSizePx: clampNumber(enemyDisplay.normalSizePx, 80, 24, 140),
@@ -2577,6 +2594,7 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
   const battleBackdrop = battleRoad.backdrop;
   const studentDisplay = battleRoad.studentDisplay;
   const studentAttack = battleRoad.studentAttack;
+  const curriculumVfx = battleRoad.curriculumAttackVfx;
   const enemyDisplay = battleRoad.enemyDisplay;
   const enemyReaction = battleRoad.enemyReaction;
   const enemyHpBar = battleRoad.enemyHpBar;
@@ -2594,7 +2612,7 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
     ".expedition-unit-avatar .unit-shadow,.expedition-unit-avatar .unit-leg,.expedition-unit-avatar .unit-arm,.expedition-unit-avatar .unit-head,.expedition-unit-avatar .unit-hair,.expedition-unit-avatar .unit-body,.expedition-unit-avatar .unit-prop,.helper-sprite:not(.helper-robot)>span{display:none}",
     `.helper-sprite:not(.helper-robot){filter:drop-shadow(4px 5px #00000045);background-size:${companionBackgroundSize}}`,
     ".expedition-empty-party-visual{z-index:3;max-width:148px;background:#0f172a78;backdrop-filter:blur(1px)}",
-    ".expedition-party-visual{z-index:7;left:3%;bottom:8%;width:210px;height:104px;overflow:visible}",
+    ".expedition-party-visual{z-index:7;left:3%;bottom:21%;width:210px;height:104px;overflow:visible}",
     ".expedition-party-visual .expedition-unit-avatar.large{width:62px;height:62px;overflow:visible;flex:0 0 62px;background-color:transparent;background-position:var(--visual-unit-frame-a,var(--visual-unit-x,0%)) var(--visual-unit-frame-a-y,var(--visual-unit-y,0%))}",
     ".expedition-arena{background:#111827;border-color:color-mix(in srgb,var(--stage-trim) 74%,#ffffff 8%);box-shadow:inset 0 0 0 1px #ffffff1f,0 12px 28px #0f172a2e}",
     ".expedition-background-sheet{display:none!important}",
@@ -2607,8 +2625,8 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
     ".expedition-party-visual.running .unit-2,.expedition-party-visual.running .unit-5{animation-name:expeditionAllyMeleeB;animation-delay:.16s}",
     ".expedition-party-visual.running .unit-3{animation-name:expeditionAllyMeleeC;animation-delay:.28s}",
     ".expedition-party-visual.running .expedition-unit-avatar.large::after{content:\"\";pointer-events:none;position:absolute;left:64%;top:40%;width:30px;height:10px;opacity:0;background:linear-gradient(90deg,transparent,#fff,#9fd4c9,transparent);clip-path:polygon(0 45%,76% 0,100% 50%,76% 100%,0 58%);filter:drop-shadow(0 0 5px #fff7);animation:1.04s steps(4,end) infinite expeditionAllySpark;animation-delay:inherit}",
-    ".expedition-enemy-group{right:9%;bottom:11%;max-width:42%;overflow:visible}",
-    ".expedition-enemy-visual{right:10%;bottom:15%;width:102px;min-height:104px;overflow:visible}",
+    ".expedition-enemy-group{right:9%;bottom:21%;max-width:42%;overflow:visible}",
+    ".expedition-enemy-visual{right:10%;bottom:26%;width:102px;min-height:104px;overflow:visible}",
     ".expedition-enemy-group,.expedition-enemy-visual{overflow:visible}",
     ".expedition-enemy-group .expedition-enemy-visual,.expedition-enemy-visual.boss{filter:drop-shadow(4px 5px #00000052)}",
     ".expedition-enemy-group .expedition-enemy-visual{animation:1.2s steps(4,end) infinite expeditionEnemyIdle}",
@@ -2648,7 +2666,7 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
     ".expedition-boss-health{z-index:2}",
     ".expedition-enemy-group .expedition-enemy-visual{flex-basis:56px;width:56px;min-height:86px}",
     ".expedition-enemy-group .expedition-enemy-visual::before{left:50%;right:auto;top:auto;bottom:-3px;width:82px;height:82px;margin-left:-43px}",
-    ".expedition-enemy-visual.boss{right:10%;width:136px;min-height:126px}",
+    ".expedition-enemy-visual.boss{right:10%;bottom:19%;width:136px;min-height:126px}",
     ".expedition-enemy-visual.boss::before{left:50%;right:auto;top:auto;bottom:-7px;width:102px;height:102px;margin-left:-52px}",
   );
   enemies.items.forEach((item) => {
@@ -2691,7 +2709,7 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
     ".pixel-arena .battle-enemy-card strong,.pixel-arena .battle-enemy-card span{line-height:1.05}",
     ".pixel-arena .enemy-stack{display:none}",
     ".pixel-arena .enemy-stack .encounter-name{display:none}",
-    `.pixel-arena{--battle-road-pan-width:${cssNumber(battleBackdrop.panWidthPercent)}%;--battle-road-pan-duration:${cssNumber(battleBackdrop.panDurationSec)}s;--battle-road-filter:${battleBackdrop.defaultFilter};--student-display-scale:${cssNumber(studentDisplay.scaleMultiplier, 3)};--battle-normal-enemy-size:${cssNumber(enemyDisplay.normalSizePx)}px;--battle-boss-enemy-size:${cssNumber(enemyDisplay.bossSizePx)}px;--battle-suneung-enemy-size:${cssNumber(enemyDisplay.suneungSizePx)}px;--battle-defeated-opacity:${cssNumber(enemyDisplay.defeatedOpacity, 3)};background:#111827;overflow:hidden}`,
+    `.pixel-arena{--battle-road-pan-width:${cssNumber(battleBackdrop.panWidthPercent)}%;--battle-road-pan-duration:${cssNumber(battleBackdrop.panDurationSec)}s;--battle-road-filter:${battleBackdrop.defaultFilter};--student-display-scale:${cssNumber(studentDisplay.scaleMultiplier, 3)};--curriculum-vfx-duration:${cssNumber(curriculumVfx.durationMs)}ms;--curriculum-vfx-base-font:${cssNumber(curriculumVfx.baseFontPx)}px;--curriculum-vfx-min-width:${cssNumber(curriculumVfx.minWidthPx)}px;--curriculum-vfx-max-width:${cssNumber(curriculumVfx.maxWidthPx)}px;--curriculum-vfx-source-x:${cssNumber(curriculumVfx.sourceOffsetXPx)}px;--curriculum-vfx-source-y:${cssNumber(curriculumVfx.sourceOffsetYPx)}px;--curriculum-vfx-arc-x:${cssNumber(curriculumVfx.sourceOffsetXPx * 0.38)}px;--curriculum-vfx-arc-y:${cssNumber(curriculumVfx.impactOffsetYPx - 16)}px;--curriculum-vfx-impact-x:${cssNumber(curriculumVfx.impactOffsetXPx)}px;--curriculum-vfx-impact-y:${cssNumber(curriculumVfx.impactOffsetYPx)}px;--battle-normal-enemy-size:${cssNumber(enemyDisplay.normalSizePx)}px;--battle-boss-enemy-size:${cssNumber(enemyDisplay.bossSizePx)}px;--battle-suneung-enemy-size:${cssNumber(enemyDisplay.suneungSizePx)}px;--battle-defeated-opacity:${cssNumber(enemyDisplay.defeatedOpacity, 3)};background:#111827;overflow:hidden}`,
     ".pixel-arena .arena-background-sheet{display:none!important}",
     ".pixel-arena::before{content:\"\";display:block;z-index:0;pointer-events:none;position:absolute;top:0;left:0;width:var(--battle-road-pan-width);height:100%;background-repeat:no-repeat;background-size:100% 100%;background-position:center bottom;filter:var(--battle-road-filter);transform:translate3d(0,0,0);will-change:transform;animation:var(--battle-road-pan-duration) linear infinite battleRoadBackdropPan}",
     `.pixel-arena.road-travel{--battle-road-filter:${battleBackdrop.travelFilter}}`,
@@ -2699,6 +2717,15 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
     ".pixel-arena .arena-background-grid{display:none}",
     ".pixel-arena .pixel-floor{left:0;right:0;background:linear-gradient(180deg,transparent 0%,#0f172a54 82%,#0f172a7a 100%);animation:none;box-shadow:none}",
     ".pixel-arena .pencil-shot,.pixel-arena .pencil-shot.active{opacity:0;animation:none}",
+    ".curriculum-attack-vfx-layer{position:absolute;inset:0;z-index:9;pointer-events:none;overflow:visible;contain:layout paint}",
+    ".curriculum-attack-vfx-token{box-sizing:border-box;position:absolute;left:var(--curriculum-vfx-left,64%);top:var(--curriculum-vfx-top,42%);width:var(--curriculum-vfx-width,auto);min-width:var(--curriculum-vfx-min-width,34px);max-width:var(--curriculum-vfx-max-width,92px);padding:2px 5px;color:var(--curriculum-vfx-primary,#fde68a);font-family:Inter,Pretendard,\"Noto Sans KR\",system-ui,sans-serif;font-size:var(--curriculum-vfx-base-font,18px);font-weight:1000;line-height:1;letter-spacing:0;text-align:center;white-space:nowrap;text-shadow:0 1px 0 var(--curriculum-vfx-shadow,#1f2937),0 0 8px var(--curriculum-vfx-accent,#9fd4c9);filter:drop-shadow(0 3px 4px #0008);opacity:0;will-change:transform,opacity;animation:var(--curriculum-vfx-duration,900ms) steps(6,end) both curriculumVfxWord}",
+    ".curriculum-vfx-glyph{font-size:calc(var(--curriculum-vfx-base-font,18px)*1.18);animation-name:curriculumVfxGlyph}",
+    ".curriculum-vfx-word{animation-name:curriculumVfxWord}",
+    ".curriculum-vfx-formula,.curriculum-attack-vfx-token.subject-math,.curriculum-attack-vfx-token.subject-science,.curriculum-attack-vfx-token.subject-social{font-family:Consolas,\"SFMono-Regular\",ui-monospace,monospace}",
+    ".curriculum-vfx-formula{padding-inline:6px;color:#f8fafc;background:linear-gradient(90deg,#0000,var(--curriculum-vfx-primary,#93c5fd) 42%,var(--curriculum-vfx-accent,#c4b5fd) 70%,#0000);border-radius:5px;text-shadow:0 1px 0 var(--curriculum-vfx-shadow,#1e293b),0 0 7px #fff7;animation-name:curriculumVfxFormula}",
+    ".curriculum-vfx-card{padding:4px 7px;color:var(--curriculum-vfx-shadow,#1f2937);background:linear-gradient(180deg,var(--curriculum-vfx-paper,#fff7d6),#fff 76%);border:1px solid color-mix(in srgb,var(--curriculum-vfx-primary,#f4d35e) 72%,#1f2937 20%);border-radius:6px;box-shadow:inset 0 -4px #00000012,0 2px 5px #0007;text-shadow:0 1px #fff;animation-name:curriculumVfxCard}",
+    ".curriculum-vfx-burst{padding:3px 6px;color:#fff;background:radial-gradient(circle at 50% 50%,var(--curriculum-vfx-accent,#fb7185),var(--curriculum-vfx-primary,#fde68a) 58%,#0000 62%);border-radius:50%;text-shadow:0 1px 0 var(--curriculum-vfx-shadow,#1f2937),0 0 8px #fff;animation-name:curriculumVfxBurst}",
+    ".curriculum-attack-vfx-token.variant-1{animation-delay:.03s}.curriculum-attack-vfx-token.variant-2{animation-delay:.06s}.curriculum-attack-vfx-token.variant-3{animation-delay:.09s}",
     `.pixel-arena .student-sprite{--student-motion-scale:calc(var(--student-scale,1)*var(--student-display-scale,1));z-index:8;width:86px;height:124px;bottom:${cssNumber(studentDisplay.baseBottomPercent)}%;left:18%;animation:1.45s steps(6,end) infinite studentCombatLoop}`,
     `.pixel-arena .student-sprite.student-elementary{width:82px;height:118px;bottom:${cssNumber(studentDisplay.elementaryBottomPercent)}%;left:18%}`,
     `.pixel-arena .student-sprite.student-middle{width:86px;height:124px;bottom:${cssNumber(studentDisplay.middleBottomPercent)}%;left:19%}`,
@@ -2745,7 +2772,7 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
     ".battle-scene-hp i{display:block;height:100%;min-width:2px;background:linear-gradient(90deg,#ef476f,#ffd166);border-radius:inherit}",
     ".battle-scene-enemy.normal .battle-scene-hp{display:none}",
     ".battle-scene-lineup.suneung .battle-scene-enemy{width:var(--battle-suneung-enemy-size,88px);height:var(--battle-suneung-enemy-size,88px)}",
-    ".phone-frame.reduced-effects .expedition-arena::before,.phone-frame.reduced-effects .expedition-arena::after,.phone-frame.reduced-effects .expedition-party-visual.running,.phone-frame.reduced-effects .expedition-unit-avatar.large,.phone-frame.reduced-effects .expedition-unit-avatar.large::after,.phone-frame.reduced-effects .expedition-enemy-visual,.phone-frame.reduced-effects .expedition-enemy-visual::before,.phone-frame.reduced-effects .expedition-enemy-visual::after,.phone-frame.reduced-effects .expedition-impact,.phone-frame.reduced-effects .pixel-arena::before,.phone-frame.reduced-effects .arena-background-sheet,.phone-frame.reduced-effects .arena-background-grid,.phone-frame.reduced-effects .pixel-floor,.phone-frame.reduced-effects .student-sprite,.phone-frame.reduced-effects .student-art,.phone-frame.reduced-effects .student-sprite::before,.phone-frame.reduced-effects .student-sprite::after,.phone-frame.reduced-effects .helper-sprite,.phone-frame.reduced-effects .helper-sprite::after,.phone-frame.reduced-effects .battle-road-lineup,.phone-frame.reduced-effects .battle-scene-lineup::before,.phone-frame.reduced-effects .battle-scene-lineup::after,.phone-frame.reduced-effects .battle-scene-enemy,.phone-frame.reduced-effects .battle-scene-enemy::before,.phone-frame.reduced-effects .battle-scene-enemy::after,.phone-frame.reduced-effects .battle-scene-monster-art,.phone-frame.reduced-effects .battle-scene-hp::after{animation-duration:.01ms;animation-iteration-count:1}",
+    ".phone-frame.reduced-effects .expedition-arena::before,.phone-frame.reduced-effects .expedition-arena::after,.phone-frame.reduced-effects .expedition-party-visual.running,.phone-frame.reduced-effects .expedition-unit-avatar.large,.phone-frame.reduced-effects .expedition-unit-avatar.large::after,.phone-frame.reduced-effects .expedition-enemy-visual,.phone-frame.reduced-effects .expedition-enemy-visual::before,.phone-frame.reduced-effects .expedition-enemy-visual::after,.phone-frame.reduced-effects .expedition-impact,.phone-frame.reduced-effects .pixel-arena::before,.phone-frame.reduced-effects .arena-background-sheet,.phone-frame.reduced-effects .arena-background-grid,.phone-frame.reduced-effects .pixel-floor,.phone-frame.reduced-effects .student-sprite,.phone-frame.reduced-effects .student-art,.phone-frame.reduced-effects .student-sprite::before,.phone-frame.reduced-effects .student-sprite::after,.phone-frame.reduced-effects .helper-sprite,.phone-frame.reduced-effects .helper-sprite::after,.phone-frame.reduced-effects .curriculum-attack-vfx-token,.phone-frame.reduced-effects .battle-road-lineup,.phone-frame.reduced-effects .battle-scene-lineup::before,.phone-frame.reduced-effects .battle-scene-lineup::after,.phone-frame.reduced-effects .battle-scene-enemy,.phone-frame.reduced-effects .battle-scene-enemy::before,.phone-frame.reduced-effects .battle-scene-enemy::after,.phone-frame.reduced-effects .battle-scene-monster-art,.phone-frame.reduced-effects .battle-scene-hp::after{animation-duration:.01ms;animation-iteration-count:1}",
     "@keyframes expeditionBackdropPan{0%{transform:translateX(0)}100%{transform:translateX(-58%)}}",
     `@keyframes battleRoadBackdropPan{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(${cssNumber(battleBackdrop.panLoopPercent)}%,0,0)}}`,
     "@keyframes expeditionPartyAdvance{0%,100%{transform:translateX(0)}50%{transform:translateX(10px)}}",
@@ -2774,6 +2801,11 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
     "@keyframes roadRunDust{0%,35%,100%{opacity:0;transform:translate(6px,0) scale(.5)}48%,72%{opacity:.68;transform:translate(-30px,3px) scale(1)}}",
     "@keyframes roadBrakeDust{0%,34%,78%,100%{opacity:0;transform:translate(10px,0) scale(.42)}48%,62%{opacity:.58;transform:translate(-14px,3px) scale(.86)}}",
     `@keyframes studentMeleeSlash{0%,29%,58%,100%{opacity:0;transform:translate(10px,5px) rotate(-13deg) scaleX(.42)}38%,48%{opacity:.95;transform:translate(${cssNumber(studentAttack.slashPx)}px,-1px) rotate(-13deg) scaleX(1)}}`,
+    "@keyframes curriculumVfxGlyph{0%,14%{opacity:0;transform:translate(var(--curriculum-vfx-source-x),var(--curriculum-vfx-source-y)) scale(.68) rotate(-14deg)}30%,58%{opacity:1}60%{transform:translate(var(--curriculum-vfx-arc-x),var(--curriculum-vfx-arc-y)) scale(1.08) rotate(4deg)}78%{opacity:.96;transform:translate(var(--curriculum-vfx-impact-x),var(--curriculum-vfx-impact-y)) scale(1.18) rotate(-2deg)}100%{opacity:0;transform:translate(8px,-10px) scale(.82) rotate(7deg)}}",
+    "@keyframes curriculumVfxWord{0%,13%{opacity:0;transform:translate(var(--curriculum-vfx-source-x),var(--curriculum-vfx-source-y)) scale(.78) rotate(-8deg)}28%,56%{opacity:1}62%{transform:translate(var(--curriculum-vfx-arc-x),var(--curriculum-vfx-arc-y)) scale(1.02) rotate(2deg)}82%{opacity:.95;transform:translate(var(--curriculum-vfx-impact-x),var(--curriculum-vfx-impact-y)) scale(1.06) rotate(0)}100%{opacity:0;transform:translate(9px,-7px) scale(.88) rotate(3deg)}}",
+    "@keyframes curriculumVfxFormula{0%,12%{opacity:0;transform:translate(var(--curriculum-vfx-source-x),var(--curriculum-vfx-source-y)) scaleX(.72) rotate(-5deg)}26%,55%{opacity:1}62%{transform:translate(var(--curriculum-vfx-arc-x),var(--curriculum-vfx-arc-y)) scaleX(1.08) rotate(1deg)}80%{opacity:.98;transform:translate(var(--curriculum-vfx-impact-x),var(--curriculum-vfx-impact-y)) scaleX(1) rotate(0)}100%{opacity:0;transform:translate(11px,-5px) scaleX(.72) rotate(2deg)}}",
+    "@keyframes curriculumVfxCard{0%,16%{opacity:0;transform:translate(var(--curriculum-vfx-source-x),var(--curriculum-vfx-source-y)) rotateY(62deg) rotate(-10deg) scale(.72)}32%,58%{opacity:1}64%{transform:translate(var(--curriculum-vfx-arc-x),var(--curriculum-vfx-arc-y)) rotateY(0) rotate(3deg) scale(1.02)}82%{opacity:.98;transform:translate(var(--curriculum-vfx-impact-x),var(--curriculum-vfx-impact-y)) rotateY(-12deg) rotate(-1deg) scale(1.04)}100%{opacity:0;transform:translate(6px,-8px) rotateY(-38deg) rotate(5deg) scale(.8)}}",
+    "@keyframes curriculumVfxBurst{0%,18%{opacity:0;transform:translate(var(--curriculum-vfx-source-x),var(--curriculum-vfx-source-y)) scale(.42) rotate(-16deg)}34%,56%{opacity:1}64%{transform:translate(var(--curriculum-vfx-arc-x),var(--curriculum-vfx-arc-y)) scale(1.18) rotate(6deg)}78%{opacity:1;transform:translate(var(--curriculum-vfx-impact-x),var(--curriculum-vfx-impact-y)) scale(1.26) rotate(-2deg)}100%{opacity:0;transform:translate(12px,-12px) scale(.3) rotate(14deg)}}",
     "@keyframes helperRoadRun{0%,24.99%,100%{background-position:var(--visual-unit-frame-a,var(--visual-unit-x,0%)) var(--visual-unit-frame-a-y,var(--visual-unit-y,0%));transform:translate(var(--helper-x),var(--helper-y)) scale(var(--helper-scale))}25%,49.99%{background-position:var(--visual-unit-frame-b,var(--visual-unit-frame-a,var(--visual-unit-x,0%))) var(--visual-unit-frame-b-y,var(--visual-unit-y,0%));transform:translate(calc(var(--helper-x) - 3px),calc(var(--helper-y) - 3px)) scale(var(--helper-scale))}50%,74.99%{background-position:var(--visual-unit-frame-c,var(--visual-unit-frame-a,var(--visual-unit-x,0%))) var(--visual-unit-frame-c-y,var(--visual-unit-y,0%));transform:translate(calc(var(--helper-x) + 4px),calc(var(--helper-y) + 1px)) scale(var(--helper-scale))}75%,99.99%{background-position:var(--visual-unit-frame-d,var(--visual-unit-frame-a,var(--visual-unit-x,0%))) var(--visual-unit-frame-d-y,var(--visual-unit-y,0%));transform:translate(calc(var(--helper-x) + 1px),calc(var(--helper-y) - 2px)) scale(var(--helper-scale))}}",
     "@keyframes helperRoadBrake{0%,33.99%,84%,100%{background-position:var(--visual-unit-frame-a,var(--visual-unit-x,0%)) var(--visual-unit-frame-a-y,var(--visual-unit-y,0%));transform:translate(var(--helper-x),var(--helper-y)) scale(var(--helper-scale))}34%,63.99%{background-position:var(--visual-unit-frame-c,var(--visual-unit-frame-a,var(--visual-unit-x,0%))) var(--visual-unit-frame-c-y,var(--visual-unit-y,0%));transform:translate(calc(var(--helper-x) + 8px),calc(var(--helper-y) - 3px)) scale(var(--helper-scale))}64%,83.99%{background-position:var(--visual-unit-frame-d,var(--visual-unit-frame-a,var(--visual-unit-x,0%))) var(--visual-unit-frame-d-y,var(--visual-unit-y,0%));transform:translate(calc(var(--helper-x) + 3px),calc(var(--helper-y) + 1px)) scale(var(--helper-scale))}}",
     "@keyframes helperAllyLoop{0%,19.99%,75%,100%{background-position:var(--visual-unit-frame-a,var(--visual-unit-x,0%)) var(--visual-unit-frame-a-y,var(--visual-unit-y,0%));transform:translate(var(--helper-x),var(--helper-y)) scale(var(--helper-scale))}20%,34.99%{background-position:var(--visual-unit-frame-b,var(--visual-unit-frame-a,var(--visual-unit-x,0%))) var(--visual-unit-frame-b-y,var(--visual-unit-y,0%));transform:translate(var(--helper-x),calc(var(--helper-y) - 3px)) scale(var(--helper-scale))}35%,54.99%{background-position:var(--visual-unit-frame-c,var(--visual-unit-frame-a,var(--visual-unit-x,0%))) var(--visual-unit-frame-c-y,var(--visual-unit-y,0%));transform:translate(calc(var(--helper-x) + 20px),calc(var(--helper-y) - 5px)) scale(var(--helper-scale))}55%,74.99%{background-position:var(--visual-unit-frame-d,var(--visual-unit-frame-a,var(--visual-unit-x,0%))) var(--visual-unit-frame-d-y,var(--visual-unit-y,0%));transform:translate(calc(var(--helper-x) + 6px),calc(var(--helper-y) + 1px)) scale(var(--helper-scale))}}",

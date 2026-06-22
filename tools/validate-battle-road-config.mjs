@@ -26,6 +26,15 @@ function hasUniqueIds(items, label) {
   });
 }
 
+function requireHelp(object, keys, path) {
+  const help = object?.help ?? {};
+  for (const key of keys) {
+    if (typeof help[key] !== "string" || help[key].trim().length === 0) {
+      fail(`${path}.help.${key} must be a non-empty Korean help string`);
+    }
+  }
+}
+
 if (config.version !== 1) fail("version must be 1");
 
 for (const key of ["playerAnchorX", "combatAnchorX", "enemyMeetX", "enemySpawnX", "parallaxDistancePx"]) {
@@ -68,6 +77,53 @@ for (const key of ["windupPx", "dashPx", "recoverPx", "dustPx", "slashPx"]) {
   if (!isFiniteNumber(attack[key]) || attack[key] < 0) fail(`presentation.studentAttack.${key} must be a non-negative number`);
 }
 if ((attack.dashPx ?? 999) > 40) fail("presentation.studentAttack.dashPx should stay short for close melee readability");
+
+const curriculumAttackVfx = presentation.curriculumAttackVfx ?? {};
+if (typeof curriculumAttackVfx.enabled !== "boolean") fail("presentation.curriculumAttackVfx.enabled must be a boolean");
+for (const key of ["cycleMs", "durationMs", "baseFontPx", "minWidthPx", "maxWidthPx"]) {
+  if (!isPositiveNumber(curriculumAttackVfx[key])) fail(`presentation.curriculumAttackVfx.${key} must be a positive number`);
+}
+for (const key of [
+  "sourceOffsetXPx",
+  "sourceOffsetYPx",
+  "impactOffsetXPx",
+  "impactOffsetYPx",
+  "normalTargetXOffsetPercent",
+  "normalTargetYOffsetPercent",
+  "bossTargetXOffsetPercent",
+  "bossTargetYOffsetPercent",
+]) {
+  if (!isFiniteNumber(curriculumAttackVfx[key])) fail(`presentation.curriculumAttackVfx.${key} must be a finite number`);
+}
+if ((curriculumAttackVfx.maxWidthPx ?? 0) < (curriculumAttackVfx.minWidthPx ?? 0)) {
+  fail("presentation.curriculumAttackVfx.maxWidthPx must be greater than or equal to minWidthPx");
+}
+if ((curriculumAttackVfx.durationMs ?? 0) > 1600) fail("presentation.curriculumAttackVfx.durationMs should stay short for attack readability");
+requireHelp(
+  curriculumAttackVfx,
+  [
+    "enabled",
+    "cycleMs",
+    "durationMs",
+    "baseFontPx",
+    "minWidthPx",
+    "maxWidthPx",
+    "sourceOffsetXPx",
+    "sourceOffsetYPx",
+    "impactOffsetXPx",
+    "impactOffsetYPx",
+    "normalTargetXOffsetPercent",
+    "normalTargetYOffsetPercent",
+    "bossTargetXOffsetPercent",
+    "bossTargetYOffsetPercent",
+  ],
+  "presentation.curriculumAttackVfx",
+);
+
+const phasePolicy = presentation.phasePolicy ?? {};
+if (typeof phasePolicy.damageStartsCombat !== "boolean") {
+  fail("presentation.phasePolicy.damageStartsCombat must be a boolean");
+}
 
 const enemySlots = presentation.enemySlots ?? {};
 for (const [slotKey, expectedLength] of [

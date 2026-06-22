@@ -1,0 +1,342 @@
+{
+  "version": 1,
+  "description": "학생탭 공격 VFX에 사용할 학년별 교과 토큰 매핑 테이블입니다. 런타임은 공격 1회마다 현재 학년의 토큰 풀에서 1개를 선택해 표시합니다.",
+  "selection": {
+    "mode": "random_one_per_attack",
+    "tokensPerAttack": 1,
+    "source": "current_grade_weighted_pool",
+    "repeatWindow": 3,
+    "seedHint": ["gradeOrder", "battleId", "targetId", "attackSerial"],
+    "help": {
+      "mode": "공격 1회에 표시할 토큰 선택 방식입니다.",
+      "tokensPerAttack": "공격 1회에 동시에 표시되는 교과 토큰 수입니다. 현재 기준은 1개입니다.",
+      "source": "현재 학년의 가중치 토큰 풀에서 선택한다는 의미입니다.",
+      "repeatWindow": "향후 런타임에서 같은 토큰 반복을 피할 때 참고할 최근 선택 개수입니다.",
+      "seedHint": "결정적 랜덤 선택이 필요할 때 사용할 수 있는 상태 키 후보입니다."
+    }
+  },
+  "runtime": {
+    "renderer": "dom_text_layer",
+    "skinKey": "default",
+    "localizationKeyPrefix": "curriculum.attackVfx",
+    "tokenKeyStrategy": "grade_pool_token",
+    "help": {
+      "renderer": "교과 공격 VFX 토큰을 어떤 렌더러로 표시할지 정합니다. 현재는 고정 DOM 텍스트 레이어를 사용합니다.",
+      "skinKey": "향후 스킨별 색상, 질감, 모션 프리셋을 분기할 때 사용할 기본 스킨 키입니다.",
+      "localizationKeyPrefix": "향후 언어별 토큰 테이블이나 번역 키를 만들 때 사용할 키 prefix입니다.",
+      "tokenKeyStrategy": "향후 토큰 문자열 대신 안정적인 로컬라이제이션 키를 생성할 때 사용할 키 구성 방식입니다."
+    }
+  },
+  "rules": {
+    "maxTokenChars": 8,
+    "minPoolsPerGrade": 3,
+    "minTokensPerPool": 4,
+    "allowedSubjects": ["korean", "english", "math", "science", "social", "exam", "habit"],
+    "inquirySubjectAliases": {
+      "social": ["science"],
+      "science": ["social"]
+    },
+    "help": {
+      "maxTokenChars": "모바일 전투장에서 글자가 겹치지 않도록 한 토큰의 최대 글자 수를 제한합니다.",
+      "minPoolsPerGrade": "학년별로 최소 몇 개의 과목/테마 풀이 있어야 하는지 정합니다.",
+      "minTokensPerPool": "각 토큰 풀이 최소 몇 개의 후보를 가져야 하는지 정합니다.",
+      "allowedSubjects": "토큰 풀이 사용할 수 있는 과목/테마 id 목록입니다.",
+      "inquirySubjectAliases": "사회/과학 탐구처럼 같은 탐구 계열로 묶어 토큰 풀을 함께 참고할 과목 alias입니다."
+    }
+  },
+  "styles": [
+    {
+      "id": "glyph",
+      "label": "낱글자",
+      "renderer": "text",
+      "motion": "pop_arc",
+      "description": "짧은 글자, 숫자, 알파벳이 튀어나가며 타격 지점으로 이동합니다."
+    },
+    {
+      "id": "word",
+      "label": "단어",
+      "renderer": "text",
+      "motion": "slide_snap",
+      "description": "단어 하나가 획처럼 밀고 들어가며 사라집니다."
+    },
+    {
+      "id": "formula",
+      "label": "식",
+      "renderer": "text",
+      "motion": "chalk_streak",
+      "description": "짧은 숫자식이나 기호식이 분필 자국처럼 날아갑니다."
+    },
+    {
+      "id": "card",
+      "label": "카드",
+      "renderer": "text_card",
+      "motion": "paper_flip",
+      "description": "작은 종이 카드에 토큰을 얹어 시험지/노트 느낌을 냅니다."
+    },
+    {
+      "id": "burst",
+      "label": "버스트",
+      "renderer": "text",
+      "motion": "impact_burst",
+      "description": "보스나 처치 타격에 쓸 짧고 강한 확산형 토큰 연출입니다."
+    }
+  ],
+  "palettes": {
+    "lowerElementary": {
+      "primary": "#f4d35e",
+      "accent": "#9fd4c9",
+      "paper": "#fff7d6",
+      "shadow": "#5b4636"
+    },
+    "upperElementary": {
+      "primary": "#7dd3fc",
+      "accent": "#f9a8d4",
+      "paper": "#f8fafc",
+      "shadow": "#334155"
+    },
+    "middle": {
+      "primary": "#93c5fd",
+      "accent": "#c4b5fd",
+      "paper": "#eef2ff",
+      "shadow": "#1e293b"
+    },
+    "high": {
+      "primary": "#fde68a",
+      "accent": "#fb7185",
+      "paper": "#fef3c7",
+      "shadow": "#1f2937"
+    },
+    "repeater": {
+      "primary": "#c4b5fd",
+      "accent": "#f0b84c",
+      "paper": "#fff1d6",
+      "shadow": "#26170f"
+    }
+  },
+  "bossStyleByVisualKey": {
+    "march_eval": "card",
+    "midterm": "burst",
+    "final": "card",
+    "year_boss": "burst",
+    "march_mock": "card",
+    "june_mock": "burst",
+    "september_mock": "burst",
+    "suneung": "burst"
+  },
+  "gradeMappings": [
+    {
+      "gradeOrder": 1,
+      "gradeLabel": "초1",
+      "phase": "elementary",
+      "palette": "lowerElementary",
+      "defaultStyle": "glyph",
+      "tokenPools": [
+        { "id": "korean_letters", "subject": "korean", "style": "glyph", "weight": 4, "tokens": ["ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ", "아", "어", "이"] },
+        { "id": "english_letters", "subject": "english", "style": "glyph", "weight": 3, "tokens": ["A-a", "B-b", "C-c", "D-d", "E-e", "cat", "dog", "book"] },
+        { "id": "counting", "subject": "math", "style": "formula", "weight": 3, "tokens": ["1+1", "2+1", "3-1", "2+2", "5-1", "1<2"] }
+      ]
+    },
+    {
+      "gradeOrder": 2,
+      "gradeLabel": "초2",
+      "phase": "elementary",
+      "palette": "lowerElementary",
+      "defaultStyle": "word",
+      "tokenPools": [
+        { "id": "easy_korean_words", "subject": "korean", "style": "word", "weight": 4, "tokens": ["안녕", "고마워", "사랑해", "학교", "친구", "가족", "바다", "하늘"] },
+        { "id": "easy_english_words", "subject": "english", "style": "word", "weight": 3, "tokens": ["hello", "name", "friend", "family", "school", "apple", "baby", "book"] },
+        { "id": "basic_addition", "subject": "math", "style": "formula", "weight": 3, "tokens": ["1+1=2", "2+2=4", "3+1=4", "5-2=3", "2x2=4", "10-3"] }
+      ]
+    },
+    {
+      "gradeOrder": 3,
+      "gradeLabel": "초3",
+      "phase": "elementary",
+      "palette": "upperElementary",
+      "defaultStyle": "word",
+      "tokenPools": [
+        { "id": "reading_basics", "subject": "korean", "style": "word", "weight": 3, "tokens": ["낱말", "문장", "문단", "일기", "중심", "주제"] },
+        { "id": "english_action", "subject": "english", "style": "word", "weight": 2, "tokens": ["read", "write", "listen", "speak", "clock", "class"] },
+        { "id": "math_units", "subject": "math", "style": "formula", "weight": 3, "tokens": ["1/2", "3x4", "12÷3", "100cm", "1m", "1L"] },
+        { "id": "observation", "subject": "science", "style": "formula", "weight": 2, "tokens": ["N-S", "S-N", "H2O", "O2", "CO2", "20°C"] }
+      ]
+    },
+    {
+      "gradeOrder": 4,
+      "gradeLabel": "초4",
+      "phase": "elementary",
+      "palette": "upperElementary",
+      "defaultStyle": "word",
+      "tokenPools": [
+        { "id": "korean_expression", "subject": "korean", "style": "word", "weight": 3, "tokens": ["요약", "주제", "토론", "설명문", "비유", "발표"] },
+        { "id": "english_time", "subject": "english", "style": "word", "weight": 2, "tokens": ["today", "time", "story", "where", "when", "favorite"] },
+        { "id": "geometry", "subject": "math", "style": "formula", "weight": 3, "tokens": ["90°", "180°", "1/4", "0.5", "3km", "A=bh"] },
+        { "id": "world_basic", "subject": "science", "style": "formula", "weight": 2, "tokens": ["V=IR", "S-N", "N-S", "H2O", "CO2", "O2"] }
+      ]
+    },
+    {
+      "gradeOrder": 5,
+      "gradeLabel": "초5",
+      "phase": "elementary",
+      "palette": "upperElementary",
+      "defaultStyle": "word",
+      "tokenPools": [
+        { "id": "argument", "subject": "korean", "style": "word", "weight": 3, "tokens": ["근거", "주장", "토의", "속담", "자료", "요약"] },
+        { "id": "english_sentence", "subject": "english", "style": "word", "weight": 2, "tokens": ["because", "before", "after", "always", "usually"] },
+        { "id": "ratio_area", "subject": "math", "style": "formula", "weight": 3, "tokens": ["3/5", "2:3", "0.25", "A=lw", "V=lwh", "12%"] },
+        { "id": "science_history", "subject": "science", "style": "formula", "weight": 2, "tokens": ["pH7", "H2O", "CO2", "O2", "NaCl", "1AU"] }
+      ]
+    },
+    {
+      "gradeOrder": 6,
+      "gradeLabel": "초6",
+      "phase": "elementary",
+      "palette": "upperElementary",
+      "defaultStyle": "word",
+      "tokenPools": [
+        { "id": "advanced_reading", "subject": "korean", "style": "word", "weight": 3, "tokens": ["논설", "비문학", "문맥", "토론", "요약", "근거"] },
+        { "id": "middle_ready_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["future", "travel", "people", "subject", "middle"] },
+        { "id": "proportion_volume", "subject": "math", "style": "formula", "weight": 3, "tokens": ["v=d/t", "2:3", "πr", "V=Bh", "x+1", "3.14"] },
+        { "id": "civic_science", "subject": "science", "style": "formula", "weight": 2, "tokens": ["kWh", "CO2", "O2", "H2O", "1atm", "pH7"] }
+      ]
+    },
+    {
+      "gradeOrder": 7,
+      "gradeLabel": "중1",
+      "phase": "middle",
+      "palette": "middle",
+      "defaultStyle": "formula",
+      "tokenPools": [
+        { "id": "middle_korean", "subject": "korean", "style": "word", "weight": 3, "tokens": ["시", "소설", "화자", "갈등", "품사", "음운"] },
+        { "id": "middle_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["be", "do", "have", "past", "will", "can"] },
+        { "id": "linear_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["2x=6", "x+3", "a+b", "(x,y)", "y=ax", "3:5"] },
+        { "id": "middle_science_social", "subject": "science", "style": "formula", "weight": 2, "tokens": ["F=ma", "v=d/t", "H2O", "O2", "CO2", "DNA"] }
+      ]
+    },
+    {
+      "gradeOrder": 8,
+      "gradeLabel": "중2",
+      "phase": "middle",
+      "palette": "middle",
+      "defaultStyle": "formula",
+      "tokenPools": [
+        { "id": "logic_media", "subject": "korean", "style": "word", "weight": 3, "tokens": ["시점", "문법", "매체", "근거", "논증", "표현"] },
+        { "id": "english_structure", "subject": "english", "style": "word", "weight": 2, "tokens": ["tense", "voice", "clause", "topic", "essay"] },
+        { "id": "function_start", "subject": "math", "style": "formula", "weight": 4, "tokens": ["x+y=5", "y=2x", "a^2", "P(A)", "2x-y", "x<3"] },
+        { "id": "lab_history", "subject": "science", "style": "formula", "weight": 2, "tokens": ["I=V/R", "V=IR", "H2O", "NaCl", "CO2", "pH7"] }
+      ]
+    },
+    {
+      "gradeOrder": 9,
+      "gradeLabel": "중3",
+      "phase": "middle",
+      "palette": "middle",
+      "defaultStyle": "formula",
+      "tokenPools": [
+        { "id": "graduation_reading", "subject": "korean", "style": "word", "weight": 3, "tokens": ["고전", "논술", "문장", "독해", "문맥", "요지"] },
+        { "id": "exam_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["syntax", "context", "infer", "review", "debate"] },
+        { "id": "quadratic_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["x^2", "√2", "a^2+b^2", "y=ax^2", "x=2", "P(A)"] },
+        { "id": "high_ready", "subject": "science", "style": "formula", "weight": 2, "tokens": ["F=ma", "E=mc^2", "DNA", "CO2", "pH", "I=V/R"] }
+      ]
+    },
+    {
+      "gradeOrder": 10,
+      "gradeLabel": "고1",
+      "phase": "high",
+      "palette": "high",
+      "defaultStyle": "formula",
+      "tokenPools": [
+        { "id": "common_korean", "subject": "korean", "style": "word", "weight": 3, "tokens": ["독서", "문학", "화법", "작문", "문법", "매체"] },
+        { "id": "high_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["idea", "topic", "title", "blank", "order"] },
+        { "id": "common_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["f(x)", "A∩B", "A∪B", "p→q", "log2", "|x|"] },
+        { "id": "integrated_subjects", "subject": "science", "style": "formula", "weight": 2, "tokens": ["GDP", "CPI", "pH", "CO2", "F=ma", "E=hf"] }
+      ]
+    },
+    {
+      "gradeOrder": 11,
+      "gradeLabel": "고2",
+      "phase": "high",
+      "palette": "high",
+      "defaultStyle": "formula",
+      "tokenPools": [
+        { "id": "elective_korean", "subject": "korean", "style": "word", "weight": 3, "tokens": ["문학", "독서", "작문", "매체", "고전", "담화"] },
+        { "id": "exam_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["infer", "summary", "blank", "order", "title"] },
+        { "id": "elective_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["lim", "dy/dx", "∫f(x)", "P(A)", "nCr", "a_n"] },
+        { "id": "track_subjects", "subject": "science", "style": "formula", "weight": 2, "tokens": ["F=ma", "PV=nRT", "pH=-logH", "DNA", "CO2", "GNI"] }
+      ]
+    },
+    {
+      "gradeOrder": 12,
+      "gradeLabel": "고3",
+      "phase": "high",
+      "palette": "high",
+      "defaultStyle": "burst",
+      "tokenPools": [
+        { "id": "suneung_korean", "subject": "korean", "style": "word", "weight": 3, "tokens": ["수특", "독서", "문학", "선지", "화작", "언매"] },
+        { "id": "suneung_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["blank", "order", "gist", "vocab", "summary"] },
+        { "id": "suneung_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["lim", "dy/dx", "∫f(x)", "P(A)", "nCr", "f'(x)"] },
+        { "id": "exam_pressure", "subject": "exam", "style": "burst", "weight": 3, "tokens": ["OMR", "EBS", "6평", "9평", "1등급", "30번"] }
+      ]
+    },
+    {
+      "gradeOrder": 13,
+      "gradeLabel": "1수",
+      "phase": "repeater",
+      "palette": "repeater",
+      "defaultStyle": "card",
+      "tokenPools": [
+        { "id": "review_start", "subject": "habit", "style": "card", "weight": 3, "tokens": ["개념", "1회독", "오답", "루틴", "복습", "호흡"] },
+        { "id": "repeater_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["review", "vocab", "blank", "logic", "speed"] },
+        { "id": "repeater_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["f(x)", "P(A)", "dy/dx", "∫", "log", "nCr"] },
+        { "id": "mock_exam", "subject": "exam", "style": "burst", "weight": 3, "tokens": ["6평", "9평", "OMR", "1컷", "2컷", "EBS"] }
+      ]
+    },
+    {
+      "gradeOrder": 14,
+      "gradeLabel": "2수",
+      "phase": "repeater",
+      "palette": "repeater",
+      "defaultStyle": "card",
+      "tokenPools": [
+        { "id": "routine_fixed", "subject": "habit", "style": "card", "weight": 3, "tokens": ["2회독", "압축", "실전", "오답", "루틴", "수면"] },
+        { "id": "speed_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["speed", "logic", "review", "blank", "order"] },
+        { "id": "simulation_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["f'(x)", "∫f(x)", "P(A)", "nCr", "a_n", "lim"] },
+        { "id": "evaluator", "subject": "exam", "style": "burst", "weight": 3, "tokens": ["6평", "9평", "OMR", "1컷", "N제", "실모"] }
+      ]
+    },
+    {
+      "gradeOrder": 15,
+      "gradeLabel": "장수",
+      "phase": "repeater",
+      "palette": "repeater",
+      "defaultStyle": "burst",
+      "tokenPools": [
+        { "id": "long_runner_mind", "subject": "habit", "style": "card", "weight": 3, "tokens": ["장수", "재정리", "불안컷", "최종", "집중", "압축"] },
+        { "id": "long_runner_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["calm", "focus", "review", "logic", "blank"] },
+        { "id": "long_runner_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["dy/dx", "∫f(x)", "P(A)", "nCr", "f(x)", "lim"] },
+        { "id": "final_exam", "subject": "exam", "style": "burst", "weight": 3, "tokens": ["OMR", "실모", "N제", "1컷", "9평"] }
+      ]
+    },
+    {
+      "gradeOrder": 16,
+      "gradeLabel": "N수",
+      "phase": "repeater",
+      "palette": "repeater",
+      "defaultStyle": "burst",
+      "tokenPools": [
+        { "id": "veteran_finish", "subject": "habit", "style": "card", "weight": 3, "tokens": ["마지막", "초압축", "실전감", "확신", "정리"] },
+        { "id": "veteran_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["focus", "final", "calm", "review", "speed"] },
+        { "id": "veteran_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["f'(x)", "∫", "P(A)", "nCr", "log", "lim"] },
+        { "id": "exam_room", "subject": "exam", "style": "burst", "weight": 3, "tokens": ["OMR", "EBS", "1컷", "N제", "실모"] }
+      ]
+    }
+  ],
+  "help": {
+    "selection": "한 번 공격할 때 하나씩 랜덤하게 나가는 교과 VFX 선택 정책입니다.",
+    "runtime": "교과 공격 VFX 테이블을 런타임 렌더러와 스킨/로컬라이제이션 구조에 연결하는 메타 설정입니다.",
+    "styles": "렌더러가 표현할 수 있는 텍스트 VFX 스타일 목록입니다.",
+    "palettes": "학년군별 교과 VFX 색상 기준입니다.",
+    "bossStyleByVisualKey": "보스 또는 시험 조우에서 사용할 강조 스타일 매핑입니다.",
+    "gradeMappings": "학년별 교과 토큰 풀 테이블입니다."
+  }
+}

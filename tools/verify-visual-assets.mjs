@@ -70,6 +70,11 @@ if (!css.includes("@keyframes enemyShockRing")) failures.push("scene enemy shock
 if (!css.includes("@keyframes helperAllyLoop")) failures.push("helper ally combat motion is missing");
 if (!css.includes("@keyframes floorTreadmill")) failures.push("arena treadmill floor motion is missing");
 if (!css.includes("@keyframes battleDustBurst")) failures.push("arena dust burst vfx is missing");
+if (!css.includes(".curriculum-attack-vfx-layer")) failures.push("curriculum attack VFX layer css is missing");
+if (!css.includes(".curriculum-attack-vfx-token")) failures.push("curriculum attack VFX token css is missing");
+for (const keyframe of ["curriculumVfxGlyph", "curriculumVfxWord", "curriculumVfxFormula", "curriculumVfxCard", "curriculumVfxBurst"]) {
+  if (!css.includes(`@keyframes ${keyframe}`)) failures.push(`${keyframe} keyframe is missing`);
+}
 if (!css.includes("__STUDENT_ASSET_010__")) failures.push("expedition long backdrop token is missing from css");
 if (!css.includes("@keyframes expeditionBackdropPan")) failures.push("expedition long backdrop pan motion is missing");
 if (!css.includes("__STUDENT_ASSET_011__")) failures.push("battle road long backdrop token is missing from css");
@@ -78,6 +83,7 @@ const battlePresentation = battleRoadConfig.presentation ?? {};
 const battleBackdrop = battlePresentation.backdrop ?? {};
 const studentAttack = battlePresentation.studentAttack ?? {};
 const studentDisplay = battlePresentation.studentDisplay ?? {};
+const curriculumAttackVfx = battlePresentation.curriculumAttackVfx ?? {};
 const enemyDisplay = battlePresentation.enemyDisplay ?? {};
 const enemyReaction = battlePresentation.enemyReaction ?? {};
 const enemyHpBar = battlePresentation.enemyHpBar ?? {};
@@ -87,6 +93,10 @@ if (!css.includes(`translate3d(${battleBackdrop.panLoopPercent}%`)) failures.pus
 if (css.includes(".pixel-arena.road-travel::before{animation-duration")) failures.push("battle road phase should not override backdrop animation duration");
 if (!css.includes(`translate(${studentAttack.dashPx}px,-6px)`)) failures.push("student attack dash distance is not config-driven");
 if (css.includes("translate(76px,-6px)") || css.includes("translate(84px,-1px)")) failures.push("student attack still uses the old long dash distance");
+if (!css.includes(`--curriculum-vfx-duration:${curriculumAttackVfx.durationMs}ms`)) failures.push("curriculum attack VFX duration is not config-driven");
+if (!css.includes(`--curriculum-vfx-base-font:${curriculumAttackVfx.baseFontPx}px`)) failures.push("curriculum attack VFX font size is not config-driven");
+if (!css.includes(`--curriculum-vfx-source-x:${curriculumAttackVfx.sourceOffsetXPx}px`)) failures.push("curriculum attack VFX source offset is not config-driven");
+if (!css.includes(".phone-frame.reduced-effects .curriculum-attack-vfx-token")) failures.push("curriculum attack VFX is missing reduced-effects rule");
 if (!css.includes(`--battle-normal-enemy-size:${enemyDisplay.normalSizePx}px`)) failures.push("battle normal enemy display size is not config-driven");
 if (!css.includes(`--battle-boss-enemy-size:${enemyDisplay.bossSizePx}px`)) failures.push("battle boss enemy display size is not config-driven");
 if (!css.includes(`--battle-suneung-enemy-size:${enemyDisplay.suneungSizePx}px`)) failures.push("battle suneung enemy display size is not config-driven");
