@@ -95,6 +95,9 @@ npm run asset:factory:install-skill
 - 직업동료 헤어/얼굴 다양화는 얼굴 중앙을 덮지 않는 범위에서만 한다. 직업 가독성은 모자, 의상 실루엣, 손소품, 색상, 배지로 확보한다.
 - 얼굴 근처 원형 아티팩트 방지를 위해 `data/professional_sprite_manifest.json`의 `appearanceProfiles`는 `round-glasses`, `earpiece`, `small-ribbon`, `star-pin`, 여자 `bun`, `twin-tail`, `pony`를 사용하지 않는다. `npm run asset:integrity`는 이 face-safe 규칙을 위반하면 실패해야 한다.
 - 원정대 몬스터는 레퍼런스처럼 귀엽고 피규어 같은 학습/생활 오브젝트형 SD 몬스터가 기준이다. 손발은 짧은 장갑/발판 정도로만 사용하고, 긴 막대 팔다리나 넓은 외부 소품 때문에 몸통이 축소되면 실패로 본다.
+- 원정대 몬스터는 지역/위치 tone마다 몸통 실루엣이 달라야 한다. shelter/studio/neighborhood/company/office/asset/national/global/future/summit의 일반 3종과 보스 1종은 같은 사각 몸통 색놀이가 아니라 월세 고지함, 세탁 바구니, 가격표, 출입 게이트, 회의 보드, 금고, 민원 서류, 여권/무역 상자, 칩/AI 코어, 정상 의제 같은 오브젝트 자체로 읽혀야 한다.
+- 원정대 몬스터 그래픽 위에는 이름, WAVE, 숫자 라벨 같은 텍스트 레이어를 붙이지 않는다. 데이터 이름은 manifest와 stage 데이터에만 남기고, 화면의 `.expedition-enemy-visual` 안쪽 레거시 `enemy-name`, `strong`, `small` 계열은 숨긴 상태를 유지한다.
+- `npm run visual:smoke`는 원정대 화면의 `enemyTextVisibleCount`가 0인지 검사한다. 스모크는 `dist/index.html` 기준이므로 원정대 몬스터 CSS나 스냅샷을 바꾼 뒤에는 `npm run build:web` 이후 실행해야 한다.
 - 학생전투 몬스터는 `assets/reference/character-ref-cute-sd.png`의 몬스터를 기준으로 한다. `tools/generate-main-monster-sources.py`가 레퍼런스 우측 몬스터를 한 개씩 crop하고 OpenCV GrabCut으로 분리해 `assets/visual-source/main-monsters/main-monsters-green.png`를 만든다.
 - 학생전투 몬스터 소스 시트는 형광 녹색 `#00FF00` 배경이어야 하며, 최종 `asset-003.png`에는 녹색 잔여 픽셀이 0개여야 한다. `visual:audit`의 `maxChromaKeyResidue`가 이 기준을 검사한다.
 - 학생전투 몬스터 crop은 주변 몬스터, 반쪽 소품, 배경선, 의미 없는 작은 조각을 포함하면 실패다. 품질 확인은 `artifacts/visual-asset-samples/reference-main-monster-cutouts-preview.png`와 `main-monster-green-source-vs-final.png`를 확대해 본다.

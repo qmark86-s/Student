@@ -32,6 +32,8 @@ Use this skill to keep sprite production repeatable. AI image generation may cre
 - Companions and monsters must keep at least 8px top/bottom alpha margin after normalization.
 - Companion/monster zoom review must show source 4 frames and normalized 4 frames without clipping, matte leaks, or one-frame scale jumps.
 - Main student-battle monsters are generated from `assets/reference/character-ref-cute-sd.png` into `assets/visual-source/main-monsters/main-monsters-green.png`; final `asset-003.png` must have zero green matte residue.
+- Expedition enemies must be left-facing cute SD object monsters with region-specific silhouettes. Do not ship legacy CSS/text monsters or visible name/WAVE/number labels on the monster graphic.
+- After changing expedition enemy CSS or snapshot assets, run `npm run build:web` before `npm run visual:smoke`; the smoke check reads the built `dist/index.html` and must report `enemyTextVisibleCount: 0`.
 - One frame visibly growing or shrinking is a failure even if the app still runs.
 - Browser/mobile screenshots must not show horizontal overflow or text/sprite overlap.
 

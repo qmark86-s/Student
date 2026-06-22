@@ -497,6 +497,11 @@ try {
       };
     };
     const enemySpriteClips = Array.from(document.querySelectorAll(".expedition-enemy-visual")).map(spriteClipFor);
+    const enemyTextVisibleCount = Array.from(document.querySelectorAll(".expedition-enemy-visual .enemy-name,.expedition-enemy-visual strong,.expedition-enemy-visual small")).filter((element) => {
+      const style = getComputedStyle(element);
+      const rect = element.getBoundingClientRect();
+      return style.display !== "none" && style.visibility !== "hidden" && Number.parseFloat(style.opacity || "1") > 0 && rect.width > 0 && rect.height > 0;
+    }).length;
     const enemySpriteClip = enemySpriteClips.reduce(
       (maxClip, clip) => ({
         left: Math.max(maxClip.left, clip.left),
@@ -547,6 +552,7 @@ try {
       enemyBeforeSquareDelta: Math.round(Math.abs(enemyBeforeWidth - enemyBeforeHeight)),
       enemyFrameSnapMaxError: Number(Math.max(...samples.map((item) => item.enemyFrameSnapError ?? 0)).toFixed(4)),
       unitFrameSnapMaxError: Number(Math.max(...samples.map((item) => item.unitFrameSnapError ?? 0)).toFixed(4)),
+      enemyTextVisibleCount,
       enemySpriteClipRight: Math.round(enemySpriteClip.right),
       enemySpriteClipLeft: Math.round(enemySpriteClip.left),
       enemySpriteClipTop: Math.round(enemySpriteClip.top),
@@ -629,6 +635,7 @@ try {
   if (!expeditionMetrics.oldBackgroundHidden) failures.push("Expedition old background image should be hidden");
   if (!expeditionMetrics.enemyBeforeMotion) failures.push("Expedition enemy sprite motion is missing");
   if (!expeditionMetrics.enemyShockVfx) failures.push("Expedition enemy rim light VFX is missing");
+  if (expeditionMetrics.enemyTextVisibleCount > 0) failures.push(`Expedition enemy attached text is visible: ${expeditionMetrics.enemyTextVisibleCount}`);
   if (expeditionMetrics.enemySpriteTravelPx < 0.4) failures.push(`Expedition enemy sprite reaction is too static: ${expeditionMetrics.enemySpriteTravelPx}px`);
   if (expeditionMetrics.enemySpriteTravelPx > 4) failures.push(`Expedition enemy sprite reaction is too large: ${expeditionMetrics.enemySpriteTravelPx}px`);
   if (!expeditionMetrics.careerUnitImage) failures.push("Expedition career unit atlas is missing");

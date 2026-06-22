@@ -2643,9 +2643,9 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
 
   lines.push(
     `.expedition-enemy-visual::before{content:"";z-index:1;pointer-events:none;background-image:url(__STUDENT_ASSET_008__);background-repeat:no-repeat;background-size:${enemyBackgroundSize};background-position:var(--visual-enemy-frame-a,var(--visual-enemy-x,0%)) var(--visual-enemy-frame-a-y,var(--visual-enemy-y,0%));image-rendering:auto;position:absolute;left:50%;right:auto;top:auto;bottom:-4px;width:86px;height:86px;margin-left:-46px}`,
-    ".expedition-enemy-visual .enemy-body{display:none}",
+    ".expedition-enemy-visual .enemy-body,.expedition-enemy-visual .enemy-eye,.expedition-enemy-visual .enemy-mouth,.expedition-enemy-visual .enemy-mark,.expedition-enemy-visual .enemy-horn,.expedition-enemy-visual .enemy-name,.expedition-enemy-visual>strong,.expedition-enemy-visual>small,.expedition-enemy-visual strong,.expedition-enemy-visual small{display:none!important}",
     ".expedition-enemy-visual .enemy-shadow{z-index:0}",
-    ".expedition-enemy-visual .enemy-name,.expedition-enemy-visual strong,.expedition-enemy-visual small,.expedition-boss-health{z-index:2}",
+    ".expedition-boss-health{z-index:2}",
     ".expedition-enemy-group .expedition-enemy-visual{flex-basis:56px;width:56px;min-height:86px}",
     ".expedition-enemy-group .expedition-enemy-visual::before{left:50%;right:auto;top:auto;bottom:-3px;width:82px;height:82px;margin-left:-43px}",
     ".expedition-enemy-visual.boss{right:10%;width:136px;min-height:126px}",

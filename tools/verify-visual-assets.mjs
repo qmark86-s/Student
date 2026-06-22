@@ -10,6 +10,8 @@ const stages = JSON.parse(readFileSync(resolve("data/expedition_stages.json"), "
 const bosses = JSON.parse(readFileSync(resolve("data/expedition_bosses.json"), "utf8"));
 const battleRoadConfig = JSON.parse(readFileSync(resolve("data/battle_road_config.json"), "utf8"));
 const css = readFileSync(resolve("src/snapshot/visual-assets.css"), "utf8");
+const baseCss = readFileSync(resolve("src/snapshot/styles.css"), "utf8");
+const combinedCss = `${baseCss}\n${css}`;
 const packageJson = JSON.parse(readFileSync(resolve("package.json"), "utf8"));
 const characterManifestPath = resolve("data/character_animation_manifest.json");
 const characterAxisReportPath = resolve("artifacts/visual-asset-samples/character-axis-report.json");
@@ -96,6 +98,10 @@ if (css.includes("translate(-24px,-7px)") || css.includes("rotate(-9deg)") || cs
 if (!css.includes(`.pixel-arena .helper-sprite{width:${studentDisplay.helperSizePx}px;height:${studentDisplay.helperSizePx}px`)) failures.push("helper companion display size is not config-driven");
 if (!css.includes("@keyframes expeditionAllyMeleeA")) failures.push("expedition ally melee motion is missing");
 if (!css.includes("@keyframes expeditionEnemyShock")) failures.push("expedition enemy shock vfx is missing");
+const expeditionEnemyLegacyHideRule = ".expedition-enemy-visual .enemy-body,.expedition-enemy-visual .enemy-eye,.expedition-enemy-visual .enemy-mouth,.expedition-enemy-visual .enemy-mark,.expedition-enemy-visual .enemy-horn,.expedition-enemy-visual .enemy-name,.expedition-enemy-visual>strong,.expedition-enemy-visual>small,.expedition-enemy-visual strong,.expedition-enemy-visual small{display:none!important}";
+if (!combinedCss.includes(expeditionEnemyLegacyHideRule)) {
+  failures.push("expedition enemy legacy body/text layers must be hidden");
+}
 
 const atlasById = new Map(visual.atlases.map((atlas) => [atlas.id, atlas]));
 if ((atlasById.get("mainStudents")?.items.length ?? 0) !== 32) failures.push("main student gender frame count mismatch");

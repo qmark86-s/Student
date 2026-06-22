@@ -54,16 +54,146 @@ HELPER_SPRITES = [
 ]
 
 ENEMY_TONES = [
-    {"id": "shelter", "color": "#e05267", "accent": "#facc15", "prop": "files", "motif": "rent", "name": "생활 기반"},
-    {"id": "studio", "color": "#f97316", "accent": "#f9a8d4", "prop": "palette", "motif": "deadline", "name": "작업 마감"},
-    {"id": "neighborhood", "color": "#22c55e", "accent": "#93c5fd", "prop": "book", "motif": "errand", "name": "동네 업무"},
-    {"id": "company", "color": "#3b82f6", "accent": "#f97316", "prop": "laptop", "motif": "inbox", "name": "회사 업무"},
-    {"id": "office", "color": "#8b5cf6", "accent": "#f0b84c", "prop": "chart", "motif": "meeting", "name": "회의 업무"},
-    {"id": "asset", "color": "#10b981", "accent": "#facc15", "prop": "chart", "motif": "market", "name": "자산 시장"},
-    {"id": "national", "color": "#ef4444", "accent": "#86efac", "prop": "gavel", "motif": "permit", "name": "행정 장벽"},
-    {"id": "global", "color": "#0ea5e9", "accent": "#fde047", "prop": "globe", "motif": "passport", "name": "세계 관문"},
-    {"id": "future", "color": "#6366f1", "accent": "#67e8f9", "prop": "chip", "motif": "circuit", "name": "미래 회로"},
-    {"id": "summit", "color": "#a855f7", "accent": "#f0b84c", "prop": "teacher", "motif": "summit", "name": "정상 장벽"},
+    {
+        "id": "shelter",
+        "color": "#e05267",
+        "accent": "#facc15",
+        "prop": "files",
+        "motif": "rent",
+        "name": "생활 기반",
+        "designs": [
+            {"form": "notice", "icon": "house", "name": "월세 고지함"},
+            {"form": "ticket", "icon": "queue", "name": "대기 번호표"},
+            {"form": "folder", "icon": "resume", "name": "구겨진 이력서"},
+        ],
+        "bossDesign": {"form": "gate", "icon": "lock", "name": "자립 게이트"},
+    },
+    {
+        "id": "studio",
+        "color": "#f97316",
+        "accent": "#f9a8d4",
+        "prop": "palette",
+        "motif": "deadline",
+        "name": "작업 마감",
+        "designs": [
+            {"form": "basket", "icon": "laundry", "name": "공용 세탁 바구니"},
+            {"form": "cup", "icon": "night", "name": "야간 알바 컵"},
+            {"form": "timer", "icon": "rush", "name": "주문 러시 타이머"},
+        ],
+        "bossDesign": {"form": "safe", "icon": "deposit", "name": "보증금 금고"},
+    },
+    {
+        "id": "neighborhood",
+        "color": "#22c55e",
+        "accent": "#93c5fd",
+        "prop": "book",
+        "motif": "errand",
+        "name": "동네 업무",
+        "designs": [
+            {"form": "tag", "icon": "price", "name": "시장 가격표"},
+            {"form": "calendar", "icon": "clinic", "name": "병원 예약판"},
+            {"form": "book", "icon": "academy", "name": "학원비 장부"},
+        ],
+        "bossDesign": {"form": "folder", "icon": "loan", "name": "대출 심사철"},
+    },
+    {
+        "id": "company",
+        "color": "#3b82f6",
+        "accent": "#f97316",
+        "prop": "laptop",
+        "motif": "inbox",
+        "name": "회사 업무",
+        "designs": [
+            {"form": "gate", "icon": "pass", "name": "출입증 게이트"},
+            {"form": "inbox", "icon": "mail", "name": "메일 인박스"},
+            {"form": "monitor", "icon": "sheet", "name": "스프레드시트 모니터"},
+        ],
+        "bossDesign": {"form": "building", "icon": "office", "name": "오피스 로비"},
+    },
+    {
+        "id": "office",
+        "color": "#8b5cf6",
+        "accent": "#f0b84c",
+        "prop": "chart",
+        "motif": "meeting",
+        "name": "회의 업무",
+        "designs": [
+            {"form": "board", "icon": "bars", "name": "회의 차트판"},
+            {"form": "clipboard", "icon": "agenda", "name": "회의 안건철"},
+            {"form": "podium", "icon": "presentation", "name": "발표 압박대"},
+        ],
+        "bossDesign": {"form": "stack", "icon": "minutes", "name": "회의록 더미"},
+    },
+    {
+        "id": "asset",
+        "color": "#10b981",
+        "accent": "#facc15",
+        "prop": "chart",
+        "motif": "market",
+        "name": "자산 시장",
+        "designs": [
+            {"form": "coin", "icon": "yield", "name": "수익률 코인"},
+            {"form": "chart", "icon": "volatile", "name": "변동성 차트"},
+            {"form": "safe", "icon": "risk", "name": "리스크 금고"},
+        ],
+        "bossDesign": {"form": "vault", "icon": "market", "name": "시장 금고"},
+    },
+    {
+        "id": "national",
+        "color": "#ef4444",
+        "accent": "#86efac",
+        "prop": "gavel",
+        "motif": "permit",
+        "name": "행정 장벽",
+        "designs": [
+            {"form": "document", "icon": "stamp", "name": "민원 서류"},
+            {"form": "seal", "icon": "approval", "name": "승인 도장"},
+            {"form": "building", "icon": "policy", "name": "관공서 창구"},
+        ],
+        "bossDesign": {"form": "tower", "icon": "project", "name": "국가 과제탑"},
+    },
+    {
+        "id": "global",
+        "color": "#0ea5e9",
+        "accent": "#fde047",
+        "prop": "globe",
+        "motif": "passport",
+        "name": "세계 관문",
+        "designs": [
+            {"form": "passport", "icon": "airport", "name": "공항 여권"},
+            {"form": "crate", "icon": "trade", "name": "무역 화물"},
+            {"form": "globe", "icon": "timezone", "name": "시차 지구본"},
+        ],
+        "bossDesign": {"form": "podium", "icon": "conference", "name": "월드 컨퍼런스"},
+    },
+    {
+        "id": "future",
+        "color": "#6366f1",
+        "accent": "#67e8f9",
+        "prop": "chip",
+        "motif": "circuit",
+        "name": "미래 회로",
+        "designs": [
+            {"form": "chip", "icon": "ai", "name": "AI 칩"},
+            {"form": "cube", "icon": "data", "name": "데이터 큐브"},
+            {"form": "flask", "icon": "bio", "name": "바이오 플라스크"},
+        ],
+        "bossDesign": {"form": "core", "icon": "singularity", "name": "특이점 코어"},
+    },
+    {
+        "id": "summit",
+        "color": "#a855f7",
+        "accent": "#f0b84c",
+        "prop": "teacher",
+        "motif": "summit",
+        "name": "정상 장벽",
+        "designs": [
+            {"form": "mountain", "icon": "flag", "name": "정상 깃발"},
+            {"form": "planet", "icon": "climate", "name": "기후 의제"},
+            {"form": "table", "icon": "peace", "name": "조정 회의장"},
+        ],
+        "bossDesign": {"form": "network", "icon": "decision", "name": "의사결정망"},
+    },
 ]
 
 
@@ -864,6 +994,311 @@ def draw_toy_limbs(
     draw.rounded_rectangle((left + body_w * 0.72 - 11 + foot_right, foot_y, left + body_w * 0.72 + 15 + foot_right, foot_y + 8), radius=4, fill=ink)
 
 
+def draw_expedition_shadow(draw, cx: int, y: int, width: int, boss: bool) -> None:
+    draw.ellipse((cx - width / 2, y - 5, cx + width / 2, y + 8), fill=(0, 0, 0, 72 if boss else 54))
+    draw.ellipse((cx - width * 0.36, y - 3, cx + width * 0.36, y + 5), fill=(0, 0, 0, 42 if boss else 30))
+
+
+def draw_expedition_limbs(
+    draw,
+    left: int,
+    top: int,
+    body_w: int,
+    body_h: int,
+    frame_index: int,
+    accent: tuple[int, int, int, int],
+    ink: tuple[int, int, int, int],
+) -> None:
+    # Enemies stand on the right side of the arena, so the left hand is the
+    # forward-facing hand toward the party.
+    arm_y = top + int(body_h * 0.62)
+    left_wave = [-4, -2, 1, -2][frame_index]
+    right_wave = [1, 2, 0, 2][frame_index]
+    hand = mix(accent, (255, 255, 255, 255), 0.18)
+    draw.line((left + 5, arm_y, left - 4 + left_wave, arm_y + 5), fill=ink, width=5)
+    draw.ellipse((left - 11 + left_wave, arm_y + 1, left + 2 + left_wave, arm_y + 14), fill=hand, outline=ink, width=2)
+    draw.line((left + body_w - 4, arm_y - 1, left + body_w + 2 + right_wave, arm_y + 5), fill=ink, width=4)
+    draw.ellipse((left + body_w - 2 + right_wave, arm_y + 1, left + body_w + 10 + right_wave, arm_y + 13), fill=mix(hand, ink, 0.08), outline=ink, width=2)
+
+    foot_y = top + body_h + 2
+    foot_left = [-3, 0, 2, 0][frame_index]
+    foot_right = [2, 0, -2, 0][frame_index]
+    draw.rounded_rectangle((left + body_w * 0.25 - 13 + foot_left, foot_y, left + body_w * 0.25 + 13 + foot_left, foot_y + 9), radius=5, fill=ink)
+    draw.rounded_rectangle((left + body_w * 0.72 - 13 + foot_right, foot_y, left + body_w * 0.72 + 13 + foot_right, foot_y + 9), radius=5, fill=ink)
+
+
+def draw_expedition_face(
+    draw,
+    left: int,
+    top: int,
+    body_w: int,
+    body_h: int,
+    boss: bool,
+    frame_index: int,
+    ink: tuple[int, int, int, int],
+    white: tuple[int, int, int, int],
+    accent: tuple[int, int, int, int],
+) -> None:
+    eye_y = top + int(body_h * 0.44)
+    gaze = [-3, -4, -4, -3][frame_index]
+    left_eye = left + int(body_w * 0.34)
+    right_eye = left + int(body_w * 0.61)
+    eye_w = 13 if boss else 12
+    eye_h = 17 if boss else 15
+    cheek = mix(accent, (255, 255, 255, 255), 0.24)
+    draw.rounded_rectangle((left_eye - eye_w // 2, eye_y, left_eye + eye_w // 2, eye_y + eye_h), radius=4, fill=ink)
+    draw.rounded_rectangle((right_eye - eye_w // 2, eye_y + 1, right_eye + eye_w // 2, eye_y + eye_h + 1), radius=4, fill=ink)
+    draw.rectangle((left_eye - 2 + gaze, eye_y + 4, left_eye + 3 + gaze, eye_y + 9), fill=white)
+    draw.rectangle((right_eye - 2 + gaze, eye_y + 5, right_eye + 3 + gaze, eye_y + 10), fill=white)
+    if boss:
+        draw.line((left_eye - 12, eye_y - 8, left_eye + 7, eye_y - 3), fill=ink, width=3)
+        draw.line((right_eye + 11, eye_y - 8, right_eye - 8, eye_y - 3), fill=ink, width=3)
+    draw.ellipse((left + 12, eye_y + 21, left + 24, eye_y + 33), fill=cheek)
+    draw.ellipse((left + body_w - 26, eye_y + 22, left + body_w - 14, eye_y + 34), fill=cheek)
+    mouth_y = top + int(body_h * 0.72)
+    if boss:
+        draw.rounded_rectangle((left + body_w * 0.36, mouth_y, left + body_w * 0.65, mouth_y + 8), radius=3, fill=ink)
+        draw.rectangle((left + body_w * 0.43, mouth_y + 8, left + body_w * 0.48, mouth_y + 15), fill=white)
+    else:
+        draw.rounded_rectangle((left + body_w * 0.40, mouth_y, left + body_w * 0.62, mouth_y + 7), radius=3, fill=ink)
+
+
+def draw_ticket_cuts(draw, left: int, top: int, body_w: int, body_h: int, ink: tuple[int, int, int, int]) -> None:
+    for y in range(top + 15, top + body_h - 10, 16):
+        draw.ellipse((left - 7, y, left + 5, y + 12), fill=ink)
+        draw.ellipse((left + body_w - 5, y, left + body_w + 7, y + 12), fill=ink)
+
+
+def draw_expedition_body(
+    draw,
+    design: dict,
+    left: int,
+    top: int,
+    body_w: int,
+    body_h: int,
+    boss: bool,
+    frame_index: int,
+    base: tuple[int, int, int, int],
+    accent: tuple[int, int, int, int],
+    ink: tuple[int, int, int, int],
+    white: tuple[int, int, int, int],
+) -> None:
+    form = design["form"]
+    side = mix(base, ink, 0.18)
+    shine = mix(base, white, 0.38)
+    pale = mix(base, white, 0.72)
+    gold = (250, 204, 21, 255)
+    red = (239, 68, 68, 255)
+    cyan = (103, 232, 249, 255)
+
+    if form in {"notice", "document"}:
+        draw.rounded_rectangle((left, top, left + body_w, top + body_h), radius=12, fill=white, outline=ink, width=4)
+        draw.rectangle((left + 8, top + 8, left + body_w - 8, top + 20), fill=base)
+        draw.polygon([(left + body_w - 19, top), (left + body_w, top + 19), (left + body_w - 20, top + 21)], fill=pale, outline=ink)
+    elif form == "ticket":
+        draw.rounded_rectangle((left, top + 4, left + body_w, top + body_h - 2), radius=8, fill=pale, outline=ink, width=4)
+        draw_ticket_cuts(draw, left, top + 4, body_w, body_h - 6, ink)
+        draw.line((left + body_w * 0.22, top + 12, left + body_w * 0.22, top + body_h - 10), fill=mix(ink, white, 0.4), width=2)
+    elif form in {"folder", "book"}:
+        draw.rounded_rectangle((left + 3, top + 6, left + body_w + 3, top + body_h), radius=10, fill=side, outline=ink, width=3)
+        draw.rounded_rectangle((left, top + 1, left + body_w - 8, top + body_h - 1), radius=10, fill=base, outline=ink, width=4)
+        draw.rounded_rectangle((left + 12, top - 7, left + body_w * 0.54, top + 9), radius=4, fill=accent, outline=ink, width=2)
+        if form == "book":
+            draw.rectangle((left + body_w - 20, top + 8, left + body_w - 12, top + body_h - 4), fill=mix(base, white, 0.34))
+    elif form == "basket":
+        draw.rounded_rectangle((left, top + 13, left + body_w, top + body_h), radius=17, fill=base, outline=ink, width=4)
+        draw.arc((left + 15, top - 5, left + body_w - 15, top + 43), 190, 350, fill=ink, width=4)
+        for x in range(left + 16, left + body_w - 10, 17):
+            draw.line((x, top + 29, x - 8, top + body_h - 10), fill=side, width=3)
+    elif form == "cup":
+        draw.rounded_rectangle((left + 5, top + 13, left + body_w - 7, top + body_h), radius=16, fill=base, outline=ink, width=4)
+        draw.ellipse((left + 2, top + 4, left + body_w - 4, top + 30), fill=white, outline=ink, width=4)
+        draw.rounded_rectangle((left + body_w - 8, top + 35, left + body_w + 16, top + 60), radius=9, fill=pale, outline=ink, width=3)
+    elif form == "timer":
+        draw.rounded_rectangle((left, top + 8, left + body_w, top + body_h), radius=18, fill=base, outline=ink, width=4)
+        draw.rectangle((left + 22, top - 3, left + body_w - 22, top + 12), fill=ink)
+        draw.ellipse((left + 20, top + 24, left + body_w - 20, top + body_h - 16), fill=pale, outline=ink, width=3)
+    elif form in {"monitor", "board"}:
+        draw.rounded_rectangle((left, top + 6, left + body_w, top + body_h - 16), radius=10, fill=base, outline=ink, width=4)
+        draw.rectangle((left + 12, top + 18, left + body_w - 12, top + body_h - 31), fill=mix(white, base, 0.08), outline=ink, width=2)
+        draw.rectangle((left + body_w * 0.43, top + body_h - 16, left + body_w * 0.57, top + body_h - 4), fill=ink)
+        draw.rounded_rectangle((left + body_w * 0.28, top + body_h - 5, left + body_w * 0.72, top + body_h + 3), radius=4, fill=ink)
+    elif form == "calendar":
+        draw.rounded_rectangle((left, top + 5, left + body_w, top + body_h), radius=10, fill=white, outline=ink, width=4)
+        draw.rectangle((left + 1, top + 6, left + body_w - 1, top + 25), fill=base)
+        for x in (left + 20, left + body_w - 27):
+            draw.rounded_rectangle((x, top - 4, x + 9, top + 13), radius=3, fill=ink)
+        for row in range(3):
+            for col in range(3):
+                cell_x = left + 19 + col * 18
+                cell_y = top + 37 + row * 14
+                draw.rounded_rectangle((cell_x, cell_y, cell_x + 10, cell_y + 8), radius=2, fill=[pale, accent, cyan][(row + col) % 3], outline=ink, width=1)
+    elif form in {"safe", "vault"}:
+        draw.rounded_rectangle((left, top, left + body_w, top + body_h), radius=16 if boss else 12, fill=base, outline=ink, width=4)
+        draw.rounded_rectangle((left + 13, top + 14, left + body_w - 12, top + body_h - 13), radius=10, fill=side, outline=ink, width=3)
+        draw.ellipse((left + body_w * 0.48, top + body_h * 0.42, left + body_w * 0.72, top + body_h * 0.66), fill=gold, outline=ink, width=3)
+        draw.rectangle((left + body_w - 24, top + 11, left + body_w - 12, top + 24), fill=cyan, outline=ink, width=2)
+    elif form in {"gate", "building", "tower"}:
+        draw.rectangle((left + 6, top + 16, left + body_w - 6, top + body_h), fill=base, outline=ink, width=4)
+        draw.polygon([(left - 2, top + 19), (left + body_w // 2, top - 8), (left + body_w + 2, top + 19)], fill=accent, outline=ink)
+        for x in (left + 19, left + body_w // 2 - 8, left + body_w - 34):
+            draw.rounded_rectangle((x, top + 33, x + 15, top + body_h - 15), radius=3, fill=pale, outline=ink, width=2)
+        if form == "tower":
+            draw.rectangle((left + body_w // 2 - 12, top - 22, left + body_w // 2 + 12, top + 8), fill=ink)
+            draw.polygon([(left + body_w // 2, top - 36), (left + body_w // 2 - 15, top - 18), (left + body_w // 2 + 15, top - 18)], fill=accent, outline=ink)
+    elif form in {"tag", "clipboard"}:
+        draw.rounded_rectangle((left + 6, top, left + body_w, top + body_h), radius=11, fill=base, outline=ink, width=4)
+        draw.polygon([(left + 6, top + 8), (left - 7, top + body_h * 0.36), (left + 6, top + body_h * 0.62)], fill=pale, outline=ink)
+        draw.rectangle((left + 22, top - 7, left + body_w - 22, top + 10), fill=ink)
+    elif form in {"inbox", "stack"}:
+        for offset in (12, 6, 0):
+            draw.rounded_rectangle((left + offset, top + offset, left + body_w + offset, top + body_h + offset), radius=10, fill=mix(base, white, offset / 36), outline=ink, width=3)
+        draw.rectangle((left + 11, top + body_h * 0.58, left + body_w - 10, top + body_h * 0.7), fill=accent)
+    elif form in {"coin"}:
+        draw.ellipse((left + 8, top + 14, left + body_w - 8, top + body_h - 1), fill=gold, outline=ink, width=4)
+        draw.ellipse((left + 23, top + 28, left + body_w - 23, top + body_h - 17), fill=mix(gold, white, 0.25), outline=ink, width=3)
+    elif form == "chart":
+        draw.rounded_rectangle((left, top + 8, left + body_w, top + body_h), radius=11, fill=white, outline=ink, width=4)
+        draw.line((left + 13, top + body_h - 20, left + 32, top + 47, left + 51, top + 56, left + body_w - 14, top + 25), fill=(34, 197, 94, 255), width=5)
+    elif form == "seal":
+        draw.ellipse((left + 7, top + 8, left + body_w - 7, top + body_h - 13), fill=base, outline=ink, width=4)
+        draw.rounded_rectangle((left + 20, top + body_h - 17, left + body_w - 20, top + body_h + 2), radius=6, fill=accent, outline=ink, width=3)
+    elif form in {"passport"}:
+        draw.rounded_rectangle((left + 9, top, left + body_w - 4, top + body_h), radius=11, fill=base, outline=ink, width=4)
+        draw.rectangle((left + 21, top + 13, left + 29, top + body_h - 10), fill=side)
+        draw.ellipse((left + body_w * 0.45, top + 23, left + body_w * 0.72, top + 49), fill=cyan, outline=white, width=2)
+    elif form == "crate":
+        draw.polygon([(left + 9, top + 12), (left + body_w - 13, top), (left + body_w, top + body_h - 12), (left + 17, top + body_h)], fill=base, outline=ink)
+        draw.line((left + 20, top + 17, left + body_w - 5, top + body_h - 18), fill=side, width=5)
+        draw.line((left + body_w - 19, top + 12, left + 13, top + body_h - 17), fill=mix(base, white, 0.25), width=4)
+    elif form == "globe":
+        draw.ellipse((left + 4, top + 3, left + body_w - 4, top + body_h - 12), fill=cyan, outline=ink, width=4)
+        draw.arc((left + 16, top + 7, left + body_w - 16, top + body_h - 16), 75, 285, fill=white, width=3)
+        draw.arc((left + 10, top + 24, left + body_w - 8, top + body_h - 25), 205, 35, fill=(34, 197, 94, 255), width=5)
+        draw.rounded_rectangle((left + body_w * 0.33, top + body_h - 14, left + body_w * 0.67, top + body_h), radius=5, fill=ink)
+    elif form == "chip":
+        draw.rectangle((left + 8, top + 8, left + body_w - 8, top + body_h - 8), fill=base, outline=ink, width=4)
+        for x in range(left + 17, left + body_w - 14, 18):
+            draw.line((x, top + 2, x, top + 10), fill=accent, width=3)
+            draw.line((x, top + body_h - 10, x, top + body_h - 1), fill=accent, width=3)
+        draw.rectangle((left + 25, top + 30, left + body_w - 25, top + body_h - 30), fill=cyan, outline=ink, width=3)
+    elif form == "cube":
+        draw.polygon([(left + 17, top + 7), (left + body_w - 12, top + 18), (left + body_w - 25, top + body_h), (left + 4, top + body_h - 13)], fill=base, outline=ink)
+        draw.polygon([(left + 17, top + 7), (left + body_w // 2, top - 8), (left + body_w - 12, top + 18), (left + body_w * 0.48, top + 32)], fill=mix(base, white, 0.24), outline=ink)
+    elif form == "flask":
+        draw.rounded_rectangle((left + body_w * 0.42, top, left + body_w * 0.58, top + 32), radius=4, fill=white, outline=ink, width=3)
+        draw.polygon([(left + 30, top + 32), (left + body_w - 30, top + 32), (left + body_w - 9, top + body_h), (left + 9, top + body_h)], fill=mix(base, white, 0.18), outline=ink)
+        draw.rectangle((left + 20, top + body_h - 32, left + body_w - 20, top + body_h - 13), fill=cyan)
+    elif form == "core":
+        draw.ellipse((left + 2, top + 6, left + body_w - 2, top + body_h - 5), fill=base, outline=ink, width=4)
+        draw.ellipse((left + 20, top + 24, left + body_w - 20, top + body_h - 24), fill=cyan, outline=white, width=3)
+        for dx, dy in [(0, -18), (-28, 10), (28, 10)]:
+            draw.ellipse((left + body_w / 2 + dx - 7, top + body_h / 2 + dy - 7, left + body_w / 2 + dx + 7, top + body_h / 2 + dy + 7), fill=accent, outline=ink, width=2)
+    elif form == "mountain":
+        draw.polygon([(left, top + body_h), (left + body_w * 0.34, top + 19), (left + body_w * 0.57, top + body_h)], fill=base, outline=ink)
+        draw.polygon([(left + body_w * 0.3, top + body_h), (left + body_w * 0.66, top + 4), (left + body_w, top + body_h)], fill=white, outline=ink)
+        draw.polygon([(left + body_w * 0.54, top + 26), (left + body_w * 0.66, top + 4), (left + body_w * 0.78, top + 26)], fill=accent, outline=ink)
+    elif form == "planet":
+        draw.ellipse((left + 5, top + 8, left + body_w - 5, top + body_h - 6), fill=base, outline=ink, width=4)
+        draw.arc((left - 11, top + 31, left + body_w + 12, top + body_h - 17), 192, 345, fill=accent, width=7)
+        draw.polygon([(left + 27, top + 45), (left + 38, top + 33), (left + 50, top + 45), (left + 39, top + 58)], fill=(34, 197, 94, 255), outline=ink)
+    elif form == "table":
+        draw.rounded_rectangle((left + 5, top + 18, left + body_w - 3, top + body_h - 8), radius=17, fill=base, outline=ink, width=4)
+        draw.ellipse((left + 12, top + 6, left + body_w - 12, top + 42), fill=pale, outline=ink, width=3)
+        draw.rectangle((left + 20, top + 43, left + body_w - 20, top + 53), fill=accent, outline=ink, width=2)
+    elif form == "network":
+        draw.rounded_rectangle((left, top + 4, left + body_w, top + body_h), radius=21, fill=base, outline=ink, width=4)
+        nodes = [(left + 23, top + 31), (left + body_w - 22, top + 28), (left + body_w // 2, top + 55), (left + 27, top + body_h - 22), (left + body_w - 26, top + body_h - 20)]
+        for a, b in [(0, 2), (1, 2), (2, 3), (2, 4), (3, 4)]:
+            draw.line((nodes[a][0], nodes[a][1], nodes[b][0], nodes[b][1]), fill=white, width=3)
+        for x, y in nodes:
+            draw.ellipse((x - 7, y - 7, x + 7, y + 7), fill=accent, outline=ink, width=2)
+    elif form == "podium":
+        draw.rounded_rectangle((left + 7, top + 25, left + body_w - 6, top + body_h), radius=12, fill=base, outline=ink, width=4)
+        draw.rectangle((left + 20, top + 12, left + body_w - 20, top + 32), fill=pale, outline=ink, width=3)
+        draw.polygon([(left + body_w - 13, top + 8), (left + body_w + 12, top + 18), (left + body_w - 13, top + 28)], fill=accent, outline=ink)
+    else:
+        draw.rounded_rectangle((left, top, left + body_w, top + body_h), radius=16, fill=base, outline=ink, width=4)
+
+    draw.rectangle((left + 15, top + 13, left + body_w - 22, top + 18), fill=(255, 255, 255, 70))
+
+
+def draw_expedition_icon(
+    draw,
+    design: dict,
+    left: int,
+    top: int,
+    body_w: int,
+    body_h: int,
+    frame_index: int,
+    accent: tuple[int, int, int, int],
+    ink: tuple[int, int, int, int],
+    white: tuple[int, int, int, int],
+) -> None:
+    icon = design["icon"]
+    gold = (250, 204, 21, 255)
+    red = (239, 68, 68, 255)
+    cyan = (103, 232, 249, 255)
+    x = left + int(body_w * 0.22)
+    y = top + int(body_h * 0.21)
+    w = int(body_w * 0.55)
+    h = int(body_h * 0.26)
+    if icon in {"house", "office", "policy"}:
+        draw.polygon([(x, y + h * 0.45), (x + w / 2, y), (x + w, y + h * 0.45)], fill=accent, outline=ink)
+        draw.rectangle((x + w * 0.18, y + h * 0.45, x + w * 0.82, y + h), fill=white, outline=ink, width=2)
+    elif icon in {"queue", "agenda", "minutes"}:
+        for index in range(3):
+            yy = y + index * 10
+            draw.rounded_rectangle((x + index * 3, yy, x + w - index * 5, yy + 5), radius=2, fill=[accent, white, cyan][index % 3], outline=ink, width=1)
+    elif icon in {"resume", "loan", "stamp", "approval"}:
+        draw.rounded_rectangle((x, y, x + w, y + h + 6), radius=4, fill=white, outline=ink, width=2)
+        draw.rectangle((x + 7, y + 7, x + w - 8, y + 11), fill=accent)
+        draw.ellipse((x + w - 20, y + h - 4, x + w, y + h + 16), fill=red, outline=ink, width=2)
+    elif icon in {"laundry", "mail"}:
+        for index, color in enumerate([white, cyan, accent]):
+            draw.ellipse((x + index * 16, y + 5 + (index % 2) * 6, x + 12 + index * 16, y + 17 + (index % 2) * 6), fill=color, outline=ink, width=1)
+    elif icon in {"night", "deposit", "risk"}:
+        draw.ellipse((x + 4, y + 2, x + 24, y + 22), fill=gold, outline=ink, width=2)
+        draw.ellipse((x + 12, y - 1, x + 30, y + 18), fill=(15, 23, 42, 255))
+    elif icon in {"rush", "volatile", "yield", "market"}:
+        points = [(x + 2, y + h), (x + w * 0.32, y + h * 0.42), (x + w * 0.55, y + h * 0.62), (x + w - 4, y + 4)]
+        draw.line(points, fill=accent, width=4)
+        for px, py in points:
+            draw.ellipse((px - 4, py - 4, px + 4, py + 4), fill=gold, outline=ink, width=1)
+    elif icon in {"price", "pass"}:
+        draw.polygon([(x, y + 4), (x + w - 9, y), (x + w, y + h / 2), (x + w - 9, y + h), (x, y + h - 4)], fill=accent, outline=ink)
+        draw.ellipse((x + 7, y + 7, x + 15, y + 15), fill=white, outline=ink, width=1)
+    elif icon in {"clinic", "bio"}:
+        draw.rectangle((x + w / 2 - 4, y + 2, x + w / 2 + 4, y + h + 7), fill=red)
+        draw.rectangle((x + w / 2 - 15, y + h / 2 - 4, x + w / 2 + 15, y + h / 2 + 4), fill=red)
+    elif icon in {"academy", "sheet", "bars", "presentation"}:
+        for index, height in enumerate([12, 20, 29]):
+            bx = x + 8 + index * 16
+            draw.rectangle((bx, y + h + 5 - height, bx + 9, y + h + 5), fill=[cyan, gold, red][index], outline=ink)
+    elif icon in {"airport", "trade", "timezone", "conference"}:
+        draw.ellipse((x + 5, y, x + w - 5, y + h + 12), fill=cyan, outline=ink, width=2)
+        draw.arc((x + 12, y + 2, x + w - 12, y + h + 11), 80, 280, fill=white, width=2)
+        draw.line((x + w / 2, y + 2, x + w / 2, y + h + 12), fill=white, width=2)
+    elif icon in {"ai", "data", "singularity"}:
+        draw.rectangle((x + 6, y + 2, x + w - 6, y + h + 8), fill=(15, 23, 42, 255), outline=ink, width=2)
+        draw.rectangle((x + 17, y + 10, x + w - 17, y + h), fill=cyan)
+        for index in range(3):
+            draw.line((x + 2, y + 8 + index * 8, x + 8, y + 8 + index * 8), fill=accent, width=2)
+            draw.line((x + w - 8, y + 8 + index * 8, x + w - 2, y + 8 + index * 8), fill=accent, width=2)
+    elif icon in {"flag", "project", "decision"}:
+        draw.line((x + w * 0.35, y, x + w * 0.35, y + h + 17), fill=ink, width=3)
+        draw.polygon([(x + w * 0.38, y + 1), (x + w, y + 8), (x + w * 0.38, y + 17)], fill=accent, outline=ink)
+        draw.ellipse((x + 3, y + h + 7, x + 19, y + h + 23), fill=gold, outline=ink, width=2)
+    elif icon in {"climate", "peace"}:
+        draw.polygon([(x + 8, y + h), (x + w * 0.35, y + 4), (x + w * 0.54, y + h), (x + w * 0.35, y + h + 15)], fill=(34, 197, 94, 255), outline=ink)
+        draw.arc((x + 20, y + 3, x + w, y + h + 13), 190, 330, fill=accent, width=3)
+    elif icon == "lock":
+        draw.rounded_rectangle((x + 10, y + 14, x + w - 10, y + h + 17), radius=5, fill=gold, outline=ink, width=2)
+        draw.arc((x + 19, y, x + w - 19, y + 27), 180, 360, fill=ink, width=4)
+    else:
+        draw.ellipse((x, y, x + w, y + h + 8), fill=accent, outline=ink, width=2)
+
+
 def draw_enemy_frame(tone: dict, variant: int, boss: bool, frame_index: int) -> Image.Image:
     source = Image.new("RGBA", (CELL * ENEMY_SUPERSAMPLE, CELL * ENEMY_SUPERSAMPLE), (0, 0, 0, 0))
     draw = ScaledDraw(ImageDraw.Draw(source), ENEMY_SUPERSAMPLE)
@@ -871,37 +1306,30 @@ def draw_enemy_frame(tone: dict, variant: int, boss: bool, frame_index: int) -> 
     accent = hex_color(tone["accent"])
     ink = (23, 33, 46, 255)
     white = (248, 250, 252, 255)
-    motif = tone["motif"]
-    bob = [0, -2, -3, -1][frame_index]
-    recoil = [-1, 1, 2, 0][frame_index]
     variant_index = max(0, variant - 1)
-    cx = 80 + recoil + ([-2, 1, 2][variant_index % 3] if not boss else 0)
-    body_bottom = (134 if boss else 133) + bob
+    design = tone["bossDesign"] if boss else tone["designs"][variant_index % len(tone["designs"])]
+    bob = [0, -2, -3, -1][frame_index]
+    recoil = [-2, -1, 1, -1][frame_index]
+    cx = 80 + recoil + ([-3, 1, 3][variant_index % 3] if not boss else 0)
+    body_bottom = (134 if boss else 132) + bob
     if boss:
-        body_w, body_h = 90, 88
+        body_w, body_h = 94, 91
     else:
-        body_w, body_h = [(72, 86), (68, 92), (80, 84)][variant_index % 3]
+        body_w, body_h = [(78, 88), (74, 92), (84, 86)][variant_index % 3]
     left = cx - body_w // 2
     top = body_bottom - body_h
 
-    draw.ellipse((37, 143, 124, 155), fill=(0, 0, 0, 76 if boss else 58))
+    draw_expedition_shadow(draw, cx, 145, 100 if boss else 88, boss)
     if boss:
-        draw.polygon([(left + 5, top + 14), (left - 7, top - 12), (left + 24, top + 6)], fill=accent, outline=ink)
-        draw.polygon([(left + body_w - 21, top + 6), (left + body_w + 8, top - 14), (left + body_w - 2, top + 19)], fill=mix(accent, white, 0.12), outline=ink)
-
-    draw_toy_limbs(draw, left, top, body_w, body_h, variant_index, frame_index, accent, ink)
-    draw_toy_body(draw, motif, variant_index, left, top, body_w, body_h, boss, base, accent, ink, white)
-    draw_toy_detail(draw, motif, variant_index, left, top, body_w, body_h, boss, frame_index, base, accent, ink, white)
-    draw_toy_face(draw, left, top, body_w, body_h, boss, frame_index, ink, white)
-
-    prop_x = max(9, left - [17, 19, 15][variant_index % 3])
-    prop_y = top + [37, 42, 33][variant_index % 3]
-    draw_enemy_prop(draw, tone, prop_x, prop_y, 0.48 if boss else [0.34, 0.32, 0.3][variant_index % 3])
+        draw.polygon([(left + 4, top + 15), (left - 8, top - 12), (left + 24, top + 7)], fill=accent, outline=ink)
+        draw.polygon([(left + body_w - 21, top + 7), (left + body_w + 8, top - 14), (left + body_w - 2, top + 20)], fill=mix(accent, white, 0.15), outline=ink)
+    draw_expedition_body(draw, design, left, top, body_w, body_h, boss, frame_index, base, accent, ink, white)
+    draw_expedition_limbs(draw, left, top, body_w, body_h, frame_index, accent, ink)
+    draw_expedition_icon(draw, design, left, top, body_w, body_h, frame_index, accent, ink, white)
+    draw_expedition_face(draw, left, top, body_w, body_h, boss, frame_index, ink, white, accent)
     if boss:
-        draw.rectangle((left + body_w // 2 - 16, top - 20, left + body_w // 2 + 16, top - 9), fill=ink)
-        draw.polygon([(left + body_w // 2 - 11, top - 10), (left + body_w // 2 - 3, top - 25), (left + body_w // 2 + 5, top - 10), (left + body_w // 2 + 15, top - 24), (left + body_w // 2 + 18, top - 8)], fill=accent, outline=ink)
-    else:
-        draw.ellipse((left + body_w - 5, top + 13, left + body_w + 10, top + 28), fill=accent, outline=ink, width=2)
+        draw.rectangle((left + body_w // 2 - 17, top - 21, left + body_w // 2 + 17, top - 10), fill=ink)
+        draw.polygon([(left + body_w // 2 - 13, top - 9), (left + body_w // 2 - 4, top - 27), (left + body_w // 2 + 5, top - 9), (left + body_w // 2 + 16, top - 25), (left + body_w // 2 + 19, top - 7)], fill=accent, outline=ink)
 
     return source.resize((CELL, CELL), Image.Resampling.LANCZOS)
 
@@ -964,14 +1392,17 @@ def build_manifest(careers: list[dict]) -> dict:
     enemies = []
     for tone in ENEMY_TONES:
         for variant in range(3):
+            design = tone["designs"][variant]
             enemy_id = f"{tone['id']}-mob-{variant + 1}"
             enemies.append(
                 {
                     "id": enemy_id,
                     "type": "mob",
-                    "name": f"{tone['name']} 몬스터 {variant + 1}",
+                    "name": design["name"],
                     "tone": tone["id"],
                     "motif": tone["motif"],
+                    "form": design["form"],
+                    "icon": design["icon"],
                     "variant": variant + 1,
                     "boss": False,
                     "direction": "left",
@@ -980,13 +1411,16 @@ def build_manifest(careers: list[dict]) -> dict:
                 }
             )
         boss_id = f"{tone['id']}-boss"
+        boss_design = tone["bossDesign"]
         enemies.append(
             {
                 "id": boss_id,
                 "type": "boss",
-                "name": f"{tone['name']} 보스",
+                "name": boss_design["name"],
                 "tone": tone["id"],
                 "motif": tone["motif"],
+                "form": boss_design["form"],
+                "icon": boss_design["icon"],
                 "variant": 0,
                 "boss": True,
                 "direction": "left",

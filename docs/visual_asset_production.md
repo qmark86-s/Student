@@ -174,6 +174,10 @@
 - 학습 도우미의 기존 `helper-*` 클래스는 유지해 기존 학생 전투와 호환한다.
 - `visual-enemies.png`는 원정대 tone별 일반 3종과 보스 1종을 담으며, 아이템당 4프레임을 가진다. 모든 원정대 몬스터 메타는 `direction: "left"`여야 한다.
 - 원정대 몬스터는 귀엽고 피규어 같은 학습/생활 오브젝트형 SD 몬스터가 기준이다. 낮고 넓어도 괜찮지만 `solidHeight`가 작아져 실제 화면에서 아이콘처럼 보이면 실패다.
+- 원정대 몬스터는 기존 레거시 도형/텍스트 조합을 쓰지 않는다. shelter/studio/neighborhood/company/office/asset/national/global/future/summit 각 지역은 일반 3종과 보스 1종을 서로 다른 몸통 오브젝트로 가진다.
+- 지역별 핵심 motif는 shelter 월세/대기표/이력서/자립 게이트, studio 세탁/야간컵/타이머/보증금 금고, neighborhood 가격표/병원 예약/학원책/대출 폴더, company 출입증/인박스/모니터/오피스 빌딩, office 회의 보드/클립보드/발표대/회의록 더미, asset 코인/차트/금고/시장 금고, national 민원서류/도장/관공서/국가 과제탑, global 여권/무역상자/글로브/컨퍼런스, future 칩/데이터 큐브/바이오 플라스크/AI 코어, summit 산봉우리/기후 행성/협상 테이블/의사결정망이다.
+- 원정대 몬스터는 눈동자, 손소품, 공격 방향이 모두 파티 쪽인 `<-`를 향해야 한다. 우향처럼 보이는 경우에는 최종 PNG를 단순 mirror하는 것보다 생성 레시피의 눈/소품 배치를 고쳐 다시 만든다.
+- 원정대 몬스터 그래픽 위에는 이름, WAVE, 숫자 같은 텍스트 레이어를 표시하지 않는다. `.expedition-enemy-visual` 내부 레거시 텍스트는 CSS에서 숨기고, `npm run visual:smoke`의 `enemyTextVisibleCount` 0건으로 확인한다.
 - 원정대 몬스터는 `data/sprite_style_profiles.json`의 `monsters.heightOnlyEqualize` 기준으로 4프레임 높이를 맞춘다. 한 프레임만 작아지거나 커지면 실패다.
 - 원정대 몬스터는 노트, 폴더, 타이머, 모니터, 차트, 여권, 회로, 산봉우리 같은 motif를 몸통 자체에 통합한다. 외부 소품은 작게 보조하고, 긴 막대 팔다리나 큰 외부 prop 때문에 전체가 축소되면 실패다.
 - 원정대 몬스터는 손발이 없어도 되지만 큰 눈, 볼 터치, 짧은 장갑/발판, 스티커/탭 디테일로 전투 가능한 캐릭터처럼 읽혀야 한다.
