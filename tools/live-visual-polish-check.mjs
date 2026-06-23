@@ -99,7 +99,7 @@ async function capture(page, name, extra = {}) {
         enemyArts: rects(".battle-scene-monster-art"),
         roadPhase: document.querySelector(".battle-scene-lineup")?.getAttribute("data-road-phase") ?? null,
         damagedEnemyCount: Math.max(domDefeatedEnemyCount, savedDamagedEnemyCount),
-        backgroundImage: arenaStyle?.backgroundImage.includes("data:image") ?? false,
+        backgroundImage: arenaStyle?.backgroundImage.includes("url(") ?? false,
         backgroundTransform: arenaStyle?.transform ?? null,
         studentScale: studentStyle?.getPropertyValue("--student-motion-scale").trim() ?? null,
         studentAnimation: studentStyle?.animationName ?? null,
@@ -110,7 +110,7 @@ async function capture(page, name, extra = {}) {
         party: rect(".expedition-party-visual"),
         units: rects(".expedition-unit-avatar"),
         enemies: rects(".expedition-enemy-visual"),
-        backgroundImage: expeditionStyle?.backgroundImage.includes("data:image") ?? false,
+        backgroundImage: expeditionStyle?.backgroundImage.includes("url(") ?? false,
         backgroundTransform: expeditionStyle?.transform ?? null,
       },
     };

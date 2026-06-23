@@ -1,6 +1,11 @@
 node_modules/
 dist/
 artifacts/
+
+# 빌드 산출물: snapshot-build가 매 빌드마다 재생성하므로 추적하지 않는다.
+# (src/snapshot/app.bundle.js + data/ + src/snapshot/assets/ 에서 재조립 가능)
+/index.html
+/share/Student-Idle-RPG-mobile.html
 .env
 .env.*
 *.log

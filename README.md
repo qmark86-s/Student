@@ -6,6 +6,7 @@
 
 ```powershell
 cd "C:\Users\상원\Downloads\Student"
+npm run build:web   # index.html / share / dist 재생성 (최초 1회 또는 소스 변경 후)
 npm run serve
 ```
 
@@ -13,10 +14,13 @@ npm run serve
 
 ## 기준 파일
 
-- 실행 파일: `index.html`
-- 공유 파일: `share/Student-Idle-RPG-mobile.html`
+- 실행 파일: `index.html` — **빌드 산출물(git 비추적)**. `npm run build:web`으로 재생성한다.
+- 공유 파일: `share/Student-Idle-RPG-mobile.html` — **단일 파일 인라인 빌드 산출물(git 비추적)**.
+- APK용 빌드: `dist/index.html` + `dist/assets/` — **외부 자산 분리 빌드 산출물(git 비추적)**. Capacitor `webDir`.
 - 원본 보관: `reference/Student-Idle-RPG-mobile-3.html`
 - 기준 SHA-256: `b1c4ec10c24c1f106b0dd75676646ba0c24455c350ee06afe13090918df0321c`
+
+> `index.html`·`share/`·`dist/`는 `src/snapshot/app.bundle.js` + `data/` + `src/snapshot/assets/`에서 항상 재조립되므로 저장소에 커밋하지 않는다. 거대한 단일 HTML이 매 빌드마다 히스토리에 쌓이는 것을 막기 위함이다.
 
 ## 작업 방식
 

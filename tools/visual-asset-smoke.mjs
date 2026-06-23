@@ -276,7 +276,9 @@ try {
         const before = getComputedStyle(arena, "::before");
         battleBackdropSceneStyles.push({
           sceneClass,
-          hasImage: before.backgroundImage.includes("data:image"),
+          // backgroundImage 에 url(...) 이 있으면 실제 이미지다.
+          // 인라인(data:image) 빌드와 외부 자산(assets/*.png) 빌드를 모두 허용한다.
+          hasImage: before.backgroundImage.includes("url("),
           size: before.backgroundSize,
           position: before.backgroundPosition,
           repeat: before.backgroundRepeat,
@@ -288,7 +290,7 @@ try {
     helperProbe.remove();
     const studentSlashBackground = studentSprite ? getComputedStyle(studentSprite, "::after").backgroundImage : "";
     return {
-      studentImage: getComputedStyle(student).backgroundImage.includes("data:image"),
+      studentImage: getComputedStyle(student).backgroundImage.includes("url("),
       studentCombatMotion: ["studentCombatLoop", "studentRoadRunLoop", "studentRoadBrakeLoop"].some((name) =>
         animationName(studentSprite).includes(name),
       ),
@@ -301,14 +303,14 @@ try {
         (battleLineupElement?.getAttribute("data-road-phase") ?? "") === "travel" ||
         animationName(studentSprite, "::after").includes("studentMeleeSlash"),
       studentSlashBackground,
-      monsterImage: getComputedStyle(monster).backgroundImage.includes("data:image"),
+      monsterImage: getComputedStyle(monster).backgroundImage.includes("url("),
       battleRoadLineup: battleLineupElement?.classList.contains("battle-road-lineup") ?? false,
       battleRoadPhase: phase,
       battleDamagedEnemyCount,
       battleRoadEncounterIndex: Number(battleLineupElement?.getAttribute("data-encounter-index") ?? -1),
       arenaRoadTravel: arena?.classList.contains("road-travel") ?? false,
       battleLineupCount: battleLineup.length,
-      battleLineupImages: sceneMonsterArt.filter((item) => getComputedStyle(item).backgroundImage.includes("data:image")).length,
+      battleLineupImages: sceneMonsterArt.filter((item) => getComputedStyle(item).backgroundImage.includes("url(")).length,
       battleLineupFrames: new Set(sceneMonsterArt.map((item) => [...item.classList].find((className) => className.startsWith("main-monster-"))).filter(Boolean)).size,
       battleLineupBosses: battleLineup.filter((item) => item.classList.contains("boss")).length,
       battleLineupHpBars: document.querySelectorAll(".battle-scene-enemy .battle-scene-hp").length,
@@ -319,7 +321,7 @@ try {
       activeEnemyImpact: animationName(activeEnemy, "::after").includes("enemyHitSpark"),
       activeEnemyShockRing: animationName(activeEnemy, "::before").includes("enemyShockRing"),
       battleDustVfx: animationName(battleLineupElement, "::before").includes("battleDustBurst"),
-      battleBackdropImage: arenaBefore?.backgroundImage.includes("data:image") ?? false,
+      battleBackdropImage: arenaBefore?.backgroundImage.includes("url(") ?? false,
       battleBackdropMotion: animationName(arena, "::before").includes("battleRoadBackdropPan"),
       battleBackdropPanWidth: Number.parseFloat(arenaStyle?.getPropertyValue("--battle-road-pan-width") ?? "0"),
       battleBackdropSize: arenaBefore?.backgroundSize ?? "",
@@ -511,7 +513,7 @@ try {
     arena?.append(partyProbe);
     const allyMotionReady = animationName(unitProbe).includes("expeditionAllyMeleeA");
     const allySparkReady = animationName(unitProbe, "::after").includes("expeditionAllySpark");
-    const careerUnitImage = getComputedStyle(unitProbe).backgroundImage.includes("data:image");
+    const careerUnitImage = getComputedStyle(unitProbe).backgroundImage.includes("url(");
     const arenaRect = arena?.getBoundingClientRect();
     const unitRects = Array.from(partyProbe.querySelectorAll(".expedition-unit-avatar")).map((unit) => unit.getBoundingClientRect());
     const unitSizes = unitRects.map((rect) => ({ width: rect.width, height: rect.height }));
@@ -607,9 +609,9 @@ try {
     };
     return {
       enemyCount: document.querySelectorAll(".expedition-enemy-visual").length,
-      enemyBeforeImage: beforeImage.includes("data:image"),
+      enemyBeforeImage: beforeImage.includes("url("),
       arenaDustBackground,
-      backdropImage: getComputedStyle(arena, "::before").backgroundImage.includes("data:image"),
+      backdropImage: getComputedStyle(arena, "::before").backgroundImage.includes("url("),
       backdropMotion: animationName(arena, "::before").includes("expeditionBackdropPan"),
       backdropTravelPx: Number(range("backdropX").toFixed(2)),
       oldBackgroundHidden: getComputedStyle(backgroundSheet).display === "none",
@@ -648,7 +650,7 @@ try {
   await page.screenshot({ path: expeditionScreenshotPath, fullPage: true });
 
   const failures = [];
-  if (!mainMetrics.studentImage) failures.push("Main student sprite is missing a data image background");
+  if (!mainMetrics.studentImage) failures.push("Main student sprite is missing an image background");
   if (!mainMetrics.studentCombatMotion) failures.push("Main student combat motion is missing");
   if (!mainMetrics.studentSpriteFrames) failures.push("Main student sprite frame animation is missing");
   if (!mainMetrics.studentDashDust) failures.push("Main student dash dust VFX is missing");
@@ -663,7 +665,7 @@ try {
     failures.push(`Main student melee travel is too small: ${combatMotionMetrics.studentTravelPx}px`);
   }
   if (combatMotionMetrics.studentSpriteFrameShift < 1) failures.push(`Main student sprite frame shift is too small: ${combatMotionMetrics.studentSpriteFrameShift}`);
-  if (!mainMetrics.monsterImage) failures.push("Main monster sprite is missing a data image background");
+  if (!mainMetrics.monsterImage) failures.push("Main monster sprite is missing an image background");
   if (!mainMetrics.battleRoadLineup) failures.push("Main battle road lineup class is missing");
   if (mainMetrics.battleDamagedEnemyCount > 0 && mainMetrics.battleRoadPhase === "travel") {
     failures.push("Main battle road phase stays travel after enemies are damaged");
@@ -725,7 +727,7 @@ try {
   if (mainMetrics.battleBackdropRepeat !== "no-repeat") failures.push(`Main battle backdrop repeat is overridden: ${mainMetrics.battleBackdropRepeat}`);
   if (!mainMetrics.battleBackdropPosition.includes("100%")) failures.push(`Main battle backdrop position is overridden: ${mainMetrics.battleBackdropPosition}`);
   for (const sceneStyle of mainMetrics.battleBackdropSceneStyles ?? []) {
-    if (!sceneStyle.hasImage) failures.push(`${sceneStyle.sceneClass} battle backdrop data image is missing`);
+    if (!sceneStyle.hasImage) failures.push(`${sceneStyle.sceneClass} battle backdrop image is missing`);
     if (sceneStyle.size !== "100% 100%") failures.push(`${sceneStyle.sceneClass} battle backdrop size is overridden: ${sceneStyle.size}`);
     if (sceneStyle.repeat !== "no-repeat") failures.push(`${sceneStyle.sceneClass} battle backdrop repeat is overridden: ${sceneStyle.repeat}`);
     if (!sceneStyle.position.includes("100%")) failures.push(`${sceneStyle.sceneClass} battle backdrop position is overridden: ${sceneStyle.position}`);

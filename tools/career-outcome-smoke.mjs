@@ -212,7 +212,8 @@ try {
       rankedButtons: buttons.length,
       enabledButtons: enabled.length,
       portraitButtons: portraits.length,
-      portraitBackgrounds: portraits.filter((portrait) => getComputedStyle(portrait).backgroundImage.includes("data:image")).length,
+      // url(...) 이면 실제 이미지 — 인라인(data:image)/외부 자산(assets/*.png) 빌드를 모두 허용한다.
+      portraitBackgrounds: portraits.filter((portrait) => getComputedStyle(portrait).backgroundImage.includes("url(")).length,
       hasOldThreeChoice: text.includes(oldThreeChoice),
       hasAvailableBadge: text.includes(availableBadgeText),
       hasRankOne: text.includes("#1"),

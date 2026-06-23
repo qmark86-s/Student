@@ -223,7 +223,8 @@ try {
       arenaTextCards: document.querySelectorAll(".pixel-arena .battle-enemy-card").length,
       suneungCards: document.querySelectorAll(".battle-enemy-card.suneung").length,
       sceneEnemies: sceneEnemies.length,
-      sceneEnemyImages: sceneMonsterArt.filter((monster) => getComputedStyle(monster).backgroundImage.includes("data:image")).length,
+      // url(...) 이면 실제 이미지 — 인라인(data:image)/외부 자산(assets/*.png) 빌드를 모두 허용한다.
+      sceneEnemyImages: sceneMonsterArt.filter((monster) => getComputedStyle(monster).backgroundImage.includes("url(")).length,
       sceneEnemyFrames: new Set(sceneMonsterArt.map((monster) => [...monster.classList].find((item) => item.startsWith("main-monster-"))).filter(Boolean)).size,
       sceneBosses: sceneEnemies.filter((enemy) => enemy.classList.contains("boss")).length,
       sceneSuneungEnemies: sceneEnemies.filter((enemy) => enemy.classList.contains("suneung")).length,
