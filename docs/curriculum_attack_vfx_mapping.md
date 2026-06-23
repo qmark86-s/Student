@@ -25,7 +25,7 @@
 | `runtime.tokenKeyStrategy` | 토큰 키 생성 전략. 현재는 `grade_pool_token`을 기준으로 한다. |
 | `rules.inquirySubjectAliases` | 사회/과학 탐구 타깃이 서로의 탐구 토큰 풀도 사용할 수 있게 하는 alias다. |
 
-Battle Road 표시 속도, 크기, 위치는 `data/battle_road_config.json`의 `presentation.curriculumAttackVfx`에서 조정한다. 기능을 잠시 걷어낼 때는 이 섹션의 `enabled`를 `false`로 둔다.
+Battle Road 표시 속도, 크기, 위치는 `data/battle_road_config.json`의 `presentation.curriculumAttackVfx`에서 조정한다. `sourceOffsetYPx`는 학생 상체/손에서 토큰이 출발하도록 0 이하로 유지한다. 기능을 잠시 걷어낼 때는 이 섹션의 `enabled`를 `false`로 둔다.
 
 ## 스타일
 

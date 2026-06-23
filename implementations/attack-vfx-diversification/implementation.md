@@ -29,18 +29,23 @@
   - `presentation.curriculumAttackVfx` 값을 CSS custom property로 생성한다.
   - `glyph`, `word`, `formula`, `card`, `burst` 스타일별 텍스트 VFX와 keyframes를 생성한다.
   - `reduced-effects` 상태에서 새 토큰 애니메이션도 축소된다.
+  - 학생 공격선과 전투 dust에서 빨강/노랑 불꽃 계열을 제거하고 흰색/청록/하늘색 계열로 통일했다.
+  - 원정대 arena dust도 같은 차가운 계열로 맞춰 바닥에서 불꽃이 솟는 인상을 줄였다.
 
 - `tools/validate-curriculum-attack-vfx.mjs`
   - `runtime`과 `rules.inquirySubjectAliases`를 검증한다.
 
 - `tools/validate-battle-road-config.mjs`
   - `presentation.curriculumAttackVfx`의 모든 수치, boolean, 한글 help를 검증한다.
+  - `sourceOffsetYPx`가 양수이면 토큰이 바닥에서 솟는 것처럼 보일 수 있으므로 실패시킨다.
 
 - `tools/verify-visual-assets.mjs`
   - 생성 CSS에 curriculum VFX layer/token/keyframes/config-driven 값/reduced-effects 규칙이 있는지 확인한다.
+  - 학생 공격선과 원정대 dust에 불꽃처럼 보이는 따뜻한 VFX 색이 되살아나지 않는지 확인한다.
 
 - `tools/visual-asset-smoke.mjs`
   - 피해 발생 이후 실제 브라우저 DOM에서 교과 VFX layer 1개, token 1개, 텍스트, 스타일 class, animation name, 토큰 박스 크기를 검사한다.
+  - 실제 computed style 기준으로 학생 공격선 색과 토큰 시작 Y offset, 원정대 dust 색을 검사한다.
 
 ## 런타임 기준
 
@@ -50,6 +55,8 @@
 - 토큰 선택 seed는 `gradeOrder`, `gradeId`, `encounterId`, `target.id`, tick을 조합한다.
 - 타깃 과목과 일치하는 토큰 풀을 우선 사용하고, 탐구 alias는 테이블에서 확장한다.
 - 보스/시험 몬스터는 `bossStyleByVisualKey`가 있으면 그 스타일을 우선한다.
+- 토큰 시작점은 `presentation.curriculumAttackVfx.sourceOffsetYPx <= 0`으로 유지해 학생 상체/손에서 출발하는 인상을 준다.
+- 학생/원정대의 움직이는 공격 VFX는 불꽃색보다 흰색/청록/하늘색 계열을 우선한다.
 - 알 수 없는 학년, 빈 토큰 풀, 긴 토큰, 알 수 없는 style은 런타임 fallback으로 숨기지 않고 검증 실패로 드러낸다.
 
 ## 검증 결과
@@ -69,7 +76,8 @@ npm run verify:mobile
 - `BUILD_WEB_OK`
 - `VISUAL_ASSET_SMOKE_OK`
 - `verify:mobile` 전체 통과
-- 스모크 기준 피해 이후 `curriculumVfxLayerCount=1`, `curriculumVfxTokenCount=1`, 예시 토큰 `cat`, animation `curriculumVfxCard`
+- 스모크 기준 피해 이후 `curriculumVfxLayerCount=1`, `curriculumVfxTokenCount=1`, `curriculumVfxSourceY=-14`, 예시 토큰 `cat`, animation `curriculumVfxCard`
+- 학생 공격선 computed color는 흰색/청록/하늘색 계열로 확인
 
 ## 확장 기준
 

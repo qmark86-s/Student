@@ -73,7 +73,7 @@
 
 `road-travel` 상태에서는 학생/학습 도우미의 달리기 루프와 몬스터 팩의 접근 모션을 강조한다. `road-combat` 상태에서는 기존 근접 타격, 피격 흔들림, hit spark, dust burst를 사용한다.
 
-교과 공격 VFX는 `curriculumAttackVfxLayer()`가 `battleSceneLineup` 앞에 1개만 렌더링한다. 토큰 데이터는 `data/curriculum_attack_vfx.json`, 표시 파라미터는 `presentation.curriculumAttackVfx`를 따른다. 현재는 별도 공격 이벤트 serial이 없어서 `elapsedMs / cycleMs` 기반 tick으로 공격 루프마다 토큰을 결정한다. 실제 공격 이벤트가 추가되면 이 tick을 `attackSerial` 또는 `hitSerial`로 교체한다.
+교과 공격 VFX는 `curriculumAttackVfxLayer()`가 `battleSceneLineup` 앞에 1개만 렌더링한다. 토큰 데이터는 `data/curriculum_attack_vfx.json`, 표시 파라미터는 `presentation.curriculumAttackVfx`를 따른다. 현재는 별도 공격 이벤트 serial이 없어서 `elapsedMs / cycleMs` 기반 tick으로 공격 루프마다 토큰을 결정한다. 토큰 시작 Y는 학생 상체/손 쪽에서 출발하도록 0 이하로 유지하며, 학생 공격선은 불꽃색이 아니라 흰색/청록/하늘색 계열로 통일한다. 실제 공격 이벤트가 추가되면 이 tick을 `attackSerial` 또는 `hitSerial`로 교체한다.
 
 표시 phase는 `battleRoadVisualPhase(battle)`가 계산한다. 기본적으로 `roadTiming.travelMs`와 `roadTiming.approachMs`를 따르지만, `presentation.phasePolicy.damageStartsCombat`이 `true`이면 적이 피해를 받거나 처치된 즉시 `combat` 표시로 전환한다. 이 정책은 고전투력 상태에서 적 처치가 빠르게 일어나도 학생/도우미가 계속 달리기 레이아웃에 남는 문제를 막기 위한 기준이다. arena의 `road-*` class와 `battleSceneLineup()`의 `data-road-phase`는 같은 헬퍼 결과를 사용해야 한다.
 
