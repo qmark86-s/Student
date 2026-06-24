@@ -1157,47 +1157,126 @@ button:disabled {
 }
 
 .expedition-unit-avatar.large {
+  --unit-scale: 1;
+  --unit-motion-duration: 1.08s;
+  --unit-frame-duration: 1.08s;
+  --unit-motion-delay: 0s;
+  --unit-frame-delay: 0s;
+  --unit-spark-duration: 1.08s;
+  --unit-spark-delay: 0s;
+  --unit-step-a-x: 2px;
+  --unit-step-a-y: -1px;
+  --unit-step-b-x: 5px;
+  --unit-step-b-y: -3px;
+  --unit-step-c-x: 1px;
+  --unit-step-c-y: 1px;
   position: absolute;
   width: 60px;
   height: 60px;
   flex: 0 0 60px;
   filter: drop-shadow(5px 6px 0 #0000003a);
   transform-origin: bottom;
+  transform: scale(var(--unit-scale));
+  translate: 0 0;
+  will-change: translate;
+}
+
+.expedition-party-visual.running .expedition-unit-avatar.large {
+  animation-name: expeditionUnitRhythm;
+  animation-duration: var(--unit-motion-duration);
+  animation-timing-function: steps(4, end);
+  animation-iteration-count: infinite;
+  animation-delay: var(--unit-motion-delay);
 }
 
 .expedition-unit-avatar.large.unit-1 {
   left: 92px;
-  top: 88px;
+  top: 95px;
   z-index: 9;
-  transform: scale(1.04);
+  --unit-scale: 1.04;
+  --unit-motion-duration: 1.09s;
+  --unit-frame-duration: 1.09s;
+  --unit-motion-delay: -.08s;
+  --unit-frame-delay: -.08s;
+  --unit-spark-delay: -.18s;
+  --unit-step-a-x: 3px;
+  --unit-step-a-y: -1px;
+  --unit-step-b-x: 7px;
+  --unit-step-b-y: -3px;
+  --unit-step-c-x: 2px;
+  --unit-step-c-y: 1px;
 }
 
 .expedition-unit-avatar.large.unit-2 {
   left: 16px;
-  top: 14px;
+  top: 55px;
   z-index: 3;
-  transform: scale(.82);
+  --unit-scale: .82;
+  --unit-motion-duration: 1.24s;
+  --unit-frame-duration: 1.24s;
+  --unit-motion-delay: -.35s;
+  --unit-frame-delay: -.35s;
+  --unit-spark-delay: -.26s;
+  --unit-step-a-x: 2px;
+  --unit-step-a-y: 0;
+  --unit-step-b-x: 5px;
+  --unit-step-b-y: -2px;
+  --unit-step-c-x: 1px;
+  --unit-step-c-y: 1px;
 }
 
 .expedition-unit-avatar.large.unit-3 {
   left: 74px;
-  top: 48px;
+  top: 73px;
   z-index: 6;
-  transform: scale(.92);
+  --unit-scale: .92;
+  --unit-motion-duration: .98s;
+  --unit-frame-duration: .98s;
+  --unit-motion-delay: -.14s;
+  --unit-frame-delay: -.14s;
+  --unit-spark-delay: -.04s;
+  --unit-step-a-x: 3px;
+  --unit-step-a-y: -2px;
+  --unit-step-b-x: 6px;
+  --unit-step-b-y: -4px;
+  --unit-step-c-x: 2px;
+  --unit-step-c-y: 0;
 }
 
 .expedition-unit-avatar.large.unit-4 {
   left: 122px;
-  top: 18px;
+  top: 59px;
   z-index: 3;
-  transform: scale(.82);
+  --unit-scale: .82;
+  --unit-motion-duration: 1.17s;
+  --unit-frame-duration: 1.17s;
+  --unit-motion-delay: -.53s;
+  --unit-frame-delay: -.53s;
+  --unit-spark-delay: -.41s;
+  --unit-step-a-x: 1px;
+  --unit-step-a-y: -1px;
+  --unit-step-b-x: 4px;
+  --unit-step-b-y: -3px;
+  --unit-step-c-x: 0;
+  --unit-step-c-y: 1px;
 }
 
 .expedition-unit-avatar.large.unit-5 {
   left: 28px;
-  top: 54px;
+  top: 79px;
   z-index: 7;
-  transform: scale(.92);
+  --unit-scale: .92;
+  --unit-motion-duration: 1.31s;
+  --unit-frame-duration: 1.31s;
+  --unit-motion-delay: -.22s;
+  --unit-frame-delay: -.22s;
+  --unit-spark-delay: -.34s;
+  --unit-step-a-x: 2px;
+  --unit-step-a-y: -1px;
+  --unit-step-b-x: 5px;
+  --unit-step-b-y: -2px;
+  --unit-step-c-x: 1px;
+  --unit-step-c-y: 2px;
 }
 
 .expedition-unit-frame,
@@ -1215,6 +1294,30 @@ button:disabled {
   opacity: 1;
 }
 
+.expedition-party-visual.running .expedition-unit-frame {
+  animation-duration: var(--unit-frame-duration);
+  animation-timing-function: step-end;
+  animation-iteration-count: infinite;
+  animation-delay: var(--unit-frame-delay);
+  animation-fill-mode: both;
+}
+
+.expedition-party-visual.running .expedition-unit-frame.frame-0 {
+  animation-name: expeditionCompanionFrameA;
+}
+
+.expedition-party-visual.running .expedition-unit-frame.frame-1 {
+  animation-name: expeditionCompanionFrameB;
+}
+
+.expedition-party-visual.running .expedition-unit-frame.frame-2 {
+  animation-name: expeditionCompanionFrameC;
+}
+
+.expedition-party-visual.running .expedition-unit-frame.frame-3 {
+  animation-name: expeditionCompanionFrameD;
+}
+
 .expedition-unit-avatar.large::after {
   position: absolute;
   left: 64%;
@@ -1226,7 +1329,11 @@ button:disabled {
   background: linear-gradient(90deg, transparent, #fff, #9fd4c9, transparent);
   clip-path: polygon(0 45%, 76% 0, 100% 50%, 76% 100%, 0 58%);
   filter: drop-shadow(0 0 5px #fff7);
-  animation: expeditionAllySpark 1.04s steps(4, end) infinite;
+  animation-name: expeditionAllySpark;
+  animation-duration: var(--unit-spark-duration);
+  animation-timing-function: steps(4, end);
+  animation-iteration-count: infinite;
+  animation-delay: var(--unit-spark-delay);
 }
 
 .expedition-unit-label {
@@ -3239,6 +3346,72 @@ button:disabled {
   }
 }
 
+@keyframes expeditionUnitRhythm {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  25% {
+    translate: var(--unit-step-a-x) var(--unit-step-a-y);
+  }
+  50% {
+    translate: var(--unit-step-b-x) var(--unit-step-b-y);
+  }
+  75% {
+    translate: var(--unit-step-c-x) var(--unit-step-c-y);
+  }
+}
+
+@keyframes expeditionCompanionFrameA {
+  0%,
+  24.99%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  99.99% {
+    opacity: 0;
+  }
+}
+
+@keyframes expeditionCompanionFrameB {
+  0%,
+  24.99%,
+  50%,
+  100% {
+    opacity: 0;
+  }
+  25%,
+  49.99% {
+    opacity: 1;
+  }
+}
+
+@keyframes expeditionCompanionFrameC {
+  0%,
+  49.99%,
+  75%,
+  100% {
+    opacity: 0;
+  }
+  50%,
+  74.99% {
+    opacity: 1;
+  }
+}
+
+@keyframes expeditionCompanionFrameD {
+  0%,
+  74.99%,
+  100% {
+    opacity: 0;
+  }
+  75%,
+  99.99% {
+    opacity: 1;
+  }
+}
+
 @keyframes expeditionAllySpark {
   0%,
   30% {
@@ -3498,27 +3671,27 @@ button:disabled {
 
   .expedition-unit-avatar.large.unit-1 {
     left: 88px;
-    top: 84px;
+    top: 91px;
   }
 
   .expedition-unit-avatar.large.unit-2 {
     left: 15px;
-    top: 14px;
+    top: 55px;
   }
 
   .expedition-unit-avatar.large.unit-3 {
     left: 70px;
-    top: 47px;
+    top: 72px;
   }
 
   .expedition-unit-avatar.large.unit-4 {
     left: 116px;
-    top: 17px;
+    top: 58px;
   }
 
   .expedition-unit-avatar.large.unit-5 {
     left: 27px;
-    top: 52px;
+    top: 77px;
   }
 
   .expedition-enemy-group {
@@ -3633,27 +3806,27 @@ button:disabled {
 
   .expedition-unit-avatar.large.unit-1 {
     left: 86px;
-    top: 82px;
+    top: 89px;
   }
 
   .expedition-unit-avatar.large.unit-2 {
     left: 15px;
-    top: 13px;
+    top: 54px;
   }
 
   .expedition-unit-avatar.large.unit-3 {
     left: 68px;
-    top: 45px;
+    top: 70px;
   }
 
   .expedition-unit-avatar.large.unit-4 {
     left: 112px;
-    top: 17px;
+    top: 58px;
   }
 
   .expedition-unit-avatar.large.unit-5 {
     left: 26px;
-    top: 50px;
+    top: 75px;
   }
 
   .expedition-scene-footer {

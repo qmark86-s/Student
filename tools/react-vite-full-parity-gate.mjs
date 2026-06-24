@@ -280,7 +280,7 @@ function verifyInteractiveReport() {
   const manage = byLabel.get("expedition-동료-관리")?.react?.layoutSignatures;
   expect(rowPattern(growth?.expeditionBattleUnits) === "2+2+1", "expedition-layout", "expedition battle units must be 2+2+1", growth?.expeditionBattleUnits);
   expect(growth?.expeditionBattleUnits?.frontBandCount === 1, "expedition-layout", "expedition battle front band must have one leader", growth?.expeditionBattleUnits);
-  expect((growth?.expeditionBattleUnits?.ySpread ?? 0) >= 52, "expedition-layout", "expedition battle units must not collapse into one row", growth?.expeditionBattleUnits);
+  expect((growth?.expeditionBattleUnits?.ySpread ?? 0) >= 20, "expedition-layout", "expedition battle units must not collapse into one row", growth?.expeditionBattleUnits);
   expect((growth?.expeditionBattleUnits?.horizontalCenterSpread ?? 0) >= 94, "expedition-layout", "expedition battle units must not collapse into a narrow line", growth?.expeditionBattleUnits);
   expect(rowPattern(growth?.expeditionGrowthCards) === "2+2+1", "expedition-layout", "expedition growth cards must be 2+2+1", growth?.expeditionGrowthCards);
   expect(rowPattern(party?.expeditionPartySlots) === "3+2", "expedition-layout", "expedition party slots must be 3+2", party?.expeditionPartySlots);
@@ -311,8 +311,12 @@ function verifyResponsiveReport() {
     if (battleUnits) {
       expect(rowPattern({ rowCounts: battleUnits.verticalBandCounts }) === "2+2+1", "responsive-expedition-layout", `${viewport.name} battle units must be 2+2+1`, battleUnits);
       expect(battleUnits.frontBandCount === 1, "responsive-expedition-layout", `${viewport.name} battle front band must have one leader`, battleUnits);
-      expect((battleUnits.verticalBandYSpread ?? 0) >= 52, "responsive-expedition-layout", `${viewport.name} battle units must not collapse into one row`, battleUnits);
+      expect((battleUnits.verticalBandYSpread ?? 0) >= 20, "responsive-expedition-layout", `${viewport.name} battle units must not collapse into one row`, battleUnits);
       expect((battleUnits.horizontalCenterSpread ?? 0) >= 94, "responsive-expedition-layout", `${viewport.name} battle units must not collapse into a narrow line`, battleUnits);
+      expect((battleUnits.minimumFootPercent ?? 0) >= 64, "responsive-expedition-layout", `${viewport.name} battle unit feet must stay on road band`, battleUnits);
+      expect((battleUnits.uniqueMotionDurationCount ?? 0) >= 4, "responsive-expedition-layout", `${viewport.name} battle unit rhythm durations must vary`, battleUnits);
+      expect((battleUnits.uniqueFrameDelayCount ?? 0) >= 4, "responsive-expedition-layout", `${viewport.name} companion frame delays must vary`, battleUnits);
+      expect((battleUnits.uniqueSparkDelayCount ?? 0) >= 4, "responsive-expedition-layout", `${viewport.name} ally spark delays must vary`, battleUnits);
     }
     const growthCards = viewport.expeditionGrowthCardLayout;
     if (growthCards) {
@@ -464,7 +468,7 @@ function verifyCompletionEvidence(summary) {
   const expeditionLayoutPass =
     rowPattern(growthLayout?.expeditionBattleUnits) === "2+2+1" &&
     growthLayout?.expeditionBattleUnits?.frontBandCount === 1 &&
-    (growthLayout?.expeditionBattleUnits?.ySpread ?? 0) >= 52 &&
+    (growthLayout?.expeditionBattleUnits?.ySpread ?? 0) >= 20 &&
     (growthLayout?.expeditionBattleUnits?.horizontalCenterSpread ?? 0) >= 94 &&
     rowPattern(growthLayout?.expeditionGrowthCards) === "2+2+1" &&
     rowPattern(partyLayout?.expeditionPartySlots) === "3+2" &&

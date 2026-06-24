@@ -174,3 +174,12 @@
 - `artifacts/react-vite-full-parity-gate/report.json` 기준 `status: pass`, `failures: []`, `completionEvidence` 9개 항목 모두 `pass`다.
 - 원정대 비일렬 배치 evidence는 전투 `2+2+1 / front 1 / horizontalCenterSpread 97px`, 성장 카드 `2+2+1`, 파티 슬롯 `3+2`, 파티 후보/동료 관리 2열 카드 그리드로 기록된다.
 - `mcp__UmgMcp.project_policy_gate`: `src/react` 절대경로와 full parity report 절대경로 기준 pass, log 분류 `fallback: 0`.
+
+## 2026-06-24 길 접지와 개별 리듬 보강
+- 사용자가 지적한 “동료들이 길 밖 오브젝트 위에 떠 보이는” 문제를 기준화했다.
+- 전투 동료의 최소 발 위치는 `minimumFootPercent >= 64`로 검사한다.
+- 최신 responsive report 기준 발 하한은 `phone-narrow 67.06%`, `phone-parity 68.49%`, `tablet-portrait 67.66%`, `landscape-small 65.73%`다.
+- 기존 `2+2+1`, front 1, 좌우 spread 94px 이상 기준은 유지한다.
+- 길 접지를 우선하면서 세로 spread 하한은 20px로 조정했다. 행 분포 자체는 `verticalBandCounts`와 `frontBandCount`로 계속 검사한다.
+- 다섯 동료가 하나처럼 움직이지 않도록 `expeditionUnitRhythm`, 4프레임 이미지 순환, spark delay를 슬롯별로 다르게 지정했다.
+- 최신 검증은 `npm run react:build`, `npm run react:responsive-audit`, `npm run react:expedition-smoke`, `src/react` 금지 문자열 검색, `git diff --check`, `mcp__UmgMcp.project_policy_gate`를 통과했다.

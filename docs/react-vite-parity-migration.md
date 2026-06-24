@@ -66,7 +66,7 @@ npm run react:verify
 - `react:records-smoke`: 저장 상태를 주입하고 시험/직장/도감 탭이 placeholder 없이 카드로 렌더링되는지 검사한다.
 - `react:education-smoke`: 교육 데이터 주입, 9개 교육 카드, 잠금 상태, 비용, 업그레이드 저장, 성장 배율 반영을 검사한다.
 - `react:shop-debug-smoke`: 상점 도우미 호출, 다이아 차감, 로봇 도우미 저장, 성장 패널 학습 도우미 반영, 동료 탭 표시, DEBUG 동료 +5, 원정대 파티 5/5 편성, stage 돌파 저장을 검사한다.
-- `react:responsive-audit`: 320x568, 360x740, 390x844, 412x915, 430x932, 768x1024, 844x390, 1280x720에서 기본/전투/상점 뽑기/원정대 디버그 흐름의 overflow, 버튼 텍스트, 이미지 로드, phone frame 위치, 원정대 전투 동료 `2+2+1` 세로 밴드, 원정대 파티 슬롯 `3+2` 행 분포, 원정대 성장/파티 후보/동료 관리 카드 `2+2+1` 행 분포를 검사하고 `artifacts/react-vite-responsive-audit/report.json`에 기록한다.
+- `react:responsive-audit`: 320x568, 360x740, 390x844, 412x915, 430x932, 768x1024, 844x390, 1280x720에서 기본/전투/상점 뽑기/원정대 디버그 흐름의 overflow, 버튼 텍스트, 이미지 로드, phone frame 위치, 원정대 전투 동료 `2+2+1` 세로 밴드, 전투 동료 발 하한 64%, 동료별 리듬 다양성, 원정대 파티 슬롯 `3+2` 행 분포, 원정대 성장/파티 후보/동료 관리 카드 `2+2+1` 행 분포를 검사하고 `artifacts/react-vite-responsive-audit/report.json`에 기록한다.
 - `react:parity-audit`: `dist/` snapshot과 `dist-react/` React를 390x844, 412x915에서 캡처하고 좌표/픽셀 차이를 `artifacts/react-vite-parity/report.json`에 기록한다. 기본은 audit이며 실패시키지 않는다. `Math.random=0.25`를 주입하고 애니메이션은 첫 프레임 pause 상태로 비교한다. live 애니메이션 상태를 보려면 `REACT_PARITY_FREEZE_ANIMATIONS=0`으로 실행한다. `REACT_PARITY_STRICT=1`을 설정하면 `REACT_PARITY_MAX_DIFF_PERCENT`, `REACT_PARITY_MAX_MEAN_ABS_DIFF` 기준으로 실패시킬 수 있다.
 - `react:interactive-parity`: `dist/` snapshot과 `dist-react/` React를 같은 의미의 저장 상태로 열고 학생 7개 탭, 상점/설정/디버그, 원정대 성장/파티/동료 관리/기록/편성 조작을 비교한다. snapshot에는 원본 HTML용 schema 1 seed, React에는 schema 2 seed를 주입한다. 첫 캡처는 양쪽 Battle Road 적 수와 HUD 제한시간이 같은 안정 상태가 된 뒤 진행한다. 전체 screenshot diff와 함께 `visualRegions.scene`, `visualRegions.activePanel`을 기록해 battle scene 잔차와 하단 패널 잔차를 분리한다. 학생 `시험`/`결과`/`도감` 패널은 핵심 selector의 rect/style/text/source evidence도 `selectorMetrics`, `selectorDiffs`로 기록한다. 원정대 전투 동료는 `layoutSignatures.expeditionBattleUnits`에 `2+2+1`, front 1, 세로 spread, 좌우 center spread를 기록한다.
 - `react:hotspot-crop`: `artifacts/react-vite-interactive-parity/report.json`의 region hotspot을 PNG로 잘라 `artifacts/react-vite-hotspot-crops/`에 저장한다. 기본 대상은 `student-도감` / `activePanel` / hotspot 0이며, `REACT_HOTSPOT_LABEL`, `REACT_HOTSPOT_REGION`, `REACT_HOTSPOT_INDEX`, `REACT_HOTSPOT_PADDING` 환경 변수로 바꿀 수 있다.
@@ -113,6 +113,8 @@ npm run react:verify
 - 원정대 일반 Stage에서 전투력이 부족하면 현재 Stage를 유지하고 보상을 지급하지 않아야 한다.
 - 원정대 성장 투자는 보유 EXP를 소모해 출전 동료 level을 올리고, 동료 관리 합성은 같은 직업/승급 동료 2명을 다음 승급 1명으로 바꿔야 한다.
 - 원정대 전투 동료는 일렬 배치나 3명 가로줄이 아니라 전투장 왼쪽 하단에서 뒤 2명, 중간 2명, 앞 리더 1명의 `2+2+1` 편대로 보여야 한다.
+- 원정대 전투 동료는 배경 펜스/상자 위에 뜬 것처럼 보이면 실패다. 최신 기준은 `minimumFootPercent >= 64`이며, `phone-narrow`, `phone-parity`, `tablet-portrait`, `landscape-small`에서 각각 `67.06%`, `68.49%`, `67.66%`, `65.73%`로 확인했다.
+- 원정대 전투 동료 5명은 같은 컨테이너 리듬으로만 움직이면 실패다. React는 슬롯별 motion duration, frame delay, spark delay를 5종으로 분리한다.
 - 원정대 파티 슬롯은 모든 검증 폭에서 3+2 그리드로 줄바꿈되어야 한다. 최신 사용자 요청 기준으로 이 3+2 배치는 원본 HTML의 5열 슬롯보다 우선한다.
 - 원정대 성장/파티 후보/동료 관리 카드 목록은 5명 기준 세로 한 줄 리스트가 아니라 2+2+1 카드 그리드로 보여야 한다.
 - 원정대 동료 관리 카드의 잠금 버튼은 `잠금` 텍스트가 줄바꿈되지 않아야 하며, 상태 배지는 직업명 아래에 표시되어야 한다.

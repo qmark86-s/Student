@@ -350,18 +350,43 @@ async function readExpeditionPartySlotLayout(page) {
 async function readExpeditionBattleUnitLayout(page) {
   return await page.evaluate(async () => {
     await document.fonts?.ready;
-    const unitRects = Array.from(document.querySelectorAll(".expedition-unit-avatar.large")).map((element, index) => {
+    const units = Array.from(document.querySelectorAll(".expedition-unit-avatar.large"));
+    const arena = document.querySelector(".expedition-arena");
+    const arenaRect = arena ? arena.getBoundingClientRect() : null;
+    const unitRects = units.map((element, index) => {
       const rect = element.getBoundingClientRect();
+      const footPercent = arenaRect && arenaRect.height > 0 ? ((rect.bottom - arenaRect.top) / arenaRect.height) * 100 : 0;
       return {
         index: index + 1,
         x: Number(rect.x.toFixed(2)),
         y: Number(rect.y.toFixed(2)),
+        bottom: Number(rect.bottom.toFixed(2)),
         width: Number(rect.width.toFixed(2)),
         height: Number(rect.height.toFixed(2)),
         centerX: Number((rect.x + rect.width / 2).toFixed(2)),
         centerY: Number((rect.y + rect.height / 2).toFixed(2)),
+        footPercent: Number(footPercent.toFixed(2)),
       };
     });
+    const motionSignatures = units.map((element, index) => {
+      const unitStyle = getComputedStyle(element);
+      const frame = element.querySelector(".expedition-unit-frame.frame-0");
+      const frameStyle = frame ? getComputedStyle(frame) : null;
+      const sparkStyle = getComputedStyle(element, "::after");
+      return {
+        index: index + 1,
+        motionName: unitStyle.animationName,
+        motionDuration: unitStyle.animationDuration,
+        motionDelay: unitStyle.animationDelay,
+        frameName: frameStyle ? frameStyle.animationName : "",
+        frameDuration: frameStyle ? frameStyle.animationDuration : "",
+        frameDelay: frameStyle ? frameStyle.animationDelay : "",
+        sparkName: sparkStyle.animationName,
+        sparkDuration: sparkStyle.animationDuration,
+        sparkDelay: sparkStyle.animationDelay,
+      };
+    });
+    const uniqueCount = (items) => new Set(items.filter((item) => item)).size;
     const verticalBands = [];
     for (const rect of unitRects.slice().sort((a, b) => a.y - b.y || a.x - b.x)) {
       const band = verticalBands.find((candidate) => Math.abs(candidate.y - rect.y) <= 8);
@@ -373,8 +398,10 @@ async function readExpeditionBattleUnitLayout(page) {
     }
     const yValues = unitRects.map((rect) => rect.y);
     const xCenters = unitRects.map((rect) => rect.centerX);
+    const footPercents = unitRects.map((rect) => rect.footPercent);
     const ySpread = yValues.length > 0 ? Math.max(...yValues) - Math.min(...yValues) : 0;
     const xSpread = xCenters.length > 0 ? Math.max(...xCenters) - Math.min(...xCenters) : 0;
+    const minFootPercent = footPercents.length > 0 ? Math.min(...footPercents) : 0;
     return {
       unitCount: unitRects.length,
       rowCounts: verticalBands.map((band) => band.items.length),
@@ -383,7 +410,13 @@ async function readExpeditionBattleUnitLayout(page) {
       horizontalCenterSpread: Number(xSpread.toFixed(2)),
       rowYGap: verticalBands.length >= 2 ? Number(Math.abs(verticalBands[1].y - verticalBands[0].y).toFixed(2)) : 0,
       verticalBandYSpread: Number(ySpread.toFixed(2)),
+      minimumFootPercent: Number(minFootPercent.toFixed(2)),
+      uniqueMotionDurationCount: uniqueCount(motionSignatures.map((signature) => signature.motionDuration)),
+      uniqueMotionDelayCount: uniqueCount(motionSignatures.map((signature) => signature.motionDelay)),
+      uniqueFrameDelayCount: uniqueCount(motionSignatures.map((signature) => signature.frameDelay)),
+      uniqueSparkDelayCount: uniqueCount(motionSignatures.map((signature) => signature.sparkDelay)),
       unitRects,
+      motionSignatures,
     };
   });
 }
@@ -562,11 +595,31 @@ function collectExpeditionBattleUnitLayoutFailures(layout) {
   if (layout.frontBandCount !== 1) {
     failures.push(`expedition battle front band should be leader-only, got ${layout.frontBandCount}`);
   }
-  if (layout.verticalBandYSpread < 52) {
-    failures.push(`expedition battle unit vertical spread ${layout.verticalBandYSpread}px under 52px`);
+  if (layout.verticalBandYSpread < 20) {
+    failures.push(`expedition battle unit vertical spread ${layout.verticalBandYSpread}px under 20px`);
   }
   if (layout.horizontalCenterSpread < 94) {
     failures.push(`expedition battle unit horizontal spread ${layout.horizontalCenterSpread}px under 94px`);
+  }
+  if (layout.minimumFootPercent < 64) {
+    failures.push(`expedition battle unit feet are above road band: ${layout.minimumFootPercent}% under 64%`);
+  }
+  const motionNames = layout.motionSignatures.map((signature) => signature.motionName);
+  const frameNames = layout.motionSignatures.map((signature) => signature.frameName);
+  if (!motionNames.every((name) => name.includes("expeditionUnitRhythm"))) {
+    failures.push(`expedition battle unit rhythm animation missing: ${motionNames.join(",")}`);
+  }
+  if (!frameNames.every((name) => name.includes("expeditionCompanionFrame"))) {
+    failures.push(`expedition companion frame cycling missing: ${frameNames.join(",")}`);
+  }
+  if (layout.uniqueMotionDurationCount < 4) {
+    failures.push(`expedition battle unit rhythms too similar: ${layout.uniqueMotionDurationCount}/4 durations`);
+  }
+  if (layout.uniqueFrameDelayCount < 4) {
+    failures.push(`expedition companion frame delays too similar: ${layout.uniqueFrameDelayCount}/4 delays`);
+  }
+  if (layout.uniqueSparkDelayCount < 4) {
+    failures.push(`expedition ally spark delays too similar: ${layout.uniqueSparkDelayCount}/4 delays`);
   }
   return failures;
 }
