@@ -1,5 +1,6 @@
 node_modules/
 dist/
+dist-react/
 artifacts/
 
 # 빌드 산출물: snapshot-build가 매 빌드마다 재생성하므로 추적하지 않는다.

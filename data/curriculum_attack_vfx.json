@@ -133,7 +133,8 @@
       "tokenPools": [
         { "id": "korean_letters", "subject": "korean", "style": "glyph", "weight": 4, "tokens": ["ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ", "아", "어", "이"] },
         { "id": "english_letters", "subject": "english", "style": "glyph", "weight": 3, "tokens": ["A-a", "B-b", "C-c", "D-d", "E-e", "cat", "dog", "book"] },
-        { "id": "counting", "subject": "math", "style": "formula", "weight": 3, "tokens": ["1+1", "2+1", "3-1", "2+2", "5-1", "1<2"] }
+        { "id": "counting", "subject": "math", "style": "formula", "weight": 3, "tokens": ["1+1", "2+1", "3-1", "2+2", "5-1", "1<2"] },
+        { "id": "first_inquiry", "subject": "science", "style": "card", "weight": 2, "tokens": ["봄", "여름", "가을", "겨울", "동네", "학교"] }
       ]
     },
     {
@@ -145,7 +146,8 @@
       "tokenPools": [
         { "id": "easy_korean_words", "subject": "korean", "style": "word", "weight": 4, "tokens": ["안녕", "고마워", "사랑해", "학교", "친구", "가족", "바다", "하늘"] },
         { "id": "easy_english_words", "subject": "english", "style": "word", "weight": 3, "tokens": ["hello", "name", "friend", "family", "school", "apple", "baby", "book"] },
-        { "id": "basic_addition", "subject": "math", "style": "formula", "weight": 3, "tokens": ["1+1=2", "2+2=4", "3+1=4", "5-2=3", "2x2=4", "10-3"] }
+        { "id": "basic_addition", "subject": "math", "style": "formula", "weight": 3, "tokens": ["1+1=2", "2+2=4", "3+1=4", "5-2=3", "2x2=4", "10-3"] },
+        { "id": "second_inquiry", "subject": "science", "style": "card", "weight": 2, "tokens": ["계절", "마을", "지도", "나침반", "식물", "날씨"] }
       ]
     },
     {
@@ -275,6 +277,8 @@
         { "id": "suneung_korean", "subject": "korean", "style": "word", "weight": 3, "tokens": ["수특", "독서", "문학", "선지", "화작", "언매"] },
         { "id": "suneung_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["blank", "order", "gist", "vocab", "summary"] },
         { "id": "suneung_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["lim", "dy/dx", "∫f(x)", "P(A)", "nCr", "f'(x)"] },
+        { "id": "suneung_social", "subject": "social", "style": "card", "weight": 2, "tokens": ["윤리", "정치", "경제", "사회", "문화", "세계사"] },
+        { "id": "suneung_science", "subject": "science", "style": "formula", "weight": 2, "tokens": ["역학", "유전", "중화", "지층", "전기장", "세포"] },
         { "id": "exam_pressure", "subject": "exam", "style": "burst", "weight": 3, "tokens": ["OMR", "EBS", "6평", "9평", "1등급", "30번"] }
       ]
     },
@@ -288,6 +292,7 @@
         { "id": "review_start", "subject": "habit", "style": "card", "weight": 3, "tokens": ["개념", "1회독", "오답", "루틴", "복습", "호흡"] },
         { "id": "repeater_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["review", "vocab", "blank", "logic", "speed"] },
         { "id": "repeater_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["f(x)", "P(A)", "dy/dx", "∫", "log", "nCr"] },
+        { "id": "repeater_inquiry", "subject": "science", "style": "formula", "weight": 2, "tokens": ["GDP", "CPI", "pH", "DNA", "CO2", "역학"] },
         { "id": "mock_exam", "subject": "exam", "style": "burst", "weight": 3, "tokens": ["6평", "9평", "OMR", "1컷", "2컷", "EBS"] }
       ]
     },
@@ -301,6 +306,7 @@
         { "id": "routine_fixed", "subject": "habit", "style": "card", "weight": 3, "tokens": ["2회독", "압축", "실전", "오답", "루틴", "수면"] },
         { "id": "speed_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["speed", "logic", "review", "blank", "order"] },
         { "id": "simulation_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["f'(x)", "∫f(x)", "P(A)", "nCr", "a_n", "lim"] },
+        { "id": "repeater2_inquiry", "subject": "science", "style": "formula", "weight": 2, "tokens": ["사문", "생윤", "물리", "화학", "생명", "지학"] },
         { "id": "evaluator", "subject": "exam", "style": "burst", "weight": 3, "tokens": ["6평", "9평", "OMR", "1컷", "N제", "실모"] }
       ]
     },
@@ -314,6 +320,7 @@
         { "id": "long_runner_mind", "subject": "habit", "style": "card", "weight": 3, "tokens": ["장수", "재정리", "불안컷", "최종", "집중", "압축"] },
         { "id": "long_runner_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["calm", "focus", "review", "logic", "blank"] },
         { "id": "long_runner_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["dy/dx", "∫f(x)", "P(A)", "nCr", "f(x)", "lim"] },
+        { "id": "long_runner_inquiry", "subject": "science", "style": "formula", "weight": 2, "tokens": ["탐구", "자료", "도표", "실험", "개념", "선지"] },
         { "id": "final_exam", "subject": "exam", "style": "burst", "weight": 3, "tokens": ["OMR", "실모", "N제", "1컷", "9평"] }
       ]
     },
@@ -327,6 +334,7 @@
         { "id": "veteran_finish", "subject": "habit", "style": "card", "weight": 3, "tokens": ["마지막", "초압축", "실전감", "확신", "정리"] },
         { "id": "veteran_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["focus", "final", "calm", "review", "speed"] },
         { "id": "veteran_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["f'(x)", "∫", "P(A)", "nCr", "log", "lim"] },
+        { "id": "veteran_inquiry", "subject": "science", "style": "formula", "weight": 2, "tokens": ["탐구", "킬러", "도표", "개념", "자료", "선지"] },
         { "id": "exam_room", "subject": "exam", "style": "burst", "weight": 3, "tokens": ["OMR", "EBS", "1컷", "N제", "실모"] }
       ]
     }

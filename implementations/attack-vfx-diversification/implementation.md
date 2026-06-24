@@ -12,7 +12,8 @@
   - `runtime.renderer="dom_text_layer"`로 현재 렌더링 방식을 명시했다.
   - `skinKey`, `localizationKeyPrefix`, `tokenKeyStrategy`를 추가해 향후 스킨/성장/로컬라이제이션 분기를 받을 수 있게 했다.
   - `rules.inquirySubjectAliases`로 사회/과학 탐구 계열을 같은 탐구 풀처럼 선택할 수 있게 했다.
-  - 초1~N수까지 16개 단계, 62개 토큰 풀, 368개 토큰, 5개 스타일을 유지한다.
+  - 고3 수능 탐구 전투용 `suneung_social`, `suneung_science` 풀을 포함한다.
+  - 초1~N수까지 16개 단계, 68개 토큰 풀, 404개 토큰, 5개 스타일을 유지한다.
 
 - `data/battle_road_config.json`
   - `presentation.curriculumAttackVfx`를 추가했다.
@@ -71,7 +72,7 @@ npm run verify:mobile
 
 확인된 주요 결과:
 
-- `CURRICULUM_ATTACK_VFX_OK grades=16 pools=62 tokens=368 styles=5 mode=random_one_per_attack`
+- `CURRICULUM_ATTACK_VFX_OK grades=16 pools=68 tokens=404 styles=5 mode=random_one_per_attack`
 - `BATTLE_ROAD_CONFIG_OK schoolEncounters=4 suneungEncounters=4`
 - `BUILD_WEB_OK`
 - `VISUAL_ASSET_SMOKE_OK`

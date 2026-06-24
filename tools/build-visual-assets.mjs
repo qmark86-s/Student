@@ -75,10 +75,30 @@ const battleRoadLaneThemes = {
   repeater: { road: "#9a6c36", roadDark: "#4e321d", trim: "#f0b84c", detail: "#ffe3a1", shadow: "#26170f", sparkle: "#c4b5fd" },
 };
 
-function clampNumber(value, fallback, min = -Infinity, max = Infinity) {
+function configObject(value, label) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error(`${label} 데이터가 객체가 아닙니다.`);
+  return value;
+}
+
+function configNumber(value, label, min = -Infinity, max = Infinity) {
   const number = Number(value);
-  if (!Number.isFinite(number)) return fallback;
+  if (!Number.isFinite(number)) throw new Error(`${label} 값이 숫자가 아닙니다.`);
   return Math.max(min, Math.min(max, number));
+}
+
+function configString(value, label) {
+  if (typeof value !== "string" || value.length === 0) throw new Error(`${label} 값이 문자열이 아닙니다.`);
+  return value;
+}
+
+function configBoolean(value, label) {
+  if (typeof value !== "boolean") throw new Error(`${label} 값이 boolean이 아닙니다.`);
+  return value;
+}
+
+function configArray(value, label) {
+  if (!Array.isArray(value) || value.length === 0) throw new Error(`${label} 데이터가 비어 있습니다.`);
+  return value;
 }
 
 function cssNumber(value, digits = 2) {
@@ -86,92 +106,92 @@ function cssNumber(value, digits = 2) {
 }
 
 function readBattleRoadConfig() {
-  if (!existsSync(battleRoadConfigPath)) return {};
+  if (!existsSync(battleRoadConfigPath)) throw new Error(`battle_road_config.json 파일이 없습니다: ${battleRoadConfigPath}`);
   return JSON.parse(readFileSync(battleRoadConfigPath, "utf8"));
 }
 
 function battleRoadPresentation(config) {
-  const presentation = config.presentation ?? {};
-  const backdrop = presentation.backdrop ?? {};
-  const display = presentation.studentDisplay ?? {};
-  const attack = presentation.studentAttack ?? {};
-  const enemyDisplay = presentation.enemyDisplay ?? {};
-  const enemyReaction = presentation.enemyReaction ?? {};
-  const enemyHpBar = presentation.enemyHpBar ?? {};
-  const enemySlots = presentation.enemySlots ?? {};
-  const curriculumVfx = presentation.curriculumAttackVfx ?? {};
+  const presentation = configObject(config.presentation, "battle_road_config.presentation");
+  const backdrop = configObject(presentation.backdrop, "battle_road_config.presentation.backdrop");
+  const display = configObject(presentation.studentDisplay, "battle_road_config.presentation.studentDisplay");
+  const attack = configObject(presentation.studentAttack, "battle_road_config.presentation.studentAttack");
+  const enemyDisplay = configObject(presentation.enemyDisplay, "battle_road_config.presentation.enemyDisplay");
+  const enemyReaction = configObject(presentation.enemyReaction, "battle_road_config.presentation.enemyReaction");
+  const enemyHpBar = configObject(presentation.enemyHpBar, "battle_road_config.presentation.enemyHpBar");
+  const enemySlots = configObject(presentation.enemySlots, "battle_road_config.presentation.enemySlots");
+  const curriculumVfx = configObject(presentation.curriculumAttackVfx, "battle_road_config.presentation.curriculumAttackVfx");
   return {
     backdrop: {
-      panWidthPercent: clampNumber(backdrop.panWidthPercent, 720, 400, 1200),
-      panLoopPercent: clampNumber(backdrop.panLoopPercent, -50, -100, -1),
-      panDurationSec: clampNumber(backdrop.panDurationSec, 64, 12, 240),
-      roadTopPercent: clampNumber(backdrop.roadTopPercent, 60, 35, 90),
-      roadBottomPercent: clampNumber(backdrop.roadBottomPercent, 100, 65, 100),
-      roadOpacity: clampNumber(backdrop.roadOpacity, 0.86, 0, 1),
-      roadDetailPx: clampNumber(backdrop.roadDetailPx, 108, 36, 240),
-      travelFilter: typeof backdrop.travelFilter === "string" ? backdrop.travelFilter : "saturate(1.15) contrast(1.06)",
-      defaultFilter: typeof backdrop.defaultFilter === "string" ? backdrop.defaultFilter : "saturate(1.1) contrast(1.04)",
+      panWidthPercent: configNumber(backdrop.panWidthPercent, "backdrop.panWidthPercent", 400, 1200),
+      panLoopPercent: configNumber(backdrop.panLoopPercent, "backdrop.panLoopPercent", -100, -1),
+      panDurationSec: configNumber(backdrop.panDurationSec, "backdrop.panDurationSec", 12, 240),
+      roadTopPercent: configNumber(backdrop.roadTopPercent, "backdrop.roadTopPercent", 35, 90),
+      roadBottomPercent: configNumber(backdrop.roadBottomPercent, "backdrop.roadBottomPercent", 65, 100),
+      roadOpacity: configNumber(backdrop.roadOpacity, "backdrop.roadOpacity", 0, 1),
+      roadDetailPx: configNumber(backdrop.roadDetailPx, "backdrop.roadDetailPx", 36, 240),
+      travelFilter: configString(backdrop.travelFilter, "backdrop.travelFilter"),
+      defaultFilter: configString(backdrop.defaultFilter, "backdrop.defaultFilter"),
     },
     studentDisplay: {
-      scaleMultiplier: clampNumber(display.scaleMultiplier, 0.8, 0.45, 1.4),
-      baseBottomPercent: clampNumber(display.baseBottomPercent, 15, 0, 60),
-      elementaryBottomPercent: clampNumber(display.elementaryBottomPercent, 15, 0, 60),
-      middleBottomPercent: clampNumber(display.middleBottomPercent, 14, 0, 60),
-      highBottomPercent: clampNumber(display.highBottomPercent, 14, 0, 60),
-      repeaterBottomPercent: clampNumber(display.repeaterBottomPercent, 14, 0, 60),
-      helperPartyLeftPercent: clampNumber(display.helperPartyLeftPercent, 30, 0, 100),
-      helperBottomPercent: clampNumber(display.helperBottomPercent, 13, 0, 60),
-      helperSizePx: clampNumber(display.helperSizePx, 78, 36, 120),
+      scaleMultiplier: configNumber(display.scaleMultiplier, "studentDisplay.scaleMultiplier", 0.45, 1.4),
+      baseBottomPercent: configNumber(display.baseBottomPercent, "studentDisplay.baseBottomPercent", 0, 60),
+      elementaryBottomPercent: configNumber(display.elementaryBottomPercent, "studentDisplay.elementaryBottomPercent", 0, 60),
+      middleBottomPercent: configNumber(display.middleBottomPercent, "studentDisplay.middleBottomPercent", 0, 60),
+      highBottomPercent: configNumber(display.highBottomPercent, "studentDisplay.highBottomPercent", 0, 60),
+      repeaterBottomPercent: configNumber(display.repeaterBottomPercent, "studentDisplay.repeaterBottomPercent", 0, 60),
+      helperPartyLeftPercent: configNumber(display.helperPartyLeftPercent, "studentDisplay.helperPartyLeftPercent", 0, 100),
+      helperBottomPercent: configNumber(display.helperBottomPercent, "studentDisplay.helperBottomPercent", 0, 60),
+      helperSizePx: configNumber(display.helperSizePx, "studentDisplay.helperSizePx", 36, 120),
     },
     studentAttack: {
-      windupPx: clampNumber(attack.windupPx, 4, 0, 120),
-      dashPx: clampNumber(attack.dashPx, 25, 0, 120),
-      recoverPx: clampNumber(attack.recoverPx, 6, 0, 120),
-      dustPx: clampNumber(attack.dustPx, 20, 0, 120),
-      slashPx: clampNumber(attack.slashPx, 28, 0, 140),
+      windupPx: configNumber(attack.windupPx, "studentAttack.windupPx", 0, 120),
+      dashPx: configNumber(attack.dashPx, "studentAttack.dashPx", 0, 120),
+      recoverPx: configNumber(attack.recoverPx, "studentAttack.recoverPx", 0, 120),
+      dustPx: configNumber(attack.dustPx, "studentAttack.dustPx", 0, 120),
+      slashPx: configNumber(attack.slashPx, "studentAttack.slashPx", 0, 140),
     },
     curriculumAttackVfx: {
-      enabled: curriculumVfx.enabled !== false,
-      cycleMs: clampNumber(curriculumVfx.cycleMs, 900, 120, 2400),
-      durationMs: clampNumber(curriculumVfx.durationMs, 900, 120, 1600),
-      baseFontPx: clampNumber(curriculumVfx.baseFontPx, 18, 10, 28),
-      minWidthPx: clampNumber(curriculumVfx.minWidthPx, 34, 20, 120),
-      maxWidthPx: clampNumber(curriculumVfx.maxWidthPx, 92, 32, 160),
-      sourceOffsetXPx: clampNumber(curriculumVfx.sourceOffsetXPx, -150, -260, 40),
-      sourceOffsetYPx: clampNumber(curriculumVfx.sourceOffsetYPx, -14, -80, 160),
-      impactOffsetXPx: clampNumber(curriculumVfx.impactOffsetXPx, -4, -80, 80),
-      impactOffsetYPx: clampNumber(curriculumVfx.impactOffsetYPx, -6, -80, 80),
-      normalTargetXOffsetPercent: clampNumber(curriculumVfx.normalTargetXOffsetPercent, -7, -50, 50),
-      normalTargetYOffsetPercent: clampNumber(curriculumVfx.normalTargetYOffsetPercent, 32, 0, 80),
-      bossTargetXOffsetPercent: clampNumber(curriculumVfx.bossTargetXOffsetPercent, -4, -50, 50),
-      bossTargetYOffsetPercent: clampNumber(curriculumVfx.bossTargetYOffsetPercent, 36, 0, 80),
+      enabled: configBoolean(curriculumVfx.enabled, "curriculumAttackVfx.enabled"),
+      cycleMs: configNumber(curriculumVfx.cycleMs, "curriculumAttackVfx.cycleMs", 120, 2400),
+      durationMs: configNumber(curriculumVfx.durationMs, "curriculumAttackVfx.durationMs", 120, 1600),
+      baseFontPx: configNumber(curriculumVfx.baseFontPx, "curriculumAttackVfx.baseFontPx", 10, 28),
+      minWidthPx: configNumber(curriculumVfx.minWidthPx, "curriculumAttackVfx.minWidthPx", 20, 120),
+      maxWidthPx: configNumber(curriculumVfx.maxWidthPx, "curriculumAttackVfx.maxWidthPx", 32, 160),
+      sourceOffsetXPx: configNumber(curriculumVfx.sourceOffsetXPx, "curriculumAttackVfx.sourceOffsetXPx", -260, 40),
+      sourceOffsetYPx: configNumber(curriculumVfx.sourceOffsetYPx, "curriculumAttackVfx.sourceOffsetYPx", -80, 160),
+      impactOffsetXPx: configNumber(curriculumVfx.impactOffsetXPx, "curriculumAttackVfx.impactOffsetXPx", -80, 80),
+      impactOffsetYPx: configNumber(curriculumVfx.impactOffsetYPx, "curriculumAttackVfx.impactOffsetYPx", -80, 80),
+      normalTargetXOffsetPercent: configNumber(curriculumVfx.normalTargetXOffsetPercent, "curriculumAttackVfx.normalTargetXOffsetPercent", -50, 50),
+      normalTargetYOffsetPercent: configNumber(curriculumVfx.normalTargetYOffsetPercent, "curriculumAttackVfx.normalTargetYOffsetPercent", 0, 80),
+      bossTargetXOffsetPercent: configNumber(curriculumVfx.bossTargetXOffsetPercent, "curriculumAttackVfx.bossTargetXOffsetPercent", -50, 50),
+      bossTargetYOffsetPercent: configNumber(curriculumVfx.bossTargetYOffsetPercent, "curriculumAttackVfx.bossTargetYOffsetPercent", 0, 80),
     },
     enemyDisplay: {
-      normalSizePx: clampNumber(enemyDisplay.normalSizePx, 80, 24, 140),
-      bossSizePx: clampNumber(enemyDisplay.bossSizePx, 94, 36, 160),
-      suneungSizePx: clampNumber(enemyDisplay.suneungSizePx, 88, 36, 160),
-      mobileNormalSizePx: clampNumber(enemyDisplay.mobileNormalSizePx, 78, 24, 140),
-      mobileBossSizePx: clampNumber(enemyDisplay.mobileBossSizePx, 92, 36, 160),
-      mobileSuneungSizePx: clampNumber(enemyDisplay.mobileSuneungSizePx, 86, 36, 160),
-      defeatedOpacity: clampNumber(enemyDisplay.defeatedOpacity, 0, 0, 1),
+      normalSizePx: configNumber(enemyDisplay.normalSizePx, "enemyDisplay.normalSizePx", 24, 140),
+      bossSizePx: configNumber(enemyDisplay.bossSizePx, "enemyDisplay.bossSizePx", 36, 160),
+      suneungSizePx: configNumber(enemyDisplay.suneungSizePx, "enemyDisplay.suneungSizePx", 36, 160),
+      mobileNormalSizePx: configNumber(enemyDisplay.mobileNormalSizePx, "enemyDisplay.mobileNormalSizePx", 24, 140),
+      mobileBossSizePx: configNumber(enemyDisplay.mobileBossSizePx, "enemyDisplay.mobileBossSizePx", 36, 160),
+      mobileSuneungSizePx: configNumber(enemyDisplay.mobileSuneungSizePx, "enemyDisplay.mobileSuneungSizePx", 36, 160),
+      defeatedOpacity: configNumber(enemyDisplay.defeatedOpacity, "enemyDisplay.defeatedOpacity", 0, 1),
     },
     enemyReaction: {
-      engagedTravelPx: clampNumber(enemyReaction.engagedTravelPx, 4, 0, 40),
-      hurtTravelPx: clampNumber(enemyReaction.hurtTravelPx, 1.5, 0, 30),
-      rimOpacity: clampNumber(enemyReaction.rimOpacity, 0.72, 0, 1),
+      engagedTravelPx: configNumber(enemyReaction.engagedTravelPx, "enemyReaction.engagedTravelPx", 0, 40),
+      hurtTravelPx: configNumber(enemyReaction.hurtTravelPx, "enemyReaction.hurtTravelPx", 0, 30),
+      rimOpacity: configNumber(enemyReaction.rimOpacity, "enemyReaction.rimOpacity", 0, 1),
     },
     enemyHpBar: {
-      widthPx: clampNumber(enemyHpBar.widthPx, 72, 24, 160),
-      heightPx: clampNumber(enemyHpBar.heightPx, 10, 4, 24),
-      topPx: clampNumber(enemyHpBar.topPx, -14, -40, 20),
-      mobileWidthPx: clampNumber(enemyHpBar.mobileWidthPx, 96, 24, 180),
-      mobileHeightPx: clampNumber(enemyHpBar.mobileHeightPx, 12, 4, 28),
-      mobileTopPx: clampNumber(enemyHpBar.mobileTopPx, -16, -44, 20),
+      widthPx: configNumber(enemyHpBar.widthPx, "enemyHpBar.widthPx", 24, 160),
+      heightPx: configNumber(enemyHpBar.heightPx, "enemyHpBar.heightPx", 4, 24),
+      topPx: configNumber(enemyHpBar.topPx, "enemyHpBar.topPx", -40, 20),
+      mobileWidthPx: configNumber(enemyHpBar.mobileWidthPx, "enemyHpBar.mobileWidthPx", 24, 180),
+      mobileHeightPx: configNumber(enemyHpBar.mobileHeightPx, "enemyHpBar.mobileHeightPx", 4, 28),
+      mobileTopPx: configNumber(enemyHpBar.mobileTopPx, "enemyHpBar.mobileTopPx", -44, 20),
     },
     enemySlots: {
-      school: Array.isArray(enemySlots.school) ? enemySlots.school : [[60, 80, 1], [73, 76, 1.08], [85, 80, 1]],
-      suneungSingle: Array.isArray(enemySlots.suneungSingle) ? enemySlots.suneungSingle : [[76, 76, 1]],
-      suneungPair: Array.isArray(enemySlots.suneungPair) ? enemySlots.suneungPair : [[68, 74, 0.95], [82, 80, 0.9]],
+      school: configArray(enemySlots.school, "enemySlots.school"),
+      suneungSingle: configArray(enemySlots.suneungSingle, "enemySlots.suneungSingle"),
+      suneungPair: configArray(enemySlots.suneungPair, "enemySlots.suneungPair"),
     },
   };
 }
@@ -393,8 +413,10 @@ function drawProp(target, type, x, y, baseColor) {
   }
 }
 
-function companionById(id, fallbackIndex = 0) {
-  return companionSprites.find((sprite) => sprite.id === id) ?? companionSprites[fallbackIndex % companionSprites.length];
+function companionById(id) {
+  const sprite = companionSprites.find((candidate) => candidate.id === id);
+  if (!sprite) throw new Error(`동료 스프라이트 정의를 찾을 수 없습니다: ${id}`);
+  return sprite;
 }
 
 function careerVisualProfile(career, helper) {
@@ -962,18 +984,20 @@ function drawCompanion(target, ox, oy, spec, variant = 0) {
 }
 
 function drawCareerCompanion(target, ox, oy, career, index) {
-  const helper = companionById(career.helperSprite, index);
+  const helper = companionById(career.helperSprite);
   drawPremiumCompanion(target, ox, oy, helper, index, career);
 }
 
-function drawCareerPortrait(target, ox, oy, career, index, gender = "male") {
-  const base = hexToRgb(career.auraColor ?? "#94a3b8");
+function drawCareerPortrait(target, ox, oy, career, index, gender) {
+  if (gender !== "male" && gender !== "female") throw new Error(`직업 초상 gender 값이 올바르지 않습니다: ${career.id} / ${gender}`);
+  if (typeof career.auraColor !== "string" || career.auraColor.length === 0) throw new Error(`careers.json auraColor 값이 없습니다: ${career.id}`);
+  const base = hexToRgb(career.auraColor);
   const ink = hexToRgb("#17212e");
   const white = hexToRgb("#f8fafc");
   const bg = mix(base, hexToRgb("#0f172a"), 0.34);
   const frame = mix(base, white, 0.24);
-  const helper = companionSprites.find((sprite) => sprite.id === career.helperSprite) ?? companionSprites[index % companionSprites.length];
-  const helperBase = hexToRgb(career.auraColor ?? helper.color);
+  const helper = companionById(career.helperSprite);
+  const helperBase = hexToRgb(career.auraColor);
   const isFemale = gender === "female";
   const skin = hexToRgb(index % 3 === 0 ? "#ffd39b" : index % 3 === 1 ? "#f0c391" : "#e7b07c");
   const maleHair = ["#111827", "#263043", "#3b2f2f", "#5b371c", "#1f2937"];
@@ -1650,13 +1674,15 @@ function drawAcademicMonster(target, ox, oy, visual, variant, boss = false) {
 }
 
 function loadPreparedStudentAnimations(frameCount) {
-  if (!existsSync(characterAnimationManifestPath)) return new Map();
-  if (!existsSync(characterAxisReportPath)) return new Map();
+  if (!existsSync(characterAnimationManifestPath)) throw new Error(`학생 애니메이션 manifest가 없습니다: ${characterAnimationManifestPath}`);
+  if (!existsSync(characterAxisReportPath)) throw new Error(`학생 축 QA report가 없습니다: ${characterAxisReportPath}`);
   const manifest = JSON.parse(readFileSync(characterAnimationManifestPath, "utf8"));
   const report = JSON.parse(readFileSync(characterAxisReportPath, "utf8"));
-  const approvedIds = new Set((report.characters ?? []).filter((character) => character.status === "ok").map((character) => character.id));
+  if (!Array.isArray(report.characters)) throw new Error("학생 축 QA report.characters 데이터가 배열이 아닙니다.");
+  if (!Array.isArray(manifest.characters)) throw new Error("학생 애니메이션 manifest.characters 데이터가 배열이 아닙니다.");
+  const approvedIds = new Set(report.characters.filter((character) => character.status === "ok").map((character) => character.id));
   const entries = new Map();
-  for (const character of manifest.characters ?? []) {
+  for (const character of manifest.characters) {
     if (!approvedIds.has(character.id)) continue;
     const frames = [];
     for (let index = 0; index < frameCount; index += 1) {
@@ -1672,20 +1698,20 @@ function loadPreparedStudentAnimations(frameCount) {
 }
 
 function loadPreparedProfessionalAnimations(familyId, frameCount) {
-  if (!existsSync(professionalAxisReportPath)) return new Map();
+  if (!existsSync(professionalAxisReportPath)) throw new Error(`전문 스프라이트 축 QA report가 없습니다: ${professionalAxisReportPath}`);
   const report = JSON.parse(readFileSync(professionalAxisReportPath, "utf8"));
+  if (!Array.isArray(report.items)) throw new Error("전문 스프라이트 축 QA report.items 데이터가 배열이 아닙니다.");
   const entries = new Map();
-  for (const item of report.items ?? []) {
+  for (const item of report.items) {
     if (item.family !== familyId || item.status !== "ok") continue;
+    if (!Array.isArray(item.frames) || item.frames.length < frameCount) throw new Error(`전문 스프라이트 프레임 목록이 부족합니다: ${item.id}:${item.variant ?? "default"}`);
     const frames = [];
-    for (const framePath of (item.frames ?? []).slice(0, frameCount)) {
+    for (const framePath of item.frames.slice(0, frameCount)) {
       const path = resolve(framePath);
-      if (!existsSync(path)) break;
+      if (!existsSync(path)) throw new Error(`전문 스프라이트 프레임 파일이 없습니다: ${path}`);
       frames.push(readPngRgba(path));
     }
-    if (frames.length === frameCount) {
-      entries.set(`${item.id}:${item.variant ?? "default"}`, { item, frames });
-    }
+    entries.set(`${item.id}:${item.variant ?? "default"}`, { item, frames });
   }
   return entries;
 }
@@ -1695,14 +1721,6 @@ function atlasFrameSlot(globalFrame, columns) {
     index: globalFrame % columns,
     row: Math.floor(globalFrame / columns),
   };
-}
-
-function buildFallbackStudentFrames(visual, gender, cell, frameCount) {
-  const small = canvas(64, 96);
-  drawMainStudent(small, 0, 0, visual, gender);
-  const base = canvas(cell, cell);
-  drawSourceScaled(base, small, 32, 8, 96, 144);
-  return Array.from({ length: frameCount }, () => base);
 }
 
 function buildMainStudentAtlas(gradeVisuals) {
@@ -1722,7 +1740,8 @@ function buildMainStudentAtlas(gradeVisuals) {
       const frame = visual.studentFrame * framesPerCharacter;
       const row = genderIndex;
       const preparedEntry = prepared.get(`${gender}:${visual.studentFrame}`);
-      const frames = preparedEntry?.frames ?? buildFallbackStudentFrames(visual, gender, cell, framesPerCharacter);
+      if (!preparedEntry) throw new Error(`준비된 학생 애니메이션 프레임이 없습니다: ${gender}:${visual.studentFrame} / ${visual.studentTitle}`);
+      const frames = preparedEntry.frames;
       frames.forEach((sprite, frameOffset) => {
         blitCanvas(target, sprite, (frame + frameOffset) * cell, row * cell);
       });
@@ -1738,7 +1757,7 @@ function buildMainStudentAtlas(gradeVisuals) {
         age: visual.age,
         title: `${visual.studentTitle} ${gender === "female" ? "여" : "남"}`,
         band: studentAgeProfile(visual).band,
-        source: preparedEntry ? "prepared" : "fallback",
+        source: "prepared",
       });
     });
   });
@@ -1750,9 +1769,11 @@ function buildMainStudentAtlas(gradeVisuals) {
 
 function buildMainMonsterAtlas(gradeVisuals) {
   const cell = 96;
-  const target = canvas(cell * 192, cell);
+  const columns = 192;
+  const rows = 1;
+  const target = canvas(cell * columns, cell);
   const items = [];
-  const sourceSheet = loadMainMonsterSourceSheet(cell, 192);
+  const sourceSheet = loadMainMonsterSourceSheet(cell, columns);
   const drawMonsterFrame = (ox, frame) => {
     blitCrop(target, sourceSheet, frame * cell, 0, cell, cell, ox, 0);
   };
@@ -1790,7 +1811,7 @@ function buildMainMonsterAtlas(gradeVisuals) {
   writePng(path, target);
   writeChromaMattePreview(target, resolve(matteDebugDir, "asset-003-monsters-chroma.png"));
   items.sort((a, b) => a.frame - b.frame);
-  return { path, width: target.width, height: target.height, cell, items };
+  return { path, width: target.width, height: target.height, cell, columns, rows, items };
 }
 
 function clearChromaKeyGreenMatte(source) {
@@ -2272,15 +2293,17 @@ function buildEnemyAtlas() {
 
 function drawCareerPortraitFromPrepared(target, ox, oy, career, gender, prepared, frameOffset = 1) {
   const entry = prepared.get(`career-unit-${sanitizeClass(career.id)}:${gender}`);
-  if (!entry) return false;
-  const source = entry.frames[frameOffset] ?? entry.frames[0];
+  if (!entry) throw new Error(`준비된 직업 초상 프레임이 없습니다: ${career.id}:${gender}`);
+  const source = entry.frames[frameOffset];
+  if (!source) throw new Error(`직업 초상 frameOffset이 없습니다: ${career.id}:${gender}:${frameOffset}`);
   const bounds = spriteBounds(source);
   const focusX = Math.max(0, bounds.x - 8);
   const focusY = Math.max(0, bounds.y - 4);
   const focusW = Math.min(source.width - focusX, bounds.w + 16);
   const focusH = Math.min(source.height - focusY, Math.max(84, Math.round(bounds.h * 0.78)));
   const focus = copyCrop(source, { x: focusX, y: focusY, w: focusW, h: focusH });
-  const base = hexToRgb(career.auraColor ?? "#94a3b8");
+  if (typeof career.auraColor !== "string" || career.auraColor.length === 0) throw new Error(`careers.json auraColor 값이 없습니다: ${career.id}`);
+  const base = hexToRgb(career.auraColor);
   fillEllipse(target, ox + 32, oy + 38, 29, 23, alpha(base, 72));
   fillEllipse(target, ox + 32, oy + 40, 25, 19, alpha(hexToRgb("#0f172a"), 34));
   drawSpriteFitted(target, focus, ox, oy, 64, 64, {
@@ -2295,16 +2318,14 @@ function drawCareerPortraitFromPrepared(target, ox, oy, career, gender, prepared
 function buildCareerAtlas(careers) {
   const cell = 64;
   const genders = ["male", "female"];
-  const ordered = careers.slice().sort((a, b) => (a.choiceRank ?? 999) - (b.choiceRank ?? 999));
+  const ordered = careers.slice().sort((a, b) => configNumber(a.choiceRank, `careers.json choiceRank 값이 올바르지 않습니다: ${a.id}`) - configNumber(b.choiceRank, `careers.json choiceRank 값이 올바르지 않습니다: ${b.id}`));
   const target = canvas(cell * ordered.length * genders.length, cell);
   const items = [];
   const prepared = loadPreparedProfessionalAnimations("companions", 4);
   genders.forEach((gender, genderIndex) => {
     ordered.forEach((career, index) => {
       const atlasIndex = genderIndex * ordered.length + index;
-      if (!drawCareerPortraitFromPrepared(target, atlasIndex * cell, 0, career, gender, prepared, index % 4)) {
-        drawCareerPortrait(target, atlasIndex * cell, 0, career, index, gender);
-      }
+      drawCareerPortraitFromPrepared(target, atlasIndex * cell, 0, career, gender, prepared, index % 4);
       items.push({
         id: gender === "male" ? `career-${career.id}` : `career-${career.id}-female`,
         careerId: career.id,
@@ -2943,7 +2964,7 @@ const visualData = {
   generatedBy: "tools/build-visual-assets.mjs",
   atlases: [
     { id: "mainStudents", token: "__STUDENT_ASSET_002__", file: "assets/asset-002.png", cell: mainStudentAtlas.cell, columns: mainStudentAtlas.columns, rows: mainStudentAtlas.rows, framesPerCharacter: mainStudentAtlas.framesPerCharacter, width: mainStudentAtlas.width, height: mainStudentAtlas.height, items: mainStudentAtlas.items },
-    { id: "mainMonsters", token: "__STUDENT_ASSET_003__", file: "assets/asset-003.png", cell: mainMonsterAtlas.cell, width: mainMonsterAtlas.width, height: mainMonsterAtlas.height, items: mainMonsterAtlas.items },
+    { id: "mainMonsters", token: "__STUDENT_ASSET_003__", file: "assets/asset-003.png", cell: mainMonsterAtlas.cell, columns: mainMonsterAtlas.columns, rows: mainMonsterAtlas.rows, width: mainMonsterAtlas.width, height: mainMonsterAtlas.height, items: mainMonsterAtlas.items },
     { id: "companions", token: "__STUDENT_ASSET_007__", file: "assets/visual-companions.png", cell: companionAtlas.cell, columns: companionAtlas.columns, rows: companionAtlas.rows, framesPerItem: companionAtlas.framesPerItem, genders: companionAtlas.genders, width: companionAtlas.width, height: companionAtlas.height, items: companionAtlas.items },
     { id: "enemies", token: "__STUDENT_ASSET_008__", file: "assets/visual-enemies.png", cell: enemyAtlas.cell, columns: enemyAtlas.columns, rows: enemyAtlas.rows, framesPerItem: enemyAtlas.framesPerItem, width: enemyAtlas.width, height: enemyAtlas.height, items: enemyAtlas.items },
     { id: "careers", token: "__STUDENT_ASSET_009__", file: "assets/visual-careers.png", cell: careerAtlas.cell, width: careerAtlas.width, height: careerAtlas.height, items: careerAtlas.items },

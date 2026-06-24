@@ -1,0 +1,21 @@
+{
+  "partySize": 5,
+  "maxStage": 10000,
+  "chapterSize": 1000,
+  "segmentSize": 100,
+  "baseRequiredPower": 42,
+  "stagePowerGrowth": 1.004,
+  "segmentPowerGrowth": 1.08,
+  "chapterPowerGrowth": 2.1,
+  "midBossPowerMultiplier": 1.35,
+  "chapterBossPowerMultiplier": 1.9,
+  "midBossFirstClearDiamonds": 25,
+  "chapterBossFirstClearDiamonds": 160,
+  "bossDiamondGrowth": 1.08,
+  "weakMultiplier": 1.35,
+  "resistMultiplier": 0.65,
+  "focusMultiplier": 1.12,
+  "clearSeconds": 8,
+  "bossTimeLimitSeconds": 30,
+  "chapterRunExpPerLevel": 20
+}

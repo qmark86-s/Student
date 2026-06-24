@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "balance": {
+    "autoTickMs": 1000,
+    "maxBattleDurationMs": 60000,
+    "monthDifficultyGrowth": 0.09,
+    "gradeTierPointGrowth": 2.4,
+    "retakePointGrowthExponent": 0.08,
+    "retakePointGrowthCap": 0.24,
+    "aptitudeExamRate": 0.12,
+    "companionStatShare": 0.1,
+    "normalEnemyHpMultiplier": 1.6,
+    "bossEnemyHpMultiplier": 4.6,
+    "suneungEnemyHpMultiplier": 7.5,
+    "multiSubjectHpScale": 0.18,
+    "studyRewardScale": 0.12,
+    "minEnemyHp": 8,
+    "damageRandomBase": 0.82,
+    "damageRandomRange": 0.08
+  },
+  "subjectTrackWeights": {
+    "korean": { "humanities": 1.25, "science": 0.75, "none": 1 },
+    "english": { "humanities": 1, "science": 1, "none": 1 },
+    "math": { "humanities": 0.8, "science": 1.3, "none": 1 },
+    "social": { "humanities": 1.35, "science": 0.65, "none": 1 },
+    "science": { "humanities": 0.65, "science": 1.35, "none": 1 }
+  },
+  "grades": [
+    { "id": "E1", "phase": "elementary", "year": 1, "order": 1, "name": "초등학교 1학년", "age": 8, "subjects": ["korean", "english", "math"], "stageCount": 9, "baseDifficulty": 52, "growthBase": 8, "examIds": ["march_eval", "midterm", "final", "year_boss"] },
+    { "id": "E2", "phase": "elementary", "year": 2, "order": 2, "name": "초등학교 2학년", "age": 9, "subjects": ["korean", "english", "math"], "stageCount": 10, "baseDifficulty": 72, "growthBase": 9, "examIds": ["march_eval", "midterm", "final", "year_boss"] },
+    { "id": "E3", "phase": "elementary", "year": 3, "order": 3, "name": "초등학교 3학년", "age": 10, "subjects": ["korean", "english", "math"], "stageCount": 10, "baseDifficulty": 96, "growthBase": 10, "examIds": ["march_eval", "midterm", "final", "year_boss"] },
+    { "id": "E4", "phase": "elementary", "year": 4, "order": 4, "name": "초등학교 4학년", "age": 11, "subjects": ["korean", "english", "math"], "stageCount": 11, "baseDifficulty": 124, "growthBase": 11, "examIds": ["march_eval", "midterm", "final", "year_boss"] },
+    { "id": "E5", "phase": "elementary", "year": 5, "order": 5, "name": "초등학교 5학년", "age": 12, "subjects": ["korean", "english", "math"], "stageCount": 12, "baseDifficulty": 156, "growthBase": 12, "examIds": ["march_eval", "midterm", "final", "year_boss"] },
+    { "id": "E6", "phase": "elementary", "year": 6, "order": 6, "name": "초등학교 6학년", "age": 13, "subjects": ["korean", "english", "math"], "stageCount": 12, "baseDifficulty": 192, "growthBase": 13, "examIds": ["march_eval", "midterm", "final", "year_boss"] },
+    { "id": "M1", "phase": "middle", "year": 1, "order": 7, "name": "중학교 1학년", "age": 14, "subjects": ["korean", "english", "math", "social", "science"], "stageCount": 13, "baseDifficulty": 244, "growthBase": 14, "examIds": ["march_eval", "midterm", "final", "year_boss"] },
+    { "id": "M2", "phase": "middle", "year": 2, "order": 8, "name": "중학교 2학년", "age": 15, "subjects": ["korean", "english", "math", "social", "science"], "stageCount": 13, "baseDifficulty": 302, "growthBase": 15, "examIds": ["march_eval", "midterm", "final", "year_boss"] },
+    { "id": "M3", "phase": "middle", "year": 3, "order": 9, "name": "중학교 3학년", "age": 16, "subjects": ["korean", "english", "math", "social", "science"], "stageCount": 14, "baseDifficulty": 370, "growthBase": 16, "examIds": ["march_eval", "midterm", "final", "year_boss"] },
+    { "id": "H1", "phase": "high", "year": 1, "order": 10, "name": "고등학교 1학년", "age": 17, "subjects": ["korean", "english", "math", "social", "science"], "stageCount": 14, "baseDifficulty": 456, "growthBase": 18, "examIds": ["march_eval", "midterm", "final", "year_boss"] },
+    { "id": "H2", "phase": "high", "year": 2, "order": 11, "name": "고등학교 2학년", "age": 18, "subjects": ["korean", "english", "math", "social", "science"], "stageCount": 15, "baseDifficulty": 560, "growthBase": 20, "examIds": ["march_eval", "midterm", "final", "year_boss"] },
+    { "id": "H3", "phase": "high", "year": 3, "order": 12, "name": "고등학교 3학년", "age": 19, "subjects": ["korean", "english", "math", "social", "science"], "stageCount": 16, "baseDifficulty": 690, "growthBase": 22, "examIds": ["march_mock", "june_mock", "september_mock", "suneung"] },
+    { "id": "REPEATER", "phase": "repeater", "year": 0, "order": 13, "name": "N수 과정", "age": 20, "subjects": ["korean", "english", "math", "social", "science"], "stageCount": 16, "baseDifficulty": 740, "growthBase": 18, "examIds": ["march_mock", "june_mock", "september_mock", "suneung"] }
+  ],
+  "help": {
+    "autoTickMs": "학생 탭 전투를 자동으로 진행하는 간격입니다.",
+    "maxBattleDurationMs": "한 전투가 가질 수 있는 최대 진행 시간입니다.",
+    "monthDifficultyGrowth": "월이 뒤로 갈수록 적 HP가 증가하는 비율입니다.",
+    "gradeTierPointGrowth": "학년이 올라갈수록 공부량 보상이 증가하는 지수 기반 계수입니다.",
+    "retakePointGrowthExponent": "N수 회차 증가에 따른 보상 증가 보정값입니다.",
+    "retakePointGrowthCap": "N수 보상 보정의 최대치입니다.",
+    "aptitudeExamRate": "적성 수치가 전투 공격력에 더해지는 비율입니다.",
+    "companionStatShare": "공부 상태 동료가 학생 전투력에 기여하는 비율입니다.",
+    "normalEnemyHpMultiplier": "일반 문제 적 HP 배율입니다.",
+    "bossEnemyHpMultiplier": "학년 보스 적 HP 배율입니다.",
+    "suneungEnemyHpMultiplier": "수능 전투 적 HP 배율입니다.",
+    "multiSubjectHpScale": "복수 과목 적의 HP 가산 배율입니다.",
+    "studyRewardScale": "처치 보상 공부량 산정 배율입니다.",
+    "damageRandomBase": "자동 전투 초당 피해량의 최소 보정값입니다.",
+    "damageRandomRange": "자동 전투 초당 피해량의 난수 보정 폭입니다."
+  }
+}

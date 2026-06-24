@@ -1,6 +1,6 @@
 {
   "reference": {
-    "path": "C:\\Users\\상원\\Downloads\\Student\\reference\\Student-Idle-RPG-mobile-3.html",
+    "path": "reference/Student-Idle-RPG-mobile-3.html",
     "size_bytes": 6805538,
     "sha256": "b1c4ec10c24c1f106b0dd75676646ba0c24455c350ee06afe13090918df0321c",
     "hash_matches_expected": true
@@ -50,7 +50,7 @@
       "자동 투자 비율": 1,
       "직접 설정": 1,
       "합계": 1,
-      "최대 비용": 0
+      "최대": 2
     },
     "education": {
       "조기교육": 1,
@@ -97,10 +97,5 @@
       "세이브 JSON": 1
     }
   },
-  "missing": [
-    {
-      "group": "growth",
-      "label": "최대 비용"
-    }
-  ]
+  "missing": []
 }

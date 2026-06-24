@@ -629,6 +629,8 @@
       "token": "__STUDENT_ASSET_003__",
       "file": "assets/asset-003.png",
       "cell": 96,
+      "columns": 192,
+      "rows": 1,
       "width": 18432,
       "height": 96,
       "items": [

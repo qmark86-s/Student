@@ -1,0 +1,122 @@
+[
+  {
+    "id": "shelter-alley",
+    "chapter": 1,
+    "name": "임시 쉼터와 낡은 골목",
+    "subtitle": "생활 기반을 붙잡는 첫 구역",
+    "backdropClass": "shelter",
+    "focusSubjects": ["korean", "social"],
+    "weakSubjects": ["social"],
+    "resistSubjects": [],
+    "difficultyMultiplier": 0.82,
+    "description": "기본 생활비와 낡은 제도를 정리하며 첫 Stage를 민다."
+  },
+  {
+    "id": "studio-parttime",
+    "chapter": 2,
+    "name": "원룸촌과 알바 거리",
+    "subtitle": "시간과 비용을 동시에 관리하는 구역",
+    "backdropClass": "studio",
+    "focusSubjects": ["math", "social"],
+    "weakSubjects": ["math"],
+    "resistSubjects": [],
+    "difficultyMultiplier": 0.94,
+    "description": "스케줄, 월세, 알바 동선이 얽힌 생활형 Stage다."
+  },
+  {
+    "id": "local-commerce",
+    "chapter": 3,
+    "name": "서민 주거지와 동네 상권",
+    "subtitle": "동네 경제와 관계망을 넓히는 구역",
+    "backdropClass": "neighborhood",
+    "focusSubjects": ["korean", "math", "social"],
+    "weakSubjects": ["korean", "social"],
+    "resistSubjects": ["science"],
+    "difficultyMultiplier": 1.02,
+    "description": "상권 정보와 계약 조건을 읽어내는 힘이 중요하다."
+  },
+  {
+    "id": "newtown-company",
+    "chapter": 4,
+    "name": "신도시와 회사 지구",
+    "subtitle": "회사 루틴과 실무 문서를 돌파하는 구역",
+    "backdropClass": "company",
+    "focusSubjects": ["english", "math", "social"],
+    "weakSubjects": ["english"],
+    "resistSubjects": [],
+    "difficultyMultiplier": 1.12,
+    "description": "회의, 보고서, 일정 압박이 본격적으로 올라온다."
+  },
+  {
+    "id": "professional-office",
+    "chapter": 5,
+    "name": "전문직 타운과 고층 오피스",
+    "subtitle": "전문 지식과 판단력을 요구하는 구역",
+    "backdropClass": "office",
+    "focusSubjects": ["korean", "english", "math", "science"],
+    "weakSubjects": ["korean", "science"],
+    "resistSubjects": [],
+    "difficultyMultiplier": 1.24,
+    "description": "전문 자료와 수치 판단을 빠르게 엮어야 한다."
+  },
+  {
+    "id": "network-asset",
+    "chapter": 6,
+    "name": "네트워크 라운지와 자산 구역",
+    "subtitle": "정보, 신뢰, 자산 흐름을 다루는 구역",
+    "backdropClass": "asset",
+    "focusSubjects": ["english", "math", "social"],
+    "weakSubjects": ["math", "social"],
+    "resistSubjects": ["science"],
+    "difficultyMultiplier": 1.38,
+    "description": "숫자와 네트워크의 격차를 줄이며 다음 문을 연다."
+  },
+  {
+    "id": "national-project",
+    "chapter": 7,
+    "name": "국가 프로젝트 구역",
+    "subtitle": "정책과 대형 프로젝트를 조율하는 구역",
+    "backdropClass": "national",
+    "focusSubjects": ["korean", "math", "social", "science"],
+    "weakSubjects": ["social", "science"],
+    "resistSubjects": [],
+    "difficultyMultiplier": 1.55,
+    "description": "정책 장벽과 기술 요구 조건을 동시에 풀어야 한다."
+  },
+  {
+    "id": "global-business",
+    "chapter": 8,
+    "name": "글로벌 비즈니스 허브",
+    "subtitle": "언어와 전략으로 세계 시장을 여는 구역",
+    "backdropClass": "global",
+    "focusSubjects": ["english", "math", "social"],
+    "weakSubjects": ["english"],
+    "resistSubjects": ["korean"],
+    "difficultyMultiplier": 1.76,
+    "description": "영어 발표와 시장 해석이 Stage 속도를 결정한다."
+  },
+  {
+    "id": "future-research",
+    "chapter": 9,
+    "name": "미래 연구도시",
+    "subtitle": "연구, 데이터, 자동화가 맞물리는 구역",
+    "backdropClass": "future",
+    "focusSubjects": ["english", "math", "science"],
+    "weakSubjects": ["math", "science"],
+    "resistSubjects": ["social"],
+    "difficultyMultiplier": 2.02,
+    "description": "수학과 과학 기반 파티가 힘을 크게 받는다."
+  },
+  {
+    "id": "world-influence",
+    "chapter": 10,
+    "name": "세계 영향력 정상",
+    "subtitle": "개인의 경력을 세계 영향력으로 바꾸는 최종 구역",
+    "backdropClass": "summit",
+    "focusSubjects": ["korean", "english", "math", "social", "science"],
+    "weakSubjects": ["english", "math", "science"],
+    "resistSubjects": [],
+    "difficultyMultiplier": 2.36,
+    "description": "모든 과목 공격 속성과 직업 조합을 종합 검증한다."
+  }
+]

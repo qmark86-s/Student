@@ -26,5 +26,5 @@
 npm run asset:factory:prepare
 npm run asset:factory:qa
 npm run verify:mobile
-python C:\Users\상원\.codex\skills\.system\skill-creator\scripts\quick_validate.py codex\skills\asset-sprite-factory
+python "$env:CODEX_HOME\skills\.system\skill-creator\scripts\quick_validate.py" codex\skills\asset-sprite-factory
 ```

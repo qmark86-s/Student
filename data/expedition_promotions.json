@@ -1,0 +1,44 @@
+[
+  {
+    "id": "staff",
+    "name": "사원",
+    "order": 1,
+    "combatMultiplier": 1
+  },
+  {
+    "id": "assistant_manager",
+    "name": "대리",
+    "order": 2,
+    "combatMultiplier": 1.25
+  },
+  {
+    "id": "manager",
+    "name": "과장",
+    "order": 3,
+    "combatMultiplier": 1.6
+  },
+  {
+    "id": "deputy_general_manager",
+    "name": "차장",
+    "order": 4,
+    "combatMultiplier": 2.05
+  },
+  {
+    "id": "general_manager",
+    "name": "부장",
+    "order": 5,
+    "combatMultiplier": 2.7
+  },
+  {
+    "id": "director",
+    "name": "실장",
+    "order": 6,
+    "combatMultiplier": 3.6
+  },
+  {
+    "id": "president",
+    "name": "사장",
+    "order": 7,
+    "combatMultiplier": 5
+  }
+]
