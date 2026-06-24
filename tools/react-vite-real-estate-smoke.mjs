@@ -10,6 +10,8 @@ const fixedNow = Date.parse("2026-06-22T00:00:00+09:00");
 const careers = JSON.parse(readFileSync(resolve("data/careers.json"), "utf8"));
 const expeditionBalance = JSON.parse(readFileSync(resolve("data/expedition_balance.json"), "utf8"));
 const realEstates = JSON.parse(readFileSync(resolve("data/real_estates.json"), "utf8"));
+const realEstateDistrictAssets = JSON.parse(readFileSync(resolve("data/real_estate_district_assets.json"), "utf8"));
+const realEstateDistrictAssetById = new Map(realEstateDistrictAssets.districts.map((asset) => [asset.id, asset]));
 const subjectIds = ["korean", "english", "math", "social", "science"];
 
 const mimeTypes = {
@@ -293,6 +295,12 @@ async function main() {
       const image = document.querySelector(".real-estate-detail-background");
       return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0;
     });
+    const initialDistrictAsset = realEstateDistrictAssetById.get("small_studio");
+    assert(initialDistrictAsset, "small_studio 지역 리소스 데이터가 없습니다.");
+    const initialDistrictSrc = await page.locator(".real-estate-detail-background").evaluate((image) => image.currentSrc || image.src);
+    assert(initialDistrictSrc.includes("visual-real-estate-district-small-studio"), `small_studio 상세 배경이 올바르지 않습니다: ${initialDistrictSrc}`);
+    const initialBuildingTheme = await page.locator(".real-estate-development-layer").getAttribute("data-building-theme");
+    assert(initialBuildingTheme === initialDistrictAsset.buildingTheme, `small_studio 건물 테마가 올바르지 않습니다: ${initialBuildingTheme}`);
     assert((await page.locator(".real-estate-development-pad").count()) === 10, "지역 상세 빈 부지 패드 10개가 렌더링되지 않았습니다.");
     assert((await page.locator(".real-estate-development-building").count()) === 0, "미보유 지역 상세에 건물이 표시되었습니다.");
     const detailMap = page.locator(".real-estate-detail-map");
@@ -312,6 +320,10 @@ async function main() {
     await smallStudio.locator('[data-action="buy-one"]').click();
     await waitForState(page, "(state) => state.realEstate.properties.small_studio && state.realEstate.properties.small_studio.count === 1");
     await page.waitForSelector('.real-estate-development-building[data-slot-id^="small_studio-"]', { timeout: 6000 });
+    const buildingThemeAfterOne = await page.locator('.real-estate-development-building[data-slot-id^="small_studio-"]').first().getAttribute("data-building-theme");
+    const buildingVariantAfterOne = await page.locator('.real-estate-development-building[data-slot-id^="small_studio-"]').first().getAttribute("data-building-variant");
+    assert(buildingThemeAfterOne === initialDistrictAsset.buildingTheme, `구매 후 건물 테마가 올바르지 않습니다: ${buildingThemeAfterOne}`);
+    assert(typeof buildingVariantAfterOne === "string" && buildingVariantAfterOne.length > 0, "구매 후 건물 variant가 없습니다.");
     const developmentAfterOne = await smallStudio.getAttribute("data-development-level");
     assert(developmentAfterOne === "1", `첫 구매 후 개발도가 1이 아닙니다: ${developmentAfterOne}`);
     await page.getByRole("button", { name: /전체 도시 보기/ }).click();
@@ -337,6 +349,27 @@ async function main() {
     }`);
     await page.reload({ waitUntil: "networkidle" });
     await page.getByRole("button", { name: "부동산" }).click();
+    await page.waitForSelector('[data-real-estate-view="overview"]', { timeout: 6000 });
+    const districtBackgroundCheckIds = ["small_studio", "shop_unit", "apartment_complex", "office_tower", "mixed_development"];
+    const checkedBackgrounds = new Set();
+    for (const districtId of districtBackgroundCheckIds) {
+      const expectedAsset = realEstateDistrictAssetById.get(districtId);
+      assert(expectedAsset, `${districtId} 지역 리소스 데이터가 없습니다.`);
+      await page.locator(`.real-estate-district-button[data-district-id="${districtId}"]`).click();
+      await page.waitForSelector(`[data-real-estate-view="district"][data-selected-property-id="${districtId}"]`, { timeout: 6000 });
+      await page.waitForFunction(() => {
+        const image = document.querySelector(".real-estate-detail-background");
+        return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0;
+      });
+      const imageSrc = await page.locator(".real-estate-detail-background").evaluate((image) => image.currentSrc || image.src);
+      assert(imageSrc.includes(expectedAsset.backgroundAsset.replace(".png", "")), `${districtId} 상세 배경 src가 데이터와 다릅니다: ${imageSrc}`);
+      checkedBackgrounds.add(imageSrc);
+      const theme = await page.locator(".real-estate-development-layer").getAttribute("data-building-theme");
+      assert(theme === expectedAsset.buildingTheme, `${districtId} 건물 테마가 데이터와 다릅니다: ${theme}`);
+      await page.getByRole("button", { name: /전체 도시 보기/ }).click();
+      await page.waitForSelector('[data-real-estate-view="overview"]', { timeout: 6000 });
+    }
+    assert(checkedBackgrounds.size === districtBackgroundCheckIds.length, `지역별 상세 배경이 고유하지 않습니다: ${checkedBackgrounds.size}`);
     await page.locator('.real-estate-district-button[data-district-id="small_studio"]').click();
     await page.waitForSelector('[data-real-estate-view="district"][data-selected-property-id="small_studio"]', { timeout: 6000 });
     await smallStudio.locator('[data-action="buy-ten"]').click();

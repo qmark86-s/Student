@@ -31,7 +31,7 @@
 
 - 생성 이미지 자산
   - `src/snapshot/assets/visual-real-estate-city-map.png`: 도시 전체 보기 배경.
-  - `src/snapshot/assets/visual-real-estate-district-detail.png`: 지역 상세 대형 배경.
+  - `src/snapshot/assets/visual-real-estate-district-detail.png`: 최초 지역 상세 공용 대형 배경. 2026-06-25 `real-estate-district-assets` 차수에서 지역별 상세 배경 10장으로 교체되었다.
 - `src/react/App.jsx`
   - 부동산 scene을 `overview / district` 2상태로 분리했다.
   - `RealEstateOverviewScene`은 도시 전체 지도, 10개 district 버튼, 개발 마커, 잠김 안내를 렌더링한다.
@@ -58,6 +58,6 @@
 ## 주의사항
 
 - 선택 지역과 pan 위치는 UI local state이며 저장 schema를 올리지 않는다.
-- 지역별 개별 상세 배경 10장과 성장 단계별 bitmap 묶음은 이번 차수 범위에서 제외했다.
+- 지역별 개별 상세 배경 10장은 후속 `implementations/real-estate-district-assets/implementation.md`에서 정식 리소스로 추가했다. 성장 단계별 bitmap 묶음은 아직 제외되어 있으며, 보유 수량 시각화는 CSS/데이터 기반 오버레이로 처리한다.
 - 건물 수량에 따른 시각화는 저장 데이터를 직접 보관하지 않고 `owned count -> developmentLevel -> visibleBuildingSlots`로 파생한다.
 - 도시 레이아웃 좌표나 슬롯을 바꾸면 `real-estate:verify`, `react:real-estate-smoke`, `react:responsive-audit`를 함께 확인한다.

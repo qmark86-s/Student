@@ -1,0 +1,309 @@
+{
+  "version": 1,
+  "districts": [
+    {
+      "id": "small_studio",
+      "backgroundAsset": "visual-real-estate-district-small-studio.png",
+      "buildingTheme": "starter_lowrise",
+      "speechTone": "humble_start",
+      "detailPads": [
+        { "id": "pad-01", "x": 17, "y": 80, "scale": 1.1, "width": 54, "height": 34, "z": 10, "variant": "lowrise_roof" },
+        { "id": "pad-02", "x": 31, "y": 72, "scale": 1.02, "width": 50, "height": 36, "z": 8, "variant": "rental_block" },
+        { "id": "pad-03", "x": 45, "y": 82, "scale": 1.15, "width": 56, "height": 38, "z": 12, "variant": "lowrise_roof" },
+        { "id": "pad-04", "x": 62, "y": 74, "scale": 1.04, "width": 52, "height": 40, "z": 9, "variant": "rental_block" },
+        { "id": "pad-05", "x": 79, "y": 83, "scale": 1.08, "width": 55, "height": 42, "z": 13, "variant": "lowrise_roof" },
+        { "id": "pad-06", "x": 23, "y": 58, "scale": 0.86, "width": 46, "height": 40, "z": 5, "variant": "rental_block" },
+        { "id": "pad-07", "x": 41, "y": 55, "scale": 0.9, "width": 48, "height": 43, "z": 4, "variant": "lowrise_roof" },
+        { "id": "pad-08", "x": 58, "y": 59, "scale": 0.93, "width": 50, "height": 45, "z": 6, "variant": "rental_block" },
+        { "id": "pad-09", "x": 74, "y": 52, "scale": 0.78, "width": 44, "height": 45, "z": 3, "variant": "lowrise_roof" },
+        { "id": "pad-10", "x": 50, "y": 43, "scale": 0.72, "width": 42, "height": 44, "z": 2, "variant": "rental_block" }
+      ],
+      "futureResidentPaths": [
+        { "id": "alley_front", "depth": "near", "points": [[7, 83], [22, 78], [39, 81], [58, 76], [92, 83]] },
+        { "id": "alley_mid", "depth": "mid", "points": [[12, 61], [31, 58], [50, 60], [72, 54], [91, 58]] },
+        { "id": "alley_back", "depth": "far", "points": [[18, 42], [39, 39], [63, 41], [84, 37]] }
+      ],
+      "help": {
+        "backgroundAsset": "작은 원룸 지역 상세 화면의 전용 배경 이미지입니다.",
+        "buildingTheme": "저층 원룸형 건물 오버레이 색상과 형태를 고르는 테마입니다.",
+        "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
+        "futureResidentPaths": "추후 주민이 골목과 도로를 따라 이동할 경로입니다.",
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+      }
+    },
+    {
+      "id": "two_room",
+      "backgroundAsset": "visual-real-estate-district-two-room.png",
+      "buildingTheme": "residential_lowrise",
+      "speechTone": "family_rental",
+      "detailPads": [
+        { "id": "pad-01", "x": 18, "y": 77, "scale": 1.08, "width": 58, "height": 38, "z": 10, "variant": "rental_block" },
+        { "id": "pad-02", "x": 34, "y": 69, "scale": 1, "width": 54, "height": 40, "z": 8, "variant": "lowrise_roof" },
+        { "id": "pad-03", "x": 51, "y": 78, "scale": 1.12, "width": 58, "height": 42, "z": 12, "variant": "rental_block" },
+        { "id": "pad-04", "x": 69, "y": 70, "scale": 0.98, "width": 54, "height": 43, "z": 9, "variant": "rental_block" },
+        { "id": "pad-05", "x": 83, "y": 80, "scale": 1.04, "width": 56, "height": 44, "z": 13, "variant": "lowrise_roof" },
+        { "id": "pad-06", "x": 25, "y": 56, "scale": 0.84, "width": 48, "height": 42, "z": 5, "variant": "rental_block" },
+        { "id": "pad-07", "x": 44, "y": 51, "scale": 0.86, "width": 48, "height": 44, "z": 4, "variant": "lowrise_roof" },
+        { "id": "pad-08", "x": 61, "y": 56, "scale": 0.9, "width": 50, "height": 46, "z": 6, "variant": "rental_block" },
+        { "id": "pad-09", "x": 78, "y": 49, "scale": 0.76, "width": 46, "height": 46, "z": 3, "variant": "lowrise_roof" },
+        { "id": "pad-10", "x": 53, "y": 40, "scale": 0.7, "width": 44, "height": 45, "z": 2, "variant": "rental_block" }
+      ],
+      "futureResidentPaths": [
+        { "id": "residential_front", "depth": "near", "points": [[6, 79], [26, 74], [47, 78], [68, 72], [92, 77]] },
+        { "id": "residential_mid", "depth": "mid", "points": [[10, 58], [31, 55], [53, 57], [73, 52], [91, 55]] },
+        { "id": "residential_back", "depth": "far", "points": [[17, 41], [38, 37], [61, 40], [84, 36]] }
+      ],
+      "help": {
+        "backgroundAsset": "투룸 지역 상세 화면의 전용 배경 이미지입니다.",
+        "buildingTheme": "주거 저층 건물 오버레이 색상과 형태를 고르는 테마입니다.",
+        "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
+        "futureResidentPaths": "추후 주민이 주거지 보행로를 따라 이동할 경로입니다.",
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+      }
+    },
+    {
+      "id": "villa",
+      "backgroundAsset": "visual-real-estate-district-villa.png",
+      "buildingTheme": "villa_green",
+      "speechTone": "quiet_village",
+      "detailPads": [
+        { "id": "pad-01", "x": 16, "y": 76, "scale": 1.06, "width": 58, "height": 40, "z": 10, "variant": "villa_block" },
+        { "id": "pad-02", "x": 32, "y": 68, "scale": 1, "width": 56, "height": 42, "z": 8, "variant": "garden_villa" },
+        { "id": "pad-03", "x": 48, "y": 79, "scale": 1.12, "width": 60, "height": 44, "z": 12, "variant": "villa_block" },
+        { "id": "pad-04", "x": 66, "y": 70, "scale": 0.96, "width": 56, "height": 44, "z": 9, "variant": "garden_villa" },
+        { "id": "pad-05", "x": 82, "y": 78, "scale": 1.02, "width": 58, "height": 46, "z": 13, "variant": "villa_block" },
+        { "id": "pad-06", "x": 23, "y": 57, "scale": 0.82, "width": 50, "height": 42, "z": 5, "variant": "garden_villa" },
+        { "id": "pad-07", "x": 41, "y": 52, "scale": 0.86, "width": 50, "height": 44, "z": 4, "variant": "villa_block" },
+        { "id": "pad-08", "x": 60, "y": 57, "scale": 0.9, "width": 52, "height": 46, "z": 6, "variant": "garden_villa" },
+        { "id": "pad-09", "x": 76, "y": 49, "scale": 0.76, "width": 48, "height": 46, "z": 3, "variant": "villa_block" },
+        { "id": "pad-10", "x": 51, "y": 40, "scale": 0.7, "width": 46, "height": 45, "z": 2, "variant": "garden_villa" }
+      ],
+      "futureResidentPaths": [
+        { "id": "villa_front", "depth": "near", "points": [[8, 78], [27, 73], [47, 77], [69, 71], [92, 76]] },
+        { "id": "villa_mid", "depth": "mid", "points": [[12, 58], [32, 54], [54, 56], [75, 51], [90, 54]] },
+        { "id": "villa_back", "depth": "far", "points": [[18, 41], [39, 38], [62, 40], [84, 36]] }
+      ],
+      "help": {
+        "backgroundAsset": "빌라 지역 상세 화면의 전용 배경 이미지입니다.",
+        "buildingTheme": "녹지가 섞인 빌라형 건물 오버레이 색상과 형태를 고르는 테마입니다.",
+        "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
+        "futureResidentPaths": "추후 주민이 빌라 단지 내부 도로를 따라 이동할 경로입니다.",
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+      }
+    },
+    {
+      "id": "officetel",
+      "backgroundAsset": "visual-real-estate-district-officetel.png",
+      "buildingTheme": "mixed_midrise",
+      "speechTone": "commuter",
+      "detailPads": [
+        { "id": "pad-01", "x": 18, "y": 78, "scale": 1.06, "width": 50, "height": 58, "z": 10, "variant": "officetel_block" },
+        { "id": "pad-02", "x": 34, "y": 70, "scale": 0.98, "width": 48, "height": 64, "z": 8, "variant": "midrise_glass" },
+        { "id": "pad-03", "x": 50, "y": 80, "scale": 1.12, "width": 52, "height": 70, "z": 12, "variant": "officetel_block" },
+        { "id": "pad-04", "x": 68, "y": 71, "scale": 0.96, "width": 50, "height": 68, "z": 9, "variant": "midrise_glass" },
+        { "id": "pad-05", "x": 83, "y": 80, "scale": 1.04, "width": 52, "height": 72, "z": 13, "variant": "officetel_block" },
+        { "id": "pad-06", "x": 25, "y": 56, "scale": 0.82, "width": 46, "height": 62, "z": 5, "variant": "midrise_glass" },
+        { "id": "pad-07", "x": 43, "y": 52, "scale": 0.86, "width": 48, "height": 68, "z": 4, "variant": "officetel_block" },
+        { "id": "pad-08", "x": 61, "y": 56, "scale": 0.9, "width": 48, "height": 70, "z": 6, "variant": "midrise_glass" },
+        { "id": "pad-09", "x": 77, "y": 49, "scale": 0.74, "width": 44, "height": 66, "z": 3, "variant": "officetel_block" },
+        { "id": "pad-10", "x": 53, "y": 40, "scale": 0.68, "width": 42, "height": 64, "z": 2, "variant": "midrise_glass" }
+      ],
+      "futureResidentPaths": [
+        { "id": "commute_front", "depth": "near", "points": [[7, 79], [27, 74], [49, 78], [70, 72], [93, 77]] },
+        { "id": "commute_mid", "depth": "mid", "points": [[10, 58], [32, 55], [54, 57], [76, 52], [91, 55]] },
+        { "id": "commute_back", "depth": "far", "points": [[18, 42], [41, 38], [64, 40], [86, 36]] }
+      ],
+      "help": {
+        "backgroundAsset": "오피스텔 지역 상세 화면의 전용 배경 이미지입니다.",
+        "buildingTheme": "업무지구와 주거가 섞인 중층 건물 테마입니다.",
+        "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
+        "futureResidentPaths": "추후 출퇴근 주민이 도로를 따라 이동할 경로입니다.",
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+      }
+    },
+    {
+      "id": "shop_unit",
+      "backgroundAsset": "visual-real-estate-district-shop-unit.png",
+      "buildingTheme": "local_commercial",
+      "speechTone": "street_market",
+      "detailPads": [
+        { "id": "pad-01", "x": 17, "y": 78, "scale": 1.08, "width": 62, "height": 34, "z": 10, "variant": "shopfront" },
+        { "id": "pad-02", "x": 33, "y": 70, "scale": 1, "width": 60, "height": 36, "z": 8, "variant": "market_row" },
+        { "id": "pad-03", "x": 50, "y": 80, "scale": 1.12, "width": 64, "height": 38, "z": 12, "variant": "shopfront" },
+        { "id": "pad-04", "x": 68, "y": 72, "scale": 0.98, "width": 60, "height": 40, "z": 9, "variant": "market_row" },
+        { "id": "pad-05", "x": 84, "y": 80, "scale": 1.04, "width": 62, "height": 40, "z": 13, "variant": "shopfront" },
+        { "id": "pad-06", "x": 25, "y": 57, "scale": 0.84, "width": 54, "height": 38, "z": 5, "variant": "market_row" },
+        { "id": "pad-07", "x": 43, "y": 53, "scale": 0.88, "width": 56, "height": 40, "z": 4, "variant": "shopfront" },
+        { "id": "pad-08", "x": 61, "y": 57, "scale": 0.9, "width": 56, "height": 42, "z": 6, "variant": "market_row" },
+        { "id": "pad-09", "x": 78, "y": 50, "scale": 0.76, "width": 50, "height": 40, "z": 3, "variant": "shopfront" },
+        { "id": "pad-10", "x": 53, "y": 41, "scale": 0.7, "width": 48, "height": 38, "z": 2, "variant": "market_row" }
+      ],
+      "futureResidentPaths": [
+        { "id": "market_front", "depth": "near", "points": [[6, 79], [25, 74], [45, 78], [67, 72], [94, 77]] },
+        { "id": "market_mid", "depth": "mid", "points": [[9, 58], [30, 55], [54, 57], [77, 52], [92, 55]] },
+        { "id": "market_back", "depth": "far", "points": [[17, 42], [39, 38], [63, 40], [86, 36]] }
+      ],
+      "help": {
+        "backgroundAsset": "상가 점포 지역 상세 화면의 전용 배경 이미지입니다.",
+        "buildingTheme": "생활 상권 상가와 시장형 건물 테마입니다.",
+        "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
+        "futureResidentPaths": "추후 주민과 손님이 상권 도로를 따라 이동할 경로입니다.",
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+      }
+    },
+    {
+      "id": "small_building",
+      "backgroundAsset": "visual-real-estate-district-small-building.png",
+      "buildingTheme": "compact_commercial",
+      "speechTone": "small_landlord",
+      "detailPads": [
+        { "id": "pad-01", "x": 18, "y": 78, "scale": 1.08, "width": 54, "height": 54, "z": 10, "variant": "compact_building" },
+        { "id": "pad-02", "x": 35, "y": 70, "scale": 1, "width": 52, "height": 58, "z": 8, "variant": "shopfront" },
+        { "id": "pad-03", "x": 51, "y": 80, "scale": 1.12, "width": 56, "height": 62, "z": 12, "variant": "compact_building" },
+        { "id": "pad-04", "x": 69, "y": 71, "scale": 0.98, "width": 54, "height": 60, "z": 9, "variant": "compact_building" },
+        { "id": "pad-05", "x": 84, "y": 80, "scale": 1.04, "width": 56, "height": 64, "z": 13, "variant": "shopfront" },
+        { "id": "pad-06", "x": 25, "y": 56, "scale": 0.84, "width": 48, "height": 58, "z": 5, "variant": "compact_building" },
+        { "id": "pad-07", "x": 43, "y": 52, "scale": 0.86, "width": 48, "height": 62, "z": 4, "variant": "shopfront" },
+        { "id": "pad-08", "x": 61, "y": 56, "scale": 0.9, "width": 50, "height": 64, "z": 6, "variant": "compact_building" },
+        { "id": "pad-09", "x": 78, "y": 49, "scale": 0.76, "width": 46, "height": 62, "z": 3, "variant": "shopfront" },
+        { "id": "pad-10", "x": 53, "y": 40, "scale": 0.7, "width": 44, "height": 60, "z": 2, "variant": "compact_building" }
+      ],
+      "futureResidentPaths": [
+        { "id": "building_front", "depth": "near", "points": [[7, 79], [27, 74], [49, 78], [70, 72], [93, 77]] },
+        { "id": "building_mid", "depth": "mid", "points": [[10, 58], [32, 55], [54, 57], [76, 52], [91, 55]] },
+        { "id": "building_back", "depth": "far", "points": [[18, 42], [41, 38], [64, 40], [86, 36]] }
+      ],
+      "help": {
+        "backgroundAsset": "꼬마빌딩 지역 상세 화면의 전용 배경 이미지입니다.",
+        "buildingTheme": "작은 빌딩과 저층 상업 건물 테마입니다.",
+        "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
+        "futureResidentPaths": "추후 임차인과 방문객이 이동할 도로 경로입니다.",
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+      }
+    },
+    {
+      "id": "apartment_building",
+      "backgroundAsset": "visual-real-estate-district-apartment-building.png",
+      "buildingTheme": "apartment_single",
+      "speechTone": "apartment_life",
+      "detailPads": [
+        { "id": "pad-01", "x": 18, "y": 79, "scale": 1.08, "width": 48, "height": 74, "z": 10, "variant": "apartment_slab" },
+        { "id": "pad-02", "x": 34, "y": 71, "scale": 1, "width": 46, "height": 78, "z": 8, "variant": "tower_podium" },
+        { "id": "pad-03", "x": 51, "y": 81, "scale": 1.12, "width": 50, "height": 84, "z": 12, "variant": "apartment_slab" },
+        { "id": "pad-04", "x": 68, "y": 72, "scale": 0.98, "width": 48, "height": 82, "z": 9, "variant": "tower_podium" },
+        { "id": "pad-05", "x": 84, "y": 80, "scale": 1.04, "width": 50, "height": 86, "z": 13, "variant": "apartment_slab" },
+        { "id": "pad-06", "x": 25, "y": 57, "scale": 0.82, "width": 44, "height": 76, "z": 5, "variant": "tower_podium" },
+        { "id": "pad-07", "x": 43, "y": 53, "scale": 0.86, "width": 44, "height": 82, "z": 4, "variant": "apartment_slab" },
+        { "id": "pad-08", "x": 61, "y": 57, "scale": 0.9, "width": 46, "height": 86, "z": 6, "variant": "tower_podium" },
+        { "id": "pad-09", "x": 78, "y": 50, "scale": 0.76, "width": 42, "height": 80, "z": 3, "variant": "apartment_slab" },
+        { "id": "pad-10", "x": 53, "y": 41, "scale": 0.7, "width": 40, "height": 78, "z": 2, "variant": "tower_podium" }
+      ],
+      "futureResidentPaths": [
+        { "id": "apartment_front", "depth": "near", "points": [[8, 80], [28, 74], [49, 78], [70, 72], [92, 77]] },
+        { "id": "apartment_mid", "depth": "mid", "points": [[11, 59], [33, 55], [55, 57], [76, 52], [90, 55]] },
+        { "id": "apartment_back", "depth": "far", "points": [[18, 42], [41, 38], [64, 40], [86, 36]] }
+      ],
+      "help": {
+        "backgroundAsset": "아파트 동 지역 상세 화면의 전용 배경 이미지입니다.",
+        "buildingTheme": "단일 아파트 동 중심의 고층 주거 테마입니다.",
+        "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
+        "futureResidentPaths": "추후 주민이 단지 진입로와 보행로를 따라 이동할 경로입니다.",
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+      }
+    },
+    {
+      "id": "apartment_complex",
+      "backgroundAsset": "visual-real-estate-district-apartment-complex.png",
+      "buildingTheme": "apartment_complex",
+      "speechTone": "complex_community",
+      "detailPads": [
+        { "id": "pad-01", "x": 17, "y": 79, "scale": 1.08, "width": 50, "height": 78, "z": 10, "variant": "complex_tower" },
+        { "id": "pad-02", "x": 33, "y": 71, "scale": 1, "width": 48, "height": 82, "z": 8, "variant": "apartment_slab" },
+        { "id": "pad-03", "x": 50, "y": 81, "scale": 1.12, "width": 52, "height": 88, "z": 12, "variant": "complex_tower" },
+        { "id": "pad-04", "x": 68, "y": 72, "scale": 0.98, "width": 50, "height": 86, "z": 9, "variant": "apartment_slab" },
+        { "id": "pad-05", "x": 84, "y": 81, "scale": 1.04, "width": 52, "height": 92, "z": 13, "variant": "complex_tower" },
+        { "id": "pad-06", "x": 25, "y": 57, "scale": 0.82, "width": 46, "height": 82, "z": 5, "variant": "apartment_slab" },
+        { "id": "pad-07", "x": 43, "y": 53, "scale": 0.86, "width": 46, "height": 88, "z": 4, "variant": "complex_tower" },
+        { "id": "pad-08", "x": 61, "y": 57, "scale": 0.9, "width": 48, "height": 92, "z": 6, "variant": "apartment_slab" },
+        { "id": "pad-09", "x": 78, "y": 50, "scale": 0.76, "width": 44, "height": 86, "z": 3, "variant": "complex_tower" },
+        { "id": "pad-10", "x": 53, "y": 41, "scale": 0.7, "width": 42, "height": 84, "z": 2, "variant": "apartment_slab" }
+      ],
+      "futureResidentPaths": [
+        { "id": "complex_front", "depth": "near", "points": [[8, 80], [28, 74], [49, 78], [70, 72], [92, 77]] },
+        { "id": "complex_mid", "depth": "mid", "points": [[11, 59], [33, 55], [55, 57], [76, 52], [90, 55]] },
+        { "id": "complex_back", "depth": "far", "points": [[18, 42], [41, 38], [64, 40], [86, 36]] }
+      ],
+      "help": {
+        "backgroundAsset": "아파트 단지 지역 상세 화면의 전용 배경 이미지입니다.",
+        "buildingTheme": "여러 동이 모이는 아파트 단지 테마입니다.",
+        "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
+        "futureResidentPaths": "추후 주민이 단지 산책로와 주도로를 따라 이동할 경로입니다.",
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+      }
+    },
+    {
+      "id": "office_tower",
+      "backgroundAsset": "visual-real-estate-district-office-tower.png",
+      "buildingTheme": "office_core",
+      "speechTone": "business_core",
+      "detailPads": [
+        { "id": "pad-01", "x": 18, "y": 79, "scale": 1.08, "width": 48, "height": 86, "z": 10, "variant": "office_tower" },
+        { "id": "pad-02", "x": 34, "y": 71, "scale": 1, "width": 50, "height": 78, "z": 8, "variant": "glass_podium" },
+        { "id": "pad-03", "x": 50, "y": 81, "scale": 1.12, "width": 50, "height": 98, "z": 12, "variant": "office_tower" },
+        { "id": "pad-04", "x": 68, "y": 72, "scale": 0.98, "width": 50, "height": 90, "z": 9, "variant": "glass_podium" },
+        { "id": "pad-05", "x": 84, "y": 81, "scale": 1.04, "width": 52, "height": 104, "z": 13, "variant": "office_tower" },
+        { "id": "pad-06", "x": 25, "y": 57, "scale": 0.82, "width": 46, "height": 84, "z": 5, "variant": "glass_podium" },
+        { "id": "pad-07", "x": 43, "y": 53, "scale": 0.86, "width": 48, "height": 96, "z": 4, "variant": "office_tower" },
+        { "id": "pad-08", "x": 61, "y": 57, "scale": 0.9, "width": 48, "height": 98, "z": 6, "variant": "glass_podium" },
+        { "id": "pad-09", "x": 78, "y": 50, "scale": 0.76, "width": 44, "height": 92, "z": 3, "variant": "office_tower" },
+        { "id": "pad-10", "x": 53, "y": 41, "scale": 0.7, "width": 42, "height": 88, "z": 2, "variant": "glass_podium" }
+      ],
+      "futureResidentPaths": [
+        { "id": "office_front", "depth": "near", "points": [[7, 80], [27, 74], [49, 78], [71, 72], [93, 77]] },
+        { "id": "office_mid", "depth": "mid", "points": [[10, 59], [32, 55], [55, 57], [77, 52], [91, 55]] },
+        { "id": "office_back", "depth": "far", "points": [[18, 42], [41, 38], [64, 40], [86, 36]] }
+      ],
+      "help": {
+        "backgroundAsset": "오피스 빌딩 지역 상세 화면의 전용 배경 이미지입니다.",
+        "buildingTheme": "도심 업무지구 고층 빌딩 테마입니다.",
+        "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
+        "futureResidentPaths": "추후 직장인 주민이 대로와 광장을 따라 이동할 경로입니다.",
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+      }
+    },
+    {
+      "id": "mixed_development",
+      "backgroundAsset": "visual-real-estate-district-mixed-development.png",
+      "buildingTheme": "landmark_mixed",
+      "speechTone": "landmark_city",
+      "detailPads": [
+        { "id": "pad-01", "x": 18, "y": 80, "scale": 1.08, "width": 52, "height": 90, "z": 10, "variant": "mixed_podium" },
+        { "id": "pad-02", "x": 34, "y": 72, "scale": 1, "width": 50, "height": 98, "z": 8, "variant": "office_tower" },
+        { "id": "pad-03", "x": 50, "y": 82, "scale": 1.12, "width": 54, "height": 110, "z": 12, "variant": "landmark_tower" },
+        { "id": "pad-04", "x": 68, "y": 73, "scale": 0.98, "width": 52, "height": 102, "z": 9, "variant": "mixed_podium" },
+        { "id": "pad-05", "x": 84, "y": 81, "scale": 1.04, "width": 56, "height": 114, "z": 13, "variant": "landmark_tower" },
+        { "id": "pad-06", "x": 25, "y": 58, "scale": 0.82, "width": 48, "height": 92, "z": 5, "variant": "office_tower" },
+        { "id": "pad-07", "x": 43, "y": 54, "scale": 0.86, "width": 50, "height": 104, "z": 4, "variant": "mixed_podium" },
+        { "id": "pad-08", "x": 61, "y": 58, "scale": 0.9, "width": 50, "height": 108, "z": 6, "variant": "landmark_tower" },
+        { "id": "pad-09", "x": 78, "y": 51, "scale": 0.76, "width": 46, "height": 100, "z": 3, "variant": "office_tower" },
+        { "id": "pad-10", "x": 53, "y": 42, "scale": 0.7, "width": 44, "height": 96, "z": 2, "variant": "mixed_podium" }
+      ],
+      "futureResidentPaths": [
+        { "id": "landmark_front", "depth": "near", "points": [[7, 80], [27, 74], [49, 78], [71, 72], [93, 77]] },
+        { "id": "landmark_mid", "depth": "mid", "points": [[10, 59], [32, 55], [55, 57], [77, 52], [91, 55]] },
+        { "id": "landmark_back", "depth": "far", "points": [[18, 42], [41, 38], [64, 40], [86, 36]] }
+      ],
+      "help": {
+        "backgroundAsset": "복합 개발지 지역 상세 화면의 전용 배경 이미지입니다.",
+        "buildingTheme": "랜드마크급 주거·상업·업무 복합 개발 테마입니다.",
+        "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
+        "futureResidentPaths": "추후 주민과 방문객이 광장, 대로, 수변 보행로를 따라 이동할 경로입니다.",
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+      }
+    }
+  ],
+  "help": {
+    "version": "부동산 지역 상세 리소스 데이터 버전입니다.",
+    "districts": "부동산 10개 지역의 상세 배경, 건물 배치 패드, 향후 주민 이동 경로입니다."
+  }
+}

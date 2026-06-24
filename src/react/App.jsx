@@ -108,7 +108,6 @@ import highBackdrop from "../snapshot/assets/visual-battle-road-backdrop-high.pn
 import middleBackdrop from "../snapshot/assets/visual-battle-road-backdrop-middle.png";
 import repeaterBackdrop from "../snapshot/assets/visual-battle-road-backdrop-repeater.png";
 import realEstateCityMap from "../snapshot/assets/visual-real-estate-city-map.png";
-import realEstateDistrictDetail from "../snapshot/assets/visual-real-estate-district-detail.png";
 import studentAtlas from "../snapshot/assets/asset-002.png";
 import mainMonsterAtlas from "../snapshot/assets/asset-003.png";
 
@@ -134,6 +133,8 @@ const backdrops = {
   high: highBackdrop,
   repeater: repeaterBackdrop,
 };
+const realEstateDistrictBackgroundModules = import.meta.glob(["../snapshot/assets/visual-real-estate-district-*.png", "!../snapshot/assets/visual-real-estate-district-detail.png"], { eager: true, import: "default" });
+const realEstateDistrictBackgrounds = Object.fromEntries(Object.entries(realEstateDistrictBackgroundModules).map(([path, asset]) => [path.split("/").pop(), asset]));
 const totalCareerAtlasFrames = careers.length * 2;
 
 function careerAtlasStyle(career, gender) {
@@ -1431,44 +1432,44 @@ function RealEstateBuildingSlots({ card }) {
   );
 }
 
-const realEstateDetailBuildPads = [
-  { x: 20, y: 78, scale: 1.08, height: 46, z: 9 },
-  { x: 35, y: 70, scale: .96, height: 42, z: 8 },
-  { x: 52, y: 76, scale: 1.12, height: 54, z: 10 },
-  { x: 70, y: 68, scale: .94, height: 48, z: 7 },
-  { x: 84, y: 78, scale: 1, height: 50, z: 11 },
-  { x: 24, y: 56, scale: .82, height: 52, z: 5 },
-  { x: 43, y: 52, scale: .86, height: 58, z: 4 },
-  { x: 61, y: 55, scale: .88, height: 64, z: 6 },
-  { x: 78, y: 48, scale: .76, height: 66, z: 3 },
-  { x: 50, y: 40, scale: .7, height: 72, z: 2 },
-];
-
 function RealEstateDetailDevelopmentLayer({ card }) {
+  const pads = card.districtDetailPads;
+  assert(Array.isArray(pads) && pads.length === 10, `부동산 상세 건물 패드 10개가 필요합니다: ${card.id}`);
   return (
-    <div className="real-estate-development-layer" aria-hidden="true" data-development-level={card.developmentLevel}>
+    <div className="real-estate-development-layer" aria-hidden="true" data-building-theme={card.districtBuildingTheme} data-development-level={card.developmentLevel}>
       <div className="real-estate-development-pads">
-        {realEstateDetailBuildPads.map((pad, index) => (
+        {pads.map((pad) => (
           <span
-            className="real-estate-development-pad"
-            key={`${card.id}-pad-${index}`}
-            style={{ left: `${pad.x}%`, top: `${pad.y}%`, zIndex: pad.z }}
+            className={`real-estate-development-pad variant-${pad.variant}`}
+            data-pad-id={pad.id}
+            key={`${card.id}-${pad.id}`}
+            style={{
+              left: `${pad.x}%`,
+              top: `${pad.y}%`,
+              zIndex: pad.z,
+              "--pad-width": `${pad.width}px`,
+              "--pad-scale": pad.scale,
+            }}
           />
         ))}
       </div>
       <div className="real-estate-development-buildings">
         {card.visibleBuildingSlots.map((slot, index) => {
-          const pad = realEstateDetailBuildPads[index % realEstateDetailBuildPads.length];
+          const pad = pads[index];
+          assert(pad, `부동산 상세 건물 패드를 찾을 수 없습니다: ${card.id} ${index}`);
           return (
             <span
-              className={`real-estate-development-building property-${card.id} level-${card.developmentLevel}`}
+              className={`real-estate-development-building property-${card.id} level-${card.developmentLevel} theme-${card.districtBuildingTheme} variant-${pad.variant}`}
+              data-building-theme={card.districtBuildingTheme}
+              data-building-variant={pad.variant}
               data-slot-id={slot.id}
               key={slot.id}
               style={{
                 left: `${pad.x}%`,
                 top: `${pad.y}%`,
                 zIndex: pad.z + 10,
-                "--building-height": `${pad.height + card.developmentLevel * 7}px`,
+                "--building-height": `${Math.round(pad.height * (1 + card.developmentLevel * .035))}px`,
+                "--building-width": `${pad.width}px`,
                 "--building-scale": pad.scale,
               }}
             >
@@ -1576,6 +1577,8 @@ function RealEstateOverviewScene({ notice, onDistrictClick, realEstateSummary })
 function RealEstateDistrictScene({ onBackToOverview, realEstateSummary, selectedPropertyId }) {
   const selectedCard = realEstateSummary.cards.find((card) => card.id === selectedPropertyId);
   assert(selectedCard, `선택된 부동산 지역을 찾을 수 없습니다: ${selectedPropertyId}`);
+  const selectedBackground = realEstateDistrictBackgrounds[selectedCard.districtBackgroundAsset];
+  assert(selectedBackground, `부동산 상세 배경을 찾을 수 없습니다: ${selectedCard.districtBackgroundAsset}`);
   const viewportRef = useRef(null);
   const dragRef = useRef(null);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -1635,7 +1638,7 @@ function RealEstateDistrictScene({ onBackToOverview, realEstateSummary, selected
           onPointerUp={handlePointerEnd}
           style={{ transform: `translate(${Math.round(pan.x)}px, ${Math.round(pan.y)}px)` }}
         >
-          <img className="real-estate-detail-background" src={realEstateDistrictDetail} alt="" aria-hidden="true" draggable="false" />
+          <img className="real-estate-detail-background" src={selectedBackground} alt="" aria-hidden="true" draggable="false" />
           <div className="real-estate-detail-development-field">
             <RealEstateDetailDevelopmentLayer card={selectedCard} />
           </div>

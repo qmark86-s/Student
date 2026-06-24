@@ -1,5 +1,6 @@
 import realEstateBalance from "../../../data/real_estate_balance.json";
 import realEstateCityLayout from "../../../data/real_estate_city_layout.json";
+import realEstateDistrictAssets from "../../../data/real_estate_district_assets.json";
 import realEstateRankRewards from "../../../data/real_estate_rank_rewards.json";
 import realEstateScaleTiers from "../../../data/real_estate_scale_tiers.json";
 import realEstates from "../../../data/real_estates.json";
@@ -151,6 +152,97 @@ function validateCityDistrict(district, index, ids, expectedId) {
   validateHelp(district, path, ["id", "polygon", "labelAnchor", "detailFocus", "buildingSlots"]);
 }
 
+const districtAssetThemes = new Set([
+  "starter_lowrise",
+  "residential_lowrise",
+  "villa_green",
+  "mixed_midrise",
+  "local_commercial",
+  "compact_commercial",
+  "apartment_single",
+  "apartment_complex",
+  "office_core",
+  "landmark_mixed",
+]);
+
+const districtAssetPadVariants = new Set([
+  "lowrise_roof",
+  "rental_block",
+  "villa_block",
+  "garden_villa",
+  "officetel_block",
+  "midrise_glass",
+  "shopfront",
+  "market_row",
+  "compact_building",
+  "apartment_slab",
+  "tower_podium",
+  "complex_tower",
+  "office_tower",
+  "glass_podium",
+  "mixed_podium",
+  "landmark_tower",
+]);
+
+const districtAssetPathDepths = new Set(["near", "mid", "far"]);
+
+function validateDistrictDetailPad(pad, index, districtPath) {
+  const path = `${districtPath}.detailPads[${index}]`;
+  assertObject(pad, path);
+  assertString(pad.id, `${path}.id`);
+  const x = finiteNumber(pad.x, `${path}.x`);
+  const y = finiteNumber(pad.y, `${path}.y`);
+  assert(x >= 0 && x <= 100, `${path}.x 값은 0~100 사이여야 합니다.`);
+  assert(y >= 0 && y <= 100, `${path}.y 값은 0~100 사이여야 합니다.`);
+  positiveNumber(pad.scale, `${path}.scale`);
+  positiveNumber(pad.width, `${path}.width`);
+  positiveNumber(pad.height, `${path}.height`);
+  integerAtLeast(pad.z, `${path}.z`, 1);
+  assertString(pad.variant, `${path}.variant`);
+  assert(districtAssetPadVariants.has(pad.variant), `${path}.variant 값이 올바르지 않습니다: ${pad.variant}`);
+}
+
+function validateDistrictResidentPath(pathData, index, districtPath) {
+  const path = `${districtPath}.futureResidentPaths[${index}]`;
+  assertObject(pathData, path);
+  assertString(pathData.id, `${path}.id`);
+  assertString(pathData.depth, `${path}.depth`);
+  assert(districtAssetPathDepths.has(pathData.depth), `${path}.depth 값이 올바르지 않습니다: ${pathData.depth}`);
+  validateCoordinateList(pathData.points, `${path}.points`, 2);
+}
+
+function validateDistrictAsset(asset, index, ids, expectedId) {
+  const path = `real_estate_district_assets.json.districts[${index}]`;
+  assertObject(asset, path);
+  assertString(asset.id, `${path}.id`);
+  assert(asset.id === expectedId, `${path}.id 순서가 real_estates.json과 다릅니다: ${asset.id} !== ${expectedId}`);
+  assert(!ids.has(asset.id), `${path}.id 값이 중복되었습니다: ${asset.id}`);
+  ids.add(asset.id);
+  assertString(asset.backgroundAsset, `${path}.backgroundAsset`);
+  assert(asset.backgroundAsset.endsWith(".png"), `${path}.backgroundAsset 값은 png 파일명이어야 합니다.`);
+  assert(!asset.backgroundAsset.includes("/") && !asset.backgroundAsset.includes("\\"), `${path}.backgroundAsset 값은 파일명만 허용합니다.`);
+  assertString(asset.buildingTheme, `${path}.buildingTheme`);
+  assert(districtAssetThemes.has(asset.buildingTheme), `${path}.buildingTheme 값이 올바르지 않습니다: ${asset.buildingTheme}`);
+  assertString(asset.speechTone, `${path}.speechTone`);
+  assertArray(asset.detailPads, `${path}.detailPads`);
+  assert(asset.detailPads.length === 10, `${path}.detailPads 수는 10개여야 합니다: ${asset.detailPads.length}`);
+  const padIds = new Set();
+  asset.detailPads.forEach((pad, padIndex) => {
+    validateDistrictDetailPad(pad, padIndex, path);
+    assert(!padIds.has(pad.id), `${path}.detailPads id 값이 중복되었습니다: ${pad.id}`);
+    padIds.add(pad.id);
+  });
+  assertArray(asset.futureResidentPaths, `${path}.futureResidentPaths`);
+  assert(asset.futureResidentPaths.length >= 3, `${path}.futureResidentPaths 수는 3개 이상이어야 합니다.`);
+  const residentPathIds = new Set();
+  asset.futureResidentPaths.forEach((pathData, pathIndex) => {
+    validateDistrictResidentPath(pathData, pathIndex, path);
+    assert(!residentPathIds.has(pathData.id), `${path}.futureResidentPaths id 값이 중복되었습니다: ${pathData.id}`);
+    residentPathIds.add(pathData.id);
+  });
+  validateHelp(asset, path, ["backgroundAsset", "buildingTheme", "detailPads", "futureResidentPaths", "speechTone"]);
+}
+
 export function validateRealEstateConfig() {
   assertObject(realEstates, "real_estates.json");
   integerAtLeast(realEstates.version, "real_estates.json.version", 1);
@@ -167,6 +259,19 @@ export function validateRealEstateConfig() {
   const districtIds = new Set();
   realEstateCityLayout.districts.forEach((district, index) => validateCityDistrict(district, index, districtIds, realEstates.properties[index].id));
   validateHelp(realEstateCityLayout, "real_estate_city_layout.json", ["version", "districts"]);
+
+  assertObject(realEstateDistrictAssets, "real_estate_district_assets.json");
+  integerAtLeast(realEstateDistrictAssets.version, "real_estate_district_assets.json.version", 1);
+  assertArray(realEstateDistrictAssets.districts, "real_estate_district_assets.json.districts");
+  assert(realEstateDistrictAssets.districts.length === realEstates.properties.length, `real_estate_district_assets.json.districts 수는 매물 수와 같아야 합니다: ${realEstateDistrictAssets.districts.length}`);
+  const districtAssetIds = new Set();
+  const districtAssetFiles = new Set();
+  realEstateDistrictAssets.districts.forEach((asset, index) => {
+    validateDistrictAsset(asset, index, districtAssetIds, realEstates.properties[index].id);
+    assert(!districtAssetFiles.has(asset.backgroundAsset), `real_estate_district_assets.json.backgroundAsset 값이 중복되었습니다: ${asset.backgroundAsset}`);
+    districtAssetFiles.add(asset.backgroundAsset);
+  });
+  validateHelp(realEstateDistrictAssets, "real_estate_district_assets.json", ["version", "districts"]);
 
   assertObject(realEstateScaleTiers, "real_estate_scale_tiers.json");
   integerAtLeast(realEstateScaleTiers.version, "real_estate_scale_tiers.json.version", 1);
@@ -219,6 +324,8 @@ const properties = realEstates.properties;
 const propertyById = new Map(properties.map((property) => [property.id, property]));
 const cityDistricts = realEstateCityLayout.districts;
 const cityDistrictById = new Map(cityDistricts.map((district) => [district.id, district]));
+const districtAssets = realEstateDistrictAssets.districts;
+const districtAssetById = new Map(districtAssets.map((asset) => [asset.id, asset]));
 const scaleTiers = realEstateScaleTiers.tiers.slice().sort((a, b) => Number(a.minCount) - Number(b.minCount));
 const artStages = realEstateBalance.artStages.slice().sort((a, b) => Number(a.minAssetValue) - Number(b.minAssetValue));
 
@@ -602,6 +709,8 @@ export function createRealEstateViewModel(state) {
     const count = ownedCount(state.realEstate, property.id);
     const district = cityDistrictById.get(property.id);
     assert(district, `real_estate_city_layout.json에서 지역을 찾을 수 없습니다: ${property.id}`);
+    const districtAsset = districtAssetById.get(property.id);
+    assert(districtAsset, `real_estate_district_assets.json에서 지역 리소스를 찾을 수 없습니다: ${property.id}`);
     const unlocked = highestStage >= Number(property.unlockStage);
     const scale = count > 0 ? scaleTierForCount(count) : null;
     const nextScale = nextScaleTier(count);
@@ -637,6 +746,11 @@ export function createRealEstateViewModel(state) {
       districtDetailFocus: district.detailFocus,
       buildingSlots: district.buildingSlots,
       visibleBuildingSlots,
+      districtBackgroundAsset: districtAsset.backgroundAsset,
+      districtBuildingTheme: districtAsset.buildingTheme,
+      districtDetailPads: districtAsset.detailPads,
+      districtFutureResidentPaths: districtAsset.futureResidentPaths,
+      districtSpeechTone: districtAsset.speechTone,
       canBuyOne: unlocked && Number(state.realEstate.cash) >= nextCost,
       canBuyTen: unlocked && Number(state.realEstate.cash) >= cost10,
       canBuyMax: unlocked && maxBuyCount > 0,

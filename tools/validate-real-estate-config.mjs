@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 function readJson(path) {
@@ -53,9 +53,44 @@ function uniqueId(source, ids, path) {
 
 const catalog = readJson("data/real_estates.json");
 const cityLayout = readJson("data/real_estate_city_layout.json");
+const districtAssets = readJson("data/real_estate_district_assets.json");
 const tiers = readJson("data/real_estate_scale_tiers.json");
 const balance = readJson("data/real_estate_balance.json");
 const rankRewards = readJson("data/real_estate_rank_rewards.json");
+
+const districtAssetThemes = new Set([
+  "starter_lowrise",
+  "residential_lowrise",
+  "villa_green",
+  "mixed_midrise",
+  "local_commercial",
+  "compact_commercial",
+  "apartment_single",
+  "apartment_complex",
+  "office_core",
+  "landmark_mixed",
+]);
+
+const districtAssetPadVariants = new Set([
+  "lowrise_roof",
+  "rental_block",
+  "villa_block",
+  "garden_villa",
+  "officetel_block",
+  "midrise_glass",
+  "shopfront",
+  "market_row",
+  "compact_building",
+  "apartment_slab",
+  "tower_podium",
+  "complex_tower",
+  "office_tower",
+  "glass_podium",
+  "mixed_podium",
+  "landmark_tower",
+]);
+
+const districtAssetPathDepths = new Set(["near", "mid", "far"]);
 
 function coordinatePair(pair, path) {
   assertArray(pair, path);
@@ -111,6 +146,67 @@ for (const [index, district] of cityLayout.districts.entries()) {
   coordinatePair(district.detailFocus, `${path}.detailFocus`);
   coordinateList(district.buildingSlots, `${path}.buildingSlots`, 6);
   help(district, path, ["id", "polygon", "labelAnchor", "detailFocus", "buildingSlots"]);
+}
+
+function percentageNumber(value, path) {
+  const numeric = number(value, path);
+  assert(numeric >= 0 && numeric <= 100, `${path} 값은 0~100 사이여야 합니다.`);
+  return numeric;
+}
+
+function validateDetailPad(pad, index, districtPath) {
+  const path = `${districtPath}.detailPads[${index}]`;
+  assertObject(pad, path);
+  uniqueId(pad, validateDetailPad.ids, path);
+  percentageNumber(pad.x, `${path}.x`);
+  percentageNumber(pad.y, `${path}.y`);
+  positiveNumber(pad.scale, `${path}.scale`);
+  positiveNumber(pad.width, `${path}.width`);
+  positiveNumber(pad.height, `${path}.height`);
+  integerAtLeast(pad.z, `${path}.z`, 1);
+  assertString(pad.variant, `${path}.variant`);
+  assert(districtAssetPadVariants.has(pad.variant), `${path}.variant 값이 올바르지 않습니다: ${pad.variant}`);
+}
+
+function validateResidentPath(pathData, index, districtPath) {
+  const path = `${districtPath}.futureResidentPaths[${index}]`;
+  assertObject(pathData, path);
+  uniqueId(pathData, validateResidentPath.ids, path);
+  assertString(pathData.depth, `${path}.depth`);
+  assert(districtAssetPathDepths.has(pathData.depth), `${path}.depth 값이 올바르지 않습니다: ${pathData.depth}`);
+  coordinateList(pathData.points, `${path}.points`, 2);
+}
+
+assertObject(districtAssets, "real_estate_district_assets.json");
+integerAtLeast(districtAssets.version, "real_estate_district_assets.json.version", 1);
+assertArray(districtAssets.districts, "real_estate_district_assets.json.districts");
+assert(districtAssets.districts.length === catalog.properties.length, `지역 리소스 수는 매물 수와 같아야 합니다: ${districtAssets.districts.length}`);
+help(districtAssets, "real_estate_district_assets.json", ["version", "districts"]);
+const districtAssetIds = new Set();
+const validateDistrictAssetFiles = new Set();
+for (const [index, asset] of districtAssets.districts.entries()) {
+  const path = `real_estate_district_assets.json.districts[${index}]`;
+  assertObject(asset, path);
+  uniqueId(asset, districtAssetIds, path);
+  assert(asset.id === catalog.properties[index].id, `${path}.id 순서가 real_estates.json과 다릅니다: ${asset.id} !== ${catalog.properties[index].id}`);
+  assertString(asset.backgroundAsset, `${path}.backgroundAsset`);
+  assert(asset.backgroundAsset.endsWith(".png"), `${path}.backgroundAsset 값은 png 파일명이어야 합니다.`);
+  assert(!asset.backgroundAsset.includes("/") && !asset.backgroundAsset.includes("\\"), `${path}.backgroundAsset 값은 파일명만 허용합니다.`);
+  assert(existsSync(resolve("src/snapshot/assets", asset.backgroundAsset)), `${path}.backgroundAsset 파일이 없습니다: ${asset.backgroundAsset}`);
+  assert(!validateDistrictAssetFiles.has(asset.backgroundAsset), `${path}.backgroundAsset 값이 중복되었습니다: ${asset.backgroundAsset}`);
+  validateDistrictAssetFiles.add(asset.backgroundAsset);
+  assertString(asset.buildingTheme, `${path}.buildingTheme`);
+  assert(districtAssetThemes.has(asset.buildingTheme), `${path}.buildingTheme 값이 올바르지 않습니다: ${asset.buildingTheme}`);
+  assertString(asset.speechTone, `${path}.speechTone`);
+  assertArray(asset.detailPads, `${path}.detailPads`);
+  assert(asset.detailPads.length === 10, `${path}.detailPads 수는 10개여야 합니다: ${asset.detailPads.length}`);
+  validateDetailPad.ids = new Set();
+  for (const [padIndex, pad] of asset.detailPads.entries()) validateDetailPad(pad, padIndex, path);
+  assertArray(asset.futureResidentPaths, `${path}.futureResidentPaths`);
+  assert(asset.futureResidentPaths.length >= 3, `${path}.futureResidentPaths 수는 3개 이상이어야 합니다.`);
+  validateResidentPath.ids = new Set();
+  for (const [pathIndex, pathData] of asset.futureResidentPaths.entries()) validateResidentPath(pathData, pathIndex, path);
+  help(asset, path, ["backgroundAsset", "buildingTheme", "detailPads", "futureResidentPaths", "speechTone"]);
 }
 
 assertObject(tiers, "real_estate_scale_tiers.json");
@@ -198,4 +294,4 @@ for (const [index, reward] of rankRewards.rewards.entries()) {
   }
 }
 
-console.log(`부동산 데이터 검증 완료: 매물 ${catalog.properties.length}종, 도시 지역 ${cityLayout.districts.length}종, 규모 ${tiers.tiers.length}종, 랭킹 보상 ${rankRewards.rewards.length}종`);
+console.log(`부동산 데이터 검증 완료: 매물 ${catalog.properties.length}종, 도시 지역 ${cityLayout.districts.length}종, 상세 리소스 ${districtAssets.districts.length}종, 규모 ${tiers.tiers.length}종, 랭킹 보상 ${rankRewards.rewards.length}종`);
