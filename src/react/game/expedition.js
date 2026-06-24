@@ -5,6 +5,7 @@ import expeditionChapters from "../../../data/expedition_chapters.json";
 import expeditionPromotions from "../../../data/expedition_promotions.json";
 import expeditionSegments from "../../../data/expedition_stages.json";
 import expeditionLevels from "../../../data/expedition_unit_levels.json";
+import { grantRealEstateExpeditionStageReward } from "./realEstate.js";
 
 const subjectIds = ["korean", "english", "math", "social", "science"];
 const subjectLabels = {
@@ -835,6 +836,8 @@ export function completeExpeditionStage(state) {
   }
   pushExpeditionLog(expedition, `${currentStage} Stage ${view.stage.enemyName} 돌파: EXP ${view.rewardExp} 획득`, "good");
   next.expedition = expeditionAliases(expedition, view.stage.id);
-  validateExpeditionState(next.expedition, "save.expedition");
-  return next;
+  const funded = grantRealEstateExpeditionStageReward(next, view.stage);
+  pushExpeditionLog(funded.state.expedition, `부동산 자금 ${funded.reward} 획득`, "good");
+  validateExpeditionState(funded.state.expedition, "save.expedition");
+  return funded.state;
 }

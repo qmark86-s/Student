@@ -257,6 +257,8 @@ try {
   if (beforeClick.state.current.totalStudyPoints !== 678) failures.push("Injected save was not loaded before click");
   if (afterClick.state.current.totalStudyPoints <= 678) failures.push("DEBUG click did not persist totalStudyPoints increment");
   if (afterClick.state.current.totalKills <= 9) failures.push("DEBUG click did not persist totalKills increment");
+  if (afterClick.state.schemaVersion !== 3) failures.push(`Injected save did not migrate to schema 3, got ${afterClick.state.schemaVersion}`);
+  if (!afterClick.state.realEstate || typeof afterClick.state.realEstate.cash !== "number") failures.push("Injected save did not create realEstate state");
   if (afterClick.state.current.road.encounterIndex !== 1) failures.push(`DEBUG click did not advance Battle Road encounter, got ${afterClick.state.current.road.encounterIndex}`);
   if (afterClick.state.current.battle?.encounterIndex !== 1) failures.push(`Saved battle did not advance to encounter 1, got ${afterClick.state.current.battle?.encounterIndex}`);
   if (afterClick.state.current.autoAllocateStudy !== false) failures.push("Auto click did not persist autoAllocateStudy toggle");

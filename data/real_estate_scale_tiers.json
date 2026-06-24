@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "tiers": [
+    { "id": "single", "minCount": 1, "label": "1채", "portfolioLabel": "단독 보유", "help": { "minCount": "이 규모가 적용되는 최소 보유 수량입니다.", "label": "카드에 표시되는 짧은 규모명입니다.", "portfolioLabel": "대표 자산 규모 영역에 표시되는 규모명입니다." } },
+    { "id": "line", "minCount": 10, "label": "라인", "portfolioLabel": "건물 라인", "help": { "minCount": "이 규모가 적용되는 최소 보유 수량입니다.", "label": "카드에 표시되는 짧은 규모명입니다.", "portfolioLabel": "대표 자산 규모 영역에 표시되는 규모명입니다." } },
+    { "id": "block", "minCount": 50, "label": "블록", "portfolioLabel": "상권 블록", "help": { "minCount": "이 규모가 적용되는 최소 보유 수량입니다.", "label": "카드에 표시되는 짧은 규모명입니다.", "portfolioLabel": "대표 자산 규모 영역에 표시되는 규모명입니다." } },
+    { "id": "complex", "minCount": 100, "label": "단지", "portfolioLabel": "임대 단지", "help": { "minCount": "이 규모가 적용되는 최소 보유 수량입니다.", "label": "카드에 표시되는 짧은 규모명입니다.", "portfolioLabel": "대표 자산 규모 영역에 표시되는 규모명입니다." } },
+    { "id": "town", "minCount": 300, "label": "타운", "portfolioLabel": "부동산 타운", "help": { "minCount": "이 규모가 적용되는 최소 보유 수량입니다.", "label": "카드에 표시되는 짧은 규모명입니다.", "portfolioLabel": "대표 자산 규모 영역에 표시되는 규모명입니다." } },
+    { "id": "city", "minCount": 1000, "label": "도시", "portfolioLabel": "자산 도시", "help": { "minCount": "이 규모가 적용되는 최소 보유 수량입니다.", "label": "카드에 표시되는 짧은 규모명입니다.", "portfolioLabel": "대표 자산 규모 영역에 표시되는 규모명입니다." } }
+  ],
+  "help": {
+    "version": "부동산 규모 티어 데이터 버전입니다.",
+    "tiers": "보유 수량에 따라 표시되는 규모명 목록입니다."
+  }
+}

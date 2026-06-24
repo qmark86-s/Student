@@ -13,6 +13,7 @@
 - `tools/react-vite-battle-road-smoke.mjs`: React Battle Road/결과 흐름 smoke test
 - `tools/react-vite-expedition-smoke.mjs`: React 직업 수락/원정대 흐름 smoke test
 - `tools/react-vite-expedition-rules-smoke.mjs`: React 원정대 보스 보상, 전투력 부족, 성장 투자, 승급 합성 상태 규칙 smoke test
+- `tools/react-vite-real-estate-smoke.mjs`: React 부동산 모드 탭, 원정대 부동산 자금, 구매/임대/랭킹/DEBUG 보상 smoke test
 - `tools/react-vite-records-smoke.mjs`: React 시험/직장/도감 저장 상태 smoke test
 - `tools/react-vite-education-smoke.mjs`: React 교육 탭/업그레이드 smoke test
 - `tools/react-vite-shop-debug-smoke.mjs`: React 상점 도우미/DEBUG 동료/원정대 편성 smoke test
@@ -23,6 +24,7 @@
 - `tools/react-vite-ui-parity-deep-smoke.mjs`: snapshot 대 React 상점/뽑기/설정/디버그 텍스트/스타일/스크린샷 parity audit
 - `tools/react-vite-full-parity-gate.mjs`: React smoke, strict 첫 화면 parity, interactive parity, deep parity, responsive, no-fallback 감사를 묶은 상위 gate
 - `tools/react-vite-goal-completion-audit.mjs`: full/interactive/deep/responsive/rules 산출물을 요구사항별 완료 증거 매트릭스로 정리하는 audit
+- `tools/validate-real-estate-config.mjs`: 부동산 카탈로그/규모/밸런스/랭킹 보상 JSON 검증
 - `plans/react-vite-parity-migration/plan.md`: 차수별 이식 계획
 - `implementations/react-vite-parity-migration/implementation.md`: 구현 이력
 
@@ -36,6 +38,8 @@ npm run react:save-smoke
 npm run react:battle-smoke
 npm run react:expedition-smoke
 npm run react:expedition-rules-smoke
+npm run real-estate:verify
+npm run react:real-estate-smoke
 npm run react:records-smoke
 npm run react:education-smoke
 npm run react:shop-debug-smoke
@@ -57,6 +61,8 @@ npm run react:verify
 - `react:battle-smoke`: 명시적 QA URL에서 기본 조우, N수 4조우, 수능 4조우, 결과 패널과 직업 후보 렌더링을 검사한다.
 - `react:expedition-smoke`: 수능 결과 직업 수락, 동료 등록, 원정대 파티 편성, stage 표시, stage 돌파 저장을 검사한다.
 - `react:expedition-rules-smoke`: 보스 첫 클리어 보상, 보스 보상 중복 방지, 보스 전투력 부족 시 구간 시작 회귀, 일반 Stage 전투력 부족 시 현재 Stage 유지, 성장 투자, 승급 합성을 실제 React 화면 클릭과 저장 상태로 검사한다.
+- `real-estate:verify`: `data/real_estates.json`, `data/real_estate_scale_tiers.json`, `data/real_estate_balance.json`, `data/real_estate_rank_rewards.json`의 id 중복, 수치 범위, help 누락을 검사한다.
+- `react:real-estate-smoke`: 상단 모드 탭 `학생/원정대/부동산`, 부동산 배경 이미지 로드, 원정대 Stage 돌파 부동산 자금 지급, 매입 1/10/최대, 임대수익 자동 정산, 규모 명칭 변경, 랭킹 preview, 일반 주간 다이아 보상 수령, DEBUG 중복 방지를 검사한다.
 - `react:records-smoke`: 저장 상태를 주입하고 시험/직장/도감 탭이 placeholder 없이 카드로 렌더링되는지 검사한다.
 - `react:education-smoke`: 교육 데이터 주입, 9개 교육 카드, 잠금 상태, 비용, 업그레이드 저장, 성장 배율 반영을 검사한다.
 - `react:shop-debug-smoke`: 상점 도우미 호출, 다이아 차감, 로봇 도우미 저장, 성장 패널 학습 도우미 반영, 동료 탭 표시, DEBUG 동료 +5, 원정대 파티 5/5 편성, stage 돌파 저장을 검사한다.
@@ -69,7 +75,7 @@ npm run react:verify
 - `react:full-parity`: `snapshot:build`로 기존 HTML `dist/`를 최신화한 뒤 `curriculum-vfx:verify`, `react:verify`, strict `react:parity-audit`, `react:interactive-parity`, `react:deep-parity`, `react:hotspot-crop`, `git diff --check`를 순서대로 실행하고 최신 artifact JSON을 다시 읽어 목표 범위 조건을 검사한다. 결과는 `artifacts/react-vite-full-parity-gate/report.json`에 기록한다. 완료 판단에는 23개 interactive 시나리오 각각의 normalized text, state diffs, rectDiffs, selectorDiffs, overflow, active panel semantic signature와 `completionEvidence` 요구사항 매트릭스까지 포함한다.
 - `react:goal-audit`: 최신 full gate, interactive parity, deep parity, responsive audit, 원정대 규칙 smoke 산출물을 읽어 목표 요구사항별 증거 매트릭스를 만든다. 결과는 `artifacts/react-vite-goal-completion-audit/report.json`과 `matrix.md`에 기록한다.
 - `react:completion-gate`: `react:full-parity`를 새로 실행한 뒤 `react:goal-audit`를 이어서 실행한다. 완료 판단에는 이 명령을 우선 사용한다.
-- `react:verify`: React 빌드, 모바일 smoke, save smoke, Battle Road smoke, 원정대 smoke, records smoke, education smoke, shop/debug smoke, responsive audit를 함께 실행한다.
+- `react:verify`: `real-estate:verify`, React 빌드, 모바일 smoke, save smoke, Battle Road smoke, 원정대 smoke, 원정대 규칙 smoke, records smoke, education smoke, shop/debug smoke, 부동산 smoke, responsive audit를 함께 실행한다.
 
 ## 현재 기준
 
@@ -78,7 +84,7 @@ npm run react:verify
 - localStorage save가 없을 때만 새 게임 상태를 생성한다. 깨진 JSON, schema mismatch, 필수 필드 누락은 기본 상태로 대체하지 않고 fatal load 화면으로 표시해야 한다.
 - 결과 대기 상태는 `current.awaitingDecision=true`, 완료된 `current.battle`, `current.outcome`을 모두 가져야 한다. 이 중 하나라도 없으면 smoke 또는 load 단계에서 실패해야 한다.
 - 런타임 소스에는 조용한 `fallback`, `??`, `unknown` 대체를 두지 않는다. sparse level map을 0으로 읽는 것은 명시 함수로만 허용한다.
-- React smoke seed는 schema 2 전체 `expedition` 필드를 명시한다. snapshot 비교 도구의 schema 1 seed는 원본 HTML 호환 입력일 뿐 React 런타임 fallback 기준이 아니다.
+- React 런타임 저장 schema는 3이며 `realEstate` 필드를 필수로 검증한다. schema 1/2 save는 migration에서 `realEstate` 기본 상태를 명시 추가한다. snapshot 비교 도구의 schema 1 seed는 원본 HTML 호환 입력일 뿐 React 런타임 fallback 기준이 아니다.
 - 모바일 가로 overflow는 0이어야 한다.
 - 첫 화면에는 상단 상태, 학생/원정대 전환, 학생 전투장, 7개 탭, 성장 패널, 자동 투자 슬라이더 5개가 있어야 한다.
 - production 기본 화면에는 `.battle-debug-complete`와 `DEBUG` 텍스트가 없어야 한다.
@@ -100,7 +106,7 @@ npm run react:verify
 - 직업 수락 후 `companions`, `history`, `log`, `expedition.partyMemberIds`가 저장되어야 한다.
 - 직업 수락 후 새 회차는 E1 Battle Road 상태로 시작해야 한다.
 - 원정대 화면은 `data/expedition_stages.json`의 stage와 원정대 적/동료 4프레임 PNG를 표시해야 한다.
-- 원정대 stage 돌파 후 `expedition.stageIndex`, `clearedStageCount`, 보유금이 저장되어야 한다.
+- 원정대 stage 돌파 후 `expedition.stageIndex`, `clearedStageCount`, 부동산 자금 지급 결과가 저장되어야 한다.
 - DEBUG 동료 +5 이후 원정대에는 직업 동료 5명이 자동 편성되어야 하고, stage 돌파가 가능해야 한다.
 - 원정대 보스 첫 클리어는 다이아와 EXP를 지급하고 `claimedBossStages`를 기록해야 하며, 이미 claim된 보스는 다이아를 중복 지급하지 않아야 한다.
 - 원정대 보스에서 전투력이 부족하면 해당 구간 첫 Stage로 회귀하고 보상을 지급하지 않아야 한다.
@@ -110,6 +116,18 @@ npm run react:verify
 - 원정대 파티 슬롯은 모든 검증 폭에서 3+2 그리드로 줄바꿈되어야 한다. 최신 사용자 요청 기준으로 이 3+2 배치는 원본 HTML의 5열 슬롯보다 우선한다.
 - 원정대 성장/파티 후보/동료 관리 카드 목록은 5명 기준 세로 한 줄 리스트가 아니라 2+2+1 카드 그리드로 보여야 한다.
 - 원정대 동료 관리 카드의 잠금 버튼은 `잠금` 텍스트가 줄바꿈되지 않아야 하며, 상태 배지는 직업명 아래에 표시되어야 한다.
+
+## 부동산 MVP 기준
+
+- 상단 모드 탭은 `학생 / 원정대 / 부동산` 3개이며, 모바일 폭에서 버튼 텍스트와 아이콘이 겹치지 않아야 한다.
+- 부동산 데이터는 루트 `data/`의 `real_estates`, `real_estate_scale_tiers`, `real_estate_balance`, `real_estate_rank_rewards` JSON으로 관리한다.
+- 부동산 전용 재화는 기존 보유금/다이아와 분리된 `부동산 자금`이다.
+- 원정대 Stage 돌파 성공 시 부동산 자금을 지급하고, 보스 Stage는 부동산 밸런스 배수를 적용한다.
+- 원정대 방치 부동산 자금은 파티가 있고 최고 Stage가 1 이상일 때만 최대 8시간까지 정산한다.
+- 부동산 탭은 생성 이미지 배경 3장 `visual-real-estate-early/mid/late.png`를 총 자산가치에 따라 표시한다.
+- 관리 패널은 매물 10개, 보유 수량, 규모 명칭, 임대/분, 평가액, 다음 구매가, `구매 / 10개 / 최대` 버튼을 표시한다.
+- 총 자산가치는 `보유 부동산 평가액 + floor(부동산 자금 * cashAssetWeight)`이며 기본 `cashAssetWeight`는 `0.15`다.
+- 일반 랭킹 영역은 예상 순위/예상 보상과 `주간 보상 수령` 버튼을 표시한다. 일반 수령은 `real_estate_balance.json.ranking.minimumWeeklyAssetGainForClaim` 이상의 주간 자산 증가량이 있을 때 가능하며, DEBUG/QA 수령 버튼과 같은 `claimedWeeklyRewardWeek`로 같은 주차 중복 수령을 막는다.
 - 시험 탭은 `current.examResults`, `current.road`, `current.examIndex`를 읽어 원본 compact `battle-summary-panel`, `battle-enemy-card`, 결과 카드를 표시해야 한다.
 - 직장 탭은 `companions`, `workSlots`, `incomePerMinute`, `powerMultiplier`를 읽어 동료 수입과 직업 카드 목록을 표시해야 한다.
 - 직장 탭의 기본 빈 상태는 원본 HTML처럼 compact 요약 패널, 비활성 슬롯 확장 버튼, 테두리 없는 빈 상태 텍스트로 표시되어야 한다.
@@ -453,6 +471,15 @@ npm run react:verify
 - 감사 입력은 `artifacts/react-vite-full-parity-gate/report.json`, `artifacts/react-vite-interactive-parity/report.json`, `artifacts/react-vite-ui-parity-deep-current/text-report.json`, `artifacts/react-vite-responsive-audit/report.json`, `artifacts/react-vite-expedition-rules-smoke/report.json`이다.
 - 산출물은 `artifacts/react-vite-goal-completion-audit/report.json`과 `artifacts/react-vite-goal-completion-audit/matrix.md`이다.
 - 원정대 후보/관리 카드는 인원 수가 10명 이상일 수 있으므로 정확한 `2+2+1`이 아니라 2열 그리드 유지 여부로 검사한다. 성장 카드처럼 5명 기준인 화면은 `2+2+1`을 유지한다.
+
+2026-06-24 부동산 MVP 기준 다음을 추가 확인했다.
+
+- 상단 모드 탭은 `학생 / 원정대 / 부동산` 3개이며, `react:responsive-audit` 8개 viewport에서 overflow failure 0건이다.
+- `npm run real-estate:verify`: 통과, 매물 10종, 규모 6종, 랭킹 보상 6종 검증.
+- `npm run react:real-estate-smoke`: 통과, 생성 배경 렌더링, 원정대 자금 지급, 구매 1/10/최대, 임대수익 정산, 규모 명칭 변경, 랭킹 preview, 일반 주간 보상 수령, DEBUG 중복 방지를 확인.
+- 일반 주간 보상은 `minimumWeeklyAssetGainForClaim` 이상의 주간 증가량이 있을 때 수령 가능하며, 일반/DEBUG 버튼은 같은 `claimedWeeklyRewardWeek` 중복 방지 키를 공유한다.
+- `npm run react:verify`: 통과, 부동산 검증과 smoke가 포함된다.
+- `npm run visual:verify`, `npm run mobile:smoke`, `rg -n '\?\?|fallback|Fallback|unknown' src/react -S`, `git diff --check`, `mcp__UmgMcp.project_policy_gate` strict를 통과했다.
 
 ## 다음 차수
 

@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "rewards": [
+    { "id": "rank_1", "label": "1위", "rankMax": 1, "diamonds": 10000, "help": { "rankMax": "이 보상을 받는 최대 예상 순위입니다.", "diamonds": "주간 랭킹 보상 수령 시 지급하는 기존 다이아 수량입니다." } },
+    { "id": "rank_10", "label": "2~10위", "rankMax": 10, "diamonds": 5000, "help": { "rankMax": "이 보상을 받는 최대 예상 순위입니다.", "diamonds": "주간 랭킹 보상 수령 시 지급하는 기존 다이아 수량입니다." } },
+    { "id": "rank_100", "label": "11~100위", "rankMax": 100, "diamonds": 2000, "help": { "rankMax": "이 보상을 받는 최대 예상 순위입니다.", "diamonds": "주간 랭킹 보상 수령 시 지급하는 기존 다이아 수량입니다." } },
+    { "id": "top_10_percent", "label": "상위 10%", "percentileMax": 0.1, "diamonds": 1000, "help": { "percentileMax": "이 보상을 받는 최대 예상 상위 비율입니다.", "diamonds": "주간 랭킹 보상 수령 시 지급하는 기존 다이아 수량입니다." } },
+    { "id": "top_30_percent", "label": "상위 30%", "percentileMax": 0.3, "diamonds": 500, "help": { "percentileMax": "이 보상을 받는 최대 예상 상위 비율입니다.", "diamonds": "주간 랭킹 보상 수령 시 지급하는 기존 다이아 수량입니다." } },
+    { "id": "participation", "label": "참여 보상", "diamonds": 100, "help": { "diamonds": "주간 랭킹 보상 수령 시 지급하는 기존 다이아 수량입니다." } }
+  ],
+  "help": {
+    "version": "부동산 주간 랭킹 보상 데이터 버전입니다.",
+    "rewards": "예상 순위에 따라 표시하고 DEBUG/QA 수령에 사용하는 보상 목록입니다."
+  }
+}

@@ -268,6 +268,7 @@ async function collectSnapshot(page) {
       currentStage: state.expedition.currentStage ?? -1,
       highestStage: state.expedition.highestStage ?? -1,
       trainingExp: state.expedition.trainingExp ?? -1,
+      realEstateCash: state.realEstate?.cash ?? -1,
       money: state.money,
       careerChoiceCount: document.querySelectorAll(".career-choice.ranked").length,
       companionCards: document.querySelectorAll(".companion-card").length,
@@ -410,6 +411,7 @@ try {
   if (afterClear.clearedStageCount !== 1) failures.push(`Expected clearedStageCount 1 after clear, got ${afterClear.clearedStageCount}`);
   if (afterClear.currentStage !== 2 || afterClear.highestStage !== 1) failures.push(`Expected current/highest stage 2/1 after clear, got ${afterClear.currentStage}/${afterClear.highestStage}`);
   if (afterClear.trainingExp <= afterAccept.trainingExp) failures.push(`Expected trainingExp to increase after clear, got ${afterAccept.trainingExp} -> ${afterClear.trainingExp}`);
+  if (afterClear.realEstateCash <= afterAccept.realEstateCash) failures.push(`Expected realEstate cash to increase after clear, got ${afterAccept.realEstateCash} -> ${afterClear.realEstateCash}`);
   if (afterClear.money !== afterAccept.money) failures.push(`Expected money to stay unchanged after clear, before ${afterAccept.money}, after ${afterClear.money}`);
   if (afterClear.unitFrameCount !== 4 || afterClear.unitFramesLoaded !== 4) failures.push(`Expected 4 loaded unit frames after clear, got ${afterClear.unitFramesLoaded}/${afterClear.unitFrameCount}`);
   if (afterClear.enemyVisualCount < 1 || afterClear.enemyVisualCount > 3) failures.push(`Expected 1-3 expedition enemies after clear, got ${afterClear.enemyVisualCount}`);

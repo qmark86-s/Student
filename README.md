@@ -37,17 +37,18 @@ npm run verify:mobile
 React/Vite 전환은 기존 snapshot 빌드를 대체하지 않고 `src/react/`에서 병행한다. 산출물은 `dist-react/`에 생성되며 Capacitor `webDir`인 `dist/`와 분리된다.
 
 ```powershell
+npm run real-estate:verify
 npm run react:verify
 npm run react:parity-audit
 npm run react:deep-parity
 npm run react:responsive-audit
 ```
 
-React 라인은 기존 `data/`와 `src/snapshot/assets/`를 직접 읽는다. `tools/react-vite-smoke.mjs`는 모바일 렌더링, 핵심 UI, production 기본 DEBUG 미노출을 검증한다. `tools/react-vite-save-smoke.mjs`와 `tools/react-vite-battle-road-smoke.mjs`는 명시적 `?qaTools=1` URL에서 save 호환과 Battle Road/N수/수능/결과 흐름을 검증하고, `tools/react-vite-expedition-smoke.mjs`는 직업 수락/동료 등록/원정대 stage 진행을 검증한다. `tools/react-vite-records-smoke.mjs`는 시험/직장/도감 탭, `tools/react-vite-education-smoke.mjs`는 교육 탭/업그레이드 저장, `tools/react-vite-shop-debug-smoke.mjs`는 상점 로봇 호출/DEBUG 동료 추가/원정대 편성을 검증한다. `tools/react-vite-responsive-audit.mjs`는 8개 viewport의 overflow, 이미지 로드, 상점 뽑기, 원정대 디버그 흐름을 `artifacts/react-vite-responsive-audit/report.json`에 기록한다. `tools/react-vite-visual-parity-smoke.mjs`는 snapshot `dist/`와 React `dist-react/`의 모바일 좌표/스크린샷 차이를 `artifacts/react-vite-parity/report.json`에 기록한다. `tools/react-vite-ui-parity-deep-smoke.mjs`는 상점 6개 탭, 로봇 뽑기 팝업, 설정, 디버그 모달의 원본 HTML normalized text, 핵심 selector computed style/rect, 스크린샷 diff를 `artifacts/react-vite-ui-parity-deep-current/`에 기록한다. 상세 기준은 `docs/react-vite-parity-migration.md`를 본다.
+React 라인은 기존 `data/`와 `src/snapshot/assets/`를 직접 읽는다. `tools/react-vite-smoke.mjs`는 모바일 렌더링, 핵심 UI, production 기본 DEBUG 미노출을 검증한다. `tools/react-vite-save-smoke.mjs`와 `tools/react-vite-battle-road-smoke.mjs`는 명시적 `?qaTools=1` URL에서 save 호환과 Battle Road/N수/수능/결과 흐름을 검증하고, `tools/react-vite-expedition-smoke.mjs`는 직업 수락/동료 등록/원정대 stage 진행과 부동산 자금 지급을 검증한다. `tools/react-vite-real-estate-smoke.mjs`는 모드 탭 3개, 부동산 생성 배경, 원정대 자금 획득, 구매 1/10/최대, 임대수익 정산, 랭킹 preview, 일반 주간 보상 수령, DEBUG 중복 방지를 검증한다. `tools/validate-real-estate-config.mjs`는 부동산 카탈로그/규모/밸런스/랭킹 보상 JSON의 중복 id, 수치 범위, help 누락을 검사한다. `tools/react-vite-records-smoke.mjs`는 시험/직장/도감 탭, `tools/react-vite-education-smoke.mjs`는 교육 탭/업그레이드 저장, `tools/react-vite-shop-debug-smoke.mjs`는 상점 로봇 호출/DEBUG 동료 추가/원정대 편성을 검증한다. `tools/react-vite-responsive-audit.mjs`는 8개 viewport의 overflow, 이미지 로드, 상점 뽑기, 원정대 디버그 흐름을 `artifacts/react-vite-responsive-audit/report.json`에 기록한다. `tools/react-vite-visual-parity-smoke.mjs`는 snapshot `dist/`와 React `dist-react/`의 모바일 좌표/스크린샷 차이를 `artifacts/react-vite-parity/report.json`에 기록한다. `tools/react-vite-ui-parity-deep-smoke.mjs`는 상점 6개 탭, 로봇 뽑기 팝업, 설정, 디버그 모달의 원본 HTML normalized text, 핵심 selector computed style/rect, 스크린샷 diff를 `artifacts/react-vite-ui-parity-deep-current/`에 기록한다. 상세 기준은 `docs/react-vite-parity-migration.md`를 본다.
 
 React/Vite 라인은 개발 중 fallback을 쓰지 않는다. 세이브가 없을 때만 새 게임을 생성하고, 깨진 세이브/누락 필드/알 수 없는 ID·rarity·icon·frame·style은 fatal 화면이나 smoke 실패로 드러낸다. 세부 기준은 `plans/react-vite-no-fallback-hardening/plan.md`와 `implementations/react-vite-no-fallback-hardening/implementation.md`에 기록한다.
 
-2026-06-23 현재 `npm run react:verify`, `npm run react:deep-parity`, `npm run verify:mobile`, `$env:REACT_PARITY_STRICT='1'; $env:REACT_PARITY_MAX_DIFF_PERCENT='0'; $env:REACT_PARITY_MAX_MEAN_ABS_DIFF='0'; npm run react:parity-audit`는 통과 상태다. 최신 strict parity audit은 412x915와 390x844 모두 `changedPixels 0`, `diffPercent 0`, `meanAbsDiff 0`, `maxChannelDiff 0`이다. `react:deep-parity`는 상점/뽑기/설정/디버그 normalized text 일치와 핵심 selector `styleDiffs: []`를 확인한다. `react:responsive-audit`는 320x568부터 1280x720까지 8개 viewport 실패 0건이다. `src/react` 런타임 소스는 `fallback`, `??`, `unknown` 검색 0건이다.
+2026-06-24 현재 `npm run react:verify`, `npm run visual:verify`, `npm run mobile:smoke`, `rg -n '\?\?|fallback|Fallback|unknown' src/react -S`, `git diff --check`, `mcp__UmgMcp.project_policy_gate` strict는 통과 상태다. `react:verify`는 부동산 데이터 검증과 부동산 smoke를 포함하며, `react:responsive-audit`는 320x568부터 1280x720까지 8개 viewport 실패 0건이다. `src/react` 런타임 소스는 금지 대체 토큰 검색 0건이다.
 
 reference HTML에서 데이터와 번들을 다시 추출해 현재 편집 파일을 초기화하려면 아래 명령을 명시적으로 실행한다.
 

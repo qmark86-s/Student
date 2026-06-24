@@ -2,9 +2,10 @@ import { courseBandForCurrent, courseLabelForCurrent, resolveGradeVisual } from 
 import { educationPointMultiplier } from "./education.js";
 import { activeLearningHelpers, helperPower } from "./companions.js";
 import { createDefaultExpeditionState, migrateLegacyExpeditionState, validateExpeditionState } from "./expedition.js";
+import { createDefaultRealEstateState, normalizeRealEstateState, validateRealEstateState } from "./realEstate.js";
 
 export const SAVE_KEY = "student-idle-rpg-save-v1";
-export const SAVE_SCHEMA_VERSION = 2;
+export const SAVE_SCHEMA_VERSION = 3;
 export const CONTENT_REVISION = "lzg40t";
 
 const defaultWeights = {
@@ -248,6 +249,7 @@ export function validateGameState(state) {
   validateCurrentState(state.current, "save.current");
   assertArray(state.companions, "save.companions");
   validateExpeditionState(state.expedition, "save.expedition");
+  validateRealEstateState(state.realEstate, "save.realEstate");
   assertArray(state.archive, "save.archive");
   assertArray(state.history, "save.history");
   assertArray(state.log, "save.log");
@@ -299,6 +301,7 @@ export function createDefaultGameState() {
     },
     companions: [],
     expedition: createDefaultExpeditionState(),
+    realEstate: createDefaultRealEstateState(),
     archive: [],
     history: [],
     log: [],
@@ -336,6 +339,14 @@ function migrateGameState(state) {
       ...state,
       schemaVersion: SAVE_SCHEMA_VERSION,
       expedition: migrateLegacyExpeditionState(state.expedition, state.companions),
+      realEstate: createDefaultRealEstateState(),
+    };
+  }
+  if (state.schemaVersion === 2) {
+    return {
+      ...state,
+      schemaVersion: SAVE_SCHEMA_VERSION,
+      realEstate: createDefaultRealEstateState(),
     };
   }
   throw new Error(`지원하지 않는 저장 버전입니다: ${String(state.schemaVersion)}`);
@@ -372,6 +383,7 @@ export function normalizeGameState(state) {
       chapterRun: { ...migrated.expedition.chapterRun },
       log: migrated.expedition.log.map((entry) => ({ ...entry })),
     },
+    realEstate: normalizeRealEstateState(migrated.realEstate),
     archive: migrated.archive,
     history: migrated.history,
     log: migrated.log,

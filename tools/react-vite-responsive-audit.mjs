@@ -444,7 +444,7 @@ function collectFailures(metrics, scenario) {
     failures.push(`tab count ${metrics.tabCount}/7`);
   }
   if (metrics.statusTileCount < 5) failures.push(`status tiles ${metrics.statusTileCount}/5`);
-  if (metrics.modeTabCount !== 2) failures.push(`mode tabs ${metrics.modeTabCount}/2`);
+  if (metrics.modeTabCount !== 3) failures.push(`mode tabs ${metrics.modeTabCount}/3`);
   if (metrics.buttonOverflow.length > 0) {
     failures.push(`button overflow: ${metrics.buttonOverflow.map((button) => button.text || "(empty)").join(", ")}`);
   }
@@ -661,7 +661,7 @@ async function auditFeatureViewport(browser, baseUrl, viewport) {
   await page.locator(".shop-modal .icon-button.dark").click();
   await page.locator(".tab").nth(2).click();
   await page.locator(".header-actions .icon-button").first().click();
-  await page.locator(".debug-actions button").nth(2).click();
+  await page.getByRole("button", { name: /동료 랜덤 \+5/ }).click();
   await page.locator(".debug-modal .icon-button.dark").click();
   await page.locator(".mode-tab").nth(1).click();
   await page.waitForSelector(".expedition-unit-avatar.large", { timeout: 5000 });

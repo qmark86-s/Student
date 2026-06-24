@@ -1,0 +1,219 @@
+{
+  "version": 1,
+  "properties": [
+    {
+      "id": "small_studio",
+      "name": "작은 원룸",
+      "description": "낡은 골목에서 시작하는 첫 임대 자산입니다.",
+      "unlockStage": 1,
+      "basePrice": 100,
+      "priceGrowth": 1.13,
+      "baseIncomePerMinute": 3,
+      "assetValue": 100,
+      "assetValueGrowth": 1.1,
+      "artStage": "early",
+      "help": {
+        "unlockStage": "매입 가능해지는 원정대 최고 Stage입니다.",
+        "basePrice": "첫 1채 구매에 필요한 부동산 자금입니다.",
+        "priceGrowth": "보유 수량이 늘어날 때 다음 구매가에 곱해지는 성장률입니다.",
+        "baseIncomePerMinute": "1채가 분당 생산하는 부동산 자금입니다.",
+        "assetValue": "첫 1채의 평가 자산가치입니다.",
+        "assetValueGrowth": "보유 수량이 늘어날 때 평가액에 곱해지는 성장률입니다.",
+        "artStage": "부동산 scene 대표 배경 단계를 고르는 값입니다."
+      }
+    },
+    {
+      "id": "two_room",
+      "name": "투룸",
+      "description": "작은 가족과 직장인이 찾는 안정적인 주거 매물입니다.",
+      "unlockStage": 2,
+      "basePrice": 420,
+      "priceGrowth": 1.145,
+      "baseIncomePerMinute": 12,
+      "assetValue": 420,
+      "assetValueGrowth": 1.11,
+      "artStage": "early",
+      "help": {
+        "unlockStage": "매입 가능해지는 원정대 최고 Stage입니다.",
+        "basePrice": "첫 1채 구매에 필요한 부동산 자금입니다.",
+        "priceGrowth": "보유 수량이 늘어날 때 다음 구매가에 곱해지는 성장률입니다.",
+        "baseIncomePerMinute": "1채가 분당 생산하는 부동산 자금입니다.",
+        "assetValue": "첫 1채의 평가 자산가치입니다.",
+        "assetValueGrowth": "보유 수량이 늘어날 때 평가액에 곱해지는 성장률입니다.",
+        "artStage": "부동산 scene 대표 배경 단계를 고르는 값입니다."
+      }
+    },
+    {
+      "id": "villa",
+      "name": "빌라",
+      "description": "한 골목의 월세 흐름을 조금 더 크게 묶는 매물입니다.",
+      "unlockStage": 5,
+      "basePrice": 1600,
+      "priceGrowth": 1.155,
+      "baseIncomePerMinute": 45,
+      "assetValue": 1600,
+      "assetValueGrowth": 1.12,
+      "artStage": "early",
+      "help": {
+        "unlockStage": "매입 가능해지는 원정대 최고 Stage입니다.",
+        "basePrice": "첫 1채 구매에 필요한 부동산 자금입니다.",
+        "priceGrowth": "보유 수량이 늘어날 때 다음 구매가에 곱해지는 성장률입니다.",
+        "baseIncomePerMinute": "1채가 분당 생산하는 부동산 자금입니다.",
+        "assetValue": "첫 1채의 평가 자산가치입니다.",
+        "assetValueGrowth": "보유 수량이 늘어날 때 평가액에 곱해지는 성장률입니다.",
+        "artStage": "부동산 scene 대표 배경 단계를 고르는 값입니다."
+      }
+    },
+    {
+      "id": "officetel",
+      "name": "오피스텔",
+      "description": "업무지구 수요까지 붙어 임대 흐름이 강해집니다.",
+      "unlockStage": 10,
+      "basePrice": 6200,
+      "priceGrowth": 1.165,
+      "baseIncomePerMinute": 160,
+      "assetValue": 6200,
+      "assetValueGrowth": 1.13,
+      "artStage": "mid",
+      "help": {
+        "unlockStage": "매입 가능해지는 원정대 최고 Stage입니다.",
+        "basePrice": "첫 1채 구매에 필요한 부동산 자금입니다.",
+        "priceGrowth": "보유 수량이 늘어날 때 다음 구매가에 곱해지는 성장률입니다.",
+        "baseIncomePerMinute": "1채가 분당 생산하는 부동산 자금입니다.",
+        "assetValue": "첫 1채의 평가 자산가치입니다.",
+        "assetValueGrowth": "보유 수량이 늘어날 때 평가액에 곱해지는 성장률입니다.",
+        "artStage": "부동산 scene 대표 배경 단계를 고르는 값입니다."
+      }
+    },
+    {
+      "id": "shop_unit",
+      "name": "상가 점포",
+      "description": "생활 상권의 작은 점포들이 꾸준히 자금을 만듭니다.",
+      "unlockStage": 18,
+      "basePrice": 24000,
+      "priceGrowth": 1.175,
+      "baseIncomePerMinute": 520,
+      "assetValue": 24000,
+      "assetValueGrowth": 1.14,
+      "artStage": "mid",
+      "help": {
+        "unlockStage": "매입 가능해지는 원정대 최고 Stage입니다.",
+        "basePrice": "첫 1채 구매에 필요한 부동산 자금입니다.",
+        "priceGrowth": "보유 수량이 늘어날 때 다음 구매가에 곱해지는 성장률입니다.",
+        "baseIncomePerMinute": "1채가 분당 생산하는 부동산 자금입니다.",
+        "assetValue": "첫 1채의 평가 자산가치입니다.",
+        "assetValueGrowth": "보유 수량이 늘어날 때 평가액에 곱해지는 성장률입니다.",
+        "artStage": "부동산 scene 대표 배경 단계를 고르는 값입니다."
+      }
+    },
+    {
+      "id": "small_building",
+      "name": "꼬마빌딩",
+      "description": "여러 임차인을 품은 작은 빌딩으로 포트폴리오가 커집니다.",
+      "unlockStage": 30,
+      "basePrice": 92000,
+      "priceGrowth": 1.185,
+      "baseIncomePerMinute": 1800,
+      "assetValue": 92000,
+      "assetValueGrowth": 1.15,
+      "artStage": "mid",
+      "help": {
+        "unlockStage": "매입 가능해지는 원정대 최고 Stage입니다.",
+        "basePrice": "첫 1채 구매에 필요한 부동산 자금입니다.",
+        "priceGrowth": "보유 수량이 늘어날 때 다음 구매가에 곱해지는 성장률입니다.",
+        "baseIncomePerMinute": "1채가 분당 생산하는 부동산 자금입니다.",
+        "assetValue": "첫 1채의 평가 자산가치입니다.",
+        "assetValueGrowth": "보유 수량이 늘어날 때 평가액에 곱해지는 성장률입니다.",
+        "artStage": "부동산 scene 대표 배경 단계를 고르는 값입니다."
+      }
+    },
+    {
+      "id": "apartment_building",
+      "name": "아파트 동",
+      "description": "한 동 단위의 임대 흐름으로 도시의 일부를 품습니다.",
+      "unlockStage": 45,
+      "basePrice": 360000,
+      "priceGrowth": 1.195,
+      "baseIncomePerMinute": 6100,
+      "assetValue": 360000,
+      "assetValueGrowth": 1.16,
+      "artStage": "late",
+      "help": {
+        "unlockStage": "매입 가능해지는 원정대 최고 Stage입니다.",
+        "basePrice": "첫 1채 구매에 필요한 부동산 자금입니다.",
+        "priceGrowth": "보유 수량이 늘어날 때 다음 구매가에 곱해지는 성장률입니다.",
+        "baseIncomePerMinute": "1채가 분당 생산하는 부동산 자금입니다.",
+        "assetValue": "첫 1채의 평가 자산가치입니다.",
+        "assetValueGrowth": "보유 수량이 늘어날 때 평가액에 곱해지는 성장률입니다.",
+        "artStage": "부동산 scene 대표 배경 단계를 고르는 값입니다."
+      }
+    },
+    {
+      "id": "apartment_complex",
+      "name": "아파트 단지",
+      "description": "여러 동의 수익을 묶어 자산 순위를 밀어 올립니다.",
+      "unlockStage": 60,
+      "basePrice": 1400000,
+      "priceGrowth": 1.2,
+      "baseIncomePerMinute": 21000,
+      "assetValue": 1400000,
+      "assetValueGrowth": 1.165,
+      "artStage": "late",
+      "help": {
+        "unlockStage": "매입 가능해지는 원정대 최고 Stage입니다.",
+        "basePrice": "첫 1채 구매에 필요한 부동산 자금입니다.",
+        "priceGrowth": "보유 수량이 늘어날 때 다음 구매가에 곱해지는 성장률입니다.",
+        "baseIncomePerMinute": "1채가 분당 생산하는 부동산 자금입니다.",
+        "assetValue": "첫 1채의 평가 자산가치입니다.",
+        "assetValueGrowth": "보유 수량이 늘어날 때 평가액에 곱해지는 성장률입니다.",
+        "artStage": "부동산 scene 대표 배경 단계를 고르는 값입니다."
+      }
+    },
+    {
+      "id": "office_tower",
+      "name": "오피스 빌딩",
+      "description": "도심 업무 수요가 큰 분당 수익으로 돌아옵니다.",
+      "unlockStage": 80,
+      "basePrice": 5600000,
+      "priceGrowth": 1.205,
+      "baseIncomePerMinute": 72000,
+      "assetValue": 5600000,
+      "assetValueGrowth": 1.17,
+      "artStage": "late",
+      "help": {
+        "unlockStage": "매입 가능해지는 원정대 최고 Stage입니다.",
+        "basePrice": "첫 1채 구매에 필요한 부동산 자금입니다.",
+        "priceGrowth": "보유 수량이 늘어날 때 다음 구매가에 곱해지는 성장률입니다.",
+        "baseIncomePerMinute": "1채가 분당 생산하는 부동산 자금입니다.",
+        "assetValue": "첫 1채의 평가 자산가치입니다.",
+        "assetValueGrowth": "보유 수량이 늘어날 때 평가액에 곱해지는 성장률입니다.",
+        "artStage": "부동산 scene 대표 배경 단계를 고르는 값입니다."
+      }
+    },
+    {
+      "id": "mixed_development",
+      "name": "복합 개발지",
+      "description": "주거와 상업, 업무가 함께 굴러가는 최종급 개발 자산입니다.",
+      "unlockStage": 100,
+      "basePrice": 22000000,
+      "priceGrowth": 1.21,
+      "baseIncomePerMinute": 250000,
+      "assetValue": 22000000,
+      "assetValueGrowth": 1.175,
+      "artStage": "late",
+      "help": {
+        "unlockStage": "매입 가능해지는 원정대 최고 Stage입니다.",
+        "basePrice": "첫 1채 구매에 필요한 부동산 자금입니다.",
+        "priceGrowth": "보유 수량이 늘어날 때 다음 구매가에 곱해지는 성장률입니다.",
+        "baseIncomePerMinute": "1채가 분당 생산하는 부동산 자금입니다.",
+        "assetValue": "첫 1채의 평가 자산가치입니다.",
+        "assetValueGrowth": "보유 수량이 늘어날 때 평가액에 곱해지는 성장률입니다.",
+        "artStage": "부동산 scene 대표 배경 단계를 고르는 값입니다."
+      }
+    }
+  ],
+  "help": {
+    "version": "부동산 카탈로그 데이터 버전입니다.",
+    "properties": "부동산 탭에서 구매 가능한 정해진 매물 목록입니다."
+  }
+}

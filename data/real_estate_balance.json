@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "currency": {
+    "id": "real_estate_cash",
+    "name": "부동산 자금",
+    "unit": "자금",
+    "help": {
+      "id": "저장과 UI에서 사용하는 부동산 전용 재화 id입니다.",
+      "name": "사용자에게 표시되는 부동산 전용 재화 이름입니다.",
+      "unit": "짧은 UI에서 붙이는 재화 단위입니다."
+    }
+  },
+  "rent": {
+    "tickMs": 1000,
+    "offlineCapHours": 8,
+    "help": {
+      "tickMs": "임대수익 자동 정산 주기입니다.",
+      "offlineCapHours": "앱 재진입 시 임대수익을 반영하는 최대 시간입니다."
+    }
+  },
+  "expeditionRewards": {
+    "stageBaseCash": 130,
+    "stageGrowthRate": 1.028,
+    "midBossMultiplier": 5,
+    "chapterBossMultiplier": 12,
+    "idleBaseCashPerHour": 90,
+    "idleStageFactor": 0.16,
+    "idleCapHours": 8,
+    "help": {
+      "stageBaseCash": "원정대 Stage 1 돌파 시 지급하는 기준 부동산 자금입니다.",
+      "stageGrowthRate": "Stage가 올라갈수록 돌파 보상에 곱해지는 성장률입니다.",
+      "midBossMultiplier": "중간 보스 Stage 돌파 시 부동산 자금 보상 배수입니다.",
+      "chapterBossMultiplier": "챕터 보스 Stage 돌파 시 부동산 자금 보상 배수입니다.",
+      "idleBaseCashPerHour": "원정대 방치 정산의 시간당 기준 부동산 자금입니다.",
+      "idleStageFactor": "원정대 최고 Stage에 따라 방치 자금에 더하는 계수입니다.",
+      "idleCapHours": "원정대 방치 부동산 자금을 반영하는 최대 시간입니다."
+    }
+  },
+  "ranking": {
+    "population": 10000,
+    "cashAssetWeight": 0.15,
+    "previewPower": 1.8,
+    "previewScale": 17,
+    "minimumWeeklyAssetGainForClaim": 1,
+    "help": {
+      "population": "로컬/mock 랭킹 preview에서 사용하는 가상 참여자 수입니다.",
+      "cashAssetWeight": "보유 부동산 자금을 총 자산가치에 일부 반영하는 비율입니다.",
+      "previewPower": "주간 자산 증가량을 예상 랭킹으로 변환할 때 쓰는 곡선 지수입니다.",
+      "previewScale": "주간 자산 증가량이 랭킹에 미치는 강도를 조절합니다.",
+      "minimumWeeklyAssetGainForClaim": "일반 부동산 랭킹 보상을 수령하기 위해 필요한 최소 주간 자산 증가량입니다."
+    }
+  },
+  "artStages": [
+    { "id": "early", "minAssetValue": 0, "asset": "visual-real-estate-early.png", "label": "골목 임대", "help": { "minAssetValue": "이 배경이 표시되는 최소 총 자산가치입니다.", "asset": "src/snapshot/assets 안의 배경 이미지 파일명입니다.", "label": "scene에 표시되는 자산 규모 이름입니다." } },
+    { "id": "mid", "minAssetValue": 120000, "asset": "visual-real-estate-mid.png", "label": "상권 확장", "help": { "minAssetValue": "이 배경이 표시되는 최소 총 자산가치입니다.", "asset": "src/snapshot/assets 안의 배경 이미지 파일명입니다.", "label": "scene에 표시되는 자산 규모 이름입니다." } },
+    { "id": "late", "minAssetValue": 1800000, "asset": "visual-real-estate-late.png", "label": "도시 자산가", "help": { "minAssetValue": "이 배경이 표시되는 최소 총 자산가치입니다.", "asset": "src/snapshot/assets 안의 배경 이미지 파일명입니다.", "label": "scene에 표시되는 자산 규모 이름입니다." } }
+  ],
+  "help": {
+    "version": "부동산 밸런스 데이터 버전입니다.",
+    "currency": "부동산 전용 재화 표시 정보입니다.",
+    "rent": "임대수익 자동 정산 설정입니다.",
+    "expeditionRewards": "원정대 돌파와 방치 보상의 부동산 자금 설정입니다.",
+    "ranking": "로컬/mock 주간 랭킹 preview 설정입니다.",
+    "artStages": "총 자산가치에 따라 바뀌는 부동산 scene 배경 설정입니다."
+  }
+}

@@ -91,6 +91,15 @@ import {
   removeExpeditionMemberFromParty,
   toggleExpeditionMemberLock,
 } from "./game/expedition.js";
+import {
+  accrueRealEstateIncome,
+  claimDebugRealEstateWeeklyReward,
+  claimRealEstateWeeklyReward,
+  createRealEstateViewModel,
+  purchaseMaxRealEstateProperty,
+  purchaseRealEstateProperty,
+  realEstateAutoTickMs,
+} from "./game/realEstate.js";
 
 import { CONTENT_REVISION, createDefaultGameState, loadGameState, normalizeGameState, saveGameState, summarizeGameState } from "./game/save.js";
 import { resolveGradeVisual } from "./game/grades.js";
@@ -98,6 +107,9 @@ import elementaryBackdrop from "../snapshot/assets/visual-battle-road-backdrop-e
 import highBackdrop from "../snapshot/assets/visual-battle-road-backdrop-high.png";
 import middleBackdrop from "../snapshot/assets/visual-battle-road-backdrop-middle.png";
 import repeaterBackdrop from "../snapshot/assets/visual-battle-road-backdrop-repeater.png";
+import realEstateEarlyBackdrop from "../snapshot/assets/visual-real-estate-early.png";
+import realEstateLateBackdrop from "../snapshot/assets/visual-real-estate-late.png";
+import realEstateMidBackdrop from "../snapshot/assets/visual-real-estate-mid.png";
 import studentAtlas from "../snapshot/assets/asset-002.png";
 import mainMonsterAtlas from "../snapshot/assets/asset-003.png";
 
@@ -122,6 +134,11 @@ const backdrops = {
   middle: middleBackdrop,
   high: highBackdrop,
   repeater: repeaterBackdrop,
+};
+const realEstateBackdrops = {
+  early: realEstateEarlyBackdrop,
+  mid: realEstateMidBackdrop,
+  late: realEstateLateBackdrop,
 };
 const totalCareerAtlasFrames = careers.length * 2;
 
@@ -436,10 +453,15 @@ function IconButton({ alert = false, icon, label, onClick }) {
   );
 }
 
-function Header({ debugAlert, expeditionSummary, mode, onOpenDebug, onOpenSettings, onOpenShop, summary }) {
+function Header({ debugAlert, expeditionSummary, mode, onOpenDebug, onOpenSettings, onOpenShop, realEstateSummary, summary }) {
   const titleRef = useRef(null);
-  const titleLabel = mode === "expedition" ? "원정대" : "학생 방치 RPG";
-  const prefixLabel = mode === "expedition" ? expeditionSummary.headerPrefix : `${summary.runNumber}회차 · ${summary.courseBand}`;
+  const titleLabel = mode === "expedition" ? "원정대" : mode === "realEstate" ? "부동산" : "학생 방치 RPG";
+  const prefixLabel =
+    mode === "expedition"
+      ? expeditionSummary.headerPrefix
+      : mode === "realEstate"
+        ? `자산 ${formatCompactNumber(realEstateSummary.totalAssetValue)}`
+        : `${summary.runNumber}회차 · ${summary.courseBand}`;
 
   useLayoutEffect(() => {
     const title = titleRef.current;
@@ -482,7 +504,7 @@ function Header({ debugAlert, expeditionSummary, mode, onOpenDebug, onOpenSettin
   );
 }
 
-function StatusGrid({ expeditionSummary, mode, summary }) {
+function StatusGrid({ expeditionSummary, mode, realEstateSummary, summary }) {
   const items =
     mode === "expedition"
       ? [
@@ -492,6 +514,14 @@ function StatusGrid({ expeditionSummary, mode, summary }) {
         ["보유 EXP", formatCompactNumber(expeditionSummary.trainingExp)],
         ["다이아", formatCompactNumber(expeditionSummary.diamonds)],
       ]
+      : mode === "realEstate"
+        ? [
+          ["총 자산", formatCompactNumber(realEstateSummary.totalAssetValue)],
+          ["부동산 자금", formatCompactNumber(realEstateSummary.cash)],
+          ["임대/분", formatCompactNumber(realEstateSummary.rentPerMinute)],
+          ["주간 증가", formatCompactNumber(realEstateSummary.weeklyAssetGain)],
+          ["예상 순위", `${formatCompactNumber(realEstateSummary.rank)}위`],
+        ]
       : [
         ["과정", summary.courseLabel],
         ["나이", `${summary.age}세`],
@@ -501,7 +531,7 @@ function StatusGrid({ expeditionSummary, mode, summary }) {
       ];
 
   return (
-    <section className="status-grid" aria-label={mode === "expedition" ? "원정대 현재 상태" : "플레이어 상태"}>
+    <section className="status-grid" aria-label={mode === "expedition" ? "원정대 현재 상태" : mode === "realEstate" ? "부동산 현재 상태" : "플레이어 상태"}>
       {items.map(([label, value]) => (
         <div className="status-tile" key={label}>
           <span>{label}</span>
@@ -523,7 +553,10 @@ function ModeTabs({ mode, onModeChange }) {
         <Medal size={24} />
         <span>원정대</span>
       </button>
-      <span className="swipe-copy">좌우 스와이프</span>
+      <button className={mode === "realEstate" ? "mode-tab active" : "mode-tab"} type="button" onClick={() => onModeChange("realEstate")}>
+        <BriefcaseBusiness size={24} />
+        <span>부동산</span>
+      </button>
     </section>
   );
 }
@@ -1335,6 +1368,115 @@ function ExpeditionManagementPanel({ activeTab, gameState, onAssign, onFuse, onL
   );
 }
 
+function RealEstateScene({ realEstateSummary }) {
+  const backdrop = realEstateBackdrops[realEstateSummary.artStage.id];
+  assert(backdrop, `부동산 배경 이미지 누락: ${realEstateSummary.artStage.id}`);
+  const rankPercent = Math.max(0, Math.min(100, Math.round((1 - realEstateSummary.rank / realEstateSummary.rankPopulation) * 100)));
+  const ownedPercent = Math.max(0, Math.min(100, Math.round((realEstateSummary.ownedKinds / realEstateSummary.totalKinds) * 100)));
+
+  return (
+    <section className="real-estate-scene" aria-label="부동산 도시">
+      <div className="real-estate-city">
+        <img className="real-estate-backdrop" src={backdrop} alt="" aria-hidden="true" />
+        <div className="real-estate-city-shade" aria-hidden="true" />
+        <div className="real-estate-city-head">
+          <div>
+            <span>{realEstateSummary.artStage.label}</span>
+            <strong>{realEstateSummary.representativeLabel}</strong>
+          </div>
+          <b>{realEstateSummary.ownedTotal}채</b>
+        </div>
+        <div className="real-estate-city-bottom">
+          <article>
+            <span>총 자산가치</span>
+            <strong>{formatCompactNumber(realEstateSummary.totalAssetValue)}</strong>
+            <i className="progress-bar"><span style={{ width: `${ownedPercent}%` }} /></i>
+          </article>
+          <article>
+            <span>예상 랭킹</span>
+            <strong>{formatCompactNumber(realEstateSummary.rank)}위</strong>
+            <i className="progress-bar"><span style={{ width: `${rankPercent}%` }} /></i>
+          </article>
+          <article>
+            <span>원정 방치/시</span>
+            <strong>{formatCompactNumber(realEstateSummary.idleCashPerHour)}</strong>
+            <i className="progress-bar"><span style={{ width: `${Math.min(100, Math.max(5, realEstateSummary.highestStage))}%` }} /></i>
+          </article>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function RealEstateCard({ card, onBuy, onBuyMax }) {
+  const cardClass = card.unlocked ? card.count > 0 ? "real-estate-card owned" : "real-estate-card ready" : "real-estate-card locked";
+  const progressWidth = `${Math.max(0, Math.min(100, card.nextScaleProgress))}%`;
+  return (
+    <article className={cardClass} data-property-id={card.id} data-real-estate-card="true">
+      <header>
+        <div>
+          <span>{card.unlocked ? card.scaleLabel : `Stage ${card.unlockStage}`}</span>
+          <strong>{card.name}</strong>
+        </div>
+        <b>{card.count}채</b>
+      </header>
+      <p>{card.description}</p>
+      <div className="real-estate-card-stats">
+        <Metric label="규모" value={card.portfolioLabel} />
+        <Metric label="임대/분" value={formatCompactNumber(card.rentPerMinute)} />
+        <Metric label="평가액" value={formatCompactNumber(card.assetValue)} />
+      </div>
+      <div className="real-estate-scale">
+        <span>{card.nextScaleLabel}</span>
+        <i><span style={{ width: progressWidth }} /></i>
+      </div>
+      <div className="real-estate-card-actions">
+        <button className="secondary-action compact" data-action="buy-one" type="button" disabled={!card.canBuyOne} onClick={() => onBuy(card.id, 1)}>
+          <span>{card.unlocked ? "구매" : "잠김"}</span>
+          <small>{card.unlocked ? formatCompactNumber(card.nextCost) : `Stage ${card.unlockStage}`}</small>
+        </button>
+        <button className="secondary-action compact" data-action="buy-ten" type="button" disabled={!card.canBuyTen} onClick={() => onBuy(card.id, 10)}>
+          <span>10개</span>
+          <small>{formatCompactNumber(card.cost10)}</small>
+        </button>
+        <button className="primary-action compact" data-action="buy-max" type="button" disabled={!card.canBuyMax} onClick={() => onBuyMax(card.id)}>
+          <span>최대</span>
+          <small>{card.maxBuyCount > 0 ? `${card.maxBuyCount}개` : "부족"}</small>
+        </button>
+      </div>
+    </article>
+  );
+}
+
+function RealEstateManagementPanel({ realEstateSummary, onBuy, onBuyMax, onClaimWeeklyReward }) {
+  return (
+    <section className="real-estate-viewport">
+      <header className="section-title compact-title">
+        <div>
+          <BriefcaseBusiness size={18} />
+          <h2>부동산 포트폴리오</h2>
+        </div>
+        <span>{realEstateSummary.ownedKinds}/{realEstateSummary.totalKinds}종</span>
+      </header>
+      <div className="real-estate-ranking-panel">
+        <Metric label="예상 순위" value={`${formatCompactNumber(realEstateSummary.rank)}위`} />
+        <Metric label="예상 보상" value={`${formatCompactNumber(realEstateSummary.rewardDiamonds)} 다이아`} />
+        <Metric label="보상 구간" value={realEstateSummary.rewardLabel} />
+        <button className="primary-action compact real-estate-reward-button" type="button" disabled={!realEstateSummary.canClaimWeeklyReward} onClick={onClaimWeeklyReward}>
+          <Gem size={16} />
+          <span>{realEstateSummary.weeklyRewardButtonLabel}</span>
+          <small>{realEstateSummary.weeklyRewardHint}</small>
+        </button>
+      </div>
+      <div className="real-estate-card-list">
+        {realEstateSummary.cards.map((card) => (
+          <RealEstateCard card={card} key={card.id} onBuy={onBuy} onBuyMax={onBuyMax} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function ExamPanel({ gameState, onBattleComplete, summary }) {
   const current = gameState.current;
   const battle = current.battle;
@@ -2089,9 +2231,10 @@ function ShopModal({ gameState, onClose, onSetGameState }) {
   );
 }
 
-function DebugModal({ gameState, onClose, onSetGameState }) {
+function DebugModal({ gameState, onClose, onSetGameState, showDebugTools = false }) {
   const [jsonText, setJsonText] = useState("");
   const [notice, setNotice] = useState("");
+  const realEstateSummary = createRealEstateViewModel(gameState);
 
   const handleAddCareerCompanions = (count) => {
     const result = addDebugExpeditionMembers(gameState, count);
@@ -2120,6 +2263,7 @@ function DebugModal({ gameState, onClose, onSetGameState }) {
         <Metric label="저장 데이터" value={isContentCurrent(gameState) ? "최신" : "갱신 필요"} />
         <Metric label="콘텐츠" value={CONTENT_REVISION.slice(0, 8)} />
         <Metric label="다이아" value={formatCompactNumber(gameState.diamonds)} />
+        <Metric label="부동산 순위" value={`${formatCompactNumber(realEstateSummary.rank)}위`} />
       </div>
       <div className="debug-actions">
         <button className="secondary-action compact" type="button" onClick={() => {
@@ -2129,6 +2273,15 @@ function DebugModal({ gameState, onClose, onSetGameState }) {
           <Gem size={18} />
           <span>다이아 +10K</span>
         </button>
+        {showDebugTools && (
+          <button className="secondary-action compact" type="button" disabled={realEstateSummary.rewardClaimed} onClick={() => {
+            onSetGameState((state) => claimDebugRealEstateWeeklyReward(state));
+            setNotice(`부동산 보상 ${formatCompactNumber(realEstateSummary.rewardDiamonds)} 다이아 수령`);
+          }}>
+            <Gem size={18} />
+            <span>부동산 주간 보상 수령</span>
+          </button>
+        )}
         <button className="secondary-action compact" type="button" onClick={() => handleAddCareerCompanions(1)}>
           <Shuffle size={18} />
           <span>동료 랜덤 +1</span>
@@ -2319,6 +2472,7 @@ function GameApp({ loaded }) {
   });
   const summary = summarizeGameState(gameState);
   const expeditionSummary = createExpeditionSummary(gameState);
+  const realEstateSummary = createRealEstateViewModel(gameState);
   const gradeVisual = resolveGradeVisual(gameState.current);
   getStudentFrameUrls(gradeVisual, gameState.current.avatarGender);
   const battle = gameState.current.battle;
@@ -2339,6 +2493,18 @@ function GameApp({ loaded }) {
     }, tickMs);
     return () => window.clearInterval(timer);
   }, [gameState.current.awaitingDecision, pauseAutoBattle]);
+
+  useEffect(() => {
+    const tickMs = finiteNumber(realEstateAutoTickMs, "부동산 자동 정산 tick 값이 올바르지 않습니다.");
+    const timer = window.setInterval(() => {
+      setGameState((state) => {
+        const owned = Object.keys(state.realEstate.properties).length > 0;
+        const expeditionIdle = state.expedition.partyMemberIds.length > 0 && Number(state.expedition.highestStage) > 0;
+        return owned || expeditionIdle ? accrueRealEstateIncome(state) : state;
+      });
+    }, tickMs);
+    return () => window.clearInterval(timer);
+  }, []);
 
   const handleModeChange = (nextMode) => {
     setMode(nextMode);
@@ -2375,11 +2541,35 @@ function GameApp({ loaded }) {
   };
 
   const handleExpeditionAssign = (memberId) => {
-    setGameState((state) => assignExpeditionMember(state, memberId, state.expedition.partyMemberIds.length));
+    setGameState((state) => {
+      const next = assignExpeditionMember(state, memberId, state.expedition.partyMemberIds.length);
+      if (state.expedition.partyMemberIds.length === 0 && next.expedition.partyMemberIds.length > 0) {
+        return {
+          ...next,
+          realEstate: {
+            ...next.realEstate,
+            lastExpeditionFundAt: Date.now(),
+          },
+        };
+      }
+      return next;
+    });
   };
 
   const handleExpeditionRemove = (memberId) => {
-    setGameState((state) => removeExpeditionMemberFromParty(state, memberId));
+    setGameState((state) => {
+      const next = removeExpeditionMemberFromParty(state, memberId);
+      if (next.expedition.partyMemberIds.length === 0) {
+        return {
+          ...next,
+          realEstate: {
+            ...next.realEstate,
+            lastExpeditionFundAt: Date.now(),
+          },
+        };
+      }
+      return next;
+    });
   };
 
   const handleExpeditionLevelUp = (memberId) => {
@@ -2396,6 +2586,18 @@ function GameApp({ loaded }) {
 
   const handleEducationUpgrade = (actionId) => {
     setGameState((state) => upgradeEducation(state, actionId));
+  };
+
+  const handleRealEstateBuy = (propertyId, quantity) => {
+    setGameState((state) => purchaseRealEstateProperty(state, propertyId, quantity));
+  };
+
+  const handleRealEstateBuyMax = (propertyId) => {
+    setGameState((state) => purchaseMaxRealEstateProperty(state, propertyId));
+  };
+
+  const handleRealEstateClaimWeeklyReward = () => {
+    setGameState((state) => claimRealEstateWeeklyReward(state));
   };
 
   const handleResetGame = () => {
@@ -2416,9 +2618,10 @@ function GameApp({ loaded }) {
           debugAlert={saveSource === "localStorage"}
           expeditionSummary={expeditionSummary}
           mode={mode}
+          realEstateSummary={realEstateSummary}
           summary={summary}
         />
-        <StatusGrid expeditionSummary={expeditionSummary} mode={mode} summary={summary} />
+        <StatusGrid expeditionSummary={expeditionSummary} mode={mode} realEstateSummary={realEstateSummary} summary={summary} />
         <ModeTabs mode={mode} onModeChange={handleModeChange} />
         {mode === "student" ? (
           <BattleArena
@@ -2430,8 +2633,10 @@ function GameApp({ loaded }) {
             showDebugTools={showDebugTools}
             summary={summary}
           />
-        ) : (
+        ) : mode === "expedition" ? (
           <ExpeditionScene gameState={gameState} onExpeditionComplete={handleExpeditionComplete} />
+        ) : (
+          <RealEstateScene realEstateSummary={realEstateSummary} />
         )}
         <section className="management-panel">
           {mode === "student" ? (
@@ -2449,7 +2654,7 @@ function GameApp({ loaded }) {
                 summary={summary}
               />
             </>
-          ) : (
+          ) : mode === "expedition" ? (
             <ExpeditionManagementPanel
               activeTab={expeditionTab}
               gameState={gameState}
@@ -2460,11 +2665,18 @@ function GameApp({ loaded }) {
               onTabChange={setExpeditionTab}
               onToggleLock={handleExpeditionToggleLock}
             />
+          ) : (
+            <RealEstateManagementPanel
+              realEstateSummary={realEstateSummary}
+              onBuy={handleRealEstateBuy}
+              onBuyMax={handleRealEstateBuyMax}
+              onClaimWeeklyReward={handleRealEstateClaimWeeklyReward}
+            />
           )}
         </section>
       </div>
       {activeModal === "shop" && <ShopModal gameState={gameState} onClose={() => setActiveModal(null)} onSetGameState={setGameState} />}
-      {activeModal === "debug" && <DebugModal gameState={gameState} onClose={() => setActiveModal(null)} onSetGameState={setGameState} />}
+      {activeModal === "debug" && <DebugModal gameState={gameState} onClose={() => setActiveModal(null)} onSetGameState={setGameState} showDebugTools={showDebugTools} />}
       {activeModal === "settings" && (
         <SettingsModal
           gameState={gameState}

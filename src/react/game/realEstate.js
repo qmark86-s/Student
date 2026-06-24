@@ -1,0 +1,600 @@
+import realEstateBalance from "../../../data/real_estate_balance.json";
+import realEstateRankRewards from "../../../data/real_estate_rank_rewards.json";
+import realEstateScaleTiers from "../../../data/real_estate_scale_tiers.json";
+import realEstates from "../../../data/real_estates.json";
+
+function assert(condition, message) {
+  if (!condition) throw new Error(message);
+}
+
+function hasOwn(source, key) {
+  return Object.prototype.hasOwnProperty.call(source, key);
+}
+
+function assertObject(source, path) {
+  assert(source && typeof source === "object" && !Array.isArray(source), `${path} 데이터가 객체가 아닙니다.`);
+}
+
+function assertArray(source, path) {
+  assert(Array.isArray(source), `${path} 데이터가 배열이 아닙니다.`);
+}
+
+function assertString(value, path) {
+  assert(typeof value === "string" && value.length > 0, `${path} 값이 문자열이 아닙니다.`);
+}
+
+function finiteNumber(value, path) {
+  const number = Number(value);
+  assert(Number.isFinite(number), `${path} 값이 숫자가 아닙니다.`);
+  return number;
+}
+
+function positiveNumber(value, path) {
+  const number = finiteNumber(value, path);
+  assert(number > 0, `${path} 값은 0보다 커야 합니다.`);
+  return number;
+}
+
+function nonNegativeNumber(value, path) {
+  const number = finiteNumber(value, path);
+  assert(number >= 0, `${path} 값은 0 이상이어야 합니다.`);
+  return number;
+}
+
+function integerAtLeast(value, path, min) {
+  const number = finiteNumber(value, path);
+  assert(Number.isInteger(number), `${path} 값은 정수여야 합니다.`);
+  assert(number >= min, `${path} 값은 ${min} 이상이어야 합니다.`);
+  return number;
+}
+
+function cloneState(state) {
+  return globalThis.structuredClone ? structuredClone(state) : JSON.parse(JSON.stringify(state));
+}
+
+function validateHelp(source, path, keys) {
+  assertObject(source.help, `${path}.help`);
+  for (const key of keys) assertString(source.help[key], `${path}.help.${key}`);
+}
+
+function validateProperty(property, index, ids) {
+  const path = `real_estates.json.properties[${index}]`;
+  assertObject(property, path);
+  assertString(property.id, `${path}.id`);
+  assert(!ids.has(property.id), `${path}.id 값이 중복되었습니다: ${property.id}`);
+  ids.add(property.id);
+  assertString(property.name, `${path}.name`);
+  assertString(property.description, `${path}.description`);
+  integerAtLeast(property.unlockStage, `${path}.unlockStage`, 1);
+  positiveNumber(property.basePrice, `${path}.basePrice`);
+  assert(positiveNumber(property.priceGrowth, `${path}.priceGrowth`) > 1, `${path}.priceGrowth 값은 1보다 커야 합니다.`);
+  positiveNumber(property.baseIncomePerMinute, `${path}.baseIncomePerMinute`);
+  positiveNumber(property.assetValue, `${path}.assetValue`);
+  assert(positiveNumber(property.assetValueGrowth, `${path}.assetValueGrowth`) > 1, `${path}.assetValueGrowth 값은 1보다 커야 합니다.`);
+  assert(["early", "mid", "late"].includes(property.artStage), `${path}.artStage 값이 올바르지 않습니다: ${property.artStage}`);
+  validateHelp(property, path, ["unlockStage", "basePrice", "priceGrowth", "baseIncomePerMinute", "assetValue", "assetValueGrowth", "artStage"]);
+}
+
+function validateScaleTier(tier, index, ids) {
+  const path = `real_estate_scale_tiers.json.tiers[${index}]`;
+  assertObject(tier, path);
+  assertString(tier.id, `${path}.id`);
+  assert(!ids.has(tier.id), `${path}.id 값이 중복되었습니다: ${tier.id}`);
+  ids.add(tier.id);
+  integerAtLeast(tier.minCount, `${path}.minCount`, 1);
+  assertString(tier.label, `${path}.label`);
+  assertString(tier.portfolioLabel, `${path}.portfolioLabel`);
+  validateHelp(tier, path, ["minCount", "label", "portfolioLabel"]);
+}
+
+function validateRankReward(reward, index, ids) {
+  const path = `real_estate_rank_rewards.json.rewards[${index}]`;
+  assertObject(reward, path);
+  assertString(reward.id, `${path}.id`);
+  assert(!ids.has(reward.id), `${path}.id 값이 중복되었습니다: ${reward.id}`);
+  ids.add(reward.id);
+  assertString(reward.label, `${path}.label`);
+  integerAtLeast(reward.diamonds, `${path}.diamonds`, 0);
+  const hasRank = hasOwn(reward, "rankMax");
+  const hasPercentile = hasOwn(reward, "percentileMax");
+  if (hasRank) {
+    integerAtLeast(reward.rankMax, `${path}.rankMax`, 1);
+    validateHelp(reward, path, ["rankMax", "diamonds"]);
+  } else if (hasPercentile) {
+    const percentile = positiveNumber(reward.percentileMax, `${path}.percentileMax`);
+    assert(percentile <= 1, `${path}.percentileMax 값은 1 이하여야 합니다.`);
+    validateHelp(reward, path, ["percentileMax", "diamonds"]);
+  } else {
+    validateHelp(reward, path, ["diamonds"]);
+  }
+}
+
+function validateArtStage(stage, index, ids) {
+  const path = `real_estate_balance.json.artStages[${index}]`;
+  assertObject(stage, path);
+  assertString(stage.id, `${path}.id`);
+  assert(!ids.has(stage.id), `${path}.id 값이 중복되었습니다: ${stage.id}`);
+  ids.add(stage.id);
+  integerAtLeast(stage.minAssetValue, `${path}.minAssetValue`, 0);
+  assertString(stage.asset, `${path}.asset`);
+  assertString(stage.label, `${path}.label`);
+  validateHelp(stage, path, ["minAssetValue", "asset", "label"]);
+}
+
+export function validateRealEstateConfig() {
+  assertObject(realEstates, "real_estates.json");
+  integerAtLeast(realEstates.version, "real_estates.json.version", 1);
+  assertArray(realEstates.properties, "real_estates.json.properties");
+  assert(realEstates.properties.length === 10, `real_estates.json.properties 수는 10개여야 합니다: ${realEstates.properties.length}`);
+  const propertyIds = new Set();
+  realEstates.properties.forEach((property, index) => validateProperty(property, index, propertyIds));
+  validateHelp(realEstates, "real_estates.json", ["version", "properties"]);
+
+  assertObject(realEstateScaleTiers, "real_estate_scale_tiers.json");
+  integerAtLeast(realEstateScaleTiers.version, "real_estate_scale_tiers.json.version", 1);
+  assertArray(realEstateScaleTiers.tiers, "real_estate_scale_tiers.json.tiers");
+  assert(realEstateScaleTiers.tiers.length === 6, `real_estate_scale_tiers.json.tiers 수는 6개여야 합니다: ${realEstateScaleTiers.tiers.length}`);
+  const tierIds = new Set();
+  realEstateScaleTiers.tiers.forEach((tier, index) => validateScaleTier(tier, index, tierIds));
+  validateHelp(realEstateScaleTiers, "real_estate_scale_tiers.json", ["version", "tiers"]);
+
+  assertObject(realEstateBalance, "real_estate_balance.json");
+  integerAtLeast(realEstateBalance.version, "real_estate_balance.json.version", 1);
+  assertObject(realEstateBalance.currency, "real_estate_balance.json.currency");
+  assertString(realEstateBalance.currency.id, "real_estate_balance.json.currency.id");
+  assertString(realEstateBalance.currency.name, "real_estate_balance.json.currency.name");
+  assertString(realEstateBalance.currency.unit, "real_estate_balance.json.currency.unit");
+  validateHelp(realEstateBalance.currency, "real_estate_balance.json.currency", ["id", "name", "unit"]);
+  assertObject(realEstateBalance.rent, "real_estate_balance.json.rent");
+  positiveNumber(realEstateBalance.rent.tickMs, "real_estate_balance.json.rent.tickMs");
+  positiveNumber(realEstateBalance.rent.offlineCapHours, "real_estate_balance.json.rent.offlineCapHours");
+  validateHelp(realEstateBalance.rent, "real_estate_balance.json.rent", ["tickMs", "offlineCapHours"]);
+  assertObject(realEstateBalance.expeditionRewards, "real_estate_balance.json.expeditionRewards");
+  for (const key of ["stageBaseCash", "stageGrowthRate", "midBossMultiplier", "chapterBossMultiplier", "idleBaseCashPerHour", "idleStageFactor", "idleCapHours"]) {
+    positiveNumber(realEstateBalance.expeditionRewards[key], `real_estate_balance.json.expeditionRewards.${key}`);
+  }
+  assert(Number(realEstateBalance.expeditionRewards.stageGrowthRate) > 1, "real_estate_balance.json.expeditionRewards.stageGrowthRate 값은 1보다 커야 합니다.");
+  validateHelp(realEstateBalance.expeditionRewards, "real_estate_balance.json.expeditionRewards", ["stageBaseCash", "stageGrowthRate", "midBossMultiplier", "chapterBossMultiplier", "idleBaseCashPerHour", "idleStageFactor", "idleCapHours"]);
+  assertObject(realEstateBalance.ranking, "real_estate_balance.json.ranking");
+  integerAtLeast(realEstateBalance.ranking.population, "real_estate_balance.json.ranking.population", 1);
+  nonNegativeNumber(realEstateBalance.ranking.cashAssetWeight, "real_estate_balance.json.ranking.cashAssetWeight");
+  positiveNumber(realEstateBalance.ranking.previewPower, "real_estate_balance.json.ranking.previewPower");
+  positiveNumber(realEstateBalance.ranking.previewScale, "real_estate_balance.json.ranking.previewScale");
+  integerAtLeast(realEstateBalance.ranking.minimumWeeklyAssetGainForClaim, "real_estate_balance.json.ranking.minimumWeeklyAssetGainForClaim", 0);
+  validateHelp(realEstateBalance.ranking, "real_estate_balance.json.ranking", ["population", "cashAssetWeight", "previewPower", "previewScale", "minimumWeeklyAssetGainForClaim"]);
+  assertArray(realEstateBalance.artStages, "real_estate_balance.json.artStages");
+  const artIds = new Set();
+  realEstateBalance.artStages.forEach((stage, index) => validateArtStage(stage, index, artIds));
+  validateHelp(realEstateBalance, "real_estate_balance.json", ["version", "currency", "rent", "expeditionRewards", "ranking", "artStages"]);
+
+  assertObject(realEstateRankRewards, "real_estate_rank_rewards.json");
+  integerAtLeast(realEstateRankRewards.version, "real_estate_rank_rewards.json.version", 1);
+  assertArray(realEstateRankRewards.rewards, "real_estate_rank_rewards.json.rewards");
+  const rewardIds = new Set();
+  realEstateRankRewards.rewards.forEach((reward, index) => validateRankReward(reward, index, rewardIds));
+  validateHelp(realEstateRankRewards, "real_estate_rank_rewards.json", ["version", "rewards"]);
+}
+
+validateRealEstateConfig();
+
+const properties = realEstates.properties;
+const propertyById = new Map(properties.map((property) => [property.id, property]));
+const scaleTiers = realEstateScaleTiers.tiers.slice().sort((a, b) => Number(a.minCount) - Number(b.minCount));
+const artStages = realEstateBalance.artStages.slice().sort((a, b) => Number(a.minAssetValue) - Number(b.minAssetValue));
+
+export const realEstateAutoTickMs = Number(realEstateBalance.rent.tickMs);
+
+export function createDefaultRealEstateState(createdAt = Date.now()) {
+  const weekStart = weekStartAt(createdAt);
+  return {
+    cash: 0,
+    properties: {},
+    rentCarry: 0,
+    lastRentAt: createdAt,
+    lastExpeditionFundAt: createdAt,
+    weeklyAssetGain: 0,
+    lastWeeklyResetAt: weekStart,
+    claimedWeeklyRewardWeek: null,
+    lastAssetValueSnapshot: 0,
+  };
+}
+
+function validateOwnedProperty(owned, path) {
+  assertObject(owned, path);
+  integerAtLeast(owned.count, `${path}.count`, 0);
+}
+
+export function validateRealEstateState(realEstate, path = "save.realEstate") {
+  assertObject(realEstate, path);
+  nonNegativeNumber(realEstate.cash, `${path}.cash`);
+  assertObject(realEstate.properties, `${path}.properties`);
+  for (const [propertyId, owned] of Object.entries(realEstate.properties)) {
+    assertString(propertyId, `${path}.properties key`);
+    assert(propertyById.has(propertyId), `${path}.properties에 카탈로그에 없는 매물 id가 있습니다: ${propertyId}`);
+    validateOwnedProperty(owned, `${path}.properties.${propertyId}`);
+  }
+  const carry = nonNegativeNumber(realEstate.rentCarry, `${path}.rentCarry`);
+  assert(carry < 1, `${path}.rentCarry 값은 1보다 작아야 합니다.`);
+  integerAtLeast(realEstate.lastRentAt, `${path}.lastRentAt`, 0);
+  integerAtLeast(realEstate.lastExpeditionFundAt, `${path}.lastExpeditionFundAt`, 0);
+  nonNegativeNumber(realEstate.weeklyAssetGain, `${path}.weeklyAssetGain`);
+  integerAtLeast(realEstate.lastWeeklyResetAt, `${path}.lastWeeklyResetAt`, 0);
+  assert(realEstate.claimedWeeklyRewardWeek === null || typeof realEstate.claimedWeeklyRewardWeek === "string", `${path}.claimedWeeklyRewardWeek 값이 올바르지 않습니다.`);
+  nonNegativeNumber(realEstate.lastAssetValueSnapshot, `${path}.lastAssetValueSnapshot`);
+}
+
+export function normalizeRealEstateState(realEstate) {
+  validateRealEstateState(realEstate);
+  const ownedProperties = {};
+  for (const [propertyId, owned] of Object.entries(realEstate.properties)) {
+    const count = Math.floor(Number(owned.count));
+    if (count > 0) ownedProperties[propertyId] = { count };
+  }
+  return {
+    cash: Math.max(0, Number(realEstate.cash)),
+    properties: ownedProperties,
+    rentCarry: Number(realEstate.rentCarry),
+    lastRentAt: Math.floor(Number(realEstate.lastRentAt)),
+    lastExpeditionFundAt: Math.floor(Number(realEstate.lastExpeditionFundAt)),
+    weeklyAssetGain: Math.max(0, Number(realEstate.weeklyAssetGain)),
+    lastWeeklyResetAt: Math.floor(Number(realEstate.lastWeeklyResetAt)),
+    claimedWeeklyRewardWeek: realEstate.claimedWeeklyRewardWeek,
+    lastAssetValueSnapshot: Math.max(0, Number(realEstate.lastAssetValueSnapshot)),
+  };
+}
+
+function propertyForId(propertyId) {
+  const property = propertyById.get(propertyId);
+  assert(property, `real_estates.json에서 매물을 찾을 수 없습니다: ${propertyId}`);
+  return property;
+}
+
+function ownedCount(realEstate, propertyId) {
+  const owned = realEstate.properties[propertyId];
+  return owned ? Math.floor(Number(owned.count)) : 0;
+}
+
+function nextPurchaseCost(property, owned) {
+  const value = Number(property.basePrice) * Number(property.priceGrowth) ** owned;
+  assert(Number.isFinite(value), `${property.id} 구매가 계산값이 올바르지 않습니다.`);
+  return Math.max(1, Math.floor(value));
+}
+
+function purchaseCostForCount(property, currentCount, quantity) {
+  const count = integerAtLeast(quantity, `${property.id}.purchaseQuantity`, 1);
+  let total = 0;
+  for (let index = 0; index < count; index += 1) {
+    total += nextPurchaseCost(property, currentCount + index);
+  }
+  return Math.floor(total);
+}
+
+function maxPurchaseCount(property, currentCount, cash) {
+  let available = Math.max(0, Math.floor(Number(cash)));
+  let count = 0;
+  while (count < 10000) {
+    const cost = nextPurchaseCost(property, currentCount + count);
+    if (available < cost) break;
+    available -= cost;
+    count += 1;
+  }
+  return count;
+}
+
+function assetValueForCount(property, count) {
+  if (count <= 0) return 0;
+  let total = 0;
+  for (let index = 0; index < count; index += 1) {
+    total += Number(property.assetValue) * Number(property.assetValueGrowth) ** index;
+  }
+  assert(Number.isFinite(total), `${property.id} 자산가치 계산값이 올바르지 않습니다.`);
+  return Math.floor(total);
+}
+
+function rentPerMinuteForState(realEstate) {
+  validateRealEstateState(realEstate);
+  return properties.reduce((sum, property) => sum + ownedCount(realEstate, property.id) * Number(property.baseIncomePerMinute), 0);
+}
+
+function portfolioAssetValue(realEstate) {
+  validateRealEstateState(realEstate);
+  return properties.reduce((sum, property) => sum + assetValueForCount(property, ownedCount(realEstate, property.id)), 0);
+}
+
+function totalAssetValueForState(realEstate) {
+  const cashWeight = Number(realEstateBalance.ranking.cashAssetWeight);
+  return portfolioAssetValue(realEstate) + Math.floor(Number(realEstate.cash) * cashWeight);
+}
+
+function weekStartAt(time) {
+  const date = new Date(Math.max(0, Number(time)));
+  const dayOffset = (date.getDay() + 6) % 7;
+  date.setHours(0, 0, 0, 0);
+  date.setDate(date.getDate() - dayOffset);
+  return date.getTime();
+}
+
+function weekKeyAt(time) {
+  return String(weekStartAt(time));
+}
+
+function syncWeekForState(state, now) {
+  validateRealEstateState(state.realEstate);
+  const weekStart = weekStartAt(now);
+  if (Number(state.realEstate.lastWeeklyResetAt) < weekStart) {
+    state.realEstate.weeklyAssetGain = 0;
+    state.realEstate.lastWeeklyResetAt = weekStart;
+    state.realEstate.claimedWeeklyRewardWeek = null;
+    state.realEstate.lastAssetValueSnapshot = totalAssetValueForState(state.realEstate);
+  }
+}
+
+function syncWeeklyAssetGain(state, now) {
+  syncWeekForState(state, now);
+  const assetValue = totalAssetValueForState(state.realEstate);
+  const previous = Number(state.realEstate.lastAssetValueSnapshot);
+  if (assetValue > previous) state.realEstate.weeklyAssetGain += assetValue - previous;
+  state.realEstate.lastAssetValueSnapshot = assetValue;
+}
+
+function stageRewardForStage(stage) {
+  assertObject(stage, "원정대 부동산 보상 stage");
+  integerAtLeast(stage.globalStage, "원정대 부동산 보상 stage.globalStage", 1);
+  const base = Number(realEstateBalance.expeditionRewards.stageBaseCash) * Number(realEstateBalance.expeditionRewards.stageGrowthRate) ** (Number(stage.globalStage) - 1);
+  const multiplier = stage.isChapterBoss ? Number(realEstateBalance.expeditionRewards.chapterBossMultiplier) : stage.isMidBoss ? Number(realEstateBalance.expeditionRewards.midBossMultiplier) : 1;
+  return Math.max(1, Math.floor(base * multiplier));
+}
+
+function idleExpeditionRewardPerHour(state) {
+  assertObject(state.expedition, "save.expedition");
+  const highestStage = Math.max(0, Math.floor(finiteNumber(state.expedition.highestStage, "save.expedition.highestStage 값이 올바르지 않습니다.")));
+  return Math.max(0, Number(realEstateBalance.expeditionRewards.idleBaseCashPerHour) * (1 + highestStage * Number(realEstateBalance.expeditionRewards.idleStageFactor)));
+}
+
+function accrueRentIntoState(state, now) {
+  validateRealEstateState(state.realEstate);
+  const rentPerMinute = rentPerMinuteForState(state.realEstate);
+  const elapsedMs = Math.max(0, Number(now) - Number(state.realEstate.lastRentAt));
+  const capMs = Number(realEstateBalance.rent.offlineCapHours) * 60 * 60 * 1000;
+  const effectiveMs = Math.min(elapsedMs, capMs);
+  if (rentPerMinute <= 0 || effectiveMs <= 0) {
+    state.realEstate.lastRentAt = Number(now);
+    return 0;
+  }
+  const pending = Number(state.realEstate.rentCarry) + (rentPerMinute * effectiveMs) / 60000;
+  const earned = Math.floor(pending);
+  state.realEstate.rentCarry = pending - earned;
+  state.realEstate.lastRentAt = Number(now);
+  if (earned > 0) state.realEstate.cash += earned;
+  return earned;
+}
+
+function accrueExpeditionFundsIntoState(state, now) {
+  validateRealEstateState(state.realEstate);
+  assertObject(state.expedition, "save.expedition");
+  assertArray(state.expedition.partyMemberIds, "save.expedition.partyMemberIds");
+  if (state.expedition.partyMemberIds.length === 0 || Number(state.expedition.highestStage) <= 0) {
+    state.realEstate.lastExpeditionFundAt = Number(now);
+    return 0;
+  }
+  const elapsedMs = Math.max(0, Number(now) - Number(state.realEstate.lastExpeditionFundAt));
+  const capMs = Number(realEstateBalance.expeditionRewards.idleCapHours) * 60 * 60 * 1000;
+  const effectiveMs = Math.min(elapsedMs, capMs);
+  if (effectiveMs <= 0) return 0;
+  const earned = Math.floor((idleExpeditionRewardPerHour(state) * effectiveMs) / 3600000);
+  if (earned <= 0) return 0;
+  state.realEstate.cash += earned;
+  state.realEstate.lastExpeditionFundAt = Number(now);
+  return earned;
+}
+
+export function accrueRealEstateIncome(state, now = Date.now()) {
+  const next = cloneState(state);
+  validateRealEstateState(next.realEstate);
+  syncWeekForState(next, now);
+  const rentEarned = accrueRentIntoState(next, now);
+  const expeditionEarned = accrueExpeditionFundsIntoState(next, now);
+  if (rentEarned > 0 || expeditionEarned > 0) syncWeeklyAssetGain(next, now);
+  validateRealEstateState(next.realEstate);
+  return next;
+}
+
+export function grantRealEstateExpeditionStageReward(state, stage, now = Date.now()) {
+  const next = cloneState(state);
+  validateRealEstateState(next.realEstate);
+  syncWeekForState(next, now);
+  const reward = stageRewardForStage(stage);
+  next.realEstate.cash += reward;
+  next.realEstate.lastExpeditionFundAt = Number(now);
+  syncWeeklyAssetGain(next, now);
+  validateRealEstateState(next.realEstate);
+  return { state: next, reward };
+}
+
+export function purchaseRealEstateProperty(state, propertyId, quantity, now = Date.now()) {
+  const next = accrueRealEstateIncome(state, now);
+  const property = propertyForId(propertyId);
+  const count = ownedCount(next.realEstate, propertyId);
+  const amount = integerAtLeast(quantity, `${propertyId}.quantity`, 1);
+  const cost = purchaseCostForCount(property, count, amount);
+  if (Number(next.realEstate.cash) < cost) return next;
+  next.realEstate.cash -= cost;
+  next.realEstate.properties[propertyId] = { count: count + amount };
+  syncWeeklyAssetGain(next, now);
+  validateRealEstateState(next.realEstate);
+  return next;
+}
+
+export function purchaseMaxRealEstateProperty(state, propertyId, now = Date.now()) {
+  const next = accrueRealEstateIncome(state, now);
+  const property = propertyForId(propertyId);
+  const count = ownedCount(next.realEstate, propertyId);
+  const amount = maxPurchaseCount(property, count, next.realEstate.cash);
+  if (amount <= 0) return next;
+  const cost = purchaseCostForCount(property, count, amount);
+  next.realEstate.cash -= cost;
+  next.realEstate.properties[propertyId] = { count: count + amount };
+  syncWeeklyAssetGain(next, now);
+  validateRealEstateState(next.realEstate);
+  return next;
+}
+
+function scaleTierForCount(count) {
+  let tier = scaleTiers[0];
+  for (const candidate of scaleTiers) {
+    if (count >= Number(candidate.minCount)) tier = candidate;
+  }
+  return tier;
+}
+
+function nextScaleTier(count) {
+  return scaleTiers.find((tier) => count < Number(tier.minCount)) || null;
+}
+
+function artStageForAssetValue(assetValue) {
+  let stage = artStages[0];
+  for (const candidate of artStages) {
+    if (assetValue >= Number(candidate.minAssetValue)) stage = candidate;
+  }
+  return stage;
+}
+
+function rankingRewardForRank(rank) {
+  const population = Number(realEstateBalance.ranking.population);
+  const percentile = rank / Math.max(1, population);
+  for (const reward of realEstateRankRewards.rewards) {
+    if (hasOwn(reward, "rankMax") && rank <= Number(reward.rankMax)) return reward;
+    if (hasOwn(reward, "percentileMax") && percentile <= Number(reward.percentileMax)) return reward;
+  }
+  return realEstateRankRewards.rewards[realEstateRankRewards.rewards.length - 1];
+}
+
+function previewRankForWeeklyGain(weeklyAssetGain) {
+  const population = Number(realEstateBalance.ranking.population);
+  if (weeklyAssetGain <= 0) return population;
+  const power = Math.log10(weeklyAssetGain + 10) ** Number(realEstateBalance.ranking.previewPower);
+  const rank = Math.ceil(population / (1 + power * Number(realEstateBalance.ranking.previewScale)));
+  return Math.max(1, Math.min(population, rank));
+}
+
+function activeWeeklyAssetGain(realEstate, now) {
+  validateRealEstateState(realEstate);
+  if (Number(realEstate.lastWeeklyResetAt) < weekStartAt(now)) return 0;
+  return Math.max(0, Number(realEstate.weeklyAssetGain));
+}
+
+function weeklyRewardStatus(realEstate, now, allowEmptyGain) {
+  validateRealEstateState(realEstate);
+  const weekKey = weekKeyAt(now);
+  const weeklyAssetGain = activeWeeklyAssetGain(realEstate, now);
+  const minimumGain = Number(realEstateBalance.ranking.minimumWeeklyAssetGainForClaim);
+  const rewardClaimed = realEstate.claimedWeeklyRewardWeek === weekKey;
+  const gainReady = allowEmptyGain || weeklyAssetGain >= minimumGain;
+  return {
+    weekKey,
+    weeklyAssetGain,
+    minimumGain,
+    rewardClaimed,
+    canClaim: !rewardClaimed && gainReady,
+  };
+}
+
+function claimRealEstateWeeklyRewardIntoState(state, now, allowEmptyGain) {
+  const next = accrueRealEstateIncome(state, now);
+  syncWeekForState(next, now);
+  const status = weeklyRewardStatus(next.realEstate, now, allowEmptyGain);
+  if (!status.canClaim) return next;
+  const rank = previewRankForWeeklyGain(status.weeklyAssetGain);
+  const reward = rankingRewardForRank(rank);
+  next.diamonds = finiteNumber(next.diamonds, "save.diamonds 값이 올바르지 않습니다.") + Number(reward.diamonds);
+  next.realEstate.claimedWeeklyRewardWeek = status.weekKey;
+  validateRealEstateState(next.realEstate);
+  return next;
+}
+
+export function claimRealEstateWeeklyReward(state, now = Date.now()) {
+  return claimRealEstateWeeklyRewardIntoState(state, now, false);
+}
+
+export function claimDebugRealEstateWeeklyReward(state, now = Date.now()) {
+  return claimRealEstateWeeklyRewardIntoState(state, now, true);
+}
+
+export function createRealEstateViewModel(state) {
+  assertObject(state.expedition, "save.expedition");
+  validateRealEstateState(state.realEstate);
+  const now = Date.now();
+  const totalAssetValue = totalAssetValueForState(state.realEstate);
+  const portfolioValue = portfolioAssetValue(state.realEstate);
+  const rentPerMinute = rentPerMinuteForState(state.realEstate);
+  const artStage = artStageForAssetValue(totalAssetValue);
+  const rewardStatus = weeklyRewardStatus(state.realEstate, now, false);
+  const rank = previewRankForWeeklyGain(rewardStatus.weeklyAssetGain);
+  const reward = rankingRewardForRank(rank);
+  const highestStage = integerAtLeast(state.expedition.highestStage, "save.expedition.highestStage", 0);
+  const weeklyRewardButtonLabel = rewardStatus.rewardClaimed ? "수령 완료" : rewardStatus.canClaim ? "주간 보상 수령" : "증가 필요";
+  const weeklyRewardHint = rewardStatus.rewardClaimed
+    ? "이번 주 보상을 이미 수령했습니다."
+    : rewardStatus.canClaim
+      ? `${reward.label} · ${Number(reward.diamonds)} 다이아`
+      : `주간 증가 ${Math.floor(rewardStatus.minimumGain)} 이상 필요`;
+  const cards = properties.map((property) => {
+    const count = ownedCount(state.realEstate, property.id);
+    const unlocked = highestStage >= Number(property.unlockStage);
+    const scale = count > 0 ? scaleTierForCount(count) : null;
+    const nextScale = nextScaleTier(count);
+    const nextCost = nextPurchaseCost(property, count);
+    const cost10 = purchaseCostForCount(property, count, 10);
+    const maxBuyCount = maxPurchaseCount(property, count, state.realEstate.cash);
+    const maxBuyCost = maxBuyCount > 0 ? purchaseCostForCount(property, count, maxBuyCount) : 0;
+    const nextScaleProgress = nextScale ? Math.min(100, Math.floor((count / Number(nextScale.minCount)) * 100)) : 100;
+    return {
+      id: property.id,
+      name: property.name,
+      description: property.description,
+      unlockStage: Number(property.unlockStage),
+      unlocked,
+      count,
+      scaleLabel: scale ? scale.label : "미보유",
+      portfolioLabel: scale ? scale.portfolioLabel : "아직 보유 없음",
+      nextScaleLabel: nextScale ? nextScale.label : "최대 규모",
+      nextScaleProgress,
+      rentPerMinute: count * Number(property.baseIncomePerMinute),
+      assetValue: assetValueForCount(property, count),
+      nextCost,
+      cost10,
+      maxBuyCount,
+      maxBuyCost,
+      canBuyOne: unlocked && Number(state.realEstate.cash) >= nextCost,
+      canBuyTen: unlocked && Number(state.realEstate.cash) >= cost10,
+      canBuyMax: unlocked && maxBuyCount > 0,
+    };
+  });
+  const ownedTotal = cards.reduce((sum, card) => sum + card.count, 0);
+  const representative = cards.slice().sort((a, b) => b.assetValue - a.assetValue || b.count - a.count)[0];
+  return {
+    currency: realEstateBalance.currency,
+    cash: Math.floor(Number(state.realEstate.cash)),
+    totalAssetValue,
+    portfolioValue,
+    rentPerMinute,
+    weeklyAssetGain: Math.floor(rewardStatus.weeklyAssetGain),
+    rank,
+    rankPopulation: Number(realEstateBalance.ranking.population),
+    rewardLabel: reward.label,
+    rewardDiamonds: Number(reward.diamonds),
+    rewardClaimed: rewardStatus.rewardClaimed,
+    canClaimWeeklyReward: rewardStatus.canClaim,
+    weeklyRewardMinGain: Math.floor(rewardStatus.minimumGain),
+    weeklyRewardButtonLabel,
+    weeklyRewardHint,
+    highestStage,
+    idleCashPerHour: Math.floor(idleExpeditionRewardPerHour(state)),
+    ownedTotal,
+    ownedKinds: cards.filter((card) => card.count > 0).length,
+    totalKinds: cards.length,
+    artStage,
+    representativeLabel: representative && representative.count > 0 ? representative.portfolioLabel : "첫 매입 대기",
+    cards,
+  };
+}
