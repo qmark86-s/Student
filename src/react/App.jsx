@@ -107,9 +107,8 @@ import elementaryBackdrop from "../snapshot/assets/visual-battle-road-backdrop-e
 import highBackdrop from "../snapshot/assets/visual-battle-road-backdrop-high.png";
 import middleBackdrop from "../snapshot/assets/visual-battle-road-backdrop-middle.png";
 import repeaterBackdrop from "../snapshot/assets/visual-battle-road-backdrop-repeater.png";
-import realEstateEarlyBackdrop from "../snapshot/assets/visual-real-estate-early.png";
-import realEstateLateBackdrop from "../snapshot/assets/visual-real-estate-late.png";
-import realEstateMidBackdrop from "../snapshot/assets/visual-real-estate-mid.png";
+import realEstateCityMap from "../snapshot/assets/visual-real-estate-city-map.png";
+import realEstateDistrictDetail from "../snapshot/assets/visual-real-estate-district-detail.png";
 import studentAtlas from "../snapshot/assets/asset-002.png";
 import mainMonsterAtlas from "../snapshot/assets/asset-003.png";
 
@@ -134,11 +133,6 @@ const backdrops = {
   middle: middleBackdrop,
   high: highBackdrop,
   repeater: repeaterBackdrop,
-};
-const realEstateBackdrops = {
-  early: realEstateEarlyBackdrop,
-  mid: realEstateMidBackdrop,
-  late: realEstateLateBackdrop,
 };
 const totalCareerAtlasFrames = careers.length * 2;
 
@@ -302,10 +296,23 @@ function formatMoney(value) {
 
 function formatCompactNumber(value) {
   const number = finiteNumber(value, `숫자 형식 값이 올바르지 않습니다: ${value}`);
-  if (Math.abs(number) >= 1_000_000_000) return `${(number / 1_000_000_000).toFixed(1)}B`;
-  if (Math.abs(number) >= 1_000_000) return `${(number / 1_000_000).toFixed(1)}M`;
-  if (Math.abs(number) >= 10_000) return `${(number / 1_000).toFixed(1)}K`;
-  if (Math.abs(number) >= 1_000) return `${(number / 1_000).toFixed(2)}K`;
+  const abs = Math.abs(number);
+  const compactUnits = [
+    { value: 1_000_000_000_000_000_000, suffix: "Qi" },
+    { value: 1_000_000_000_000_000, suffix: "Qa" },
+    { value: 1_000_000_000_000, suffix: "T" },
+    { value: 1_000_000_000, suffix: "B" },
+    { value: 1_000_000, suffix: "M" },
+  ];
+  if (abs >= 1e21) {
+    const exponent = Math.floor(Math.log10(abs));
+    const mantissa = number / (10 ** exponent);
+    return `${mantissa.toFixed(2)}e${exponent}`;
+  }
+  const unit = compactUnits.find((entry) => abs >= entry.value);
+  if (unit) return `${(number / unit.value).toFixed(1)}${unit.suffix}`;
+  if (abs >= 10_000) return `${(number / 1_000).toFixed(1)}K`;
+  if (abs >= 1_000) return `${(number / 1_000).toFixed(2)}K`;
   return formatMoney(Math.round(number));
 }
 
@@ -1368,51 +1375,299 @@ function ExpeditionManagementPanel({ activeTab, gameState, onAssign, onFuse, onL
   );
 }
 
-function RealEstateScene({ realEstateSummary }) {
-  const backdrop = realEstateBackdrops[realEstateSummary.artStage.id];
-  assert(backdrop, `부동산 배경 이미지 누락: ${realEstateSummary.artStage.id}`);
-  const rankPercent = Math.max(0, Math.min(100, Math.round((1 - realEstateSummary.rank / realEstateSummary.rankPopulation) * 100)));
-  const ownedPercent = Math.max(0, Math.min(100, Math.round((realEstateSummary.ownedKinds / realEstateSummary.totalKinds) * 100)));
+function percentPointStyle(point) {
+  return {
+    left: `${Number(point[0])}%`,
+    top: `${Number(point[1])}%`,
+  };
+}
 
+function polygonBounds(points) {
+  const xs = points.map((point) => Number(point[0]));
+  const ys = points.map((point) => Number(point[1]));
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
+  const width = maxX - minX;
+  const height = maxY - minY;
+  assert(width > 0 && height > 0, "부동산 지역 polygon bounds 값이 올바르지 않습니다.");
+  return { minX, minY, width, height };
+}
+
+function localPercentPoint(point, bounds) {
+  return [
+    ((Number(point[0]) - bounds.minX) / bounds.width) * 100,
+    ((Number(point[1]) - bounds.minY) / bounds.height) * 100,
+  ];
+}
+
+function polygonBoxStyle(points) {
+  const bounds = polygonBounds(points);
+  const localPoints = points.map((point) => localPercentPoint(point, bounds));
+  const clipPath = `polygon(${localPoints.map((point) => `${Number(point[0])}% ${Number(point[1])}%`).join(", ")})`;
+  return {
+    left: `${bounds.minX}%`,
+    top: `${bounds.minY}%`,
+    width: `${bounds.width}%`,
+    height: `${bounds.height}%`,
+    clipPath,
+    WebkitClipPath: clipPath,
+  };
+}
+
+function RealEstateBuildingSlots({ card }) {
   return (
-    <section className="real-estate-scene" aria-label="부동산 도시">
-      <div className="real-estate-city">
-        <img className="real-estate-backdrop" src={backdrop} alt="" aria-hidden="true" />
-        <div className="real-estate-city-shade" aria-hidden="true" />
+    <div className="real-estate-building-layer" aria-hidden="true">
+      {card.visibleBuildingSlots.map((slot) => (
+        <span
+          className={`real-estate-building-dot level-${card.developmentLevel}`}
+          data-slot-id={slot.id}
+          key={slot.id}
+          style={percentPointStyle([slot.x, slot.y])}
+        />
+      ))}
+    </div>
+  );
+}
+
+const realEstateDetailBuildPads = [
+  { x: 20, y: 78, scale: 1.08, height: 46, z: 9 },
+  { x: 35, y: 70, scale: .96, height: 42, z: 8 },
+  { x: 52, y: 76, scale: 1.12, height: 54, z: 10 },
+  { x: 70, y: 68, scale: .94, height: 48, z: 7 },
+  { x: 84, y: 78, scale: 1, height: 50, z: 11 },
+  { x: 24, y: 56, scale: .82, height: 52, z: 5 },
+  { x: 43, y: 52, scale: .86, height: 58, z: 4 },
+  { x: 61, y: 55, scale: .88, height: 64, z: 6 },
+  { x: 78, y: 48, scale: .76, height: 66, z: 3 },
+  { x: 50, y: 40, scale: .7, height: 72, z: 2 },
+];
+
+function RealEstateDetailDevelopmentLayer({ card }) {
+  return (
+    <div className="real-estate-development-layer" aria-hidden="true" data-development-level={card.developmentLevel}>
+      <div className="real-estate-development-pads">
+        {realEstateDetailBuildPads.map((pad, index) => (
+          <span
+            className="real-estate-development-pad"
+            key={`${card.id}-pad-${index}`}
+            style={{ left: `${pad.x}%`, top: `${pad.y}%`, zIndex: pad.z }}
+          />
+        ))}
+      </div>
+      <div className="real-estate-development-buildings">
+        {card.visibleBuildingSlots.map((slot, index) => {
+          const pad = realEstateDetailBuildPads[index % realEstateDetailBuildPads.length];
+          return (
+            <span
+              className={`real-estate-development-building property-${card.id} level-${card.developmentLevel}`}
+              data-slot-id={slot.id}
+              key={slot.id}
+              style={{
+                left: `${pad.x}%`,
+                top: `${pad.y}%`,
+                zIndex: pad.z + 10,
+                "--building-height": `${pad.height + card.developmentLevel * 7}px`,
+                "--building-scale": pad.scale,
+              }}
+            >
+              <i />
+            </span>
+          );
+        })}
+      </div>
+      <div className="real-estate-ambient-layer" data-layer-purpose="future-residents" />
+    </div>
+  );
+}
+
+function RealEstateDistrictLabel({ bounds, card }) {
+  return (
+    <span className="real-estate-district-label" style={percentPointStyle(localPercentPoint(card.districtLabelAnchor, bounds))}>
+      <strong>{card.name}</strong>
+      <small>{card.unlocked ? `${card.count}채 · ${card.developmentRatio}%` : `Stage ${card.unlockStage}`}</small>
+    </span>
+  );
+}
+
+function RealEstateDistrictButton({ card, onDistrictClick }) {
+  const stateClass = card.unlocked ? card.count > 0 ? "owned" : "ready" : "locked";
+  const bounds = polygonBounds(card.districtPolygon);
+  return (
+    <button
+      aria-label={card.unlocked ? `${card.name} 지역 보기` : `${card.name} 잠김 Stage ${card.unlockStage}`}
+      className={`real-estate-district-button ${stateClass}`}
+      data-development-level={card.developmentLevel}
+      data-district-id={card.id}
+      data-locked={card.unlocked ? "false" : "true"}
+      onClick={() => onDistrictClick(card)}
+      style={{ ...polygonBoxStyle(card.districtPolygon), "--development-ratio": card.developmentRatio }}
+      type="button"
+    >
+      <RealEstateDistrictLabel bounds={bounds} card={card} />
+    </button>
+  );
+}
+
+function RealEstateDistrictSurface({ card, selected }) {
+  const stateClass = card.unlocked ? card.count > 0 ? "owned" : "ready" : "locked";
+  return (
+    <div
+      className={`real-estate-district-surface ${stateClass}${selected ? " selected" : ""}`}
+      data-development-level={card.developmentLevel}
+      data-district-id={card.id}
+      style={{ ...polygonBoxStyle(card.districtPolygon), "--development-ratio": card.developmentRatio }}
+    />
+  );
+}
+
+function RealEstateCityMapLayers({ realEstateSummary, onDistrictClick, selectedPropertyId, showButtons }) {
+  return (
+    <>
+      {realEstateSummary.cards.map((card) => (
+        showButtons ? (
+          <RealEstateDistrictButton card={card} key={card.id} onDistrictClick={onDistrictClick} />
+        ) : (
+          <RealEstateDistrictSurface card={card} key={card.id} selected={card.id === selectedPropertyId} />
+        )
+      ))}
+      {realEstateSummary.cards.map((card) => (
+        <RealEstateBuildingSlots card={card} key={`${card.id}-buildings`} />
+      ))}
+    </>
+  );
+}
+
+function clampRealEstatePan(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function panForDistrictFocus(viewport, focus) {
+  const contentWidth = viewport.width * 2;
+  const contentHeight = viewport.height * 2;
+  const x = viewport.width / 2 - (Number(focus[0]) / 100) * contentWidth;
+  const y = viewport.height / 2 - (Number(focus[1]) / 100) * contentHeight;
+  return {
+    x: clampRealEstatePan(x, -viewport.width, 0),
+    y: clampRealEstatePan(y, -viewport.height, 0),
+  };
+}
+
+function RealEstateOverviewScene({ notice, onDistrictClick, realEstateSummary }) {
+  return (
+    <section className="real-estate-scene real-estate-overview" aria-label="부동산 도시 전체 보기" data-real-estate-view="overview">
+      <div className="real-estate-map-frame">
+        <img className="real-estate-map-image" src={realEstateCityMap} alt="" aria-hidden="true" />
+        <RealEstateCityMapLayers realEstateSummary={realEstateSummary} onDistrictClick={onDistrictClick} selectedPropertyId="" showButtons />
         <div className="real-estate-city-head">
           <div>
-            <span>{realEstateSummary.artStage.label}</span>
-            <strong>{realEstateSummary.representativeLabel}</strong>
+            <span>도시 전체 보기</span>
+            <strong>{realEstateSummary.ownedKinds}/{realEstateSummary.totalKinds} 지역 개발</strong>
           </div>
           <b>{realEstateSummary.ownedTotal}채</b>
         </div>
-        <div className="real-estate-city-bottom">
-          <article>
-            <span>총 자산가치</span>
-            <strong>{formatCompactNumber(realEstateSummary.totalAssetValue)}</strong>
-            <i className="progress-bar"><span style={{ width: `${ownedPercent}%` }} /></i>
-          </article>
-          <article>
-            <span>예상 랭킹</span>
-            <strong>{formatCompactNumber(realEstateSummary.rank)}위</strong>
-            <i className="progress-bar"><span style={{ width: `${rankPercent}%` }} /></i>
-          </article>
-          <article>
-            <span>원정 방치/시</span>
-            <strong>{formatCompactNumber(realEstateSummary.idleCashPerHour)}</strong>
-            <i className="progress-bar"><span style={{ width: `${Math.min(100, Math.max(5, realEstateSummary.highestStage))}%` }} /></i>
-          </article>
+        {notice ? <p className="real-estate-map-notice">{notice}</p> : null}
+      </div>
+    </section>
+  );
+}
+
+function RealEstateDistrictScene({ onBackToOverview, realEstateSummary, selectedPropertyId }) {
+  const selectedCard = realEstateSummary.cards.find((card) => card.id === selectedPropertyId);
+  assert(selectedCard, `선택된 부동산 지역을 찾을 수 없습니다: ${selectedPropertyId}`);
+  const viewportRef = useRef(null);
+  const dragRef = useRef(null);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+
+  const clampPanWithViewport = (candidate) => {
+    const viewport = viewportRef.current;
+    if (!viewport) return candidate;
+    const rect = viewport.getBoundingClientRect();
+    return {
+      x: clampRealEstatePan(candidate.x, -rect.width, 0),
+      y: clampRealEstatePan(candidate.y, -rect.height, 0),
+    };
+  };
+
+  useLayoutEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    const rect = viewport.getBoundingClientRect();
+    setPan(panForDistrictFocus({ width: rect.width, height: rect.height }, selectedCard.districtDetailFocus));
+  }, [selectedCard.id]);
+
+  const handlePointerDown = (event) => {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: pan.x,
+      originY: pan.y,
+    };
+  };
+
+  const handlePointerMove = (event) => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    setPan(clampPanWithViewport({
+      x: drag.originX + event.clientX - drag.startX,
+      y: drag.originY + event.clientY - drag.startY,
+    }));
+  };
+
+  const handlePointerEnd = (event) => {
+    const drag = dragRef.current;
+    if (drag && drag.pointerId === event.pointerId) dragRef.current = null;
+  };
+
+  return (
+    <section className="real-estate-scene real-estate-district" aria-label={`${selectedCard.name} 지역 상세 보기`} data-real-estate-view="district" data-selected-property-id={selectedCard.id}>
+      <div className="real-estate-detail-viewport" ref={viewportRef}>
+        <div
+          className="real-estate-detail-map"
+          data-pan-x={Math.round(pan.x)}
+          data-pan-y={Math.round(pan.y)}
+          onPointerCancel={handlePointerEnd}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerEnd}
+          style={{ transform: `translate(${Math.round(pan.x)}px, ${Math.round(pan.y)}px)` }}
+        >
+          <img className="real-estate-detail-background" src={realEstateDistrictDetail} alt="" aria-hidden="true" draggable="false" />
+          <div className="real-estate-detail-development-field">
+            <RealEstateDetailDevelopmentLayer card={selectedCard} />
+          </div>
+        </div>
+        <button className="secondary-action compact real-estate-map-back" type="button" onClick={onBackToOverview}>
+          <BriefcaseBusiness size={16} />
+          <span>전체 도시 보기</span>
+        </button>
+        <div className="real-estate-city-head real-estate-detail-head">
+          <div>
+            <span>{selectedCard.scaleLabel}</span>
+            <strong>{selectedCard.name}</strong>
+          </div>
+          <b>{selectedCard.count}채</b>
         </div>
       </div>
     </section>
   );
 }
 
-function RealEstateCard({ card, onBuy, onBuyMax }) {
-  const cardClass = card.unlocked ? card.count > 0 ? "real-estate-card owned" : "real-estate-card ready" : "real-estate-card locked";
+function RealEstateScene({ notice, onBackToOverview, onDistrictClick, realEstateSummary, selectedPropertyId, viewMode }) {
+  if (viewMode === "overview") {
+    return <RealEstateOverviewScene notice={notice} onDistrictClick={onDistrictClick} realEstateSummary={realEstateSummary} />;
+  }
+  return <RealEstateDistrictScene onBackToOverview={onBackToOverview} realEstateSummary={realEstateSummary} selectedPropertyId={selectedPropertyId} />;
+}
+
+function RealEstateCard({ card, featured = false, onBuy, onBuyMax }) {
+  const cardClass = `${card.unlocked ? card.count > 0 ? "real-estate-card owned" : "real-estate-card ready" : "real-estate-card locked"}${featured ? " featured" : ""}`;
   const progressWidth = `${Math.max(0, Math.min(100, card.nextScaleProgress))}%`;
   return (
-    <article className={cardClass} data-property-id={card.id} data-real-estate-card="true">
+    <article className={cardClass} data-development-level={card.developmentLevel} data-property-id={card.id} data-real-estate-card="true">
       <header>
         <div>
           <span>{card.unlocked ? card.scaleLabel : `Stage ${card.unlockStage}`}</span>
@@ -1424,7 +1679,7 @@ function RealEstateCard({ card, onBuy, onBuyMax }) {
       <div className="real-estate-card-stats">
         <Metric label="규모" value={card.portfolioLabel} />
         <Metric label="임대/분" value={formatCompactNumber(card.rentPerMinute)} />
-        <Metric label="평가액" value={formatCompactNumber(card.assetValue)} />
+        <Metric label="개발도" value={`${card.developmentRatio}%`} />
       </div>
       <div className="real-estate-scale">
         <span>{card.nextScaleLabel}</span>
@@ -1448,15 +1703,18 @@ function RealEstateCard({ card, onBuy, onBuyMax }) {
   );
 }
 
-function RealEstateManagementPanel({ realEstateSummary, onBuy, onBuyMax, onClaimWeeklyReward }) {
+function RealEstateManagementPanel({ realEstateSummary, selectedPropertyId, onBuy, onBuyMax, onClaimWeeklyReward }) {
+  const selectedCard = selectedPropertyId ? realEstateSummary.cards.find((card) => card.id === selectedPropertyId) : null;
+  if (selectedPropertyId) assert(selectedCard, `선택된 부동산 관리 카드를 찾을 수 없습니다: ${selectedPropertyId}`);
+  const cards = selectedCard ? [selectedCard] : realEstateSummary.cards;
   return (
     <section className="real-estate-viewport">
       <header className="section-title compact-title">
         <div>
           <BriefcaseBusiness size={18} />
-          <h2>부동산 포트폴리오</h2>
+          <h2>{selectedCard ? `${selectedCard.name} 관리` : "부동산 포트폴리오"}</h2>
         </div>
-        <span>{realEstateSummary.ownedKinds}/{realEstateSummary.totalKinds}종</span>
+        <span>{selectedCard ? selectedCard.portfolioLabel : `${realEstateSummary.ownedKinds}/${realEstateSummary.totalKinds}종`}</span>
       </header>
       <div className="real-estate-ranking-panel">
         <Metric label="예상 순위" value={`${formatCompactNumber(realEstateSummary.rank)}위`} />
@@ -1468,9 +1726,9 @@ function RealEstateManagementPanel({ realEstateSummary, onBuy, onBuyMax, onClaim
           <small>{realEstateSummary.weeklyRewardHint}</small>
         </button>
       </div>
-      <div className="real-estate-card-list">
-        {realEstateSummary.cards.map((card) => (
-          <RealEstateCard card={card} key={card.id} onBuy={onBuy} onBuyMax={onBuyMax} />
+      <div className={selectedCard ? "real-estate-card-list selected-district" : "real-estate-card-list"}>
+        {cards.map((card) => (
+          <RealEstateCard card={card} featured={Boolean(selectedCard)} key={card.id} onBuy={onBuy} onBuyMax={onBuyMax} />
         ))}
       </div>
     </section>
@@ -2459,6 +2717,9 @@ function GameApp({ loaded }) {
   const [mode, setMode] = useState("student");
   const [studentTab, setStudentTab] = useState("growth");
   const [expeditionTab, setExpeditionTab] = useState("growth");
+  const [realEstateViewMode, setRealEstateViewMode] = useState("overview");
+  const [selectedRealEstateId, setSelectedRealEstateId] = useState("");
+  const [realEstateNotice, setRealEstateNotice] = useState("");
   const [activeModal, setActiveModal] = useState(null);
   const [settings, setSettings] = useState({
     autosave: true,
@@ -2507,6 +2768,11 @@ function GameApp({ loaded }) {
   }, []);
 
   const handleModeChange = (nextMode) => {
+    if (nextMode === "realEstate") {
+      setRealEstateViewMode("overview");
+      setSelectedRealEstateId("");
+      setRealEstateNotice("");
+    }
     setMode(nextMode);
   };
 
@@ -2600,12 +2866,31 @@ function GameApp({ loaded }) {
     setGameState((state) => claimRealEstateWeeklyReward(state));
   };
 
+  const handleRealEstateDistrictClick = (card) => {
+    if (!card.unlocked) {
+      setRealEstateNotice(`${card.name}은 원정대 Stage ${card.unlockStage} 돌파 후 이용할 수 있습니다.`);
+      return;
+    }
+    setSelectedRealEstateId(card.id);
+    setRealEstateViewMode("district");
+    setRealEstateNotice("");
+  };
+
+  const handleRealEstateBackToOverview = () => {
+    setRealEstateViewMode("overview");
+    setSelectedRealEstateId("");
+    setRealEstateNotice("");
+  };
+
   const handleResetGame = () => {
     setGameState(ensureBattleState(createDefaultGameState()));
     setActiveModal(null);
     setMode("student");
     setStudentTab("growth");
     setExpeditionTab("growth");
+    setRealEstateViewMode("overview");
+    setSelectedRealEstateId("");
+    setRealEstateNotice("");
   };
 
   return (
@@ -2636,7 +2921,14 @@ function GameApp({ loaded }) {
         ) : mode === "expedition" ? (
           <ExpeditionScene gameState={gameState} onExpeditionComplete={handleExpeditionComplete} />
         ) : (
-          <RealEstateScene realEstateSummary={realEstateSummary} />
+          <RealEstateScene
+            notice={realEstateNotice}
+            onBackToOverview={handleRealEstateBackToOverview}
+            onDistrictClick={handleRealEstateDistrictClick}
+            realEstateSummary={realEstateSummary}
+            selectedPropertyId={selectedRealEstateId}
+            viewMode={realEstateViewMode}
+          />
         )}
         <section className="management-panel">
           {mode === "student" ? (
@@ -2668,6 +2960,7 @@ function GameApp({ loaded }) {
           ) : (
             <RealEstateManagementPanel
               realEstateSummary={realEstateSummary}
+              selectedPropertyId={realEstateViewMode === "district" ? selectedRealEstateId : ""}
               onBuy={handleRealEstateBuy}
               onBuyMax={handleRealEstateBuyMax}
               onClaimWeeklyReward={handleRealEstateClaimWeeklyReward}

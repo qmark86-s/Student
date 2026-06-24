@@ -52,9 +52,25 @@ function uniqueId(source, ids, path) {
 }
 
 const catalog = readJson("data/real_estates.json");
+const cityLayout = readJson("data/real_estate_city_layout.json");
 const tiers = readJson("data/real_estate_scale_tiers.json");
 const balance = readJson("data/real_estate_balance.json");
 const rankRewards = readJson("data/real_estate_rank_rewards.json");
+
+function coordinatePair(pair, path) {
+  assertArray(pair, path);
+  assert(pair.length === 2, `${path} 좌표는 [x, y] 2개 값이어야 합니다.`);
+  const x = number(pair[0], `${path}[0]`);
+  const y = number(pair[1], `${path}[1]`);
+  assert(x >= 0 && x <= 100, `${path}[0] 값은 0~100 사이여야 합니다.`);
+  assert(y >= 0 && y <= 100, `${path}[1] 값은 0~100 사이여야 합니다.`);
+}
+
+function coordinateList(list, path, minLength) {
+  assertArray(list, path);
+  assert(list.length >= minLength, `${path} 좌표는 ${minLength}개 이상이어야 합니다.`);
+  for (const [index, pair] of list.entries()) coordinatePair(pair, `${path}[${index}]`);
+}
 
 assertObject(catalog, "real_estates.json");
 integerAtLeast(catalog.version, "real_estates.json.version", 1);
@@ -77,6 +93,24 @@ for (const [index, property] of catalog.properties.entries()) {
   assert(positiveNumber(property.assetValueGrowth, `${path}.assetValueGrowth`) > 1, `${path}.assetValueGrowth 값은 1보다 커야 합니다.`);
   assert(["early", "mid", "late"].includes(property.artStage), `${path}.artStage 값이 올바르지 않습니다: ${property.artStage}`);
   help(property, path, ["unlockStage", "basePrice", "priceGrowth", "baseIncomePerMinute", "assetValue", "assetValueGrowth", "artStage"]);
+}
+
+assertObject(cityLayout, "real_estate_city_layout.json");
+integerAtLeast(cityLayout.version, "real_estate_city_layout.json.version", 1);
+assertArray(cityLayout.districts, "real_estate_city_layout.json.districts");
+assert(cityLayout.districts.length === catalog.properties.length, `도시 지역 수는 매물 수와 같아야 합니다: ${cityLayout.districts.length}`);
+help(cityLayout, "real_estate_city_layout.json", ["version", "districts"]);
+const districtIds = new Set();
+for (const [index, district] of cityLayout.districts.entries()) {
+  const path = `real_estate_city_layout.json.districts[${index}]`;
+  assertObject(district, path);
+  uniqueId(district, districtIds, path);
+  assert(district.id === catalog.properties[index].id, `${path}.id 순서가 real_estates.json과 다릅니다: ${district.id} !== ${catalog.properties[index].id}`);
+  coordinateList(district.polygon, `${path}.polygon`, 4);
+  coordinatePair(district.labelAnchor, `${path}.labelAnchor`);
+  coordinatePair(district.detailFocus, `${path}.detailFocus`);
+  coordinateList(district.buildingSlots, `${path}.buildingSlots`, 6);
+  help(district, path, ["id", "polygon", "labelAnchor", "detailFocus", "buildingSlots"]);
 }
 
 assertObject(tiers, "real_estate_scale_tiers.json");
@@ -164,4 +198,4 @@ for (const [index, reward] of rankRewards.rewards.entries()) {
   }
 }
 
-console.log(`부동산 데이터 검증 완료: 매물 ${catalog.properties.length}종, 규모 ${tiers.tiers.length}종, 랭킹 보상 ${rankRewards.rewards.length}종`);
+console.log(`부동산 데이터 검증 완료: 매물 ${catalog.properties.length}종, 도시 지역 ${cityLayout.districts.length}종, 규모 ${tiers.tiers.length}종, 랭킹 보상 ${rankRewards.rewards.length}종`);

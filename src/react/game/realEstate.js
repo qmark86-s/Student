@@ -1,4 +1,5 @@
 import realEstateBalance from "../../../data/real_estate_balance.json";
+import realEstateCityLayout from "../../../data/real_estate_city_layout.json";
 import realEstateRankRewards from "../../../data/real_estate_rank_rewards.json";
 import realEstateScaleTiers from "../../../data/real_estate_scale_tiers.json";
 import realEstates from "../../../data/real_estates.json";
@@ -121,6 +122,35 @@ function validateArtStage(stage, index, ids) {
   validateHelp(stage, path, ["minAssetValue", "asset", "label"]);
 }
 
+function validateCoordinatePair(pair, path) {
+  assertArray(pair, path);
+  assert(pair.length === 2, `${path} 좌표는 [x, y] 2개 값이어야 합니다.`);
+  const x = finiteNumber(pair[0], `${path}[0]`);
+  const y = finiteNumber(pair[1], `${path}[1]`);
+  assert(x >= 0 && x <= 100, `${path}[0] 값은 0~100 사이여야 합니다.`);
+  assert(y >= 0 && y <= 100, `${path}[1] 값은 0~100 사이여야 합니다.`);
+}
+
+function validateCoordinateList(list, path, minLength) {
+  assertArray(list, path);
+  assert(list.length >= minLength, `${path} 좌표는 ${minLength}개 이상이어야 합니다.`);
+  list.forEach((pair, index) => validateCoordinatePair(pair, `${path}[${index}]`));
+}
+
+function validateCityDistrict(district, index, ids, expectedId) {
+  const path = `real_estate_city_layout.json.districts[${index}]`;
+  assertObject(district, path);
+  assertString(district.id, `${path}.id`);
+  assert(district.id === expectedId, `${path}.id 순서가 real_estates.json과 다릅니다: ${district.id} !== ${expectedId}`);
+  assert(!ids.has(district.id), `${path}.id 값이 중복되었습니다: ${district.id}`);
+  ids.add(district.id);
+  validateCoordinateList(district.polygon, `${path}.polygon`, 4);
+  validateCoordinatePair(district.labelAnchor, `${path}.labelAnchor`);
+  validateCoordinatePair(district.detailFocus, `${path}.detailFocus`);
+  validateCoordinateList(district.buildingSlots, `${path}.buildingSlots`, 6);
+  validateHelp(district, path, ["id", "polygon", "labelAnchor", "detailFocus", "buildingSlots"]);
+}
+
 export function validateRealEstateConfig() {
   assertObject(realEstates, "real_estates.json");
   integerAtLeast(realEstates.version, "real_estates.json.version", 1);
@@ -129,6 +159,14 @@ export function validateRealEstateConfig() {
   const propertyIds = new Set();
   realEstates.properties.forEach((property, index) => validateProperty(property, index, propertyIds));
   validateHelp(realEstates, "real_estates.json", ["version", "properties"]);
+
+  assertObject(realEstateCityLayout, "real_estate_city_layout.json");
+  integerAtLeast(realEstateCityLayout.version, "real_estate_city_layout.json.version", 1);
+  assertArray(realEstateCityLayout.districts, "real_estate_city_layout.json.districts");
+  assert(realEstateCityLayout.districts.length === realEstates.properties.length, `real_estate_city_layout.json.districts 수는 매물 수와 같아야 합니다: ${realEstateCityLayout.districts.length}`);
+  const districtIds = new Set();
+  realEstateCityLayout.districts.forEach((district, index) => validateCityDistrict(district, index, districtIds, realEstates.properties[index].id));
+  validateHelp(realEstateCityLayout, "real_estate_city_layout.json", ["version", "districts"]);
 
   assertObject(realEstateScaleTiers, "real_estate_scale_tiers.json");
   integerAtLeast(realEstateScaleTiers.version, "real_estate_scale_tiers.json.version", 1);
@@ -179,6 +217,8 @@ validateRealEstateConfig();
 
 const properties = realEstates.properties;
 const propertyById = new Map(properties.map((property) => [property.id, property]));
+const cityDistricts = realEstateCityLayout.districts;
+const cityDistrictById = new Map(cityDistricts.map((district) => [district.id, district]));
 const scaleTiers = realEstateScaleTiers.tiers.slice().sort((a, b) => Number(a.minCount) - Number(b.minCount));
 const artStages = realEstateBalance.artStages.slice().sort((a, b) => Number(a.minAssetValue) - Number(b.minAssetValue));
 
@@ -447,6 +487,26 @@ function scaleTierForCount(count) {
   return tier;
 }
 
+function developmentLevelForCount(count) {
+  if (count <= 0) return 0;
+  let level = 0;
+  for (const tier of scaleTiers) {
+    if (count >= Number(tier.minCount)) level += 1;
+  }
+  return Math.min(scaleTiers.length, level);
+}
+
+function visibleBuildingSlotsForDistrict(district, developmentLevel) {
+  const totalSlots = district.buildingSlots.length;
+  if (developmentLevel <= 0) return [];
+  const visibleCount = Math.max(1, Math.min(totalSlots, Math.ceil((totalSlots * developmentLevel) / scaleTiers.length)));
+  return district.buildingSlots.slice(0, visibleCount).map((slot, index) => ({
+    id: `${district.id}-${index}`,
+    x: Number(slot[0]),
+    y: Number(slot[1]),
+  }));
+}
+
 function nextScaleTier(count) {
   return scaleTiers.find((tier) => count < Number(tier.minCount)) || null;
 }
@@ -540,6 +600,8 @@ export function createRealEstateViewModel(state) {
       : `주간 증가 ${Math.floor(rewardStatus.minimumGain)} 이상 필요`;
   const cards = properties.map((property) => {
     const count = ownedCount(state.realEstate, property.id);
+    const district = cityDistrictById.get(property.id);
+    assert(district, `real_estate_city_layout.json에서 지역을 찾을 수 없습니다: ${property.id}`);
     const unlocked = highestStage >= Number(property.unlockStage);
     const scale = count > 0 ? scaleTierForCount(count) : null;
     const nextScale = nextScaleTier(count);
@@ -548,6 +610,9 @@ export function createRealEstateViewModel(state) {
     const maxBuyCount = maxPurchaseCount(property, count, state.realEstate.cash);
     const maxBuyCost = maxBuyCount > 0 ? purchaseCostForCount(property, count, maxBuyCount) : 0;
     const nextScaleProgress = nextScale ? Math.min(100, Math.floor((count / Number(nextScale.minCount)) * 100)) : 100;
+    const developmentLevel = developmentLevelForCount(count);
+    const developmentRatio = Math.floor((developmentLevel / scaleTiers.length) * 100);
+    const visibleBuildingSlots = visibleBuildingSlotsForDistrict(district, developmentLevel);
     return {
       id: property.id,
       name: property.name,
@@ -565,6 +630,13 @@ export function createRealEstateViewModel(state) {
       cost10,
       maxBuyCount,
       maxBuyCost,
+      developmentLevel,
+      developmentRatio,
+      districtPolygon: district.polygon,
+      districtLabelAnchor: district.labelAnchor,
+      districtDetailFocus: district.detailFocus,
+      buildingSlots: district.buildingSlots,
+      visibleBuildingSlots,
       canBuyOne: unlocked && Number(state.realEstate.cash) >= nextCost,
       canBuyTen: unlocked && Number(state.realEstate.cash) >= cost10,
       canBuyMax: unlocked && maxBuyCount > 0,

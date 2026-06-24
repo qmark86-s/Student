@@ -39,13 +39,12 @@
 - `src/react/App.jsx`
   - `mode === "realEstate"` 분기를 추가했다.
   - 상태 타일은 총 자산, 부동산 자금, 임대/분, 주간 증가, 예상 순위를 표시한다.
-  - 부동산 scene은 총 자산가치에 따라 3단계 배경을 보여준다.
+  - 초기 MVP의 3단계 scene 배경은 후속 `real-estate-city-map` 차수에서 도시 전체 보기/지역 상세 보기 구조로 대체되었다.
   - 관리 패널은 매물 카드 10개, 일반 `주간 보상 수령` 버튼, `구매 / 10개 / 최대` 버튼을 제공한다.
   - DEBUG 모달의 `부동산 주간 보상 수령` 버튼은 QA용으로 유지했다.
-- 생성 배경 이미지
-  - `src/snapshot/assets/visual-real-estate-early.png`
-  - `src/snapshot/assets/visual-real-estate-mid.png`
-  - `src/snapshot/assets/visual-real-estate-late.png`
+- 후속 도시 맵 차수의 생성 배경 이미지
+  - `src/snapshot/assets/visual-real-estate-city-map.png`
+  - `src/snapshot/assets/visual-real-estate-district-detail.png`
 - `src/react/styles.css`
   - 모드 탭을 3분할 grid로 조정했다.
   - 부동산 scene, 랭킹 preview, 카드/버튼/모바일 레이아웃 스타일을 추가했다.
@@ -66,3 +65,4 @@
 - 부동산은 v1에서 기존 보유금, 학생 성장, 상점, 직업 수입과 환전하지 않는다.
 - 일반 플레이어용 주간 보상은 `real_estate_balance.json.ranking.minimumWeeklyAssetGainForClaim` 이상의 주간 자산 증가량이 있을 때만 수령 가능하다. DEBUG/QA 버튼은 같은 주차 수령 키를 공유하므로 일반 수령 뒤에는 비활성화된다.
 - 새 매물/보상/배경 단계 추가 시 JSON의 한글 `help`와 `tools/validate-real-estate-config.mjs` 검증 기준을 함께 갱신해야 한다.
+- 도시 전체 보기/지역 상세 보기/개발도 시각화 기준은 `implementations/real-estate-city-map/implementation.md`를 우선 참고한다.

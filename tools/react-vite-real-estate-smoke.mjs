@@ -9,6 +9,7 @@ const saveKey = "student-idle-rpg-save-v1";
 const fixedNow = Date.parse("2026-06-22T00:00:00+09:00");
 const careers = JSON.parse(readFileSync(resolve("data/careers.json"), "utf8"));
 const expeditionBalance = JSON.parse(readFileSync(resolve("data/expedition_balance.json"), "utf8"));
+const realEstates = JSON.parse(readFileSync(resolve("data/real_estates.json"), "utf8"));
 const subjectIds = ["korean", "english", "math", "social", "science"];
 
 const mimeTypes = {
@@ -201,6 +202,18 @@ function seedState() {
   };
 }
 
+function fullGrowthState() {
+  const state = seedState();
+  state.expedition.highestStage = 100;
+  state.expedition.clearedStageCount = 100;
+  state.realEstate.cash = 1000000000;
+  state.realEstate.lastAssetValueSnapshot = 0;
+  for (const property of realEstates.properties) {
+    state.realEstate.properties[property.id] = { count: 1000 };
+  }
+  return state;
+}
+
 async function readState(page) {
   return page.evaluate((key) => JSON.parse(localStorage.getItem(key)), saveKey);
 }
@@ -247,13 +260,21 @@ async function main() {
     assert(modeTexts.join("|") === "학생|원정대|부동산", `모드 탭 순서가 올바르지 않습니다: ${modeTexts.join("|")}`);
 
     await page.getByRole("button", { name: "부동산" }).click();
-    await page.waitForSelector(".real-estate-scene", { timeout: 6000 });
+    await page.waitForSelector('[data-real-estate-view="overview"]', { timeout: 6000 });
+    assert((await page.locator(".real-estate-district-button").count()) === 10, "부동산 도시 지역 버튼 10개가 렌더링되지 않았습니다.");
+    assert((await page.locator('.real-estate-district-button[data-locked="true"]').count()) >= 1, "잠긴 부동산 도시 지역이 표시되지 않았습니다.");
+    await page.locator('.real-estate-district-button[data-district-id="mixed_development"]').click();
+    assert((await page.locator('[data-real-estate-view="overview"]').count()) === 1, "잠긴 지역 클릭 후 상세 화면으로 진입했습니다.");
+    const lockNotice = await page.locator(".real-estate-map-notice").innerText();
+    assert(lockNotice.includes("Stage 100"), "잠긴 지역 Stage 안내가 표시되지 않았습니다.");
     assert((await page.locator("[data-real-estate-card]").count()) === 10, "부동산 카드 10개가 렌더링되지 않았습니다.");
     const normalRewardButton = page.locator(".real-estate-reward-button");
     assert((await normalRewardButton.count()) === 1, "일반 랭킹 보상 수령 버튼이 렌더링되지 않았습니다.");
     assert(await normalRewardButton.isDisabled(), "주간 증가량이 0인데 일반 랭킹 보상 버튼이 활성화되었습니다.");
-    const imageReady = await page.locator(".real-estate-backdrop").evaluate((image) => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0);
-    assert(imageReady, "부동산 생성 배경 이미지가 렌더링되지 않았습니다.");
+    await page.waitForFunction(() => {
+      const image = document.querySelector(".real-estate-map-image");
+      return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0;
+    });
     const initialState = await readState(page);
     assert(initialState.realEstate.cash === 0, `초기 부동산 자금이 0이 아닙니다: ${initialState.realEstate.cash}`);
 
@@ -263,9 +284,41 @@ async function main() {
     await waitForState(page, "(state) => state.expedition.highestStage >= 1 && state.realEstate.cash >= 100");
 
     await page.getByRole("button", { name: "부동산" }).click();
+    await page.waitForSelector('[data-real-estate-view="overview"]', { timeout: 6000 });
+    await page.locator('.real-estate-district-button[data-district-id="small_studio"]').click();
+    await page.waitForSelector('[data-real-estate-view="district"][data-selected-property-id="small_studio"]', { timeout: 6000 });
+    assert((await page.locator(".real-estate-city-bottom").count()) === 0, "상세 화면에 삭제 대상 metric card 영역이 남아 있습니다.");
+    assert((await page.locator("[data-real-estate-card]").count()) === 1, "상세 화면 구매 패널이 선택 지역 1개 카드로 축소되지 않았습니다.");
+    await page.waitForFunction(() => {
+      const image = document.querySelector(".real-estate-detail-background");
+      return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0;
+    });
+    assert((await page.locator(".real-estate-development-pad").count()) === 10, "지역 상세 빈 부지 패드 10개가 렌더링되지 않았습니다.");
+    assert((await page.locator(".real-estate-development-building").count()) === 0, "미보유 지역 상세에 건물이 표시되었습니다.");
+    const detailMap = page.locator(".real-estate-detail-map");
+    const beforePan = await detailMap.evaluate((node) => ({ x: Number(node.getAttribute("data-pan-x")), y: Number(node.getAttribute("data-pan-y")) }));
+    const viewportBox = await page.locator(".real-estate-detail-viewport").boundingBox();
+    assert(viewportBox, "부동산 상세 지도 viewport를 찾을 수 없습니다.");
+    await page.mouse.move(viewportBox.x + viewportBox.width / 2, viewportBox.y + viewportBox.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(viewportBox.x + viewportBox.width / 2 - 70, viewportBox.y + viewportBox.height / 2 + 55, { steps: 6 });
+    await page.mouse.up();
+    await page.waitForFunction((previous) => {
+      const node = document.querySelector(".real-estate-detail-map");
+      if (!(node instanceof HTMLElement)) return false;
+      return Number(node.getAttribute("data-pan-x")) !== previous.x || Number(node.getAttribute("data-pan-y")) !== previous.y;
+    }, beforePan);
     const smallStudio = page.locator('[data-property-id="small_studio"]');
     await smallStudio.locator('[data-action="buy-one"]').click();
     await waitForState(page, "(state) => state.realEstate.properties.small_studio && state.realEstate.properties.small_studio.count === 1");
+    await page.waitForSelector('.real-estate-development-building[data-slot-id^="small_studio-"]', { timeout: 6000 });
+    const developmentAfterOne = await smallStudio.getAttribute("data-development-level");
+    assert(developmentAfterOne === "1", `첫 구매 후 개발도가 1이 아닙니다: ${developmentAfterOne}`);
+    await page.getByRole("button", { name: /전체 도시 보기/ }).click();
+    await page.waitForSelector('[data-real-estate-view="overview"]', { timeout: 6000 });
+    await page.waitForSelector('.real-estate-building-dot[data-slot-id^="small_studio-"]', { timeout: 6000 });
+    const overviewDevelopmentAfterOne = await page.locator('.real-estate-district-button[data-district-id="small_studio"]').getAttribute("data-development-level");
+    assert(overviewDevelopmentAfterOne === "1", `도시 전체 보기 개발도 반영이 올바르지 않습니다: ${overviewDevelopmentAfterOne}`);
     const afterOne = await readState(page);
     await writeState(page, `(state) => {
       state.realEstate.lastRentAt = Date.now() - 120000;
@@ -284,6 +337,8 @@ async function main() {
     }`);
     await page.reload({ waitUntil: "networkidle" });
     await page.getByRole("button", { name: "부동산" }).click();
+    await page.locator('.real-estate-district-button[data-district-id="small_studio"]').click();
+    await page.waitForSelector('[data-real-estate-view="district"][data-selected-property-id="small_studio"]', { timeout: 6000 });
     await smallStudio.locator('[data-action="buy-ten"]').click();
     await waitForState(page, "(state) => state.realEstate.properties.small_studio.count >= 11");
     const scaleText = await smallStudio.innerText();
@@ -313,7 +368,21 @@ async function main() {
     await rewardButton.waitFor({ state: "attached", timeout: 4000 });
     assert(await rewardButton.isDisabled(), "일반 보상 수령 후 DEBUG 보상 중복 수령 버튼이 비활성화되지 않았습니다.");
 
-    console.log("React 부동산 smoke 통과: 탭, 배경, 원정대 자금, 구매, 임대수익, 랭킹 preview, 일반 주간 보상, DEBUG 중복 방지 확인");
+    const fullPage = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+    await fullPage.addInitScript(({ key, state }) => {
+      localStorage.setItem(key, JSON.stringify(state));
+    }, { key: saveKey, state: fullGrowthState() });
+    await fullPage.goto(baseUrl, { waitUntil: "networkidle" });
+    await fullPage.getByRole("button", { name: "부동산" }).click();
+    await fullPage.waitForSelector('[data-real-estate-view="overview"]', { timeout: 6000 });
+    const fullLevels = await fullPage.locator(".real-estate-district-button").evaluateAll((nodes) => nodes.map((node) => node.getAttribute("data-development-level")));
+    assert(fullLevels.length === 10 && fullLevels.every((level) => level === "6"), `풀성장 도시 개발도 표시가 올바르지 않습니다: ${fullLevels.join(",")}`);
+    await fullPage.locator('.real-estate-district-button[data-district-id="mixed_development"]').click();
+    await fullPage.waitForSelector('[data-real-estate-view="district"][data-selected-property-id="mixed_development"]', { timeout: 6000 });
+    assert((await fullPage.locator(".real-estate-development-building").count()) === 10, "풀성장 지역 상세 건물 수가 10개가 아닙니다.");
+    await fullPage.close();
+
+    console.log("React 부동산 smoke 통과: 도시 overview, 잠김 안내, 상세 대형 배경, 상세 pan, 구매 개발도, 임대수익, 랭킹, 주간 보상, 풀성장 도시 확인");
   } finally {
     await browser.close();
     await closeServer(server);
