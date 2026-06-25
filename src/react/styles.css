@@ -5877,6 +5877,12 @@ body {
   min-width: 0;
 }
 
+.debug-actions .danger-action {
+  border-color: #fca5a5;
+  background: #fff1f2;
+  color: #991b1b;
+}
+
 .debug-actions span {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -7556,14 +7562,15 @@ body {
 .real-estate-district-label {
   position: absolute;
   z-index: 6;
-  min-width: 72px;
-  max-width: 118px;
-  padding: 6px 7px;
+  min-width: 56px;
+  max-width: 108px;
+  width: max-content;
+  padding: 5px 6px;
   display: grid;
   gap: 2px;
-  border: 1px solid #ffffff45;
-  border-radius: 7px;
-  background: #101827d9;
+  border: 1px solid #ffffff38;
+  border-radius: 6px;
+  background: #101827c4;
   color: #fff;
   text-align: left;
   transform: translate(-50%, -50%);
@@ -7579,26 +7586,26 @@ body {
 }
 
 .real-estate-district-label strong {
-  font-size: .64rem;
+  font-size: .58rem;
   font-weight: 1000;
 }
 
 .real-estate-district-label small {
   color: #cbd5e1;
-  font-size: .52rem;
+  font-size: .47rem;
   font-weight: 900;
 }
 
 .real-estate-district-button.owned .real-estate-district-label {
-  background: #0f766ee8;
+  background: #0f766ec9;
 }
 
 .real-estate-district-button.ready .real-estate-district-label {
-  background: #166534df;
+  background: #166534c9;
 }
 
 .real-estate-district-button.locked .real-estate-district-label {
-  background: #1f2937e8;
+  background: #1f2937dc;
 }
 
 .real-estate-building-layer {
@@ -7610,44 +7617,53 @@ body {
 
 .real-estate-building-dot {
   position: absolute;
-  width: 13px;
-  height: 13px;
-  border-radius: 3px 3px 2px 2px;
-  background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 48%, #92400e 100%);
-  box-shadow:
-    0 2px 0 #6b3712,
-    0 0 0 1px #fff8,
-    0 4px 8px #00000044;
-  transform: translate(-50%, -82%) rotate(-2deg);
+  width: var(--overview-building-width, 26px);
+  height: var(--overview-building-height, 24px);
+  display: block;
+  border-radius: 0;
+  background: transparent;
+  filter: drop-shadow(0 3px 4px #0f172a6a);
+  transform: translate(-50%, -78%) rotate(var(--building-rotation, -8deg)) scale(.56);
+  transform-origin: 50% 88%;
 }
 
 .real-estate-building-dot::after {
+  content: none;
+}
+
+.real-estate-building-dot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.real-estate-building-dot::before {
   content: "";
   position: absolute;
-  inset: 3px 3px auto 3px;
-  height: 3px;
-  border-radius: 2px;
-  background: #dbeafe;
-  box-shadow: 0 4px 0 #bfdbfe;
+  left: 50%;
+  bottom: 0;
+  width: 34px;
+  height: 13px;
+  border-radius: 50%;
+  background: #0f172a38;
+  transform: translateX(-50%) rotate(var(--building-rotation, -8deg)) skew(-18deg);
+  z-index: -1;
 }
 
 .real-estate-building-dot.level-1,
 .real-estate-building-dot.level-2 {
-  background: linear-gradient(135deg, #fde68a, #b45309);
+  transform: translate(-50%, -78%) rotate(var(--building-rotation, -8deg)) scale(.5);
 }
 
 .real-estate-building-dot.level-3,
 .real-estate-building-dot.level-4 {
-  width: 16px;
-  height: 18px;
-  background: linear-gradient(135deg, #bae6fd 0%, #38bdf8 42%, #0369a1 100%);
+  transform: translate(-50%, -78%) rotate(var(--building-rotation, -8deg)) scale(.57);
 }
 
 .real-estate-building-dot.level-5,
 .real-estate-building-dot.level-6 {
-  width: 18px;
-  height: 24px;
-  background: linear-gradient(135deg, #f8fafc 0%, #94a3b8 36%, #1e40af 100%);
+  transform: translate(-50%, -78%) rotate(var(--building-rotation, -8deg)) scale(.64);
 }
 
 .real-estate-map-notice {
@@ -7743,7 +7759,7 @@ body {
 .real-estate-development-pad {
   position: absolute;
   width: var(--pad-width);
-  height: calc(var(--pad-width) * .52);
+  height: var(--pad-height, calc(var(--pad-width) * .52));
   border: 1px solid #f8fafc8a;
   border-radius: 7px;
   background:
@@ -7753,301 +7769,56 @@ body {
     inset 0 0 0 2px #0f172a24,
     0 7px 13px #0f172a40;
   opacity: var(--pad-opacity);
-  transform: translate(-50%, -50%) skew(-18deg) rotate(-4deg) scale(var(--pad-scale));
+  transform: translate(-50%, -50%) skew(-18deg) rotate(var(--pad-rotation, -8deg)) scale(var(--pad-scale));
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.real-estate-development-pad[data-occupied="true"] {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .real-estate-development-building {
-  --facade-highlight: #ffffff34;
-  --facade-shadow: #0f172a24;
-  --window-band: #f8fafc7c;
-  --window-column: #f8fafc30;
-  --roof-a: #d7903d;
-  --roof-b: #6d3a1f;
-  --base-edge: #433224;
   position: absolute;
   width: var(--building-width);
   height: var(--building-height);
   display: block;
-  border: 1px solid #0f172a3d;
-  border-radius: 5px 5px 3px 3px;
-  background:
-    linear-gradient(90deg, var(--facade-highlight) 0 14%, transparent 14% 72%, var(--facade-shadow) 72% 100%),
-    repeating-linear-gradient(0deg, transparent 0 11px, var(--window-band) 11px 13px, transparent 13px 18px),
-    repeating-linear-gradient(90deg, transparent 0 13px, var(--window-column) 13px 15px, transparent 15px 23px),
-    linear-gradient(135deg, #d0a06a 0%, #9c6140 47%, #4f3527 100%);
-  box-shadow:
-    inset -8px 0 0 #0f172a24,
-    inset 4px 0 0 #ffffff26,
-    0 4px 0 var(--base-edge),
-    0 13px 18px #0f172a5c;
-  clip-path: polygon(7% 2%, 93% 0, 100% 100%, 0 100%);
-  transform: translate(-50%, -100%) scale(var(--building-scale));
-  transform-origin: 50% 100%;
-  filter: saturate(.9) contrast(.98);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  clip-path: none;
+  filter: drop-shadow(0 7px 7px #0f172a62);
+  overflow: visible;
+  transform: translate(var(--building-anchor-x-offset), var(--building-anchor-y-offset)) rotate(var(--building-rotation, -8deg)) scale(var(--building-scale));
+  transform-origin: var(--building-anchor-x) var(--building-anchor-y);
 }
 
 .real-estate-development-building::before {
-  content: "";
-  position: absolute;
-  left: -6px;
-  right: -3px;
-  top: -12px;
-  height: 18px;
-  border-radius: 8px 8px 3px 3px;
-  border: 1px solid #0f172a33;
-  background: linear-gradient(135deg, var(--roof-a), var(--roof-b));
-  box-shadow: inset 0 3px 0 #ffffff38, 0 3px 0 #0f172a42;
-  transform: skew(-18deg) rotate(-1deg);
+  content: none;
 }
 
 .real-estate-development-building::after {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: -13px;
-  width: 86px;
-  height: 25px;
+  bottom: 3%;
+  width: calc(var(--building-width) * 1.08);
+  height: calc(var(--building-width) * .32);
   border-radius: 50%;
-  background: #0f172a4a;
-  transform: translateX(-50%) skew(-18deg);
+  background: #0f172a38;
+  transform: translateX(-50%) rotate(var(--building-rotation, -8deg)) skew(-18deg);
   z-index: -1;
 }
 
-.real-estate-development-building i {
-  position: absolute;
-  left: 9px;
-  right: 9px;
-  bottom: 8px;
-  height: 10px;
-  border-radius: 3px 3px 0 0;
-  background: #172554d4;
-  box-shadow:
-    0 -18px 0 -3px #e8f4f8b5,
-    0 -35px 0 -3px #e8f4f8b0,
-    0 -52px 0 -3px #e8f4f8a8;
-  opacity: .9;
-}
-
-.real-estate-development-building.property-small_studio,
-.real-estate-development-building.property-two_room,
-.real-estate-development-building.property-villa {
-  width: 48px;
-  background:
-    linear-gradient(90deg, #ffffff2e 0 17%, transparent 17% 72%, #0f172a20 72% 100%),
-    repeating-linear-gradient(0deg, transparent 0 13px, #f4dfaa82 13px 15px, transparent 15px 20px),
-    repeating-linear-gradient(90deg, transparent 0 15px, #f8fafc24 15px 17px, transparent 17px 24px),
-    linear-gradient(135deg, #cfa66b 0%, #9e623f 45%, #533928 100%);
-}
-
-.real-estate-development-building.property-small_studio::before,
-.real-estate-development-building.property-two_room::before,
-.real-estate-development-building.property-villa::before {
-  background: linear-gradient(135deg, #38bdf8, #0f766e);
-}
-
-.real-estate-development-building.property-shop_unit,
-.real-estate-development-building.property-small_building {
-  width: 54px;
-  background:
-    linear-gradient(90deg, #ffffff2f 0 14%, transparent 14% 72%, #0f172a26 72% 100%),
-    repeating-linear-gradient(0deg, transparent 0 12px, #eacb7b82 12px 14px, transparent 14px 19px),
-    repeating-linear-gradient(90deg, transparent 0 15px, #fff8 15px 17px, transparent 17px 26px),
-    linear-gradient(135deg, #c79459 0%, #a85a3e 42%, #54352a 100%);
-}
-
-.real-estate-development-building.property-officetel,
-.real-estate-development-building.property-apartment_building,
-.real-estate-development-building.property-apartment_complex,
-.real-estate-development-building.property-office_tower,
-.real-estate-development-building.property-mixed_development {
-  width: 48px;
-  border-color: #1e293b5a;
-  background:
-    linear-gradient(90deg, #ffffff3c 0 14%, transparent 14% 70%, #0f172a2f 70% 100%),
-    repeating-linear-gradient(0deg, transparent 0 10px, #cfe5ef9c 10px 12px, transparent 12px 17px),
-    repeating-linear-gradient(90deg, transparent 0 13px, #eff9ff52 13px 15px, transparent 15px 24px),
-    linear-gradient(135deg, #c9d9df 0%, #779daf 42%, #314f69 100%);
-  box-shadow:
-    inset -9px 0 0 #0f172a2c,
-    inset 5px 0 0 #ffffff30,
-    0 4px 0 #203950,
-    0 15px 23px #0f172a60;
-}
-
-.real-estate-development-building.property-office_tower,
-.real-estate-development-building.property-mixed_development {
-  width: 56px;
-}
-
-.real-estate-development-building.property-officetel::before,
-.real-estate-development-building.property-apartment_building::before,
-.real-estate-development-building.property-apartment_complex::before,
-.real-estate-development-building.property-office_tower::before,
-.real-estate-development-building.property-mixed_development::before {
-  left: 2px;
-  right: 2px;
-  top: -8px;
-  height: 10px;
-  border-radius: 4px;
-  background: linear-gradient(135deg, #f8fafc, #64748b);
-  transform: none;
-}
-
-.real-estate-development-building.theme-starter_lowrise,
-.real-estate-development-building.theme-residential_lowrise,
-.real-estate-development-building.theme-villa_green,
-.real-estate-development-building.theme-mixed_midrise,
-.real-estate-development-building.theme-local_commercial,
-.real-estate-development-building.theme-compact_commercial,
-.real-estate-development-building.theme-apartment_single,
-.real-estate-development-building.theme-apartment_complex,
-.real-estate-development-building.theme-office_core,
-.real-estate-development-building.theme-landmark_mixed {
-  width: var(--building-width);
-}
-
-.real-estate-development-building.theme-starter_lowrise,
-.real-estate-development-building.theme-residential_lowrise {
-  --roof-a: #b67636;
-  --roof-b: #60381f;
-  --base-edge: #493425;
-  background:
-    linear-gradient(90deg, #ffffff2b 0 16%, transparent 16% 72%, #0f172a22 72% 100%),
-    repeating-linear-gradient(0deg, transparent 0 14px, #ead39b70 14px 16px, transparent 16px 22px),
-    repeating-linear-gradient(90deg, transparent 0 15px, #fff5 15px 17px, transparent 17px 26px),
-    linear-gradient(135deg, #c49a66 0%, #985f3d 48%, #563a2a 100%);
-  box-shadow:
-    inset -7px 0 0 #00000024,
-    inset 5px 0 0 #fff7,
-    0 5px 0 #4b3425,
-    0 15px 20px #0f172a4f;
-}
-
-.real-estate-development-building.theme-villa_green {
-  --roof-a: #2f9a70;
-  --roof-b: #245239;
-  --base-edge: #294535;
-  background:
-    linear-gradient(90deg, #ffffff28 0 16%, transparent 16% 72%, #0f172a20 72% 100%),
-    repeating-linear-gradient(0deg, transparent 0 15px, #d7e6cf70 15px 17px, transparent 17px 23px),
-    repeating-linear-gradient(90deg, transparent 0 15px, #f8fafc42 15px 17px, transparent 17px 26px),
-    linear-gradient(135deg, #bca777 0%, #658d5d 50%, #304f38 100%);
-}
-
-.real-estate-development-building.theme-local_commercial,
-.real-estate-development-building.theme-compact_commercial {
-  --roof-a: #d7a13c;
-  --roof-b: #87451f;
-  --base-edge: #523629;
-  background:
-    linear-gradient(90deg, #ffffff2c 0 14%, transparent 14% 72%, #0f172a27 72% 100%),
-    repeating-linear-gradient(0deg, transparent 0 12px, #e4c27678 12px 14px, transparent 14px 20px),
-    repeating-linear-gradient(90deg, transparent 0 15px, #fff6 15px 17px, transparent 17px 26px),
-    linear-gradient(135deg, #bf8c56 0%, #9f553b 44%, #53362b 100%);
-}
-
-.real-estate-development-building.theme-mixed_midrise,
-.real-estate-development-building.theme-apartment_single,
-.real-estate-development-building.theme-apartment_complex {
-  --roof-a: #cfd9de;
-  --roof-b: #566879;
-  --base-edge: #2d4257;
-  border-color: #1e293b55;
-  background:
-    linear-gradient(90deg, #ffffff34 0 15%, transparent 15% 70%, #0f172a2b 70% 100%),
-    repeating-linear-gradient(0deg, transparent 0 10px, #d5e6ed91 10px 12px, transparent 12px 18px),
-    repeating-linear-gradient(90deg, transparent 0 13px, #d8edf25c 13px 15px, transparent 15px 24px),
-    linear-gradient(135deg, #bfcfd7 0%, #6d95a8 43%, #314f67 100%);
-}
-
-.real-estate-development-building.theme-office_core,
-.real-estate-development-building.theme-landmark_mixed {
-  --roof-a: #d5dde2;
-  --roof-b: #47586c;
-  --base-edge: #203a5b;
-  border-color: #1e293b66;
-  background:
-    linear-gradient(90deg, #ffffff38 0 14%, transparent 14% 68%, #0f172a34 68% 100%),
-    repeating-linear-gradient(0deg, transparent 0 9px, #cddde7a6 9px 11px, transparent 11px 17px),
-    repeating-linear-gradient(90deg, transparent 0 12px, #a9cfdb66 12px 14px, transparent 14px 23px),
-    linear-gradient(135deg, #cad8df 0%, #5d8ba5 38%, #203d63 100%);
-  box-shadow:
-    inset -9px 0 0 #0f172a2e,
-    inset 5px 0 0 #ffffff40,
-    0 5px 0 #1f3f6d,
-    0 18px 26px #0f172a66;
-}
-
-.real-estate-development-building.variant-lowrise_roof::before,
-.real-estate-development-building.variant-villa_block::before,
-.real-estate-development-building.variant-garden_villa::before {
-  left: -7px;
-  right: -7px;
-  top: -14px;
-  height: 18px;
-  border-radius: 9px 9px 3px 3px;
-  background: linear-gradient(135deg, var(--roof-a), var(--roof-b));
-  transform: skew(-16deg);
-}
-
-.real-estate-development-building.variant-rental_block::before,
-.real-estate-development-building.variant-compact_building::before {
-  background: linear-gradient(135deg, var(--roof-a), var(--roof-b));
-}
-
-.real-estate-development-building.variant-shopfront::before,
-.real-estate-development-building.variant-market_row::before {
-  left: -8px;
-  right: -8px;
-  top: -10px;
-  height: 15px;
-  border-radius: 7px 7px 3px 3px;
-  background:
-    repeating-linear-gradient(90deg, #fef3c7 0 9px, #ef4444 9px 18px),
-    linear-gradient(135deg, #f97316, #7c2d12);
-  transform: skew(-14deg);
-}
-
-.real-estate-development-building.variant-officetel_block::before,
-.real-estate-development-building.variant-midrise_glass::before,
-.real-estate-development-building.variant-apartment_slab::before,
-.real-estate-development-building.variant-tower_podium::before,
-.real-estate-development-building.variant-complex_tower::before,
-.real-estate-development-building.variant-office_tower::before,
-.real-estate-development-building.variant-glass_podium::before,
-.real-estate-development-building.variant-mixed_podium::before,
-.real-estate-development-building.variant-landmark_tower::before {
-  left: 2px;
-  right: 2px;
-  top: -8px;
-  height: 10px;
-  border-radius: 4px;
-  background: linear-gradient(135deg, var(--roof-a), var(--roof-b));
-  transform: none;
-}
-
-.real-estate-development-building.variant-shopfront i,
-.real-estate-development-building.variant-market_row i,
-.real-estate-development-building.variant-compact_building i {
-  left: 8px;
-  right: 8px;
-  bottom: 8px;
-  height: 14px;
-  background: #17324d;
-  box-shadow:
-    0 -19px 0 -2px #fde68a,
-    0 -36px 0 -2px #fed7aa;
-}
-
-.real-estate-development-building.variant-office_tower i,
-.real-estate-development-building.variant-landmark_tower i,
-.real-estate-development-building.variant-mixed_podium i {
-  box-shadow:
-    0 -18px 0 -3px #d8ebf2b5,
-    0 -34px 0 -3px #d8ebf2ad,
-    0 -50px 0 -3px #d8ebf2a8,
-    0 -66px 0 -3px #d8ebf2a0,
-    0 -82px 0 -3px #d8ebf294;
+.real-estate-development-building img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
 }
 
 .real-estate-development-building.level-1 {
@@ -8070,11 +7841,11 @@ body {
 @keyframes realEstateBuildIn {
   from {
     opacity: .76;
-    transform: translate(-50%, -92%) scale(calc(var(--building-scale) * .9));
+    transform: translate(var(--building-anchor-x-offset), calc(var(--building-anchor-y-offset) + 8%)) rotate(var(--building-rotation, -8deg)) scale(calc(var(--building-scale) * .9));
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -100%) scale(var(--building-scale));
+    transform: translate(var(--building-anchor-x-offset), var(--building-anchor-y-offset)) rotate(var(--building-rotation, -8deg)) scale(var(--building-scale));
   }
 }
 

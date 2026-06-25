@@ -3,8 +3,8 @@
 ## 개요
 
 - 부동산 지역 상세 화면을 공용 배경 1장 구조에서 지역별 배경 10장 구조로 확장했다.
-- 각 지역은 `data/real_estate_district_assets.json`에서 배경 파일, 건물 theme, 상세 건물 pad, 향후 주민 이동 경로, 말풍선 톤을 가진다.
-- 구매 수량이 늘면 기존 저장 데이터의 `count`에서 파생된 `developmentLevel`과 `visibleBuildingSlots`를 유지하면서, 상세 화면은 지역별 pad와 theme/variant로 건물을 렌더링한다.
+- 각 지역은 `data/real_estate_district_assets.json`에서 배경 파일, 건물 theme, 상세 건물 pad, pad별 PNG asset, 향후 주민 이동 경로, 말풍선 톤을 가진다.
+- 구매 수량이 늘면 기존 저장 데이터의 `count`에서 파생된 `developmentLevel`과 `visibleBuildingSlots`를 유지하면서, 상세 화면은 지역별 pad와 `real_estate_building_assets.json`의 PNG를 조합해 건물을 렌더링한다.
 - 도시 전체 보기의 지역 개발도 마커는 기존 `real_estate_city_layout.json`을 계속 사용한다.
 
 ## 생성 리소스
@@ -29,8 +29,9 @@
 - `data/real_estate_district_assets.json`
   - `districts`는 `real_estates.json.properties` 10개 id와 순서까지 1:1로 맞춘다.
   - `backgroundAsset`: 지역 상세 화면에서 import할 PNG 파일명.
-  - `buildingTheme`: CSS 건물 테마. `starter_lowrise`, `residential_lowrise`, `villa_green`, `mixed_midrise`, `local_commercial`, `compact_commercial`, `apartment_single`, `apartment_complex`, `office_core`, `landmark_mixed` 중 하나다.
-  - `detailPads`: 200% x 200% 상세 지도 위 건물 배치 지점 10개. `x`, `y`, `scale`, `width`, `height`, `z`, `variant`를 가진다.
+  - `buildingTheme`: 건물 PNG 분류 테마. `starter_lowrise`, `residential_lowrise`, `villa_green`, `mixed_midrise`, `local_commercial`, `compact_commercial`, `apartment_single`, `apartment_complex`, `office_core`, `landmark_mixed` 중 하나다.
+  - `detailPads`: 200% x 200% 상세 지도 위 건물 배치 지점 16개. `x`, `y`, `scale`, `width`, `height`, `z`, `rotation`, `variant`, `buildingAsset`을 가진다.
+  - `buildingAsset`: `data/real_estate_building_assets.json.assets[].id`를 참조한다.
   - `futureResidentPaths`: 다음 차수 주민 이동용 도로 경로. 이번 차수에서는 렌더링하지 않지만 검증 대상이다.
   - `speechTone`: 다음 차수 말풍선 문구 톤 분기용 값이다.
 
@@ -38,7 +39,7 @@
 
 - `src/react/game/realEstate.js`
   - `real_estate_district_assets.json`을 import하고 런타임 설정 검증에 포함했다.
-  - 상세 리소스는 district 수, property id 순서, background file name, theme, pad 좌표/수치, path 좌표/깊이, help 누락을 검사한다.
+  - 상세 리소스는 district 수, property id 순서, background file name, theme, pad 좌표/수치, pad별 PNG asset 참조, path 좌표/깊이, help 누락을 검사한다.
   - `createRealEstateViewModel()` 카드에 `districtBackgroundAsset`, `districtBuildingTheme`, `districtDetailPads`, `districtFutureResidentPaths`, `districtSpeechTone`을 추가했다.
 - `tools/validate-real-estate-config.mjs`
   - 같은 데이터 검증을 CLI에 추가했다.
@@ -50,12 +51,12 @@
   - `import.meta.glob`로 지역별 상세 PNG를 모으고, `selectedCard.districtBackgroundAsset` 파일명으로 배경을 선택한다.
   - 예전 공용 상세 배경 `visual-real-estate-district-detail.png`는 glob 제외 패턴으로 번들에서 제외한다.
   - `RealEstateDetailDevelopmentLayer`는 공용 pad 상수를 사용하지 않고 `card.districtDetailPads`를 사용한다.
-  - 건물 DOM에는 `data-building-theme`, `data-building-variant`와 `theme-*`, `variant-*` class를 붙인다.
+  - 건물 DOM에는 `data-building-asset`, `data-building-theme`, `data-building-variant`를 붙인다.
 - `src/react/styles.css`
-  - 상세 배경 밝기/채도를 조정해 건물 오버레이가 배경과 더 잘 섞이게 했다.
-  - 저층 주거, 빌라, 상가, 꼬마빌딩, 오피스텔, 아파트, 오피스, 복합개발 테마별 CSS 건물 형태를 분리했다.
-  - pad는 데이터의 `width`/`scale`을 사용하고, 건물은 데이터의 `width`/`height`/`scale`/`z`를 사용해 원근감을 만든다.
-  - 건물 높이는 고정 픽셀 가산이 아니라 pad 기본 높이의 비율로 성장해, 저층 지역이 과하게 고층처럼 보이지 않게 조정했다.
+  - 상세 배경 밝기/채도를 조정해 건물 PNG가 배경과 더 잘 섞이게 했다.
+  - 저층 주거, 빌라, 상가, 꼬마빌딩, 오피스텔, 아파트, 오피스, 복합개발 건물은 CSS 도형이 아니라 PNG 리소스로 표시한다.
+  - pad는 데이터의 `width`/`scale`을 사용하고, 건물은 PNG asset의 `displayWidth`/`displayHeight`/`anchorX`/`anchorY`와 pad의 `scale`/`z`를 사용해 원근감을 만든다.
+  - 건물이 들어선 pad는 숨겨서 풀성장 상태에서 자리표시자처럼 보이지 않게 했다.
 
 ## 주민 이동/말풍선 검토
 
@@ -74,13 +75,13 @@
 ## 검증
 
 - `npm run real-estate:verify`
-  - 통과. 매물 10종, 도시 지역 10종, 상세 리소스 10종, 규모 6종, 랭킹 보상 6종을 검증했다.
+  - 통과. 매물 10종, 도시 지역 10종, 상세 리소스 10종, 건물 PNG 84종, 규모 6종, 랭킹 보상 6종을 검증했다.
 - `npm run react:build`
   - 통과. 지역별 상세 배경 10장이 React 번들에 포함된다.
 - `npm run react:real-estate-smoke`
-  - 통과. 지역별 상세 배경, 건물 theme/variant, 구매 후 상세 건물 렌더링, 풀성장 상세 건물 10개를 확인했다.
+  - 통과. 지역별 상세 배경, PNG 건물 asset/theme/variant, 구매 후 상세 건물 렌더링, 첫 구매 슬롯 1개, 풀성장 상세 건물 PNG 16개를 확인했다.
 - `npm run react:real-estate-visual-audit`
-  - 통과. 10개 지역 풀성장 상세 화면을 전수 캡처하고 `backgroundAsset` 기반 src, 건물 10개, theme/variant, horizontal overflow 0을 확인했다.
+  - 통과. 풀성장 도시 전체 보기 PNG 슬롯 160개와 10개 지역 풀성장 상세 화면을 전수 캡처하고 `backgroundAsset` 기반 src, 건물 PNG 16개, asset/theme/variant, horizontal overflow 0을 확인했다.
   - 산출물은 `artifacts/real-estate-resource-quality-audit/report.json`, `report.html`, `contact-sheet.png`다.
 - `npm run react:verify`
   - 통과. 부동산 검증, React 빌드, 전체 React smoke, responsive audit를 확인했다.
@@ -93,10 +94,10 @@
 - `mcp__UmgMcp.project_policy_gate` strict
   - 통과. 절대 경로 roots 기준 finding 0건이다.
 - 수동 캡처
-  - `artifacts/real-estate-district-assets/mixed-development-full-growth.png`에서 풀성장 복합 개발지의 상세 배경/건물 오버레이 합성을 확인했다.
+  - `artifacts/real-estate-resource-quality-audit/contact-sheet.png`에서 풀성장 도시 전체 보기와 10개 상세 배경/건물 PNG 합성을 확인했다.
 
 ## 주의사항
 
-- 이번 차수는 지역별 상세 배경과 CSS 건물 오버레이를 정식화한 것이다. 지역별 성장 단계 bitmap 묶음은 아직 만들지 않았다.
+- 이번 차수는 지역별 상세 배경을 정식화했고, 이후 PNG 건물 리소스 테이블 차수에서 건물 표현을 CSS 도형에서 PNG로 교체했다. 지역별 성장 단계 bitmap 묶음은 아직 만들지 않았다.
 - `real_estate_district_assets.json`의 pad 좌표를 바꾸면 `real-estate:verify`, `react:real-estate-smoke`, 모바일 responsive audit를 함께 확인한다.
 - 신규 주민 시스템을 붙일 때는 `futureResidentPaths`를 먼저 쓰고, 저장 schema를 올리지 않는 방향을 우선한다.

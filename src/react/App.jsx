@@ -96,6 +96,10 @@ import {
   claimDebugRealEstateWeeklyReward,
   claimRealEstateWeeklyReward,
   createRealEstateViewModel,
+  debugGrantRealEstateCash,
+  debugResetRealEstateState,
+  debugSetAllRealEstateCounts,
+  debugUnlockRealEstateStages,
   purchaseMaxRealEstateProperty,
   purchaseRealEstateProperty,
   realEstateAutoTickMs,
@@ -135,6 +139,8 @@ const backdrops = {
 };
 const realEstateDistrictBackgroundModules = import.meta.glob(["../snapshot/assets/visual-real-estate-district-*.png", "!../snapshot/assets/visual-real-estate-district-detail.png"], { eager: true, import: "default" });
 const realEstateDistrictBackgrounds = Object.fromEntries(Object.entries(realEstateDistrictBackgroundModules).map(([path, asset]) => [path.split("/").pop(), asset]));
+const realEstateBuildingModules = import.meta.glob("../snapshot/assets/real-estate-buildings/*.png", { eager: true, import: "default" });
+const realEstateBuildingImages = Object.fromEntries(Object.entries(realEstateBuildingModules).map(([path, asset]) => [path.slice(path.indexOf("real-estate-buildings/")), asset]));
 const totalCareerAtlasFrames = careers.length * 2;
 
 function careerAtlasStyle(career, gender) {
@@ -1417,36 +1423,58 @@ function polygonBoxStyle(points) {
   };
 }
 
+function realEstateBuildingImageFor(file) {
+  const image = realEstateBuildingImages[file];
+  assert(image, `부동산 건물 PNG를 찾을 수 없습니다: ${file}`);
+  return image;
+}
+
 function RealEstateBuildingSlots({ card }) {
   return (
     <div className="real-estate-building-layer" aria-hidden="true">
-      {card.visibleBuildingSlots.map((slot) => (
-        <span
-          className={`real-estate-building-dot level-${card.developmentLevel}`}
-          data-slot-id={slot.id}
-          key={slot.id}
-          style={percentPointStyle([slot.x, slot.y])}
-        />
-      ))}
+      {card.visibleBuildingSlots.map((slot) => {
+        const buildingImage = realEstateBuildingImageFor(slot.buildingAssetFile);
+        return (
+          <span
+            className={`real-estate-building-dot level-${card.developmentLevel}`}
+            data-building-asset={slot.buildingAssetId}
+            data-building-variant={slot.buildingVariant}
+            data-slot-id={slot.id}
+            key={slot.id}
+            style={{
+              ...percentPointStyle([slot.x, slot.y]),
+              zIndex: Math.round(slot.y * 10),
+              "--building-rotation": `${slot.rotation}deg`,
+              "--overview-building-height": `${Math.max(20, Math.round(slot.buildingDisplayHeight * 0.48))}px`,
+              "--overview-building-width": `${Math.max(22, Math.round(slot.buildingDisplayWidth * 0.48))}px`,
+            }}
+          >
+            <img alt="" aria-hidden="true" draggable="false" src={buildingImage} />
+          </span>
+        );
+      })}
     </div>
   );
 }
 
 function RealEstateDetailDevelopmentLayer({ card }) {
   const pads = card.districtDetailPads;
-  assert(Array.isArray(pads) && pads.length === 10, `부동산 상세 건물 패드 10개가 필요합니다: ${card.id}`);
+  assert(Array.isArray(pads) && pads.length === card.buildingSlots.length, `부동산 상세 건물 패드와 도시 슬롯 수가 다릅니다: ${card.id}`);
   return (
     <div className="real-estate-development-layer" aria-hidden="true" data-building-theme={card.districtBuildingTheme} data-development-level={card.developmentLevel}>
       <div className="real-estate-development-pads">
-        {pads.map((pad) => (
+        {pads.map((pad, index) => (
           <span
             className={`real-estate-development-pad variant-${pad.variant}`}
+            data-occupied={index < card.visibleBuildingSlots.length ? "true" : "false"}
             data-pad-id={pad.id}
             key={`${card.id}-${pad.id}`}
             style={{
               left: `${pad.x}%`,
               top: `${pad.y}%`,
               zIndex: pad.z,
+              "--pad-height": `${pad.height}px`,
+              "--pad-rotation": `${pad.rotation}deg`,
               "--pad-width": `${pad.width}px`,
               "--pad-scale": pad.scale,
             }}
@@ -1457,9 +1485,11 @@ function RealEstateDetailDevelopmentLayer({ card }) {
         {card.visibleBuildingSlots.map((slot, index) => {
           const pad = pads[index];
           assert(pad, `부동산 상세 건물 패드를 찾을 수 없습니다: ${card.id} ${index}`);
+          const buildingImage = realEstateBuildingImageFor(pad.buildingAssetFile);
           return (
             <span
               className={`real-estate-development-building property-${card.id} level-${card.developmentLevel} theme-${card.districtBuildingTheme} variant-${pad.variant}`}
+              data-building-asset={pad.buildingAssetId}
               data-building-theme={card.districtBuildingTheme}
               data-building-variant={pad.variant}
               data-slot-id={slot.id}
@@ -1468,12 +1498,17 @@ function RealEstateDetailDevelopmentLayer({ card }) {
                 left: `${pad.x}%`,
                 top: `${pad.y}%`,
                 zIndex: pad.z + 10,
-                "--building-height": `${Math.round(pad.height * (1 + card.developmentLevel * .035))}px`,
-                "--building-width": `${pad.width}px`,
+                "--building-anchor-x": `${pad.buildingAnchorX}%`,
+                "--building-anchor-x-offset": `-${pad.buildingAnchorX}%`,
+                "--building-anchor-y": `${pad.buildingAnchorY}%`,
+                "--building-anchor-y-offset": `-${pad.buildingAnchorY}%`,
+                "--building-height": `${pad.buildingDisplayHeight}px`,
+                "--building-rotation": `${pad.rotation}deg`,
+                "--building-width": `${pad.buildingDisplayWidth}px`,
                 "--building-scale": pad.scale,
               }}
             >
-              <i />
+              <img alt="" aria-hidden="true" draggable="false" src={buildingImage} />
             </span>
           );
         })}
@@ -1487,7 +1522,7 @@ function RealEstateDistrictLabel({ bounds, card }) {
   return (
     <span className="real-estate-district-label" style={percentPointStyle(localPercentPoint(card.districtLabelAnchor, bounds))}>
       <strong>{card.name}</strong>
-      <small>{card.unlocked ? `${card.count}채 · ${card.developmentRatio}%` : `Stage ${card.unlockStage}`}</small>
+      <small>{card.unlocked ? `${formatCompactNumber(card.count)}채` : `Stage ${card.unlockStage}`}</small>
     </span>
   );
 }
@@ -2525,6 +2560,8 @@ function DebugModal({ gameState, onClose, onSetGameState, showDebugTools = false
         <Metric label="콘텐츠" value={CONTENT_REVISION.slice(0, 8)} />
         <Metric label="다이아" value={formatCompactNumber(gameState.diamonds)} />
         <Metric label="부동산 순위" value={`${formatCompactNumber(realEstateSummary.rank)}위`} />
+        {showDebugTools && <Metric label="부동산 자금" value={formatCompactNumber(realEstateSummary.cash)} />}
+        {showDebugTools && <Metric label="부동산 보유" value={`${realEstateSummary.ownedKinds}/${realEstateSummary.totalKinds}종`} />}
       </div>
       <div className="debug-actions">
         <button className="secondary-action compact" type="button" onClick={() => {
@@ -2541,6 +2578,51 @@ function DebugModal({ gameState, onClose, onSetGameState, showDebugTools = false
           }}>
             <Gem size={18} />
             <span>부동산 주간 보상 수령</span>
+          </button>
+        )}
+        {showDebugTools && (
+          <button className="secondary-action compact" type="button" onClick={() => {
+            onSetGameState((state) => debugGrantRealEstateCash(state, 1000000));
+            setNotice("부동산 자금 +1M 완료");
+          }}>
+            <Coins size={18} />
+            <span>부동산 자금 +1M</span>
+          </button>
+        )}
+        {showDebugTools && (
+          <button className="secondary-action compact" type="button" onClick={() => {
+            onSetGameState((state) => debugUnlockRealEstateStages(state, 100));
+            setNotice("부동산 Stage 100 해금");
+          }}>
+            <LockOpen size={18} />
+            <span>부동산 Stage 100</span>
+          </button>
+        )}
+        {showDebugTools && (
+          <button className="secondary-action compact" type="button" onClick={() => {
+            onSetGameState((state) => debugSetAllRealEstateCounts(state, 1));
+            setNotice("모든 부동산 1채 완료");
+          }}>
+            <BriefcaseBusiness size={18} />
+            <span>부동산 모두 1채</span>
+          </button>
+        )}
+        {showDebugTools && (
+          <button className="secondary-action compact" type="button" onClick={() => {
+            onSetGameState((state) => debugSetAllRealEstateCounts(state, 1000));
+            setNotice("부동산 풀성장 완료");
+          }}>
+            <Sparkles size={18} />
+            <span>부동산 풀성장</span>
+          </button>
+        )}
+        {showDebugTools && (
+          <button className="secondary-action compact danger-action" type="button" onClick={() => {
+            onSetGameState((state) => debugResetRealEstateState(state));
+            setNotice("부동산 초기화 완료");
+          }}>
+            <Trash2 size={18} />
+            <span>부동산 초기화</span>
           </button>
         )}
         <button className="secondary-action compact" type="button" onClick={() => handleAddCareerCompanions(1)}>

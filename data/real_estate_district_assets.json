@@ -7,28 +7,283 @@
       "buildingTheme": "starter_lowrise",
       "speechTone": "humble_start",
       "detailPads": [
-        { "id": "pad-01", "x": 17, "y": 80, "scale": 1.1, "width": 54, "height": 34, "z": 10, "variant": "lowrise_roof" },
-        { "id": "pad-02", "x": 31, "y": 72, "scale": 1.02, "width": 50, "height": 36, "z": 8, "variant": "rental_block" },
-        { "id": "pad-03", "x": 45, "y": 82, "scale": 1.15, "width": 56, "height": 38, "z": 12, "variant": "lowrise_roof" },
-        { "id": "pad-04", "x": 62, "y": 74, "scale": 1.04, "width": 52, "height": 40, "z": 9, "variant": "rental_block" },
-        { "id": "pad-05", "x": 79, "y": 83, "scale": 1.08, "width": 55, "height": 42, "z": 13, "variant": "lowrise_roof" },
-        { "id": "pad-06", "x": 23, "y": 58, "scale": 0.86, "width": 46, "height": 40, "z": 5, "variant": "rental_block" },
-        { "id": "pad-07", "x": 41, "y": 55, "scale": 0.9, "width": 48, "height": 43, "z": 4, "variant": "lowrise_roof" },
-        { "id": "pad-08", "x": 58, "y": 59, "scale": 0.93, "width": 50, "height": 45, "z": 6, "variant": "rental_block" },
-        { "id": "pad-09", "x": 74, "y": 52, "scale": 0.78, "width": 44, "height": 45, "z": 3, "variant": "lowrise_roof" },
-        { "id": "pad-10", "x": 50, "y": 43, "scale": 0.72, "width": 42, "height": 44, "z": 2, "variant": "rental_block" }
+        {
+          "id": "pad-01",
+          "x": 49.05,
+          "y": 79.69,
+          "scale": 1.034,
+          "width": 39,
+          "height": 21,
+          "z": 797,
+          "rotation": -8.0,
+          "variant": "lowrise_roof",
+          "buildingAsset": "small_studio_lowrise_roof_1"
+        },
+        {
+          "id": "pad-02",
+          "x": 43.05,
+          "y": 75.06,
+          "scale": 1.01,
+          "width": 39,
+          "height": 21,
+          "z": 752,
+          "rotation": -8.55,
+          "variant": "rental_block",
+          "buildingAsset": "small_studio_rental_block_1"
+        },
+        {
+          "id": "pad-03",
+          "x": 54.35,
+          "y": 75.06,
+          "scale": 1.01,
+          "width": 39,
+          "height": 21,
+          "z": 753,
+          "rotation": -7.45,
+          "variant": "rental_block",
+          "buildingAsset": "small_studio_rental_block_2"
+        },
+        {
+          "id": "pad-04",
+          "x": 48.35,
+          "y": 70.43,
+          "scale": 0.986,
+          "width": 39,
+          "height": 21,
+          "z": 707,
+          "rotation": -8.0,
+          "variant": "lowrise_roof",
+          "buildingAsset": "small_studio_lowrise_roof_2"
+        },
+        {
+          "id": "pad-05",
+          "x": 37.04,
+          "y": 70.43,
+          "scale": 0.986,
+          "width": 39,
+          "height": 21,
+          "z": 708,
+          "rotation": -9.1,
+          "variant": "lowrise_roof",
+          "buildingAsset": "small_studio_lowrise_roof_3"
+        },
+        {
+          "id": "pad-06",
+          "x": 59.66,
+          "y": 70.43,
+          "scale": 0.986,
+          "width": 39,
+          "height": 21,
+          "z": 709,
+          "rotation": -6.9,
+          "variant": "lowrise_roof",
+          "buildingAsset": "small_studio_lowrise_roof_4"
+        },
+        {
+          "id": "pad-07",
+          "x": 53.65,
+          "y": 65.8,
+          "scale": 0.962,
+          "width": 39,
+          "height": 21,
+          "z": 664,
+          "rotation": -7.45,
+          "variant": "rental_block",
+          "buildingAsset": "small_studio_rental_block_3"
+        },
+        {
+          "id": "pad-08",
+          "x": 42.35,
+          "y": 65.8,
+          "scale": 0.962,
+          "width": 39,
+          "height": 21,
+          "z": 665,
+          "rotation": -8.55,
+          "variant": "rental_block",
+          "buildingAsset": "small_studio_rental_block_4"
+        },
+        {
+          "id": "pad-09",
+          "x": 31.04,
+          "y": 65.8,
+          "scale": 0.962,
+          "width": 39,
+          "height": 21,
+          "z": 666,
+          "rotation": -9.65,
+          "variant": "rental_block",
+          "buildingAsset": "small_studio_rental_block_1"
+        },
+        {
+          "id": "pad-10",
+          "x": 64.96,
+          "y": 65.8,
+          "scale": 0.962,
+          "width": 39,
+          "height": 21,
+          "z": 667,
+          "rotation": -6.35,
+          "variant": "rental_block",
+          "buildingAsset": "small_studio_rental_block_2"
+        },
+        {
+          "id": "pad-11",
+          "x": 47.65,
+          "y": 61.17,
+          "scale": 0.938,
+          "width": 39,
+          "height": 21,
+          "z": 622,
+          "rotation": -8.0,
+          "variant": "lowrise_roof",
+          "buildingAsset": "small_studio_lowrise_roof_1"
+        },
+        {
+          "id": "pad-12",
+          "x": 58.96,
+          "y": 61.17,
+          "scale": 0.938,
+          "width": 39,
+          "height": 21,
+          "z": 623,
+          "rotation": -6.9,
+          "variant": "lowrise_roof",
+          "buildingAsset": "small_studio_lowrise_roof_2"
+        },
+        {
+          "id": "pad-13",
+          "x": 36.34,
+          "y": 61.17,
+          "scale": 0.938,
+          "width": 39,
+          "height": 21,
+          "z": 624,
+          "rotation": -9.1,
+          "variant": "lowrise_roof",
+          "buildingAsset": "small_studio_lowrise_roof_3"
+        },
+        {
+          "id": "pad-14",
+          "x": 52.95,
+          "y": 56.54,
+          "scale": 0.914,
+          "width": 39,
+          "height": 21,
+          "z": 578,
+          "rotation": -7.45,
+          "variant": "rental_block",
+          "buildingAsset": "small_studio_rental_block_3"
+        },
+        {
+          "id": "pad-15",
+          "x": 41.65,
+          "y": 56.54,
+          "scale": 0.914,
+          "width": 39,
+          "height": 21,
+          "z": 579,
+          "rotation": -8.55,
+          "variant": "rental_block",
+          "buildingAsset": "small_studio_rental_block_4"
+        },
+        {
+          "id": "pad-16",
+          "x": 46.95,
+          "y": 51.91,
+          "scale": 0.89,
+          "width": 39,
+          "height": 21,
+          "z": 534,
+          "rotation": -8.0,
+          "variant": "lowrise_roof",
+          "buildingAsset": "small_studio_lowrise_roof_4"
+        }
       ],
       "futureResidentPaths": [
-        { "id": "alley_front", "depth": "near", "points": [[7, 83], [22, 78], [39, 81], [58, 76], [92, 83]] },
-        { "id": "alley_mid", "depth": "mid", "points": [[12, 61], [31, 58], [50, 60], [72, 54], [91, 58]] },
-        { "id": "alley_back", "depth": "far", "points": [[18, 42], [39, 39], [63, 41], [84, 37]] }
+        {
+          "id": "alley_front",
+          "depth": "near",
+          "points": [
+            [
+              7,
+              83
+            ],
+            [
+              22,
+              78
+            ],
+            [
+              39,
+              81
+            ],
+            [
+              58,
+              76
+            ],
+            [
+              92,
+              83
+            ]
+          ]
+        },
+        {
+          "id": "alley_mid",
+          "depth": "mid",
+          "points": [
+            [
+              12,
+              61
+            ],
+            [
+              31,
+              58
+            ],
+            [
+              50,
+              60
+            ],
+            [
+              72,
+              54
+            ],
+            [
+              91,
+              58
+            ]
+          ]
+        },
+        {
+          "id": "alley_back",
+          "depth": "far",
+          "points": [
+            [
+              18,
+              42
+            ],
+            [
+              39,
+              39
+            ],
+            [
+              63,
+              41
+            ],
+            [
+              84,
+              37
+            ]
+          ]
+        }
       ],
       "help": {
         "backgroundAsset": "작은 원룸 지역 상세 화면의 전용 배경 이미지입니다.",
         "buildingTheme": "저층 원룸형 건물 오버레이 색상과 형태를 고르는 테마입니다.",
         "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
         "futureResidentPaths": "추후 주민이 골목과 도로를 따라 이동할 경로입니다.",
-        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다.",
+        "buildingAsset": "각 상세 pad가 사용할 PNG 건물 리소스 id입니다.",
+        "rotation": "건물과 빈 필지를 배경 바닥 각도에 맞추기 위한 회전 각도(deg)입니다."
       }
     },
     {
@@ -37,28 +292,283 @@
       "buildingTheme": "residential_lowrise",
       "speechTone": "family_rental",
       "detailPads": [
-        { "id": "pad-01", "x": 18, "y": 77, "scale": 1.08, "width": 58, "height": 38, "z": 10, "variant": "rental_block" },
-        { "id": "pad-02", "x": 34, "y": 69, "scale": 1, "width": 54, "height": 40, "z": 8, "variant": "lowrise_roof" },
-        { "id": "pad-03", "x": 51, "y": 78, "scale": 1.12, "width": 58, "height": 42, "z": 12, "variant": "rental_block" },
-        { "id": "pad-04", "x": 69, "y": 70, "scale": 0.98, "width": 54, "height": 43, "z": 9, "variant": "rental_block" },
-        { "id": "pad-05", "x": 83, "y": 80, "scale": 1.04, "width": 56, "height": 44, "z": 13, "variant": "lowrise_roof" },
-        { "id": "pad-06", "x": 25, "y": 56, "scale": 0.84, "width": 48, "height": 42, "z": 5, "variant": "rental_block" },
-        { "id": "pad-07", "x": 44, "y": 51, "scale": 0.86, "width": 48, "height": 44, "z": 4, "variant": "lowrise_roof" },
-        { "id": "pad-08", "x": 61, "y": 56, "scale": 0.9, "width": 50, "height": 46, "z": 6, "variant": "rental_block" },
-        { "id": "pad-09", "x": 78, "y": 49, "scale": 0.76, "width": 46, "height": 46, "z": 3, "variant": "lowrise_roof" },
-        { "id": "pad-10", "x": 53, "y": 40, "scale": 0.7, "width": 44, "height": 45, "z": 2, "variant": "rental_block" }
+        {
+          "id": "pad-01",
+          "x": 52.65,
+          "y": 76.49,
+          "scale": 1.018,
+          "width": 42,
+          "height": 23,
+          "z": 765,
+          "rotation": -9.0,
+          "variant": "lowrise_roof",
+          "buildingAsset": "two_room_lowrise_roof_1"
+        },
+        {
+          "id": "pad-02",
+          "x": 46.35,
+          "y": 71.86,
+          "scale": 0.994,
+          "width": 42,
+          "height": 23,
+          "z": 720,
+          "rotation": -9.55,
+          "variant": "rental_block",
+          "buildingAsset": "two_room_rental_block_1"
+        },
+        {
+          "id": "pad-03",
+          "x": 58.25,
+          "y": 71.86,
+          "scale": 0.994,
+          "width": 42,
+          "height": 23,
+          "z": 721,
+          "rotation": -8.45,
+          "variant": "rental_block",
+          "buildingAsset": "two_room_rental_block_2"
+        },
+        {
+          "id": "pad-04",
+          "x": 51.95,
+          "y": 67.23,
+          "scale": 0.97,
+          "width": 42,
+          "height": 23,
+          "z": 675,
+          "rotation": -9.0,
+          "variant": "lowrise_roof",
+          "buildingAsset": "two_room_lowrise_roof_2"
+        },
+        {
+          "id": "pad-05",
+          "x": 40.04,
+          "y": 67.23,
+          "scale": 0.97,
+          "width": 42,
+          "height": 23,
+          "z": 676,
+          "rotation": -10.1,
+          "variant": "lowrise_roof",
+          "buildingAsset": "two_room_lowrise_roof_3"
+        },
+        {
+          "id": "pad-06",
+          "x": 63.86,
+          "y": 67.23,
+          "scale": 0.97,
+          "width": 42,
+          "height": 23,
+          "z": 677,
+          "rotation": -7.9,
+          "variant": "lowrise_roof",
+          "buildingAsset": "two_room_lowrise_roof_4"
+        },
+        {
+          "id": "pad-07",
+          "x": 57.55,
+          "y": 62.6,
+          "scale": 0.946,
+          "width": 42,
+          "height": 23,
+          "z": 632,
+          "rotation": -8.45,
+          "variant": "rental_block",
+          "buildingAsset": "two_room_rental_block_3"
+        },
+        {
+          "id": "pad-08",
+          "x": 45.65,
+          "y": 62.6,
+          "scale": 0.946,
+          "width": 42,
+          "height": 23,
+          "z": 633,
+          "rotation": -9.55,
+          "variant": "rental_block",
+          "buildingAsset": "two_room_rental_block_4"
+        },
+        {
+          "id": "pad-09",
+          "x": 69.46,
+          "y": 62.6,
+          "scale": 0.946,
+          "width": 42,
+          "height": 23,
+          "z": 634,
+          "rotation": -7.35,
+          "variant": "rental_block",
+          "buildingAsset": "two_room_rental_block_1"
+        },
+        {
+          "id": "pad-10",
+          "x": 33.74,
+          "y": 62.6,
+          "scale": 0.946,
+          "width": 42,
+          "height": 23,
+          "z": 635,
+          "rotation": -10.65,
+          "variant": "rental_block",
+          "buildingAsset": "two_room_rental_block_2"
+        },
+        {
+          "id": "pad-11",
+          "x": 51.25,
+          "y": 57.97,
+          "scale": 0.921,
+          "width": 42,
+          "height": 23,
+          "z": 590,
+          "rotation": -9.0,
+          "variant": "lowrise_roof",
+          "buildingAsset": "two_room_lowrise_roof_1"
+        },
+        {
+          "id": "pad-12",
+          "x": 63.16,
+          "y": 57.97,
+          "scale": 0.921,
+          "width": 42,
+          "height": 23,
+          "z": 591,
+          "rotation": -7.9,
+          "variant": "lowrise_roof",
+          "buildingAsset": "two_room_lowrise_roof_2"
+        },
+        {
+          "id": "pad-13",
+          "x": 39.34,
+          "y": 57.97,
+          "scale": 0.921,
+          "width": 42,
+          "height": 23,
+          "z": 592,
+          "rotation": -10.1,
+          "variant": "lowrise_roof",
+          "buildingAsset": "two_room_lowrise_roof_3"
+        },
+        {
+          "id": "pad-14",
+          "x": 56.85,
+          "y": 53.34,
+          "scale": 0.897,
+          "width": 42,
+          "height": 23,
+          "z": 546,
+          "rotation": -8.45,
+          "variant": "rental_block",
+          "buildingAsset": "two_room_rental_block_3"
+        },
+        {
+          "id": "pad-15",
+          "x": 44.95,
+          "y": 53.34,
+          "scale": 0.897,
+          "width": 42,
+          "height": 23,
+          "z": 547,
+          "rotation": -9.55,
+          "variant": "rental_block",
+          "buildingAsset": "two_room_rental_block_4"
+        },
+        {
+          "id": "pad-16",
+          "x": 50.55,
+          "y": 48.71,
+          "scale": 0.873,
+          "width": 42,
+          "height": 23,
+          "z": 502,
+          "rotation": -9.0,
+          "variant": "lowrise_roof",
+          "buildingAsset": "two_room_lowrise_roof_4"
+        }
       ],
       "futureResidentPaths": [
-        { "id": "residential_front", "depth": "near", "points": [[6, 79], [26, 74], [47, 78], [68, 72], [92, 77]] },
-        { "id": "residential_mid", "depth": "mid", "points": [[10, 58], [31, 55], [53, 57], [73, 52], [91, 55]] },
-        { "id": "residential_back", "depth": "far", "points": [[17, 41], [38, 37], [61, 40], [84, 36]] }
+        {
+          "id": "residential_front",
+          "depth": "near",
+          "points": [
+            [
+              6,
+              79
+            ],
+            [
+              26,
+              74
+            ],
+            [
+              47,
+              78
+            ],
+            [
+              68,
+              72
+            ],
+            [
+              92,
+              77
+            ]
+          ]
+        },
+        {
+          "id": "residential_mid",
+          "depth": "mid",
+          "points": [
+            [
+              10,
+              58
+            ],
+            [
+              31,
+              55
+            ],
+            [
+              53,
+              57
+            ],
+            [
+              73,
+              52
+            ],
+            [
+              91,
+              55
+            ]
+          ]
+        },
+        {
+          "id": "residential_back",
+          "depth": "far",
+          "points": [
+            [
+              17,
+              41
+            ],
+            [
+              38,
+              37
+            ],
+            [
+              61,
+              40
+            ],
+            [
+              84,
+              36
+            ]
+          ]
+        }
       ],
       "help": {
         "backgroundAsset": "투룸 지역 상세 화면의 전용 배경 이미지입니다.",
         "buildingTheme": "주거 저층 건물 오버레이 색상과 형태를 고르는 테마입니다.",
         "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
         "futureResidentPaths": "추후 주민이 주거지 보행로를 따라 이동할 경로입니다.",
-        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다.",
+        "buildingAsset": "각 상세 pad가 사용할 PNG 건물 리소스 id입니다.",
+        "rotation": "건물과 빈 필지를 배경 바닥 각도에 맞추기 위한 회전 각도(deg)입니다."
       }
     },
     {
@@ -67,28 +577,283 @@
       "buildingTheme": "villa_green",
       "speechTone": "quiet_village",
       "detailPads": [
-        { "id": "pad-01", "x": 16, "y": 76, "scale": 1.06, "width": 58, "height": 40, "z": 10, "variant": "villa_block" },
-        { "id": "pad-02", "x": 32, "y": 68, "scale": 1, "width": 56, "height": 42, "z": 8, "variant": "garden_villa" },
-        { "id": "pad-03", "x": 48, "y": 79, "scale": 1.12, "width": 60, "height": 44, "z": 12, "variant": "villa_block" },
-        { "id": "pad-04", "x": 66, "y": 70, "scale": 0.96, "width": 56, "height": 44, "z": 9, "variant": "garden_villa" },
-        { "id": "pad-05", "x": 82, "y": 78, "scale": 1.02, "width": 58, "height": 46, "z": 13, "variant": "villa_block" },
-        { "id": "pad-06", "x": 23, "y": 57, "scale": 0.82, "width": 50, "height": 42, "z": 5, "variant": "garden_villa" },
-        { "id": "pad-07", "x": 41, "y": 52, "scale": 0.86, "width": 50, "height": 44, "z": 4, "variant": "villa_block" },
-        { "id": "pad-08", "x": 60, "y": 57, "scale": 0.9, "width": 52, "height": 46, "z": 6, "variant": "garden_villa" },
-        { "id": "pad-09", "x": 76, "y": 49, "scale": 0.76, "width": 48, "height": 46, "z": 3, "variant": "villa_block" },
-        { "id": "pad-10", "x": 51, "y": 40, "scale": 0.7, "width": 46, "height": 45, "z": 2, "variant": "garden_villa" }
+        {
+          "id": "pad-01",
+          "x": 50.55,
+          "y": 76.14,
+          "scale": 1.016,
+          "width": 47,
+          "height": 25,
+          "z": 761,
+          "rotation": -8.0,
+          "variant": "villa_block",
+          "buildingAsset": "villa_villa_block_1"
+        },
+        {
+          "id": "pad-02",
+          "x": 44.14,
+          "y": 71.63,
+          "scale": 0.992,
+          "width": 47,
+          "height": 25,
+          "z": 717,
+          "rotation": -8.55,
+          "variant": "garden_villa",
+          "buildingAsset": "villa_garden_villa_1"
+        },
+        {
+          "id": "pad-03",
+          "x": 56.26,
+          "y": 71.63,
+          "scale": 0.992,
+          "width": 47,
+          "height": 25,
+          "z": 718,
+          "rotation": -7.45,
+          "variant": "garden_villa",
+          "buildingAsset": "villa_garden_villa_2"
+        },
+        {
+          "id": "pad-04",
+          "x": 49.85,
+          "y": 67.11,
+          "scale": 0.969,
+          "width": 47,
+          "height": 25,
+          "z": 674,
+          "rotation": -8.0,
+          "variant": "villa_block",
+          "buildingAsset": "villa_villa_block_2"
+        },
+        {
+          "id": "pad-05",
+          "x": 37.74,
+          "y": 67.11,
+          "scale": 0.969,
+          "width": 47,
+          "height": 25,
+          "z": 675,
+          "rotation": -9.1,
+          "variant": "villa_block",
+          "buildingAsset": "villa_villa_block_3"
+        },
+        {
+          "id": "pad-06",
+          "x": 61.96,
+          "y": 67.11,
+          "scale": 0.969,
+          "width": 47,
+          "height": 25,
+          "z": 676,
+          "rotation": -6.9,
+          "variant": "villa_block",
+          "buildingAsset": "villa_villa_block_4"
+        },
+        {
+          "id": "pad-07",
+          "x": 55.56,
+          "y": 62.6,
+          "scale": 0.946,
+          "width": 47,
+          "height": 25,
+          "z": 632,
+          "rotation": -7.45,
+          "variant": "garden_villa",
+          "buildingAsset": "villa_garden_villa_3"
+        },
+        {
+          "id": "pad-08",
+          "x": 43.44,
+          "y": 62.6,
+          "scale": 0.946,
+          "width": 47,
+          "height": 25,
+          "z": 633,
+          "rotation": -8.55,
+          "variant": "garden_villa",
+          "buildingAsset": "villa_garden_villa_4"
+        },
+        {
+          "id": "pad-09",
+          "x": 31.33,
+          "y": 62.6,
+          "scale": 0.946,
+          "width": 47,
+          "height": 25,
+          "z": 634,
+          "rotation": -9.65,
+          "variant": "garden_villa",
+          "buildingAsset": "villa_garden_villa_1"
+        },
+        {
+          "id": "pad-10",
+          "x": 67.67,
+          "y": 62.6,
+          "scale": 0.946,
+          "width": 47,
+          "height": 25,
+          "z": 635,
+          "rotation": -6.35,
+          "variant": "garden_villa",
+          "buildingAsset": "villa_garden_villa_2"
+        },
+        {
+          "id": "pad-11",
+          "x": 49.15,
+          "y": 58.09,
+          "scale": 0.922,
+          "width": 47,
+          "height": 25,
+          "z": 591,
+          "rotation": -8.0,
+          "variant": "villa_block",
+          "buildingAsset": "villa_villa_block_1"
+        },
+        {
+          "id": "pad-12",
+          "x": 61.26,
+          "y": 58.09,
+          "scale": 0.922,
+          "width": 47,
+          "height": 25,
+          "z": 592,
+          "rotation": -6.9,
+          "variant": "villa_block",
+          "buildingAsset": "villa_villa_block_2"
+        },
+        {
+          "id": "pad-13",
+          "x": 37.04,
+          "y": 58.09,
+          "scale": 0.922,
+          "width": 47,
+          "height": 25,
+          "z": 593,
+          "rotation": -9.1,
+          "variant": "villa_block",
+          "buildingAsset": "villa_villa_block_3"
+        },
+        {
+          "id": "pad-14",
+          "x": 54.86,
+          "y": 53.57,
+          "scale": 0.899,
+          "width": 47,
+          "height": 25,
+          "z": 549,
+          "rotation": -7.45,
+          "variant": "garden_villa",
+          "buildingAsset": "villa_garden_villa_3"
+        },
+        {
+          "id": "pad-15",
+          "x": 42.74,
+          "y": 53.57,
+          "scale": 0.899,
+          "width": 47,
+          "height": 25,
+          "z": 550,
+          "rotation": -8.55,
+          "variant": "garden_villa",
+          "buildingAsset": "villa_garden_villa_4"
+        },
+        {
+          "id": "pad-16",
+          "x": 48.45,
+          "y": 49.06,
+          "scale": 0.875,
+          "width": 47,
+          "height": 25,
+          "z": 506,
+          "rotation": -8.0,
+          "variant": "villa_block",
+          "buildingAsset": "villa_villa_block_4"
+        }
       ],
       "futureResidentPaths": [
-        { "id": "villa_front", "depth": "near", "points": [[8, 78], [27, 73], [47, 77], [69, 71], [92, 76]] },
-        { "id": "villa_mid", "depth": "mid", "points": [[12, 58], [32, 54], [54, 56], [75, 51], [90, 54]] },
-        { "id": "villa_back", "depth": "far", "points": [[18, 41], [39, 38], [62, 40], [84, 36]] }
+        {
+          "id": "villa_front",
+          "depth": "near",
+          "points": [
+            [
+              8,
+              78
+            ],
+            [
+              27,
+              73
+            ],
+            [
+              47,
+              77
+            ],
+            [
+              69,
+              71
+            ],
+            [
+              92,
+              76
+            ]
+          ]
+        },
+        {
+          "id": "villa_mid",
+          "depth": "mid",
+          "points": [
+            [
+              12,
+              58
+            ],
+            [
+              32,
+              54
+            ],
+            [
+              54,
+              56
+            ],
+            [
+              75,
+              51
+            ],
+            [
+              90,
+              54
+            ]
+          ]
+        },
+        {
+          "id": "villa_back",
+          "depth": "far",
+          "points": [
+            [
+              18,
+              41
+            ],
+            [
+              39,
+              38
+            ],
+            [
+              62,
+              40
+            ],
+            [
+              84,
+              36
+            ]
+          ]
+        }
       ],
       "help": {
         "backgroundAsset": "빌라 지역 상세 화면의 전용 배경 이미지입니다.",
         "buildingTheme": "녹지가 섞인 빌라형 건물 오버레이 색상과 형태를 고르는 테마입니다.",
         "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
         "futureResidentPaths": "추후 주민이 빌라 단지 내부 도로를 따라 이동할 경로입니다.",
-        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다.",
+        "buildingAsset": "각 상세 pad가 사용할 PNG 건물 리소스 id입니다.",
+        "rotation": "건물과 빈 필지를 배경 바닥 각도에 맞추기 위한 회전 각도(deg)입니다."
       }
     },
     {
@@ -97,28 +862,283 @@
       "buildingTheme": "mixed_midrise",
       "speechTone": "commuter",
       "detailPads": [
-        { "id": "pad-01", "x": 18, "y": 78, "scale": 1.06, "width": 50, "height": 58, "z": 10, "variant": "officetel_block" },
-        { "id": "pad-02", "x": 34, "y": 70, "scale": 0.98, "width": 48, "height": 64, "z": 8, "variant": "midrise_glass" },
-        { "id": "pad-03", "x": 50, "y": 80, "scale": 1.12, "width": 52, "height": 70, "z": 12, "variant": "officetel_block" },
-        { "id": "pad-04", "x": 68, "y": 71, "scale": 0.96, "width": 50, "height": 68, "z": 9, "variant": "midrise_glass" },
-        { "id": "pad-05", "x": 83, "y": 80, "scale": 1.04, "width": 52, "height": 72, "z": 13, "variant": "officetel_block" },
-        { "id": "pad-06", "x": 25, "y": 56, "scale": 0.82, "width": 46, "height": 62, "z": 5, "variant": "midrise_glass" },
-        { "id": "pad-07", "x": 43, "y": 52, "scale": 0.86, "width": 48, "height": 68, "z": 4, "variant": "officetel_block" },
-        { "id": "pad-08", "x": 61, "y": 56, "scale": 0.9, "width": 48, "height": 70, "z": 6, "variant": "midrise_glass" },
-        { "id": "pad-09", "x": 77, "y": 49, "scale": 0.74, "width": 44, "height": 66, "z": 3, "variant": "officetel_block" },
-        { "id": "pad-10", "x": 53, "y": 40, "scale": 0.68, "width": 42, "height": 64, "z": 2, "variant": "midrise_glass" }
+        {
+          "id": "pad-01",
+          "x": 52.25,
+          "y": 77.09,
+          "scale": 1.021,
+          "width": 47,
+          "height": 25,
+          "z": 771,
+          "rotation": -7.0,
+          "variant": "midrise_glass",
+          "buildingAsset": "officetel_midrise_glass_1"
+        },
+        {
+          "id": "pad-02",
+          "x": 45.95,
+          "y": 72.46,
+          "scale": 0.997,
+          "width": 47,
+          "height": 25,
+          "z": 726,
+          "rotation": -7.55,
+          "variant": "officetel_block",
+          "buildingAsset": "officetel_officetel_block_1"
+        },
+        {
+          "id": "pad-03",
+          "x": 57.85,
+          "y": 72.46,
+          "scale": 0.997,
+          "width": 47,
+          "height": 25,
+          "z": 727,
+          "rotation": -6.45,
+          "variant": "officetel_block",
+          "buildingAsset": "officetel_officetel_block_2"
+        },
+        {
+          "id": "pad-04",
+          "x": 51.55,
+          "y": 67.83,
+          "scale": 0.973,
+          "width": 47,
+          "height": 25,
+          "z": 681,
+          "rotation": -7.0,
+          "variant": "midrise_glass",
+          "buildingAsset": "officetel_midrise_glass_2"
+        },
+        {
+          "id": "pad-05",
+          "x": 39.64,
+          "y": 67.83,
+          "scale": 0.973,
+          "width": 47,
+          "height": 25,
+          "z": 682,
+          "rotation": -8.1,
+          "variant": "midrise_glass",
+          "buildingAsset": "officetel_midrise_glass_3"
+        },
+        {
+          "id": "pad-06",
+          "x": 63.46,
+          "y": 67.83,
+          "scale": 0.973,
+          "width": 47,
+          "height": 25,
+          "z": 683,
+          "rotation": -5.9,
+          "variant": "midrise_glass",
+          "buildingAsset": "officetel_midrise_glass_4"
+        },
+        {
+          "id": "pad-07",
+          "x": 57.15,
+          "y": 63.2,
+          "scale": 0.949,
+          "width": 47,
+          "height": 25,
+          "z": 638,
+          "rotation": -6.45,
+          "variant": "officetel_block",
+          "buildingAsset": "officetel_officetel_block_3"
+        },
+        {
+          "id": "pad-08",
+          "x": 45.25,
+          "y": 63.2,
+          "scale": 0.949,
+          "width": 47,
+          "height": 25,
+          "z": 639,
+          "rotation": -7.55,
+          "variant": "officetel_block",
+          "buildingAsset": "officetel_officetel_block_4"
+        },
+        {
+          "id": "pad-09",
+          "x": 69.06,
+          "y": 63.2,
+          "scale": 0.949,
+          "width": 47,
+          "height": 25,
+          "z": 640,
+          "rotation": -5.35,
+          "variant": "officetel_block",
+          "buildingAsset": "officetel_officetel_block_1"
+        },
+        {
+          "id": "pad-10",
+          "x": 33.34,
+          "y": 63.2,
+          "scale": 0.949,
+          "width": 47,
+          "height": 25,
+          "z": 641,
+          "rotation": -8.65,
+          "variant": "officetel_block",
+          "buildingAsset": "officetel_officetel_block_2"
+        },
+        {
+          "id": "pad-11",
+          "x": 50.85,
+          "y": 58.57,
+          "scale": 0.925,
+          "width": 47,
+          "height": 25,
+          "z": 596,
+          "rotation": -7.0,
+          "variant": "midrise_glass",
+          "buildingAsset": "officetel_midrise_glass_1"
+        },
+        {
+          "id": "pad-12",
+          "x": 62.76,
+          "y": 58.57,
+          "scale": 0.925,
+          "width": 47,
+          "height": 25,
+          "z": 597,
+          "rotation": -5.9,
+          "variant": "midrise_glass",
+          "buildingAsset": "officetel_midrise_glass_2"
+        },
+        {
+          "id": "pad-13",
+          "x": 38.94,
+          "y": 58.57,
+          "scale": 0.925,
+          "width": 47,
+          "height": 25,
+          "z": 598,
+          "rotation": -8.1,
+          "variant": "midrise_glass",
+          "buildingAsset": "officetel_midrise_glass_3"
+        },
+        {
+          "id": "pad-14",
+          "x": 56.45,
+          "y": 53.94,
+          "scale": 0.9,
+          "width": 47,
+          "height": 25,
+          "z": 552,
+          "rotation": -6.45,
+          "variant": "officetel_block",
+          "buildingAsset": "officetel_officetel_block_3"
+        },
+        {
+          "id": "pad-15",
+          "x": 44.55,
+          "y": 53.94,
+          "scale": 0.9,
+          "width": 47,
+          "height": 25,
+          "z": 553,
+          "rotation": -7.55,
+          "variant": "officetel_block",
+          "buildingAsset": "officetel_officetel_block_4"
+        },
+        {
+          "id": "pad-16",
+          "x": 50.15,
+          "y": 49.31,
+          "scale": 0.876,
+          "width": 47,
+          "height": 25,
+          "z": 508,
+          "rotation": -7.0,
+          "variant": "midrise_glass",
+          "buildingAsset": "officetel_midrise_glass_4"
+        }
       ],
       "futureResidentPaths": [
-        { "id": "commute_front", "depth": "near", "points": [[7, 79], [27, 74], [49, 78], [70, 72], [93, 77]] },
-        { "id": "commute_mid", "depth": "mid", "points": [[10, 58], [32, 55], [54, 57], [76, 52], [91, 55]] },
-        { "id": "commute_back", "depth": "far", "points": [[18, 42], [41, 38], [64, 40], [86, 36]] }
+        {
+          "id": "commute_front",
+          "depth": "near",
+          "points": [
+            [
+              7,
+              79
+            ],
+            [
+              27,
+              74
+            ],
+            [
+              49,
+              78
+            ],
+            [
+              70,
+              72
+            ],
+            [
+              93,
+              77
+            ]
+          ]
+        },
+        {
+          "id": "commute_mid",
+          "depth": "mid",
+          "points": [
+            [
+              10,
+              58
+            ],
+            [
+              32,
+              55
+            ],
+            [
+              54,
+              57
+            ],
+            [
+              76,
+              52
+            ],
+            [
+              91,
+              55
+            ]
+          ]
+        },
+        {
+          "id": "commute_back",
+          "depth": "far",
+          "points": [
+            [
+              18,
+              42
+            ],
+            [
+              41,
+              38
+            ],
+            [
+              64,
+              40
+            ],
+            [
+              86,
+              36
+            ]
+          ]
+        }
       ],
       "help": {
         "backgroundAsset": "오피스텔 지역 상세 화면의 전용 배경 이미지입니다.",
         "buildingTheme": "업무지구와 주거가 섞인 중층 건물 테마입니다.",
         "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
         "futureResidentPaths": "추후 출퇴근 주민이 도로를 따라 이동할 경로입니다.",
-        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다.",
+        "buildingAsset": "각 상세 pad가 사용할 PNG 건물 리소스 id입니다.",
+        "rotation": "건물과 빈 필지를 배경 바닥 각도에 맞추기 위한 회전 각도(deg)입니다."
       }
     },
     {
@@ -127,28 +1147,283 @@
       "buildingTheme": "local_commercial",
       "speechTone": "street_market",
       "detailPads": [
-        { "id": "pad-01", "x": 17, "y": 78, "scale": 1.08, "width": 62, "height": 34, "z": 10, "variant": "shopfront" },
-        { "id": "pad-02", "x": 33, "y": 70, "scale": 1, "width": 60, "height": 36, "z": 8, "variant": "market_row" },
-        { "id": "pad-03", "x": 50, "y": 80, "scale": 1.12, "width": 64, "height": 38, "z": 12, "variant": "shopfront" },
-        { "id": "pad-04", "x": 68, "y": 72, "scale": 0.98, "width": 60, "height": 40, "z": 9, "variant": "market_row" },
-        { "id": "pad-05", "x": 84, "y": 80, "scale": 1.04, "width": 62, "height": 40, "z": 13, "variant": "shopfront" },
-        { "id": "pad-06", "x": 25, "y": 57, "scale": 0.84, "width": 54, "height": 38, "z": 5, "variant": "market_row" },
-        { "id": "pad-07", "x": 43, "y": 53, "scale": 0.88, "width": 56, "height": 40, "z": 4, "variant": "shopfront" },
-        { "id": "pad-08", "x": 61, "y": 57, "scale": 0.9, "width": 56, "height": 42, "z": 6, "variant": "market_row" },
-        { "id": "pad-09", "x": 78, "y": 50, "scale": 0.76, "width": 50, "height": 40, "z": 3, "variant": "shopfront" },
-        { "id": "pad-10", "x": 53, "y": 41, "scale": 0.7, "width": 48, "height": 38, "z": 2, "variant": "market_row" }
+        {
+          "id": "pad-01",
+          "x": 52.25,
+          "y": 77.34,
+          "scale": 1.022,
+          "width": 46,
+          "height": 25,
+          "z": 773,
+          "rotation": -8.0,
+          "variant": "shopfront",
+          "buildingAsset": "shop_unit_shopfront_1"
+        },
+        {
+          "id": "pad-02",
+          "x": 45.74,
+          "y": 72.83,
+          "scale": 0.999,
+          "width": 46,
+          "height": 25,
+          "z": 729,
+          "rotation": -8.55,
+          "variant": "market_row",
+          "buildingAsset": "shop_unit_market_row_1"
+        },
+        {
+          "id": "pad-03",
+          "x": 58.06,
+          "y": 72.83,
+          "scale": 0.999,
+          "width": 46,
+          "height": 25,
+          "z": 730,
+          "rotation": -7.45,
+          "variant": "market_row",
+          "buildingAsset": "shop_unit_market_row_2"
+        },
+        {
+          "id": "pad-04",
+          "x": 51.55,
+          "y": 68.31,
+          "scale": 0.975,
+          "width": 46,
+          "height": 25,
+          "z": 686,
+          "rotation": -8.0,
+          "variant": "shopfront",
+          "buildingAsset": "shop_unit_shopfront_2"
+        },
+        {
+          "id": "pad-05",
+          "x": 39.24,
+          "y": 68.31,
+          "scale": 0.975,
+          "width": 46,
+          "height": 25,
+          "z": 687,
+          "rotation": -9.1,
+          "variant": "shopfront",
+          "buildingAsset": "shop_unit_shopfront_3"
+        },
+        {
+          "id": "pad-06",
+          "x": 63.86,
+          "y": 68.31,
+          "scale": 0.975,
+          "width": 46,
+          "height": 25,
+          "z": 688,
+          "rotation": -6.9,
+          "variant": "shopfront",
+          "buildingAsset": "shop_unit_shopfront_4"
+        },
+        {
+          "id": "pad-07",
+          "x": 57.36,
+          "y": 63.8,
+          "scale": 0.952,
+          "width": 46,
+          "height": 25,
+          "z": 644,
+          "rotation": -7.45,
+          "variant": "market_row",
+          "buildingAsset": "shop_unit_market_row_3"
+        },
+        {
+          "id": "pad-08",
+          "x": 45.04,
+          "y": 63.8,
+          "scale": 0.952,
+          "width": 46,
+          "height": 25,
+          "z": 645,
+          "rotation": -8.55,
+          "variant": "market_row",
+          "buildingAsset": "shop_unit_market_row_4"
+        },
+        {
+          "id": "pad-09",
+          "x": 32.73,
+          "y": 63.8,
+          "scale": 0.952,
+          "width": 46,
+          "height": 25,
+          "z": 646,
+          "rotation": -9.65,
+          "variant": "market_row",
+          "buildingAsset": "shop_unit_market_row_1"
+        },
+        {
+          "id": "pad-10",
+          "x": 69.67,
+          "y": 63.8,
+          "scale": 0.952,
+          "width": 46,
+          "height": 25,
+          "z": 647,
+          "rotation": -6.35,
+          "variant": "market_row",
+          "buildingAsset": "shop_unit_market_row_2"
+        },
+        {
+          "id": "pad-11",
+          "x": 50.85,
+          "y": 59.29,
+          "scale": 0.928,
+          "width": 46,
+          "height": 25,
+          "z": 603,
+          "rotation": -8.0,
+          "variant": "shopfront",
+          "buildingAsset": "shop_unit_shopfront_1"
+        },
+        {
+          "id": "pad-12",
+          "x": 63.16,
+          "y": 59.29,
+          "scale": 0.928,
+          "width": 46,
+          "height": 25,
+          "z": 604,
+          "rotation": -6.9,
+          "variant": "shopfront",
+          "buildingAsset": "shop_unit_shopfront_2"
+        },
+        {
+          "id": "pad-13",
+          "x": 38.54,
+          "y": 59.29,
+          "scale": 0.928,
+          "width": 46,
+          "height": 25,
+          "z": 605,
+          "rotation": -9.1,
+          "variant": "shopfront",
+          "buildingAsset": "shop_unit_shopfront_3"
+        },
+        {
+          "id": "pad-14",
+          "x": 56.66,
+          "y": 54.77,
+          "scale": 0.905,
+          "width": 46,
+          "height": 25,
+          "z": 561,
+          "rotation": -7.45,
+          "variant": "market_row",
+          "buildingAsset": "shop_unit_market_row_3"
+        },
+        {
+          "id": "pad-15",
+          "x": 44.34,
+          "y": 54.77,
+          "scale": 0.905,
+          "width": 46,
+          "height": 25,
+          "z": 562,
+          "rotation": -8.55,
+          "variant": "market_row",
+          "buildingAsset": "shop_unit_market_row_4"
+        },
+        {
+          "id": "pad-16",
+          "x": 50.15,
+          "y": 50.26,
+          "scale": 0.881,
+          "width": 46,
+          "height": 25,
+          "z": 518,
+          "rotation": -8.0,
+          "variant": "shopfront",
+          "buildingAsset": "shop_unit_shopfront_4"
+        }
       ],
       "futureResidentPaths": [
-        { "id": "market_front", "depth": "near", "points": [[6, 79], [25, 74], [45, 78], [67, 72], [94, 77]] },
-        { "id": "market_mid", "depth": "mid", "points": [[9, 58], [30, 55], [54, 57], [77, 52], [92, 55]] },
-        { "id": "market_back", "depth": "far", "points": [[17, 42], [39, 38], [63, 40], [86, 36]] }
+        {
+          "id": "market_front",
+          "depth": "near",
+          "points": [
+            [
+              6,
+              79
+            ],
+            [
+              25,
+              74
+            ],
+            [
+              45,
+              78
+            ],
+            [
+              67,
+              72
+            ],
+            [
+              94,
+              77
+            ]
+          ]
+        },
+        {
+          "id": "market_mid",
+          "depth": "mid",
+          "points": [
+            [
+              9,
+              58
+            ],
+            [
+              30,
+              55
+            ],
+            [
+              54,
+              57
+            ],
+            [
+              77,
+              52
+            ],
+            [
+              92,
+              55
+            ]
+          ]
+        },
+        {
+          "id": "market_back",
+          "depth": "far",
+          "points": [
+            [
+              17,
+              42
+            ],
+            [
+              39,
+              38
+            ],
+            [
+              63,
+              40
+            ],
+            [
+              86,
+              36
+            ]
+          ]
+        }
       ],
       "help": {
         "backgroundAsset": "상가 점포 지역 상세 화면의 전용 배경 이미지입니다.",
         "buildingTheme": "생활 상권 상가와 시장형 건물 테마입니다.",
         "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
         "futureResidentPaths": "추후 주민과 손님이 상권 도로를 따라 이동할 경로입니다.",
-        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다.",
+        "buildingAsset": "각 상세 pad가 사용할 PNG 건물 리소스 id입니다.",
+        "rotation": "건물과 빈 필지를 배경 바닥 각도에 맞추기 위한 회전 각도(deg)입니다."
       }
     },
     {
@@ -157,28 +1432,283 @@
       "buildingTheme": "compact_commercial",
       "speechTone": "small_landlord",
       "detailPads": [
-        { "id": "pad-01", "x": 18, "y": 78, "scale": 1.08, "width": 54, "height": 54, "z": 10, "variant": "compact_building" },
-        { "id": "pad-02", "x": 35, "y": 70, "scale": 1, "width": 52, "height": 58, "z": 8, "variant": "shopfront" },
-        { "id": "pad-03", "x": 51, "y": 80, "scale": 1.12, "width": 56, "height": 62, "z": 12, "variant": "compact_building" },
-        { "id": "pad-04", "x": 69, "y": 71, "scale": 0.98, "width": 54, "height": 60, "z": 9, "variant": "compact_building" },
-        { "id": "pad-05", "x": 84, "y": 80, "scale": 1.04, "width": 56, "height": 64, "z": 13, "variant": "shopfront" },
-        { "id": "pad-06", "x": 25, "y": 56, "scale": 0.84, "width": 48, "height": 58, "z": 5, "variant": "compact_building" },
-        { "id": "pad-07", "x": 43, "y": 52, "scale": 0.86, "width": 48, "height": 62, "z": 4, "variant": "shopfront" },
-        { "id": "pad-08", "x": 61, "y": 56, "scale": 0.9, "width": 50, "height": 64, "z": 6, "variant": "compact_building" },
-        { "id": "pad-09", "x": 78, "y": 49, "scale": 0.76, "width": 46, "height": 62, "z": 3, "variant": "shopfront" },
-        { "id": "pad-10", "x": 53, "y": 40, "scale": 0.7, "width": 44, "height": 60, "z": 2, "variant": "compact_building" }
+        {
+          "id": "pad-01",
+          "x": 52.75,
+          "y": 77.09,
+          "scale": 1.021,
+          "width": 47,
+          "height": 25,
+          "z": 771,
+          "rotation": -9.0,
+          "variant": "shopfront",
+          "buildingAsset": "small_building_shopfront_1"
+        },
+        {
+          "id": "pad-02",
+          "x": 46.34,
+          "y": 72.46,
+          "scale": 0.997,
+          "width": 47,
+          "height": 25,
+          "z": 726,
+          "rotation": -9.55,
+          "variant": "compact_building",
+          "buildingAsset": "small_building_compact_building_1"
+        },
+        {
+          "id": "pad-03",
+          "x": 58.46,
+          "y": 72.46,
+          "scale": 0.997,
+          "width": 47,
+          "height": 25,
+          "z": 727,
+          "rotation": -8.45,
+          "variant": "compact_building",
+          "buildingAsset": "small_building_compact_building_2"
+        },
+        {
+          "id": "pad-04",
+          "x": 52.05,
+          "y": 67.83,
+          "scale": 0.973,
+          "width": 47,
+          "height": 25,
+          "z": 681,
+          "rotation": -9.0,
+          "variant": "shopfront",
+          "buildingAsset": "small_building_shopfront_2"
+        },
+        {
+          "id": "pad-05",
+          "x": 39.94,
+          "y": 67.83,
+          "scale": 0.973,
+          "width": 47,
+          "height": 25,
+          "z": 682,
+          "rotation": -10.1,
+          "variant": "shopfront",
+          "buildingAsset": "small_building_shopfront_3"
+        },
+        {
+          "id": "pad-06",
+          "x": 64.16,
+          "y": 67.83,
+          "scale": 0.973,
+          "width": 47,
+          "height": 25,
+          "z": 683,
+          "rotation": -7.9,
+          "variant": "shopfront",
+          "buildingAsset": "small_building_shopfront_4"
+        },
+        {
+          "id": "pad-07",
+          "x": 57.76,
+          "y": 63.2,
+          "scale": 0.949,
+          "width": 47,
+          "height": 25,
+          "z": 638,
+          "rotation": -8.45,
+          "variant": "compact_building",
+          "buildingAsset": "small_building_compact_building_3"
+        },
+        {
+          "id": "pad-08",
+          "x": 45.64,
+          "y": 63.2,
+          "scale": 0.949,
+          "width": 47,
+          "height": 25,
+          "z": 639,
+          "rotation": -9.55,
+          "variant": "compact_building",
+          "buildingAsset": "small_building_compact_building_4"
+        },
+        {
+          "id": "pad-09",
+          "x": 69.87,
+          "y": 63.2,
+          "scale": 0.949,
+          "width": 47,
+          "height": 25,
+          "z": 640,
+          "rotation": -7.35,
+          "variant": "compact_building",
+          "buildingAsset": "small_building_compact_building_1"
+        },
+        {
+          "id": "pad-10",
+          "x": 33.53,
+          "y": 63.2,
+          "scale": 0.949,
+          "width": 47,
+          "height": 25,
+          "z": 641,
+          "rotation": -10.65,
+          "variant": "compact_building",
+          "buildingAsset": "small_building_compact_building_2"
+        },
+        {
+          "id": "pad-11",
+          "x": 51.35,
+          "y": 58.57,
+          "scale": 0.925,
+          "width": 47,
+          "height": 25,
+          "z": 596,
+          "rotation": -9.0,
+          "variant": "shopfront",
+          "buildingAsset": "small_building_shopfront_1"
+        },
+        {
+          "id": "pad-12",
+          "x": 63.46,
+          "y": 58.57,
+          "scale": 0.925,
+          "width": 47,
+          "height": 25,
+          "z": 597,
+          "rotation": -7.9,
+          "variant": "shopfront",
+          "buildingAsset": "small_building_shopfront_2"
+        },
+        {
+          "id": "pad-13",
+          "x": 39.24,
+          "y": 58.57,
+          "scale": 0.925,
+          "width": 47,
+          "height": 25,
+          "z": 598,
+          "rotation": -10.1,
+          "variant": "shopfront",
+          "buildingAsset": "small_building_shopfront_3"
+        },
+        {
+          "id": "pad-14",
+          "x": 57.06,
+          "y": 53.94,
+          "scale": 0.9,
+          "width": 47,
+          "height": 25,
+          "z": 552,
+          "rotation": -8.45,
+          "variant": "compact_building",
+          "buildingAsset": "small_building_compact_building_3"
+        },
+        {
+          "id": "pad-15",
+          "x": 44.94,
+          "y": 53.94,
+          "scale": 0.9,
+          "width": 47,
+          "height": 25,
+          "z": 553,
+          "rotation": -9.55,
+          "variant": "compact_building",
+          "buildingAsset": "small_building_compact_building_4"
+        },
+        {
+          "id": "pad-16",
+          "x": 50.65,
+          "y": 49.31,
+          "scale": 0.876,
+          "width": 47,
+          "height": 25,
+          "z": 508,
+          "rotation": -9.0,
+          "variant": "shopfront",
+          "buildingAsset": "small_building_shopfront_4"
+        }
       ],
       "futureResidentPaths": [
-        { "id": "building_front", "depth": "near", "points": [[7, 79], [27, 74], [49, 78], [70, 72], [93, 77]] },
-        { "id": "building_mid", "depth": "mid", "points": [[10, 58], [32, 55], [54, 57], [76, 52], [91, 55]] },
-        { "id": "building_back", "depth": "far", "points": [[18, 42], [41, 38], [64, 40], [86, 36]] }
+        {
+          "id": "building_front",
+          "depth": "near",
+          "points": [
+            [
+              7,
+              79
+            ],
+            [
+              27,
+              74
+            ],
+            [
+              49,
+              78
+            ],
+            [
+              70,
+              72
+            ],
+            [
+              93,
+              77
+            ]
+          ]
+        },
+        {
+          "id": "building_mid",
+          "depth": "mid",
+          "points": [
+            [
+              10,
+              58
+            ],
+            [
+              32,
+              55
+            ],
+            [
+              54,
+              57
+            ],
+            [
+              76,
+              52
+            ],
+            [
+              91,
+              55
+            ]
+          ]
+        },
+        {
+          "id": "building_back",
+          "depth": "far",
+          "points": [
+            [
+              18,
+              42
+            ],
+            [
+              41,
+              38
+            ],
+            [
+              64,
+              40
+            ],
+            [
+              86,
+              36
+            ]
+          ]
+        }
       ],
       "help": {
         "backgroundAsset": "꼬마빌딩 지역 상세 화면의 전용 배경 이미지입니다.",
         "buildingTheme": "작은 빌딩과 저층 상업 건물 테마입니다.",
         "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
         "futureResidentPaths": "추후 임차인과 방문객이 이동할 도로 경로입니다.",
-        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다.",
+        "buildingAsset": "각 상세 pad가 사용할 PNG 건물 리소스 id입니다.",
+        "rotation": "건물과 빈 필지를 배경 바닥 각도에 맞추기 위한 회전 각도(deg)입니다."
       }
     },
     {
@@ -187,28 +1717,283 @@
       "buildingTheme": "apartment_single",
       "speechTone": "apartment_life",
       "detailPads": [
-        { "id": "pad-01", "x": 18, "y": 79, "scale": 1.08, "width": 48, "height": 74, "z": 10, "variant": "apartment_slab" },
-        { "id": "pad-02", "x": 34, "y": 71, "scale": 1, "width": 46, "height": 78, "z": 8, "variant": "tower_podium" },
-        { "id": "pad-03", "x": 51, "y": 81, "scale": 1.12, "width": 50, "height": 84, "z": 12, "variant": "apartment_slab" },
-        { "id": "pad-04", "x": 68, "y": 72, "scale": 0.98, "width": 48, "height": 82, "z": 9, "variant": "tower_podium" },
-        { "id": "pad-05", "x": 84, "y": 80, "scale": 1.04, "width": 50, "height": 86, "z": 13, "variant": "apartment_slab" },
-        { "id": "pad-06", "x": 25, "y": 57, "scale": 0.82, "width": 44, "height": 76, "z": 5, "variant": "tower_podium" },
-        { "id": "pad-07", "x": 43, "y": 53, "scale": 0.86, "width": 44, "height": 82, "z": 4, "variant": "apartment_slab" },
-        { "id": "pad-08", "x": 61, "y": 57, "scale": 0.9, "width": 46, "height": 86, "z": 6, "variant": "tower_podium" },
-        { "id": "pad-09", "x": 78, "y": 50, "scale": 0.76, "width": 42, "height": 80, "z": 3, "variant": "apartment_slab" },
-        { "id": "pad-10", "x": 53, "y": 41, "scale": 0.7, "width": 40, "height": 78, "z": 2, "variant": "tower_podium" }
+        {
+          "id": "pad-01",
+          "x": 52.55,
+          "y": 77.99,
+          "scale": 1.026,
+          "width": 53,
+          "height": 29,
+          "z": 780,
+          "rotation": -7.0,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_building_apartment_slab_1"
+        },
+        {
+          "id": "pad-02",
+          "x": 46.14,
+          "y": 73.36,
+          "scale": 1.001,
+          "width": 53,
+          "height": 29,
+          "z": 735,
+          "rotation": -7.55,
+          "variant": "tower_podium",
+          "buildingAsset": "apartment_building_tower_podium_1"
+        },
+        {
+          "id": "pad-03",
+          "x": 58.26,
+          "y": 73.36,
+          "scale": 1.001,
+          "width": 53,
+          "height": 29,
+          "z": 736,
+          "rotation": -6.45,
+          "variant": "tower_podium",
+          "buildingAsset": "apartment_building_tower_podium_2"
+        },
+        {
+          "id": "pad-04",
+          "x": 51.85,
+          "y": 68.73,
+          "scale": 0.977,
+          "width": 53,
+          "height": 29,
+          "z": 690,
+          "rotation": -7.0,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_building_apartment_slab_2"
+        },
+        {
+          "id": "pad-05",
+          "x": 39.74,
+          "y": 68.73,
+          "scale": 0.977,
+          "width": 53,
+          "height": 29,
+          "z": 691,
+          "rotation": -8.1,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_building_apartment_slab_3"
+        },
+        {
+          "id": "pad-06",
+          "x": 63.96,
+          "y": 68.73,
+          "scale": 0.977,
+          "width": 53,
+          "height": 29,
+          "z": 692,
+          "rotation": -5.9,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_building_apartment_slab_4"
+        },
+        {
+          "id": "pad-07",
+          "x": 57.56,
+          "y": 64.1,
+          "scale": 0.953,
+          "width": 53,
+          "height": 29,
+          "z": 647,
+          "rotation": -6.45,
+          "variant": "tower_podium",
+          "buildingAsset": "apartment_building_tower_podium_3"
+        },
+        {
+          "id": "pad-08",
+          "x": 45.44,
+          "y": 64.1,
+          "scale": 0.953,
+          "width": 53,
+          "height": 29,
+          "z": 648,
+          "rotation": -7.55,
+          "variant": "tower_podium",
+          "buildingAsset": "apartment_building_tower_podium_4"
+        },
+        {
+          "id": "pad-09",
+          "x": 69.67,
+          "y": 64.1,
+          "scale": 0.953,
+          "width": 53,
+          "height": 29,
+          "z": 649,
+          "rotation": -5.35,
+          "variant": "tower_podium",
+          "buildingAsset": "apartment_building_tower_podium_1"
+        },
+        {
+          "id": "pad-10",
+          "x": 33.33,
+          "y": 64.1,
+          "scale": 0.953,
+          "width": 53,
+          "height": 29,
+          "z": 650,
+          "rotation": -8.65,
+          "variant": "tower_podium",
+          "buildingAsset": "apartment_building_tower_podium_2"
+        },
+        {
+          "id": "pad-11",
+          "x": 51.15,
+          "y": 59.47,
+          "scale": 0.929,
+          "width": 53,
+          "height": 29,
+          "z": 605,
+          "rotation": -7.0,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_building_apartment_slab_1"
+        },
+        {
+          "id": "pad-12",
+          "x": 63.26,
+          "y": 59.47,
+          "scale": 0.929,
+          "width": 53,
+          "height": 29,
+          "z": 606,
+          "rotation": -5.9,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_building_apartment_slab_2"
+        },
+        {
+          "id": "pad-13",
+          "x": 39.04,
+          "y": 59.47,
+          "scale": 0.929,
+          "width": 53,
+          "height": 29,
+          "z": 607,
+          "rotation": -8.1,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_building_apartment_slab_3"
+        },
+        {
+          "id": "pad-14",
+          "x": 56.86,
+          "y": 54.84,
+          "scale": 0.905,
+          "width": 53,
+          "height": 29,
+          "z": 561,
+          "rotation": -6.45,
+          "variant": "tower_podium",
+          "buildingAsset": "apartment_building_tower_podium_3"
+        },
+        {
+          "id": "pad-15",
+          "x": 44.74,
+          "y": 54.84,
+          "scale": 0.905,
+          "width": 53,
+          "height": 29,
+          "z": 562,
+          "rotation": -7.55,
+          "variant": "tower_podium",
+          "buildingAsset": "apartment_building_tower_podium_4"
+        },
+        {
+          "id": "pad-16",
+          "x": 50.45,
+          "y": 50.21,
+          "scale": 0.881,
+          "width": 53,
+          "height": 29,
+          "z": 517,
+          "rotation": -7.0,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_building_apartment_slab_4"
+        }
       ],
       "futureResidentPaths": [
-        { "id": "apartment_front", "depth": "near", "points": [[8, 80], [28, 74], [49, 78], [70, 72], [92, 77]] },
-        { "id": "apartment_mid", "depth": "mid", "points": [[11, 59], [33, 55], [55, 57], [76, 52], [90, 55]] },
-        { "id": "apartment_back", "depth": "far", "points": [[18, 42], [41, 38], [64, 40], [86, 36]] }
+        {
+          "id": "apartment_front",
+          "depth": "near",
+          "points": [
+            [
+              8,
+              80
+            ],
+            [
+              28,
+              74
+            ],
+            [
+              49,
+              78
+            ],
+            [
+              70,
+              72
+            ],
+            [
+              92,
+              77
+            ]
+          ]
+        },
+        {
+          "id": "apartment_mid",
+          "depth": "mid",
+          "points": [
+            [
+              11,
+              59
+            ],
+            [
+              33,
+              55
+            ],
+            [
+              55,
+              57
+            ],
+            [
+              76,
+              52
+            ],
+            [
+              90,
+              55
+            ]
+          ]
+        },
+        {
+          "id": "apartment_back",
+          "depth": "far",
+          "points": [
+            [
+              18,
+              42
+            ],
+            [
+              41,
+              38
+            ],
+            [
+              64,
+              40
+            ],
+            [
+              86,
+              36
+            ]
+          ]
+        }
       ],
       "help": {
         "backgroundAsset": "아파트 동 지역 상세 화면의 전용 배경 이미지입니다.",
         "buildingTheme": "단일 아파트 동 중심의 고층 주거 테마입니다.",
         "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
         "futureResidentPaths": "추후 주민이 단지 진입로와 보행로를 따라 이동할 경로입니다.",
-        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다.",
+        "buildingAsset": "각 상세 pad가 사용할 PNG 건물 리소스 id입니다.",
+        "rotation": "건물과 빈 필지를 배경 바닥 각도에 맞추기 위한 회전 각도(deg)입니다."
       }
     },
     {
@@ -217,28 +2002,283 @@
       "buildingTheme": "apartment_complex",
       "speechTone": "complex_community",
       "detailPads": [
-        { "id": "pad-01", "x": 17, "y": 79, "scale": 1.08, "width": 50, "height": 78, "z": 10, "variant": "complex_tower" },
-        { "id": "pad-02", "x": 33, "y": 71, "scale": 1, "width": 48, "height": 82, "z": 8, "variant": "apartment_slab" },
-        { "id": "pad-03", "x": 50, "y": 81, "scale": 1.12, "width": 52, "height": 88, "z": 12, "variant": "complex_tower" },
-        { "id": "pad-04", "x": 68, "y": 72, "scale": 0.98, "width": 50, "height": 86, "z": 9, "variant": "apartment_slab" },
-        { "id": "pad-05", "x": 84, "y": 81, "scale": 1.04, "width": 52, "height": 92, "z": 13, "variant": "complex_tower" },
-        { "id": "pad-06", "x": 25, "y": 57, "scale": 0.82, "width": 46, "height": 82, "z": 5, "variant": "apartment_slab" },
-        { "id": "pad-07", "x": 43, "y": 53, "scale": 0.86, "width": 46, "height": 88, "z": 4, "variant": "complex_tower" },
-        { "id": "pad-08", "x": 61, "y": 57, "scale": 0.9, "width": 48, "height": 92, "z": 6, "variant": "apartment_slab" },
-        { "id": "pad-09", "x": 78, "y": 50, "scale": 0.76, "width": 44, "height": 86, "z": 3, "variant": "complex_tower" },
-        { "id": "pad-10", "x": 53, "y": 41, "scale": 0.7, "width": 42, "height": 84, "z": 2, "variant": "apartment_slab" }
+        {
+          "id": "pad-01",
+          "x": 52.25,
+          "y": 78.09,
+          "scale": 1.026,
+          "width": 54,
+          "height": 29,
+          "z": 781,
+          "rotation": -7.0,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_complex_apartment_slab_1"
+        },
+        {
+          "id": "pad-02",
+          "x": 45.74,
+          "y": 73.46,
+          "scale": 1.002,
+          "width": 54,
+          "height": 29,
+          "z": 736,
+          "rotation": -7.55,
+          "variant": "complex_tower",
+          "buildingAsset": "apartment_complex_complex_tower_1"
+        },
+        {
+          "id": "pad-03",
+          "x": 58.06,
+          "y": 73.46,
+          "scale": 1.002,
+          "width": 54,
+          "height": 29,
+          "z": 737,
+          "rotation": -6.45,
+          "variant": "complex_tower",
+          "buildingAsset": "apartment_complex_complex_tower_2"
+        },
+        {
+          "id": "pad-04",
+          "x": 51.55,
+          "y": 68.83,
+          "scale": 0.978,
+          "width": 54,
+          "height": 29,
+          "z": 691,
+          "rotation": -7.0,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_complex_apartment_slab_2"
+        },
+        {
+          "id": "pad-05",
+          "x": 39.24,
+          "y": 68.83,
+          "scale": 0.978,
+          "width": 54,
+          "height": 29,
+          "z": 692,
+          "rotation": -8.1,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_complex_apartment_slab_3"
+        },
+        {
+          "id": "pad-06",
+          "x": 63.86,
+          "y": 68.83,
+          "scale": 0.978,
+          "width": 54,
+          "height": 29,
+          "z": 693,
+          "rotation": -5.9,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_complex_apartment_slab_4"
+        },
+        {
+          "id": "pad-07",
+          "x": 57.36,
+          "y": 64.2,
+          "scale": 0.954,
+          "width": 54,
+          "height": 29,
+          "z": 648,
+          "rotation": -6.45,
+          "variant": "complex_tower",
+          "buildingAsset": "apartment_complex_complex_tower_3"
+        },
+        {
+          "id": "pad-08",
+          "x": 45.04,
+          "y": 64.2,
+          "scale": 0.954,
+          "width": 54,
+          "height": 29,
+          "z": 649,
+          "rotation": -7.55,
+          "variant": "complex_tower",
+          "buildingAsset": "apartment_complex_complex_tower_4"
+        },
+        {
+          "id": "pad-09",
+          "x": 32.73,
+          "y": 64.2,
+          "scale": 0.954,
+          "width": 54,
+          "height": 29,
+          "z": 650,
+          "rotation": -8.65,
+          "variant": "complex_tower",
+          "buildingAsset": "apartment_complex_complex_tower_1"
+        },
+        {
+          "id": "pad-10",
+          "x": 69.67,
+          "y": 64.2,
+          "scale": 0.954,
+          "width": 54,
+          "height": 29,
+          "z": 651,
+          "rotation": -5.35,
+          "variant": "complex_tower",
+          "buildingAsset": "apartment_complex_complex_tower_2"
+        },
+        {
+          "id": "pad-11",
+          "x": 50.85,
+          "y": 59.57,
+          "scale": 0.93,
+          "width": 54,
+          "height": 29,
+          "z": 606,
+          "rotation": -7.0,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_complex_apartment_slab_1"
+        },
+        {
+          "id": "pad-12",
+          "x": 63.16,
+          "y": 59.57,
+          "scale": 0.93,
+          "width": 54,
+          "height": 29,
+          "z": 607,
+          "rotation": -5.9,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_complex_apartment_slab_2"
+        },
+        {
+          "id": "pad-13",
+          "x": 38.54,
+          "y": 59.57,
+          "scale": 0.93,
+          "width": 54,
+          "height": 29,
+          "z": 608,
+          "rotation": -8.1,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_complex_apartment_slab_3"
+        },
+        {
+          "id": "pad-14",
+          "x": 56.66,
+          "y": 54.94,
+          "scale": 0.906,
+          "width": 54,
+          "height": 29,
+          "z": 562,
+          "rotation": -6.45,
+          "variant": "complex_tower",
+          "buildingAsset": "apartment_complex_complex_tower_3"
+        },
+        {
+          "id": "pad-15",
+          "x": 44.34,
+          "y": 54.94,
+          "scale": 0.906,
+          "width": 54,
+          "height": 29,
+          "z": 563,
+          "rotation": -7.55,
+          "variant": "complex_tower",
+          "buildingAsset": "apartment_complex_complex_tower_4"
+        },
+        {
+          "id": "pad-16",
+          "x": 50.15,
+          "y": 50.31,
+          "scale": 0.882,
+          "width": 54,
+          "height": 29,
+          "z": 518,
+          "rotation": -7.0,
+          "variant": "apartment_slab",
+          "buildingAsset": "apartment_complex_apartment_slab_4"
+        }
       ],
       "futureResidentPaths": [
-        { "id": "complex_front", "depth": "near", "points": [[8, 80], [28, 74], [49, 78], [70, 72], [92, 77]] },
-        { "id": "complex_mid", "depth": "mid", "points": [[11, 59], [33, 55], [55, 57], [76, 52], [90, 55]] },
-        { "id": "complex_back", "depth": "far", "points": [[18, 42], [41, 38], [64, 40], [86, 36]] }
+        {
+          "id": "complex_front",
+          "depth": "near",
+          "points": [
+            [
+              8,
+              80
+            ],
+            [
+              28,
+              74
+            ],
+            [
+              49,
+              78
+            ],
+            [
+              70,
+              72
+            ],
+            [
+              92,
+              77
+            ]
+          ]
+        },
+        {
+          "id": "complex_mid",
+          "depth": "mid",
+          "points": [
+            [
+              11,
+              59
+            ],
+            [
+              33,
+              55
+            ],
+            [
+              55,
+              57
+            ],
+            [
+              76,
+              52
+            ],
+            [
+              90,
+              55
+            ]
+          ]
+        },
+        {
+          "id": "complex_back",
+          "depth": "far",
+          "points": [
+            [
+              18,
+              42
+            ],
+            [
+              41,
+              38
+            ],
+            [
+              64,
+              40
+            ],
+            [
+              86,
+              36
+            ]
+          ]
+        }
       ],
       "help": {
         "backgroundAsset": "아파트 단지 지역 상세 화면의 전용 배경 이미지입니다.",
         "buildingTheme": "여러 동이 모이는 아파트 단지 테마입니다.",
         "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
         "futureResidentPaths": "추후 주민이 단지 산책로와 주도로를 따라 이동할 경로입니다.",
-        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다.",
+        "buildingAsset": "각 상세 pad가 사용할 PNG 건물 리소스 id입니다.",
+        "rotation": "건물과 빈 필지를 배경 바닥 각도에 맞추기 위한 회전 각도(deg)입니다."
       }
     },
     {
@@ -247,28 +2287,283 @@
       "buildingTheme": "office_core",
       "speechTone": "business_core",
       "detailPads": [
-        { "id": "pad-01", "x": 18, "y": 79, "scale": 1.08, "width": 48, "height": 86, "z": 10, "variant": "office_tower" },
-        { "id": "pad-02", "x": 34, "y": 71, "scale": 1, "width": 50, "height": 78, "z": 8, "variant": "glass_podium" },
-        { "id": "pad-03", "x": 50, "y": 81, "scale": 1.12, "width": 50, "height": 98, "z": 12, "variant": "office_tower" },
-        { "id": "pad-04", "x": 68, "y": 72, "scale": 0.98, "width": 50, "height": 90, "z": 9, "variant": "glass_podium" },
-        { "id": "pad-05", "x": 84, "y": 81, "scale": 1.04, "width": 52, "height": 104, "z": 13, "variant": "office_tower" },
-        { "id": "pad-06", "x": 25, "y": 57, "scale": 0.82, "width": 46, "height": 84, "z": 5, "variant": "glass_podium" },
-        { "id": "pad-07", "x": 43, "y": 53, "scale": 0.86, "width": 48, "height": 96, "z": 4, "variant": "office_tower" },
-        { "id": "pad-08", "x": 61, "y": 57, "scale": 0.9, "width": 48, "height": 98, "z": 6, "variant": "glass_podium" },
-        { "id": "pad-09", "x": 78, "y": 50, "scale": 0.76, "width": 44, "height": 92, "z": 3, "variant": "office_tower" },
-        { "id": "pad-10", "x": 53, "y": 41, "scale": 0.7, "width": 42, "height": 88, "z": 2, "variant": "glass_podium" }
+        {
+          "id": "pad-01",
+          "x": 52.45,
+          "y": 78.09,
+          "scale": 1.026,
+          "width": 53,
+          "height": 29,
+          "z": 781,
+          "rotation": -8.0,
+          "variant": "office_tower",
+          "buildingAsset": "office_tower_office_tower_1"
+        },
+        {
+          "id": "pad-02",
+          "x": 46.04,
+          "y": 73.46,
+          "scale": 1.002,
+          "width": 53,
+          "height": 29,
+          "z": 736,
+          "rotation": -8.55,
+          "variant": "glass_podium",
+          "buildingAsset": "office_tower_glass_podium_1"
+        },
+        {
+          "id": "pad-03",
+          "x": 58.16,
+          "y": 73.46,
+          "scale": 1.002,
+          "width": 53,
+          "height": 29,
+          "z": 737,
+          "rotation": -7.45,
+          "variant": "glass_podium",
+          "buildingAsset": "office_tower_glass_podium_2"
+        },
+        {
+          "id": "pad-04",
+          "x": 51.75,
+          "y": 68.83,
+          "scale": 0.978,
+          "width": 53,
+          "height": 29,
+          "z": 691,
+          "rotation": -8.0,
+          "variant": "office_tower",
+          "buildingAsset": "office_tower_office_tower_2"
+        },
+        {
+          "id": "pad-05",
+          "x": 39.64,
+          "y": 68.83,
+          "scale": 0.978,
+          "width": 53,
+          "height": 29,
+          "z": 692,
+          "rotation": -9.1,
+          "variant": "office_tower",
+          "buildingAsset": "office_tower_office_tower_3"
+        },
+        {
+          "id": "pad-06",
+          "x": 63.86,
+          "y": 68.83,
+          "scale": 0.978,
+          "width": 53,
+          "height": 29,
+          "z": 693,
+          "rotation": -6.9,
+          "variant": "office_tower",
+          "buildingAsset": "office_tower_office_tower_4"
+        },
+        {
+          "id": "pad-07",
+          "x": 57.46,
+          "y": 64.2,
+          "scale": 0.954,
+          "width": 53,
+          "height": 29,
+          "z": 648,
+          "rotation": -7.45,
+          "variant": "glass_podium",
+          "buildingAsset": "office_tower_glass_podium_3"
+        },
+        {
+          "id": "pad-08",
+          "x": 45.34,
+          "y": 64.2,
+          "scale": 0.954,
+          "width": 53,
+          "height": 29,
+          "z": 649,
+          "rotation": -8.55,
+          "variant": "glass_podium",
+          "buildingAsset": "office_tower_glass_podium_4"
+        },
+        {
+          "id": "pad-09",
+          "x": 69.57,
+          "y": 64.2,
+          "scale": 0.954,
+          "width": 53,
+          "height": 29,
+          "z": 650,
+          "rotation": -6.35,
+          "variant": "glass_podium",
+          "buildingAsset": "office_tower_glass_podium_1"
+        },
+        {
+          "id": "pad-10",
+          "x": 33.23,
+          "y": 64.2,
+          "scale": 0.954,
+          "width": 53,
+          "height": 29,
+          "z": 651,
+          "rotation": -9.65,
+          "variant": "glass_podium",
+          "buildingAsset": "office_tower_glass_podium_2"
+        },
+        {
+          "id": "pad-11",
+          "x": 51.05,
+          "y": 59.57,
+          "scale": 0.93,
+          "width": 53,
+          "height": 29,
+          "z": 606,
+          "rotation": -8.0,
+          "variant": "office_tower",
+          "buildingAsset": "office_tower_office_tower_1"
+        },
+        {
+          "id": "pad-12",
+          "x": 63.16,
+          "y": 59.57,
+          "scale": 0.93,
+          "width": 53,
+          "height": 29,
+          "z": 607,
+          "rotation": -6.9,
+          "variant": "office_tower",
+          "buildingAsset": "office_tower_office_tower_2"
+        },
+        {
+          "id": "pad-13",
+          "x": 38.94,
+          "y": 59.57,
+          "scale": 0.93,
+          "width": 53,
+          "height": 29,
+          "z": 608,
+          "rotation": -9.1,
+          "variant": "office_tower",
+          "buildingAsset": "office_tower_office_tower_3"
+        },
+        {
+          "id": "pad-14",
+          "x": 56.76,
+          "y": 54.94,
+          "scale": 0.906,
+          "width": 53,
+          "height": 29,
+          "z": 562,
+          "rotation": -7.45,
+          "variant": "glass_podium",
+          "buildingAsset": "office_tower_glass_podium_3"
+        },
+        {
+          "id": "pad-15",
+          "x": 44.64,
+          "y": 54.94,
+          "scale": 0.906,
+          "width": 53,
+          "height": 29,
+          "z": 563,
+          "rotation": -8.55,
+          "variant": "glass_podium",
+          "buildingAsset": "office_tower_glass_podium_4"
+        },
+        {
+          "id": "pad-16",
+          "x": 50.35,
+          "y": 50.31,
+          "scale": 0.882,
+          "width": 53,
+          "height": 29,
+          "z": 518,
+          "rotation": -8.0,
+          "variant": "office_tower",
+          "buildingAsset": "office_tower_office_tower_4"
+        }
       ],
       "futureResidentPaths": [
-        { "id": "office_front", "depth": "near", "points": [[7, 80], [27, 74], [49, 78], [71, 72], [93, 77]] },
-        { "id": "office_mid", "depth": "mid", "points": [[10, 59], [32, 55], [55, 57], [77, 52], [91, 55]] },
-        { "id": "office_back", "depth": "far", "points": [[18, 42], [41, 38], [64, 40], [86, 36]] }
+        {
+          "id": "office_front",
+          "depth": "near",
+          "points": [
+            [
+              7,
+              80
+            ],
+            [
+              27,
+              74
+            ],
+            [
+              49,
+              78
+            ],
+            [
+              71,
+              72
+            ],
+            [
+              93,
+              77
+            ]
+          ]
+        },
+        {
+          "id": "office_mid",
+          "depth": "mid",
+          "points": [
+            [
+              10,
+              59
+            ],
+            [
+              32,
+              55
+            ],
+            [
+              55,
+              57
+            ],
+            [
+              77,
+              52
+            ],
+            [
+              91,
+              55
+            ]
+          ]
+        },
+        {
+          "id": "office_back",
+          "depth": "far",
+          "points": [
+            [
+              18,
+              42
+            ],
+            [
+              41,
+              38
+            ],
+            [
+              64,
+              40
+            ],
+            [
+              86,
+              36
+            ]
+          ]
+        }
       ],
       "help": {
         "backgroundAsset": "오피스 빌딩 지역 상세 화면의 전용 배경 이미지입니다.",
         "buildingTheme": "도심 업무지구 고층 빌딩 테마입니다.",
         "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
         "futureResidentPaths": "추후 직장인 주민이 대로와 광장을 따라 이동할 경로입니다.",
-        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다.",
+        "buildingAsset": "각 상세 pad가 사용할 PNG 건물 리소스 id입니다.",
+        "rotation": "건물과 빈 필지를 배경 바닥 각도에 맞추기 위한 회전 각도(deg)입니다."
       }
     },
     {
@@ -277,28 +2572,283 @@
       "buildingTheme": "landmark_mixed",
       "speechTone": "landmark_city",
       "detailPads": [
-        { "id": "pad-01", "x": 18, "y": 80, "scale": 1.08, "width": 52, "height": 90, "z": 10, "variant": "mixed_podium" },
-        { "id": "pad-02", "x": 34, "y": 72, "scale": 1, "width": 50, "height": 98, "z": 8, "variant": "office_tower" },
-        { "id": "pad-03", "x": 50, "y": 82, "scale": 1.12, "width": 54, "height": 110, "z": 12, "variant": "landmark_tower" },
-        { "id": "pad-04", "x": 68, "y": 73, "scale": 0.98, "width": 52, "height": 102, "z": 9, "variant": "mixed_podium" },
-        { "id": "pad-05", "x": 84, "y": 81, "scale": 1.04, "width": 56, "height": 114, "z": 13, "variant": "landmark_tower" },
-        { "id": "pad-06", "x": 25, "y": 58, "scale": 0.82, "width": 48, "height": 92, "z": 5, "variant": "office_tower" },
-        { "id": "pad-07", "x": 43, "y": 54, "scale": 0.86, "width": 50, "height": 104, "z": 4, "variant": "mixed_podium" },
-        { "id": "pad-08", "x": 61, "y": 58, "scale": 0.9, "width": 50, "height": 108, "z": 6, "variant": "landmark_tower" },
-        { "id": "pad-09", "x": 78, "y": 51, "scale": 0.76, "width": 46, "height": 100, "z": 3, "variant": "office_tower" },
-        { "id": "pad-10", "x": 53, "y": 42, "scale": 0.7, "width": 44, "height": 96, "z": 2, "variant": "mixed_podium" }
+        {
+          "id": "pad-01",
+          "x": 52.45,
+          "y": 78.99,
+          "scale": 1.031,
+          "width": 57,
+          "height": 31,
+          "z": 790,
+          "rotation": -8.0,
+          "variant": "mixed_podium",
+          "buildingAsset": "mixed_development_mixed_podium_1"
+        },
+        {
+          "id": "pad-02",
+          "x": 46.04,
+          "y": 74.36,
+          "scale": 1.007,
+          "width": 57,
+          "height": 31,
+          "z": 745,
+          "rotation": -8.55,
+          "variant": "landmark_tower",
+          "buildingAsset": "mixed_development_landmark_tower_1"
+        },
+        {
+          "id": "pad-03",
+          "x": 58.16,
+          "y": 74.36,
+          "scale": 1.007,
+          "width": 57,
+          "height": 31,
+          "z": 746,
+          "rotation": -7.45,
+          "variant": "landmark_tower",
+          "buildingAsset": "mixed_development_landmark_tower_2"
+        },
+        {
+          "id": "pad-04",
+          "x": 51.75,
+          "y": 69.73,
+          "scale": 0.983,
+          "width": 57,
+          "height": 31,
+          "z": 700,
+          "rotation": -8.0,
+          "variant": "office_tower",
+          "buildingAsset": "mixed_development_office_tower_1"
+        },
+        {
+          "id": "pad-05",
+          "x": 39.64,
+          "y": 69.73,
+          "scale": 0.983,
+          "width": 57,
+          "height": 31,
+          "z": 701,
+          "rotation": -9.1,
+          "variant": "office_tower",
+          "buildingAsset": "mixed_development_office_tower_2"
+        },
+        {
+          "id": "pad-06",
+          "x": 63.86,
+          "y": 69.73,
+          "scale": 0.983,
+          "width": 57,
+          "height": 31,
+          "z": 702,
+          "rotation": -6.9,
+          "variant": "office_tower",
+          "buildingAsset": "mixed_development_office_tower_3"
+        },
+        {
+          "id": "pad-07",
+          "x": 57.46,
+          "y": 65.1,
+          "scale": 0.959,
+          "width": 57,
+          "height": 31,
+          "z": 657,
+          "rotation": -7.45,
+          "variant": "mixed_podium",
+          "buildingAsset": "mixed_development_mixed_podium_2"
+        },
+        {
+          "id": "pad-08",
+          "x": 45.34,
+          "y": 65.1,
+          "scale": 0.959,
+          "width": 57,
+          "height": 31,
+          "z": 658,
+          "rotation": -8.55,
+          "variant": "mixed_podium",
+          "buildingAsset": "mixed_development_mixed_podium_3"
+        },
+        {
+          "id": "pad-09",
+          "x": 69.57,
+          "y": 65.1,
+          "scale": 0.959,
+          "width": 57,
+          "height": 31,
+          "z": 659,
+          "rotation": -6.35,
+          "variant": "mixed_podium",
+          "buildingAsset": "mixed_development_mixed_podium_4"
+        },
+        {
+          "id": "pad-10",
+          "x": 33.23,
+          "y": 65.1,
+          "scale": 0.959,
+          "width": 57,
+          "height": 31,
+          "z": 660,
+          "rotation": -9.65,
+          "variant": "mixed_podium",
+          "buildingAsset": "mixed_development_mixed_podium_1"
+        },
+        {
+          "id": "pad-11",
+          "x": 51.05,
+          "y": 60.47,
+          "scale": 0.934,
+          "width": 57,
+          "height": 31,
+          "z": 615,
+          "rotation": -8.0,
+          "variant": "landmark_tower",
+          "buildingAsset": "mixed_development_landmark_tower_3"
+        },
+        {
+          "id": "pad-12",
+          "x": 63.16,
+          "y": 60.47,
+          "scale": 0.934,
+          "width": 57,
+          "height": 31,
+          "z": 616,
+          "rotation": -6.9,
+          "variant": "landmark_tower",
+          "buildingAsset": "mixed_development_landmark_tower_4"
+        },
+        {
+          "id": "pad-13",
+          "x": 38.94,
+          "y": 60.47,
+          "scale": 0.934,
+          "width": 57,
+          "height": 31,
+          "z": 617,
+          "rotation": -9.1,
+          "variant": "landmark_tower",
+          "buildingAsset": "mixed_development_landmark_tower_1"
+        },
+        {
+          "id": "pad-14",
+          "x": 56.76,
+          "y": 55.84,
+          "scale": 0.91,
+          "width": 57,
+          "height": 31,
+          "z": 571,
+          "rotation": -7.45,
+          "variant": "office_tower",
+          "buildingAsset": "mixed_development_office_tower_4"
+        },
+        {
+          "id": "pad-15",
+          "x": 44.64,
+          "y": 55.84,
+          "scale": 0.91,
+          "width": 57,
+          "height": 31,
+          "z": 572,
+          "rotation": -8.55,
+          "variant": "office_tower",
+          "buildingAsset": "mixed_development_office_tower_1"
+        },
+        {
+          "id": "pad-16",
+          "x": 50.35,
+          "y": 51.21,
+          "scale": 0.886,
+          "width": 57,
+          "height": 31,
+          "z": 527,
+          "rotation": -8.0,
+          "variant": "mixed_podium",
+          "buildingAsset": "mixed_development_mixed_podium_2"
+        }
       ],
       "futureResidentPaths": [
-        { "id": "landmark_front", "depth": "near", "points": [[7, 80], [27, 74], [49, 78], [71, 72], [93, 77]] },
-        { "id": "landmark_mid", "depth": "mid", "points": [[10, 59], [32, 55], [55, 57], [77, 52], [91, 55]] },
-        { "id": "landmark_back", "depth": "far", "points": [[18, 42], [41, 38], [64, 40], [86, 36]] }
+        {
+          "id": "landmark_front",
+          "depth": "near",
+          "points": [
+            [
+              7,
+              80
+            ],
+            [
+              27,
+              74
+            ],
+            [
+              49,
+              78
+            ],
+            [
+              71,
+              72
+            ],
+            [
+              93,
+              77
+            ]
+          ]
+        },
+        {
+          "id": "landmark_mid",
+          "depth": "mid",
+          "points": [
+            [
+              10,
+              59
+            ],
+            [
+              32,
+              55
+            ],
+            [
+              55,
+              57
+            ],
+            [
+              77,
+              52
+            ],
+            [
+              91,
+              55
+            ]
+          ]
+        },
+        {
+          "id": "landmark_back",
+          "depth": "far",
+          "points": [
+            [
+              18,
+              42
+            ],
+            [
+              41,
+              38
+            ],
+            [
+              64,
+              40
+            ],
+            [
+              86,
+              36
+            ]
+          ]
+        }
       ],
       "help": {
         "backgroundAsset": "복합 개발지 지역 상세 화면의 전용 배경 이미지입니다.",
         "buildingTheme": "랜드마크급 주거·상업·업무 복합 개발 테마입니다.",
         "detailPads": "상세 200% 지도 위에 건물을 얹는 정해진 위치와 원근 값입니다.",
         "futureResidentPaths": "추후 주민과 방문객이 광장, 대로, 수변 보행로를 따라 이동할 경로입니다.",
-        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다."
+        "speechTone": "추후 주민 말풍선 문구 톤을 고르는 값입니다.",
+        "buildingAsset": "각 상세 pad가 사용할 PNG 건물 리소스 id입니다.",
+        "rotation": "건물과 빈 필지를 배경 바닥 각도에 맞추기 위한 회전 각도(deg)입니다."
       }
     }
   ],

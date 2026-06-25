@@ -47,11 +47,11 @@
   - 해금 district 클릭 시 상세 화면 진입.
   - 잠김 district 클릭 시 상세 진입 없이 Stage 안내 표시.
   - 상세 화면에서 기존 3개 scene metric card가 사라졌는지 확인.
-  - 상세 화면에서 지역 상세 배경 이미지와 빈 부지 패드 10개가 렌더링되는지 확인.
+  - 후속 폴리싱 기준으로 상세 화면에서 지역 상세 배경 이미지와 빈 부지 패드 16개가 렌더링되는지 확인.
   - `전체 도시 보기` 버튼으로 overview 복귀 확인.
   - 드래그 후 지도 transform이 바뀌고 clamp 범위를 벗어나지 않는지 확인.
   - 구매 후 해당 district의 `real-estate-development-building`, `visibleBuildingSlots`, `data-development-level`이 증가하는지 확인.
-  - full-growth seed에서 모든 district가 풀개발 상태로 표시되고 지역 상세 건물 10개가 렌더링되는지 확인.
+  - full-growth seed에서 모든 district가 풀개발 상태로 표시되고 지역 상세 건물 16개가 렌더링되는지 확인.
 - 기존 검증 유지
   - `npm run react:verify`
   - `npm run verify:mobile`

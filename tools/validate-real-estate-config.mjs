@@ -52,11 +52,14 @@ function uniqueId(source, ids, path) {
 }
 
 const catalog = readJson("data/real_estates.json");
+const buildingAssets = readJson("data/real_estate_building_assets.json");
 const cityLayout = readJson("data/real_estate_city_layout.json");
 const districtAssets = readJson("data/real_estate_district_assets.json");
 const tiers = readJson("data/real_estate_scale_tiers.json");
 const balance = readJson("data/real_estate_balance.json");
 const rankRewards = readJson("data/real_estate_rank_rewards.json");
+
+const minBuildingSlotCount = 16;
 
 const districtAssetThemes = new Set([
   "starter_lowrise",
@@ -91,6 +94,7 @@ const districtAssetPadVariants = new Set([
 ]);
 
 const districtAssetPathDepths = new Set(["near", "mid", "far"]);
+const districtAssetShadows = new Set(["soft_ground"]);
 
 function coordinatePair(pair, path) {
   assertArray(pair, path);
@@ -144,7 +148,7 @@ for (const [index, district] of cityLayout.districts.entries()) {
   coordinateList(district.polygon, `${path}.polygon`, 4);
   coordinatePair(district.labelAnchor, `${path}.labelAnchor`);
   coordinatePair(district.detailFocus, `${path}.detailFocus`);
-  coordinateList(district.buildingSlots, `${path}.buildingSlots`, 6);
+  coordinateList(district.buildingSlots, `${path}.buildingSlots`, minBuildingSlotCount);
   help(district, path, ["id", "polygon", "labelAnchor", "detailFocus", "buildingSlots"]);
 }
 
@@ -154,7 +158,7 @@ function percentageNumber(value, path) {
   return numeric;
 }
 
-function validateDetailPad(pad, index, districtPath) {
+function validateDetailPad(pad, index, districtPath, districtId, districtTheme, buildingAssetById) {
   const path = `${districtPath}.detailPads[${index}]`;
   assertObject(pad, path);
   uniqueId(pad, validateDetailPad.ids, path);
@@ -164,8 +168,16 @@ function validateDetailPad(pad, index, districtPath) {
   positiveNumber(pad.width, `${path}.width`);
   positiveNumber(pad.height, `${path}.height`);
   integerAtLeast(pad.z, `${path}.z`, 1);
+  const rotation = number(pad.rotation, `${path}.rotation`);
+  assert(rotation >= -30 && rotation <= 30, `${path}.rotation 값은 -30~30 사이여야 합니다.`);
   assertString(pad.variant, `${path}.variant`);
   assert(districtAssetPadVariants.has(pad.variant), `${path}.variant 값이 올바르지 않습니다: ${pad.variant}`);
+  assertString(pad.buildingAsset, `${path}.buildingAsset`);
+  const buildingAsset = buildingAssetById.get(pad.buildingAsset);
+  assert(buildingAsset, `${path}.buildingAsset 참조를 찾을 수 없습니다: ${pad.buildingAsset}`);
+  assert(buildingAsset.districtId === districtId, `${path}.buildingAsset districtId가 지역과 다릅니다: ${buildingAsset.districtId} !== ${districtId}`);
+  assert(buildingAsset.theme === districtTheme, `${path}.buildingAsset theme가 지역 theme와 다릅니다: ${buildingAsset.theme} !== ${districtTheme}`);
+  assert(buildingAsset.variant === pad.variant, `${path}.buildingAsset variant가 pad variant와 다릅니다: ${buildingAsset.variant} !== ${pad.variant}`);
 }
 
 function validateResidentPath(pathData, index, districtPath) {
@@ -175,6 +187,51 @@ function validateResidentPath(pathData, index, districtPath) {
   assertString(pathData.depth, `${path}.depth`);
   assert(districtAssetPathDepths.has(pathData.depth), `${path}.depth 값이 올바르지 않습니다: ${pathData.depth}`);
   coordinateList(pathData.points, `${path}.points`, 2);
+}
+
+assertObject(buildingAssets, "real_estate_building_assets.json");
+integerAtLeast(buildingAssets.version, "real_estate_building_assets.json.version", 1);
+assertArray(buildingAssets.assets, "real_estate_building_assets.json.assets");
+assert(buildingAssets.assets.length >= catalog.properties.length * 6, `건물 PNG 리소스 수가 부족합니다: ${buildingAssets.assets.length}`);
+help(buildingAssets, "real_estate_building_assets.json", ["version", "assets"]);
+const buildingAssetIds = new Set();
+const buildingAssetFiles = new Set();
+const buildingAssetById = new Map();
+const buildingAssetCountByDistrict = new Map();
+const buildingAssetVariantsByDistrict = new Map();
+for (const [index, asset] of buildingAssets.assets.entries()) {
+  const path = `real_estate_building_assets.json.assets[${index}]`;
+  assertObject(asset, path);
+  uniqueId(asset, buildingAssetIds, path);
+  assertString(asset.file, `${path}.file`);
+  assert(asset.file.startsWith("real-estate-buildings/") && asset.file.endsWith(".png"), `${path}.file 값은 real-estate-buildings/*.png 형식이어야 합니다.`);
+  assert(!asset.file.includes("..") && !asset.file.includes("\\"), `${path}.file 값이 올바르지 않습니다: ${asset.file}`);
+  assert(existsSync(resolve("src/snapshot/assets", asset.file)), `${path}.file 파일이 없습니다: ${asset.file}`);
+  assert(!buildingAssetFiles.has(asset.file), `${path}.file 값이 중복되었습니다: ${asset.file}`);
+  buildingAssetFiles.add(asset.file);
+  assertString(asset.districtId, `${path}.districtId`);
+  assert(propertyIds.has(asset.districtId), `${path}.districtId 값이 매물 id와 맞지 않습니다: ${asset.districtId}`);
+  assertString(asset.theme, `${path}.theme`);
+  assert(districtAssetThemes.has(asset.theme), `${path}.theme 값이 올바르지 않습니다: ${asset.theme}`);
+  assertString(asset.variant, `${path}.variant`);
+  assert(districtAssetPadVariants.has(asset.variant), `${path}.variant 값이 올바르지 않습니다: ${asset.variant}`);
+  buildingAssetCountByDistrict.set(asset.districtId, (buildingAssetCountByDistrict.get(asset.districtId) || 0) + 1);
+  if (!buildingAssetVariantsByDistrict.has(asset.districtId)) buildingAssetVariantsByDistrict.set(asset.districtId, new Set());
+  buildingAssetVariantsByDistrict.get(asset.districtId).add(asset.variant);
+  positiveNumber(asset.displayWidth, `${path}.displayWidth`);
+  positiveNumber(asset.displayHeight, `${path}.displayHeight`);
+  percentageNumber(asset.anchorX, `${path}.anchorX`);
+  percentageNumber(asset.anchorY, `${path}.anchorY`);
+  assertString(asset.shadow, `${path}.shadow`);
+  assert(districtAssetShadows.has(asset.shadow), `${path}.shadow 값이 올바르지 않습니다: ${asset.shadow}`);
+  help(asset, path, ["file", "districtId", "theme", "variant", "displayWidth", "displayHeight", "anchorX", "anchorY", "shadow"]);
+  buildingAssetById.set(asset.id, asset);
+}
+for (const property of catalog.properties) {
+  const count = buildingAssetCountByDistrict.get(property.id) || 0;
+  const variantCount = buildingAssetVariantsByDistrict.get(property.id)?.size || 0;
+  assert(count >= 6, `지역별 건물 PNG 리소스 수가 부족합니다: ${property.id} ${count}`);
+  assert(variantCount >= 2, `지역별 건물 variant 수가 부족합니다: ${property.id} ${variantCount}`);
 }
 
 assertObject(districtAssets, "real_estate_district_assets.json");
@@ -199,14 +256,16 @@ for (const [index, asset] of districtAssets.districts.entries()) {
   assert(districtAssetThemes.has(asset.buildingTheme), `${path}.buildingTheme 값이 올바르지 않습니다: ${asset.buildingTheme}`);
   assertString(asset.speechTone, `${path}.speechTone`);
   assertArray(asset.detailPads, `${path}.detailPads`);
-  assert(asset.detailPads.length === 10, `${path}.detailPads 수는 10개여야 합니다: ${asset.detailPads.length}`);
+  const expectedSlotCount = cityLayout.districts[index].buildingSlots.length;
+  assert(expectedSlotCount >= minBuildingSlotCount, `${path}.detailPads 기준 도시 슬롯 수가 부족합니다: ${expectedSlotCount}`);
+  assert(asset.detailPads.length === expectedSlotCount, `${path}.detailPads 수는 도시 buildingSlots 수와 같아야 합니다: ${asset.detailPads.length} !== ${expectedSlotCount}`);
   validateDetailPad.ids = new Set();
-  for (const [padIndex, pad] of asset.detailPads.entries()) validateDetailPad(pad, padIndex, path);
+  for (const [padIndex, pad] of asset.detailPads.entries()) validateDetailPad(pad, padIndex, path, asset.id, asset.buildingTheme, buildingAssetById);
   assertArray(asset.futureResidentPaths, `${path}.futureResidentPaths`);
   assert(asset.futureResidentPaths.length >= 3, `${path}.futureResidentPaths 수는 3개 이상이어야 합니다.`);
   validateResidentPath.ids = new Set();
   for (const [pathIndex, pathData] of asset.futureResidentPaths.entries()) validateResidentPath(pathData, pathIndex, path);
-  help(asset, path, ["backgroundAsset", "buildingTheme", "detailPads", "futureResidentPaths", "speechTone"]);
+  help(asset, path, ["backgroundAsset", "buildingTheme", "detailPads", "futureResidentPaths", "speechTone", "buildingAsset", "rotation"]);
 }
 
 assertObject(tiers, "real_estate_scale_tiers.json");
@@ -294,4 +353,4 @@ for (const [index, reward] of rankRewards.rewards.entries()) {
   }
 }
 
-console.log(`부동산 데이터 검증 완료: 매물 ${catalog.properties.length}종, 도시 지역 ${cityLayout.districts.length}종, 상세 리소스 ${districtAssets.districts.length}종, 규모 ${tiers.tiers.length}종, 랭킹 보상 ${rankRewards.rewards.length}종`);
+console.log(`부동산 데이터 검증 완료: 매물 ${catalog.properties.length}종, 도시 지역 ${cityLayout.districts.length}종, 상세 리소스 ${districtAssets.districts.length}종, 건물 PNG ${buildingAssets.assets.length}종, 규모 ${tiers.tiers.length}종, 랭킹 보상 ${rankRewards.rewards.length}종`);

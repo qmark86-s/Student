@@ -41,7 +41,7 @@
   - 10개 지역 중 최소 저층/상가/아파트/타워/복합개발 상세 배경 로드 확인.
   - 선택 지역별 `data-building-theme`과 상세 배경 src가 달라지는지 확인.
   - 구매 후 상세 건물이 해당 지역 theme/variant로 렌더링되는지 확인.
-  - 풀성장 seed에서 상세 건물 10개 유지 확인.
+  - 후속 폴리싱 기준으로 풀성장 seed에서 상세 건물 16개 유지 확인.
 - 기존 검증 유지
   - `npm run react:verify`
   - `npm run verify:mobile`

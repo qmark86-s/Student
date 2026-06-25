@@ -2,14 +2,18 @@ import { chromium } from "@playwright/test";
 import { createReadStream, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { createServer } from "node:http";
 import { basename, extname, join, normalize, resolve, sep } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const root = resolve("dist-react");
 const outDir = resolve("artifacts/real-estate-resource-quality-audit");
 const preferredPort = Number(process.env.REACT_REAL_ESTATE_VISUAL_AUDIT_PORT || 5815);
 const saveKey = "student-idle-rpg-save-v1";
 const realEstates = JSON.parse(readFileSync(resolve("data/real_estates.json"), "utf8"));
+const buildingAssets = JSON.parse(readFileSync(resolve("data/real_estate_building_assets.json"), "utf8"));
 const districtAssets = JSON.parse(readFileSync(resolve("data/real_estate_district_assets.json"), "utf8"));
+const buildingAssetById = new Map(buildingAssets.assets.map((asset) => [asset.id, asset]));
 const districtAssetById = new Map(districtAssets.districts.map((asset) => [asset.id, asset]));
+const expectedOverviewBuildingCount = districtAssets.districts.reduce((sum, asset) => sum + asset.detailPads.length, 0);
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -111,9 +115,68 @@ async function seedFullGrowth(page) {
   );
 }
 
+async function inspectOverview(page) {
+  await page.waitForFunction(() => {
+    const image = document.querySelector(".real-estate-map-image");
+    return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0 && image.naturalHeight > 0;
+  });
+  await page.waitForSelector(".real-estate-building-dot", { timeout: 6000 });
+  await page.waitForFunction(() => [...document.querySelectorAll(".real-estate-building-dot img")].every((image) => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0 && image.naturalHeight > 0), null, { timeout: 6000 });
+
+  const metrics = await page.evaluate(() => {
+    const image = document.querySelector(".real-estate-map-image");
+    const districts = Array.from(document.querySelectorAll(".real-estate-district-button"));
+    const buildings = Array.from(document.querySelectorAll(".real-estate-building-dot"));
+    const buildingImages = Array.from(document.querySelectorAll(".real-estate-building-dot img"));
+    const assetIds = Array.from(new Set(buildings.map((node) => node.getAttribute("data-building-asset")).filter(Boolean)));
+    const developmentLevels = districts.map((node) => node.getAttribute("data-development-level"));
+    const lockedCount = districts.filter((node) => node.getAttribute("data-locked") === "true").length;
+    const frame = document.querySelector(".real-estate-map-frame");
+    const frameRect = frame.getBoundingClientRect();
+    return {
+      mapSrc: image.currentSrc || image.src,
+      naturalWidth: image.naturalWidth,
+      naturalHeight: image.naturalHeight,
+      districtCount: districts.length,
+      lockedCount,
+      buildingDotCount: buildings.length,
+      buildingImageCount: buildingImages.length,
+      buildingImagesLoaded: buildingImages.filter((node) => node instanceof HTMLImageElement && node.complete && node.naturalWidth > 0 && node.naturalHeight > 0).length,
+      uniqueBuildingAssetCount: assetIds.length,
+      assetIds,
+      developmentLevels,
+      frameWidth: Math.round(frameRect.width),
+      frameHeight: Math.round(frameRect.height),
+      horizontalOverflow: Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth),
+    };
+  });
+
+  const expectedBuildingCount = expectedOverviewBuildingCount;
+  assert(metrics.districtCount === realEstates.properties.length, `overview 지역 버튼 수가 올바르지 않습니다: ${metrics.districtCount}`);
+  assert(metrics.lockedCount === 0, `풀성장 overview에 잠긴 지역이 남아 있습니다: ${metrics.lockedCount}`);
+  assert(metrics.buildingDotCount === expectedBuildingCount, `overview PNG 건물 슬롯 수가 올바르지 않습니다: ${metrics.buildingDotCount}/${expectedBuildingCount}`);
+  assert(metrics.buildingImageCount === expectedBuildingCount, `overview PNG 이미지 수가 올바르지 않습니다: ${metrics.buildingImageCount}/${expectedBuildingCount}`);
+  assert(metrics.buildingImagesLoaded === expectedBuildingCount, `overview PNG 이미지가 모두 로드되지 않았습니다: ${metrics.buildingImagesLoaded}/${expectedBuildingCount}`);
+  assert(metrics.uniqueBuildingAssetCount >= realEstates.properties.length * 6, `overview 건물 PNG 종류가 부족합니다: ${metrics.uniqueBuildingAssetCount}`);
+  assert(metrics.developmentLevels.every((level) => level === "6"), `overview 풀성장 개발도 표시가 올바르지 않습니다: ${metrics.developmentLevels.join(",")}`);
+  assert(metrics.horizontalOverflow === 0, `overview horizontal overflow가 있습니다: ${metrics.horizontalOverflow}`);
+  for (const assetId of metrics.assetIds) {
+    assert(buildingAssetById.has(assetId), `overview 건물 asset id를 데이터에서 찾을 수 없습니다: ${assetId}`);
+  }
+
+  const screenshotName = "overview-full-growth.png";
+  await page.locator(".real-estate-map-frame").screenshot({ path: join(outDir, screenshotName) });
+
+  return {
+    screenshot: screenshotName,
+    ...metrics,
+  };
+}
+
 async function inspectDistrict(page, districtId) {
   const asset = districtAssetById.get(districtId);
   assert(asset, `지역 리소스 데이터가 없습니다: ${districtId}`);
+  const expectedSlotCount = asset.detailPads.length;
   await page.locator(`.real-estate-district-button[data-district-id="${districtId}"]`).click();
   await page.waitForSelector(`[data-real-estate-view="district"][data-selected-property-id="${districtId}"]`, { timeout: 6000 });
   await page.waitForFunction(() => {
@@ -125,7 +188,9 @@ async function inspectDistrict(page, districtId) {
   const metrics = await page.evaluate(() => {
     const image = document.querySelector(".real-estate-detail-background");
     const buildings = Array.from(document.querySelectorAll(".real-estate-development-building"));
+    const buildingImages = Array.from(document.querySelectorAll(".real-estate-development-building img"));
     const pads = Array.from(document.querySelectorAll(".real-estate-development-pad"));
+    const assetIds = Array.from(new Set(buildings.map((node) => node.getAttribute("data-building-asset"))));
     const themes = Array.from(new Set(buildings.map((node) => node.getAttribute("data-building-theme"))));
     const variants = Array.from(new Set(buildings.map((node) => node.getAttribute("data-building-variant"))));
     const viewport = document.querySelector(".real-estate-detail-viewport");
@@ -135,7 +200,10 @@ async function inspectDistrict(page, districtId) {
       naturalWidth: image.naturalWidth,
       naturalHeight: image.naturalHeight,
       buildingCount: buildings.length,
+      buildingImageCount: buildingImages.length,
+      buildingImagesLoaded: buildingImages.filter((node) => node instanceof HTMLImageElement && node.complete && node.naturalWidth > 0 && node.naturalHeight > 0).length,
       padCount: pads.length,
+      assetIds,
       themes,
       variants,
       viewportWidth: Math.round(viewportRect.width),
@@ -145,10 +213,18 @@ async function inspectDistrict(page, districtId) {
   });
 
   assert(metrics.backgroundSrc.includes(asset.backgroundAsset.replace(".png", "")), `${districtId} 상세 배경 src가 데이터와 다릅니다: ${metrics.backgroundSrc}`);
-  assert(metrics.buildingCount === 10, `${districtId} 풀성장 상세 건물 수가 10개가 아닙니다: ${metrics.buildingCount}`);
-  assert(metrics.padCount === 10, `${districtId} 상세 pad 수가 10개가 아닙니다: ${metrics.padCount}`);
+  assert(metrics.buildingCount === expectedSlotCount, `${districtId} 풀성장 상세 건물 수가 ${expectedSlotCount}개가 아닙니다: ${metrics.buildingCount}`);
+  assert(metrics.buildingImageCount === expectedSlotCount, `${districtId} 풀성장 상세 건물 PNG 수가 ${expectedSlotCount}개가 아닙니다: ${metrics.buildingImageCount}`);
+  assert(metrics.buildingImagesLoaded === expectedSlotCount, `${districtId} 풀성장 상세 건물 PNG가 모두 로드되지 않았습니다: ${metrics.buildingImagesLoaded}/${expectedSlotCount}`);
+  assert(metrics.padCount === expectedSlotCount, `${districtId} 상세 pad 수가 ${expectedSlotCount}개가 아닙니다: ${metrics.padCount}`);
   assert(metrics.themes.length === 1 && metrics.themes[0] === asset.buildingTheme, `${districtId} 건물 theme가 데이터와 다릅니다: ${metrics.themes.join(",")}`);
   assert(metrics.variants.every((variant) => typeof variant === "string" && variant.length > 0), `${districtId} 건물 variant가 비어 있습니다.`);
+  assert(metrics.assetIds.length >= 4, `${districtId} 상세 건물 PNG 종류가 부족합니다: ${metrics.assetIds.length}`);
+  for (const assetId of metrics.assetIds) {
+    const buildingAsset = buildingAssetById.get(assetId);
+    assert(buildingAsset, `${districtId} 건물 asset id를 데이터에서 찾을 수 없습니다: ${assetId}`);
+    assert(buildingAsset.districtId === districtId, `${districtId} 건물 asset districtId가 다릅니다: ${assetId}`);
+  }
   assert(metrics.horizontalOverflow === 0, `${districtId} 상세 화면 horizontal overflow가 있습니다: ${metrics.horizontalOverflow}`);
 
   const screenshotName = `${districtId}-full-growth.png`;
@@ -161,20 +237,29 @@ async function inspectDistrict(page, districtId) {
     name: realEstates.properties.find((property) => property.id === districtId).name,
     backgroundAsset: asset.backgroundAsset,
     buildingTheme: asset.buildingTheme,
+    uniqueBuildingAssetCount: metrics.assetIds.length,
     screenshot: screenshotName,
     ...metrics,
   };
 }
 
-function writeHtmlReport(results) {
+function writeHtmlReport(overview, results) {
   const cards = results.map((result) => `
     <article>
       <img src="${escapeHtml(result.screenshot)}" alt="${escapeHtml(result.name)}">
       <h2>${escapeHtml(result.name)} <small>${escapeHtml(result.districtId)}</small></h2>
-      <p>theme: <b>${escapeHtml(result.buildingTheme)}</b> · buildings: ${result.buildingCount} · variants: ${escapeHtml(result.variants.join(", "))}</p>
+      <p>theme: <b>${escapeHtml(result.buildingTheme)}</b> · buildings: ${result.buildingCount} · png assets: ${result.uniqueBuildingAssetCount} · variants: ${escapeHtml(result.variants.join(", "))}</p>
       <p>${escapeHtml(result.backgroundAsset)} · ${result.naturalWidth}x${result.naturalHeight}</p>
     </article>
   `).join("\n");
+  const overviewCard = `
+    <article>
+      <img src="${escapeHtml(overview.screenshot)}" alt="도시 전체 보기 풀성장">
+      <h2>도시 전체 보기 <small>overview</small></h2>
+      <p>districts: ${overview.districtCount} · buildings: ${overview.buildingDotCount} · png assets: ${overview.uniqueBuildingAssetCount}</p>
+      <p>${overview.naturalWidth}x${overview.naturalHeight} · loaded ${overview.buildingImagesLoaded}/${overview.buildingImageCount}</p>
+    </article>
+  `;
   writeFileSync(join(outDir, "report.html"), `<!doctype html>
 <html lang="ko">
 <head>
@@ -193,10 +278,20 @@ function writeHtmlReport(results) {
 </head>
 <body>
   <h1>부동산 리소스 품질 전수 감사</h1>
-  <main>${cards}</main>
+  <main>${overviewCard}${cards}</main>
 </body>
 </html>
 `, "utf8");
+}
+
+async function captureHtmlReportContactSheet(browser) {
+  const reportPage = await browser.newPage({ viewport: { width: 760, height: 1600 }, deviceScaleFactor: 1 });
+  try {
+    await reportPage.goto(pathToFileURL(join(outDir, "report.html")).href, { waitUntil: "load" });
+    await reportPage.screenshot({ path: join(outDir, "contact-sheet.png"), fullPage: true });
+  } finally {
+    await reportPage.close();
+  }
 }
 
 async function main() {
@@ -212,6 +307,7 @@ async function main() {
     await page.locator(".mode-tab").nth(2).click();
     await page.waitForSelector('[data-real-estate-view="overview"]', { timeout: 6000 });
 
+    const overview = await inspectOverview(page);
     const results = [];
     for (const property of realEstates.properties) {
       results.push(await inspectDistrict(page, property.id));
@@ -223,12 +319,14 @@ async function main() {
       checkedAt: new Date().toISOString(),
       districtCount: results.length,
       uniqueBackgroundCount: uniqueBackgrounds.size,
+      overview,
       failures: [],
       results,
     };
     writeFileSync(join(outDir, "report.json"), JSON.stringify(report, null, 2), "utf8");
-    writeHtmlReport(results);
-    console.log(`React 부동산 리소스 전수 감사 통과: ${results.length}개 지역, 캡처 ${results.length}장, report=${join(outDir, "report.json")}`);
+    writeHtmlReport(overview, results);
+    await captureHtmlReportContactSheet(browser);
+    console.log(`React 부동산 리소스 전수 감사 통과: overview 1장, 지역 ${results.length}개, 캡처 ${results.length + 1}장, report=${join(outDir, "report.json")}`);
   } finally {
     await browser.close();
     await closeServer(server);

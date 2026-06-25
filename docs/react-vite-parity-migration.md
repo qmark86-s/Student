@@ -14,7 +14,7 @@
 - `tools/react-vite-expedition-smoke.mjs`: React 직업 수락/원정대 흐름 smoke test
 - `tools/react-vite-expedition-rules-smoke.mjs`: React 원정대 보스 보상, 전투력 부족, 성장 투자, 승급 합성 상태 규칙 smoke test
 - `tools/react-vite-real-estate-smoke.mjs`: React 부동산 모드 탭, 도시 전체 보기, 지역 상세 보기, 원정대 부동산 자금, 구매/임대/랭킹/DEBUG 보상 smoke test
-- `tools/react-vite-real-estate-visual-audit.mjs`: React 부동산 10개 지역 상세 배경/건물 오버레이 전수 시각 audit
+- `tools/react-vite-real-estate-visual-audit.mjs`: React 부동산 도시 전체 보기 160개 PNG 슬롯과 10개 지역 상세 배경/건물 PNG 전수 시각 audit
 - `tools/react-vite-records-smoke.mjs`: React 시험/직장/도감 저장 상태 smoke test
 - `tools/react-vite-education-smoke.mjs`: React 교육 탭/업그레이드 smoke test
 - `tools/react-vite-shop-debug-smoke.mjs`: React 상점 도우미/DEBUG 동료/원정대 편성 smoke test
@@ -25,7 +25,7 @@
 - `tools/react-vite-ui-parity-deep-smoke.mjs`: snapshot 대 React 상점/뽑기/설정/디버그 텍스트/스타일/스크린샷 parity audit
 - `tools/react-vite-full-parity-gate.mjs`: React smoke, strict 첫 화면 parity, interactive parity, deep parity, responsive, no-fallback 감사를 묶은 상위 gate
 - `tools/react-vite-goal-completion-audit.mjs`: full/interactive/deep/responsive/rules 산출물을 요구사항별 완료 증거 매트릭스로 정리하는 audit
-- `tools/validate-real-estate-config.mjs`: 부동산 카탈로그/규모/밸런스/랭킹 보상/도시 레이아웃 JSON 검증
+- `tools/validate-real-estate-config.mjs`: 부동산 카탈로그/규모/밸런스/랭킹 보상/도시 레이아웃/지역 리소스/건물 PNG JSON 검증
 - `plans/react-vite-parity-migration/plan.md`: 차수별 이식 계획
 - `implementations/react-vite-parity-migration/implementation.md`: 구현 이력
 
@@ -63,9 +63,9 @@ npm run react:verify
 - `react:battle-smoke`: 명시적 QA URL에서 기본 조우, N수 4조우, 수능 4조우, 결과 패널과 직업 후보 렌더링을 검사한다.
 - `react:expedition-smoke`: 수능 결과 직업 수락, 동료 등록, 원정대 파티 편성, stage 표시, stage 돌파 저장을 검사한다.
 - `react:expedition-rules-smoke`: 보스 첫 클리어 보상, 보스 보상 중복 방지, 보스 전투력 부족 시 구간 시작 회귀, 일반 Stage 전투력 부족 시 현재 Stage 유지, 성장 투자, 승급 합성을 실제 React 화면 클릭과 저장 상태로 검사한다.
-- `real-estate:verify`: `data/real_estates.json`, `data/real_estate_scale_tiers.json`, `data/real_estate_balance.json`, `data/real_estate_rank_rewards.json`, `data/real_estate_city_layout.json`, `data/real_estate_district_assets.json`의 id 중복, 수치 범위, 좌표 범위, 배경 파일 존재, 건물 패드/주민 경로, help 누락을 검사한다.
-- `react:real-estate-smoke`: 상단 모드 탭 `학생/원정대/부동산`, 도시 전체 보기 기본 진입, 10개 지역 버튼, 잠김 안내, 지역별 상세 배경, 건물 theme/variant, 드래그 pan, 구매 후 건물 개발도 증가, 원정대 Stage 돌파 부동산 자금 지급, 매입 1/10/최대, 임대수익 자동 정산, 규모 명칭 변경, 랭킹 preview, 일반 주간 다이아 보상 수령, DEBUG 중복 방지를 검사한다.
-- `react:real-estate-visual-audit`: 풀성장 seed로 10개 부동산 지역 상세 화면을 모두 열고, `backgroundAsset` 기반 배경 src, 건물 10개, `data-building-theme`, `data-building-variant`, horizontal overflow 0, screenshot 저장을 검사한다. 산출물은 `artifacts/real-estate-resource-quality-audit/`에 남긴다.
+- `real-estate:verify`: `data/real_estates.json`, `data/real_estate_scale_tiers.json`, `data/real_estate_balance.json`, `data/real_estate_rank_rewards.json`, `data/real_estate_city_layout.json`, `data/real_estate_district_assets.json`, `data/real_estate_building_assets.json`의 id 중복, 수치 범위, 좌표 범위, 배경/건물 파일 존재, 건물 asset 매칭, 주민 경로, help 누락을 검사한다.
+- `react:real-estate-smoke`: 상단 모드 탭 `학생/원정대/부동산`, 도시 전체 보기 기본 진입, 10개 지역 버튼, 잠김 안내, 지역별 상세 배경, PNG 건물 asset/id 로드, 드래그 pan, 구매 후 건물 개발도 증가, 원정대 Stage 돌파 부동산 자금 지급, 매입 1/10/최대, 임대수익 자동 정산, 규모 명칭 변경, 랭킹 preview, 일반 주간 다이아 보상 수령, DEBUG 부동산 조작과 중복 방지를 검사한다.
+- `react:real-estate-visual-audit`: 풀성장 seed로 도시 전체 보기와 10개 부동산 지역 상세 화면을 모두 열고, overview PNG 건물 슬롯 160개, `backgroundAsset` 기반 배경 src, 상세 건물 PNG 16개, `data-building-asset`, `data-building-theme`, `data-building-variant`, horizontal overflow 0, screenshot 저장을 검사한다. 산출물은 `artifacts/real-estate-resource-quality-audit/`에 남긴다.
 - `react:records-smoke`: 저장 상태를 주입하고 시험/직장/도감 탭이 placeholder 없이 카드로 렌더링되는지 검사한다.
 - `react:education-smoke`: 교육 데이터 주입, 9개 교육 카드, 잠금 상태, 비용, 업그레이드 저장, 성장 배율 반영을 검사한다.
 - `react:shop-debug-smoke`: 상점 도우미 호출, 다이아 차감, 로봇 도우미 저장, 성장 패널 학습 도우미 반영, 동료 탭 표시, DEBUG 동료 +5, 원정대 파티 5/5 편성, stage 돌파 저장을 검사한다.
@@ -97,7 +97,7 @@ npm run react:verify
 - 상점 로봇 탭은 로봇 도우미 1회/10+1 호출 시 다이아를 차감하고, snapshot 기준 C~SSS 등급 결과와 뽑기 팝업을 표시해야 한다.
 - 로봇 도우미는 학생 Battle Road 학습 도우미로 저장되어 성장 패널 `학습 도우미 n/3`과 전투력 보너스에 반영되어야 한다.
 - 로봇 도우미는 원정대 파티 후보가 아니며, DEBUG 직업 동료만 원정대 파티에 편성되어야 한다.
-- DEBUG 메뉴의 다이아 +10K, 동료 랜덤 +1/+5, 데이터 동기화, 세이브 내보내기/불러오기 UI는 save 상태와 연결되어야 한다.
+- DEBUG 메뉴의 다이아 +10K, 동료 랜덤 +1/+5, 부동산 자금/Stage/수량/풀성장/초기화, 데이터 동기화, 세이브 내보내기/불러오기 UI는 save 상태와 연결되어야 한다.
 - 설정/디버그 summary는 snapshot 기준 콘텐츠 리비전과 legacy save 상태를 표시해야 한다.
 - 학생 atlas와 학생전투 몬스터 atlas 3개가 로드되어야 한다.
 - 기존 localStorage save를 읽어 회차, 과정, 재화, 공부량, 학습 도우미, 자동 투자 값을 표시해야 한다.
@@ -125,14 +125,16 @@ npm run react:verify
 ## 부동산 MVP 기준
 
 - 상단 모드 탭은 `학생 / 원정대 / 부동산` 3개이며, 모바일 폭에서 버튼 텍스트와 아이콘이 겹치지 않아야 한다.
-- 부동산 데이터는 루트 `data/`의 `real_estates`, `real_estate_scale_tiers`, `real_estate_balance`, `real_estate_rank_rewards`, `real_estate_city_layout`, `real_estate_district_assets` JSON으로 관리한다.
+- 부동산 데이터는 루트 `data/`의 `real_estates`, `real_estate_scale_tiers`, `real_estate_balance`, `real_estate_rank_rewards`, `real_estate_city_layout`, `real_estate_district_assets`, `real_estate_building_assets` JSON으로 관리한다.
 - 부동산 전용 재화는 기존 보유금/다이아와 분리된 `부동산 자금`이다.
 - 원정대 Stage 돌파 성공 시 부동산 자금을 지급하고, 보스 Stage는 부동산 밸런스 배수를 적용한다.
 - 원정대 방치 부동산 자금은 파티가 있고 최고 Stage가 1 이상일 때만 최대 8시간까지 정산한다.
 - 부동산 탭 기본 화면은 `도시 전체 보기`이며, `visual-real-estate-city-map.png` 위에 10개 지역 버튼을 외곽에서 중심부로 갈수록 고등급이 되도록 배치한다.
 - 지역 상세 화면은 `real_estate_district_assets.json.backgroundAsset`에 정의된 지역별 PNG 10장을 200% x 200% 대형 배경으로 표시하고, `real_estate_city_layout.json.detailFocus`로 초기 카메라 중심을 잡으며, pointer 기반 드래그 pan을 지원한다. 우상단 `전체 도시 보기` 버튼은 pan과 무관하게 고정되어야 한다.
 - 구매 수량이 늘면 `createRealEstateViewModel()`의 `developmentLevel`, `developmentRatio`, `visibleBuildingSlots`에서 파생된 도시 전체 마커와 지역 상세 건물이 즉시 증가해야 한다.
-- 지역 상세 화면은 `districtDetailPads` 기반 빈 부지 패드와 `real-estate-development-building` 레이어를 분리하고, 향후 주민/차량 이동을 올릴 수 있는 ambient 레이어를 유지한다. `futureResidentPaths`는 추후 주민이 도로를 따라 걷도록 쓰는 검증 대상 데이터다.
+- 도시 전체와 지역 상세 건물은 CSS 도형이 아니라 `real_estate_building_assets.json`의 PNG를 `detailPads[].buildingAsset`로 매핑해 렌더링한다. 건물 원본은 형광분홍 크로마키 시트이며, 파일 누락/잘못된 참조는 verify 또는 런타임 assert로 드러나야 한다.
+- 각 지역은 16개 건물 슬롯을 가지며, 첫 구매는 1칸만 표시하고 보유 수량 마일스톤에 따라 점차 채워져 풀성장 1000채에서 16칸이 모두 표시되어야 한다.
+- 지역 상세 화면은 `districtDetailPads` 기반 빈 부지 패드와 PNG wrapper인 `real-estate-development-building` 레이어를 분리하고, 향후 주민/차량 이동을 올릴 수 있는 ambient 레이어를 유지한다. 건물이 들어선 pad는 자리표시자처럼 보이지 않도록 숨긴다. `futureResidentPaths`는 추후 주민이 도로를 따라 걷도록 쓰는 검증 대상 데이터다.
 - 관리 패널은 도시 전체 보기에서는 매물 10개, 지역 상세 보기에서는 선택 지역 1개를 표시하며, 보유 수량, 규모 명칭, 임대/분, 개발도, 다음 구매가, `구매 / 10개 / 최대` 버튼을 제공한다.
 - 총 자산가치는 `보유 부동산 평가액 + floor(부동산 자금 * cashAssetWeight)`이며 기본 `cashAssetWeight`는 `0.15`다.
 - 일반 랭킹 영역은 예상 순위/예상 보상과 `주간 보상 수령` 버튼을 표시한다. 일반 수령은 `real_estate_balance.json.ranking.minimumWeeklyAssetGainForClaim` 이상의 주간 자산 증가량이 있을 때 가능하며, DEBUG/QA 수령 버튼과 같은 `claimedWeeklyRewardWeek`로 같은 주차 중복 수령을 막는다.
@@ -491,14 +493,25 @@ npm run react:verify
 
 2026-06-25 부동산 지역별 정식 리소스 기준 다음을 추가 확인했다.
 
-- `data/real_estate_district_assets.json`을 추가해 10개 지역별 상세 배경, 건물 theme, 10개 detail pad, 향후 주민 경로, 말풍선 톤을 관리한다.
+- `data/real_estate_district_assets.json`을 추가해 10개 지역별 상세 배경, 건물 theme, 16개 detail pad, 향후 주민 경로, 말풍선 톤을 관리한다.
 - 상세 배경은 `visual-real-estate-district-*.png` 10장으로 분리되며, smoke는 작은 원룸/상가/아파트 단지/오피스 빌딩/복합 개발지의 src와 theme가 데이터와 일치하는지 확인한다.
 - `npm run real-estate:verify`: 통과, 상세 리소스 10종과 배경 파일 존재를 검증한다.
 - `npm run react:build`: 통과, 지역별 배경 10장이 React 번들에 포함된다.
-- `npm run react:real-estate-smoke`: 통과, 지역별 상세 배경, 건물 theme/variant, 구매 후 건물 렌더링을 확인한다.
-- `npm run react:real-estate-visual-audit`: 통과, 10개 지역 풀성장 상세 화면을 전수 캡처하고 `backgroundAsset` src, 건물 10개, theme/variant, overflow 0을 확인한다.
+- `npm run react:real-estate-smoke`: 통과, 지역별 상세 배경, PNG 건물 asset/theme/variant, 구매 후 건물 렌더링을 확인한다.
+- `npm run react:real-estate-visual-audit`: 통과, 도시 전체 보기와 10개 지역 풀성장 상세 화면을 전수 캡처하고 `backgroundAsset` src, PNG 건물 수/로드, asset/theme/variant, overflow 0을 확인한다.
 - `npm run react:verify`, `npm run verify:mobile`, `rg -n '\?\?|fallback|Fallback|unknown' src/react -S`, `git diff --check`, `mcp__UmgMcp.project_policy_gate` strict를 통과했다.
 - 전수 캡처 리포트는 `artifacts/real-estate-resource-quality-audit/report.json`, `report.html`, `contact-sheet.png`에 남긴다.
+
+2026-06-25 부동산 PNG 건물/DEBUG 고도화 기준 다음을 추가 확인했다.
+
+- `data/real_estate_building_assets.json`을 추가해 84개 건물 PNG의 파일, 지역 id, theme, variant, 표시 크기, anchor, shadow, help를 관리한다.
+- `data/real_estate_district_assets.json.detailPads[].buildingAsset`과 `rotation`이 각 pad의 실제 PNG와 바닥 각도를 명시한다. 같은 지역 안에서도 여러 asset을 섞어 반복감을 줄인다.
+- `src/snapshot/assets/real-estate-buildings/*.png`는 `tools/generate-real-estate-building-assets.py`로 형광분홍 크로마키 원본 시트 2장에서 생성하며, React는 `import.meta.glob`로 명시 로드한다.
+- 상세 화면의 CSS 건물 몸체/지붕/창문 드로잉은 제거했고, `real-estate-development-building`은 PNG 배치/앵커/그림자 wrapper만 담당한다.
+- DEBUG 메뉴는 QA 모드에서 부동산 자금 +1M, Stage 100, 모든 매물 1채, 모든 매물 1000채, 부동산 초기화를 제공한다.
+- `npm run real-estate:verify`: 통과, 건물 PNG 테이블과 pad 참조의 district/theme/variant 매칭, 파일 존재, anchor 범위, help를 검증한다.
+- `npm run react:real-estate-smoke`: 통과, 상세/도시 전체 PNG 로드와 DEBUG 부동산 조작을 확인한다.
+- `npm run react:real-estate-visual-audit`: 통과, 풀성장 도시 전체 보기 PNG 슬롯 160개와 10개 상세 지역의 PNG 건물 16개씩을 전수 확인한다.
 
 ## 다음 차수
 
