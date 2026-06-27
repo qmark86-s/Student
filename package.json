@@ -32,7 +32,7 @@
     "visual:build": "node tools/sync-character-animation-manifest.mjs && python tools/prepare-character-sprites.py && python tools/generate-professional-sprite-sources.py && python tools/prepare-professional-sprites.py && python tools/generate-main-monster-sources.py && node tools/build-visual-assets.mjs",
     "visual:audit": "node tools/visual-asset-audit.mjs",
     "visual:sheet": "node tools/visual-asset-contact-sheet.mjs",
-    "visual:verify": "node tools/verify-visual-assets.mjs && npm run visual:audit",
+    "visual:verify": "npm run visual:build && node tools/verify-visual-assets.mjs && npm run visual:audit",
     "visual:smoke": "node tools/visual-asset-smoke.mjs",
     "live:polish": "node tools/live-visual-polish-check.mjs",
     "visual:qa": "npm run build:web && npm run visual:verify && npm run visual:sheet && npm run visual:smoke",

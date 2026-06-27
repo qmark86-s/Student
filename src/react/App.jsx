@@ -142,7 +142,7 @@ const backdrops = {
   high: highBackdrop,
   repeater: repeaterBackdrop,
 };
-const realEstateDistrictBackgroundModules = import.meta.glob(["../snapshot/assets/visual-real-estate-district-*.png", "!../snapshot/assets/visual-real-estate-district-detail.png"], { eager: true, import: "default" });
+const realEstateDistrictBackgroundModules = import.meta.glob("../snapshot/assets/visual-real-estate-district-*.png", { eager: true, import: "default" });
 const realEstateDistrictBackgrounds = Object.fromEntries(Object.entries(realEstateDistrictBackgroundModules).map(([path, asset]) => [path.split("/").pop(), asset]));
 const realEstateDistrictGrowthModules = import.meta.glob("../snapshot/assets/real-estate-district-growth/*.png", { eager: true, import: "default" });
 const realEstateDistrictGrowthImages = Object.fromEntries(Object.entries(realEstateDistrictGrowthModules).map(([path, asset]) => [path.slice(path.indexOf("real-estate-district-growth/")), asset]));
@@ -1719,6 +1719,7 @@ function RealEstateDistrictScene({ onBackToOverview, realEstateSummary, selected
     startDistance: 0,
     startView: REAL_ESTATE_DETAIL_DEFAULT_VIEW,
   });
+  const detailViewportFocusedRef = useRef(false);
   const [detailView, setDetailView] = useState(REAL_ESTATE_DETAIL_DEFAULT_VIEW);
   const [detailViewportFocused, setDetailViewportFocused] = useState(false);
 
@@ -1738,6 +1739,11 @@ function RealEstateDistrictScene({ onBackToOverview, realEstateSummary, selected
       startDistance: realEstatePointerDistance(pointerList),
       startView: viewRef.current,
     };
+  };
+
+  const setDetailFocus = (focused) => {
+    detailViewportFocusedRef.current = focused;
+    setDetailViewportFocused(focused);
   };
 
   useLayoutEffect(() => {
@@ -1819,21 +1825,27 @@ function RealEstateDistrictScene({ onBackToOverview, realEstateSummary, selected
     resetGesture(pointers);
   };
 
-  const handleWheel = (event) => {
-    if (!detailViewportFocused) return;
-    event.preventDefault();
-    const direction = event.deltaY > 0 ? -1 : 1;
-    const viewport = viewportRef.current;
-    if (!viewport) return;
-    const currentView = viewRef.current;
-    const point = realEstatePointInViewport(viewport, event.clientX, event.clientY);
-    applyDetailView(zoomRealEstateDetailAtPoint(
-      viewport,
-      currentView,
-      currentView.zoom + direction * REAL_ESTATE_DETAIL_WHEEL_STEP,
-      point,
-    ));
-  };
+  useEffect(() => {
+    const viewportNode = viewportRef.current;
+    if (!viewportNode) return undefined;
+    const handleWheel = (event) => {
+      if (!detailViewportFocusedRef.current) return;
+      event.preventDefault();
+      const direction = event.deltaY > 0 ? -1 : 1;
+      const viewport = viewportRef.current;
+      if (!viewport) return;
+      const currentView = viewRef.current;
+      const point = realEstatePointInViewport(viewport, event.clientX, event.clientY);
+      applyDetailView(zoomRealEstateDetailAtPoint(
+        viewport,
+        currentView,
+        currentView.zoom + direction * REAL_ESTATE_DETAIL_WHEEL_STEP,
+        point,
+      ));
+    };
+    viewportNode.addEventListener("wheel", handleWheel, { passive: false });
+    return () => viewportNode.removeEventListener("wheel", handleWheel);
+  }, [selectedCard.id]);
 
   return (
     <section className="real-estate-scene real-estate-district" aria-label={`${selectedCard.name} 지역 상세 보기`} data-real-estate-view="district" data-selected-property-id={selectedCard.id} data-uses-baked-growth={selectedCard.usesBakedDistrictGrowth ? "true" : "false"}>
@@ -1841,9 +1853,8 @@ function RealEstateDistrictScene({ onBackToOverview, realEstateSummary, selected
         className="real-estate-detail-viewport"
         data-focused={detailViewportFocused ? "true" : "false"}
         data-zoom={detailView.zoom.toFixed(2)}
-        onBlur={() => setDetailViewportFocused(false)}
-        onFocus={() => setDetailViewportFocused(true)}
-        onWheel={handleWheel}
+        onBlur={() => setDetailFocus(false)}
+        onFocus={() => setDetailFocus(true)}
         ref={viewportRef}
         tabIndex={0}
       >

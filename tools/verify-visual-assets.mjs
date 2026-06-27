@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { pngInfo, sha256 } from "./snapshot-utils.mjs";
+import { pngInfo, sha256 } from "./asset-file-utils.mjs";
 
 const manifest = JSON.parse(readFileSync(resolve("src/snapshot/manifest.json"), "utf8"));
 const visual = JSON.parse(readFileSync(resolve("data/visual_assets.json"), "utf8"));

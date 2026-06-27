@@ -3,8 +3,8 @@ dist/
 dist-react/
 artifacts/
 
-# 빌드 산출물: snapshot-build가 매 빌드마다 재생성하므로 추적하지 않는다.
-# (src/snapshot/app.bundle.js + data/ + src/snapshot/assets/ 에서 재조립 가능)
+# React/Vite 빌드 산출물과 과거 단일 HTML export는 추적하지 않는다.
+# 현재 앱 빌드는 npm run build:web으로 dist/에 재생성한다.
 /index.html
 /share/Student-Idle-RPG-mobile.html
 .env

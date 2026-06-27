@@ -2946,7 +2946,12 @@ writeFileSync(gradeVisualsPath, `${JSON.stringify(enrichGradeVisuals(gradeVisual
 writeFileSync(stagesPath, `${JSON.stringify(enrichStages(stages), null, 2)}\n`, "utf8");
 writeFileSync(bossesPath, `${JSON.stringify(enrichBosses(bosses), null, 2)}\n`, "utf8");
 
-const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+const previousManifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+const manifest = {
+  version: previousManifest.version ?? 1,
+  generatedBy: "tools/build-visual-assets.mjs",
+  assets: [],
+};
 const manifestAssets = [
   upsertManifestAsset(manifest, "__STUDENT_ASSET_002__", "assets/asset-002.png", mainStudentAtlas),
   upsertManifestAsset(manifest, "__STUDENT_ASSET_003__", "assets/asset-003.png", mainMonsterAtlas),

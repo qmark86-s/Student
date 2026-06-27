@@ -1,20 +1,7 @@
 {
   "version": 1,
-  "source": "reference\\Student-Idle-RPG-mobile-3.html",
-  "sourceSha256": "b1c4ec10c24c1f106b0dd75676646ba0c24455c350ee06afe13090918df0321c",
-  "bytes": 6805538,
-  "styleChars": 159758,
-  "scriptChars": 6606843,
+  "generatedBy": "tools/build-visual-assets.mjs",
   "assets": [
-    {
-      "token": "__STUDENT_ASSET_001__",
-      "file": "assets/asset-001.png",
-      "mime": "image/png",
-      "bytes": 994,
-      "sha256": "2a77af855bec68562d6906e8427af1e5453a4a9cd61ab6dfe7b992883066aa86",
-      "width": 420,
-      "height": 150
-    },
     {
       "token": "__STUDENT_ASSET_002__",
       "file": "assets/asset-002.png",
@@ -32,33 +19,6 @@
       "sha256": "04dd27ea1c8841f07bf6ac26e5380d759feb21a6be7ee9c7b5f7baa938b0fcf2",
       "width": 18432,
       "height": 96
-    },
-    {
-      "token": "__STUDENT_ASSET_004__",
-      "file": "assets/asset-004.png",
-      "mime": "image/png",
-      "bytes": 1988475,
-      "sha256": "efcbfa71514e321bd00dc7332ec45ab7137bb298f9a411c0241072d2f0c0d933",
-      "width": 1672,
-      "height": 941
-    },
-    {
-      "token": "__STUDENT_ASSET_005__",
-      "file": "assets/asset-005.png",
-      "mime": "image/png",
-      "bytes": 1879250,
-      "sha256": "09ad4223308fe13dd8733bac84df97944353066641e0895e463fe39c5b09316f",
-      "width": 1672,
-      "height": 941
-    },
-    {
-      "token": "__STUDENT_ASSET_006__",
-      "file": "assets/asset-006.png",
-      "mime": "image/png",
-      "bytes": 705125,
-      "sha256": "80c9cd78d7764a254d8b26bc3c223b5b3117b379c94b90989219acc764f7a000",
-      "width": 1536,
-      "height": 8640
     },
     {
       "token": "__STUDENT_ASSET_007__",
@@ -131,36 +91,6 @@
       "sha256": "4d027390394333438f32d7558407f79e1941acb0ef7bd7e12e93ab0518af065b",
       "width": 6688,
       "height": 300
-    }
-  ],
-  "dataTables": [
-    {
-      "fileName": "growth_levels.json",
-      "count": 600
-    },
-    {
-      "fileName": "universities.json",
-      "count": 54
-    },
-    {
-      "fileName": "careers.json",
-      "count": 62
-    },
-    {
-      "fileName": "grade_visuals.json",
-      "count": 16
-    },
-    {
-      "fileName": "expedition_unit_levels.json",
-      "count": 600
-    },
-    {
-      "fileName": "expedition_stages.json",
-      "count": 100
-    },
-    {
-      "fileName": "expedition_bosses.json",
-      "count": 100
     }
   ]
 }
