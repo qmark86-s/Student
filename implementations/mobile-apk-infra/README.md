@@ -2,12 +2,12 @@
 
 ## 개요
 
-현재 레포는 원본 React/Vite 소스가 아니라 단일 HTML 실행본을 기준으로 한다. 이번 구현은 그 구조를 유지하면서 `index.html`을 Capacitor Android WebView에 넣어 APK로 빌드할 수 있는 기반을 추가했다.
+이 문서는 과거 단일 HTML 실행본 기준으로 APK 인프라를 만든 시점의 기록이다. 현재 active workflow는 React/Vite 기준이며, `npm run build:web`이 React 앱을 `dist/`로 빌드하고 Capacitor가 같은 `dist/`를 Android WebView에 넣는다.
 
 ## 주요 파일
 
 - `capacitor.config.json`: Capacitor 앱 식별자와 `dist` 웹 번들 경로를 정의한다.
-- `tools/prepare-web.mjs`: 스냅샷 소스에서 `index.html`, 공유 HTML, `dist/index.html`을 함께 생성하고 SHA-256 메타데이터를 생성한다.
+- `npm run build:web`: 현재 기준에서 시각 자산을 준비한 뒤 React 앱을 `dist/`로 빌드한다.
 - `tools/mobile-smoke.mjs`: Playwright Chromium으로 모바일 뷰포트 렌더링, 버튼 수, 가로 overflow, 콘솔 오류를 검사한다.
 - `tools/build-android.mjs`: portable JDK와 사용자 Android SDK를 감지하고, `cap sync android` 후 Gradle 빌드를 실행한다.
 - `tools/install-portable-jdk.ps1`: Adoptium API에서 JDK 17 zip을 받아 검증 후 사용자 로컬 도구 경로에 설치한다.
@@ -17,7 +17,7 @@
 
 ## npm 명령
 
-- `npm run build:web`: 파일 확인용 `index.html`, 공유 HTML, Capacitor용 웹 번들을 함께 생성
+- `npm run build:web`: React 앱을 Capacitor용 `dist/` 웹 번들로 생성
 - `npm run verify:mobile`: 기존 검증 + 모바일 smoke test
 - `npm run cap:sync`: 웹 번들을 Android 프로젝트에 복사
 - `npm run cap:open`: Android Studio에서 프로젝트 열기

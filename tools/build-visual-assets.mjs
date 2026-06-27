@@ -2997,7 +2997,3 @@ console.log(`VISUAL_ASSETS_BUILT students=${mainStudentAtlas.items.length} mainM
 for (const asset of manifestAssets) {
   console.log(`${asset.token} ${asset.file} ${asset.width}x${asset.height} bytes=${asset.bytes}`);
 }
-
-if (!existsSync(resolve("src/snapshot/index.template.html"))) {
-  throw new Error("snapshot template missing");
-}

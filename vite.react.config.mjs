@@ -15,7 +15,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: resolve(repoRoot, "dist-react"),
+    outDir: resolve(repoRoot, "dist"),
     emptyOutDir: true,
   },
 });

@@ -21,11 +21,11 @@
 - `artifacts/live-visual-polish/report.json`에 주요 rect, 애니메이션, 배경 transform, 몬스터 슬롯 값을 남긴다.
 - 콘솔 오류, page error, 가로 overflow는 hard failure로 처리한다.
 
-### 단일 HTML 산출물 동기화
+### 현재 React 산출물 동기화
 
-- `tools/prepare-web.mjs`가 `buildSnapshot()`을 전체 출력 모드로 호출하도록 변경했다.
-- 이제 `npm run build:web`는 `index.html`, `share/Student-Idle-RPG-mobile.html`, `dist/index.html`을 함께 갱신한다.
-- 루트 서버와 `dist` 미리보기가 서로 다른 전투 배치 값을 보여주는 문제를 막는다.
+- 이 구현 당시에는 단일 HTML 산출물을 동기화했지만, 현재 active workflow에서는 React/Vite가 `dist/index.html`을 직접 생성한다.
+- 이제 `npm run build:web`는 시각 자산을 준비한 뒤 React 앱을 `dist/`로 빌드한다.
+- 화면 확인은 현재 React `dist/`와 Vite 개발 서버를 기준으로 한다.
 
 ### 학생탭 몬스터 표시 보정
 

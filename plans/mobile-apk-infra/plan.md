@@ -2,11 +2,11 @@
 
 ## 목표
 
-Godot 이식 없이 현재 단일 HTML 웹앱 형태를 유지하고, Android APK 출시까지 이어질 수 있는 Capacitor 기반 인프라를 준비한다.
+Godot 이식 없이 웹앱 형태를 유지하고, Android APK 출시까지 이어질 수 있는 Capacitor 기반 인프라를 준비한다. 이 계획은 과거 단일 HTML 기준으로 작성되었고, 현재 active workflow는 React/Vite가 `dist/`를 직접 생성하는 구조다.
 
 ## 범위
 
-- 단일 HTML 실행본을 Capacitor용 정적 번들(`dist/`)로 생성한다.
+- React/Vite 앱을 Capacitor용 정적 번들(`dist/`)로 생성한다.
 - Android Capacitor 프로젝트를 레포에 추가한다.
 - 모바일 브라우저 렌더링 smoke test를 추가한다.
 - portable JDK 설치와 Android SDK 설정 스크립트를 추가한다.
@@ -16,7 +16,7 @@ Godot 이식 없이 현재 단일 HTML 웹앱 형태를 유지하고, Android AP
 ## 구현 항목
 
 - `capacitor.config.json` 추가
-- `tools/prepare-web.mjs` 추가
+- `npm run build:web`가 React `dist/`를 생성하도록 구성
 - `tools/mobile-smoke.mjs` 추가
 - `tools/build-android.mjs` 추가
 - `tools/install-portable-jdk.ps1` 추가
@@ -29,7 +29,7 @@ Godot 이식 없이 현재 단일 HTML 웹앱 형태를 유지하고, Android AP
 ## 검증 기준
 
 - `npm run build:web`가 `dist/index.html`을 생성한다.
-- `npm run verify:mobile`이 reference 감사, 데이터 추출, 번들 추출, 모바일 smoke test를 모두 통과한다.
+- `npm run verify:mobile`이 React 검증, React `dist/` 빌드, 모바일 smoke test를 모두 통과한다.
 - `npm run cap:sync`가 Android 프로젝트에 웹 에셋을 복사한다.
 - `npm run android:doctor`가 Capacitor Android 의존성을 확인한다.
 - Android SDK 패키지가 없을 때 `npm run android:debug`가 명확한 오류를 출력한다.

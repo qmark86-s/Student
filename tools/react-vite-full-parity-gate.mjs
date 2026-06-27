@@ -55,6 +55,10 @@ function sameJson(left, right) {
   return JSON.stringify(left ?? null) === JSON.stringify(right ?? null);
 }
 
+function meaningfulDiffs(diffs) {
+  return asArray(diffs).filter((diff) => !sameJson(diff?.snapshot, diff?.react));
+}
+
 function expect(condition, scope, message, evidence = {}) {
   if (!condition) failures.push({ scope, message, evidence });
 }
@@ -67,7 +71,7 @@ function verifyScenarioCounts(label, result) {
     "studentTabs",
     "expeditionTabs",
     "statusTiles",
-    "companions",
+    "equipmentCards",
     "expeditionUnits",
     "shopModal",
     "settingsModal",
@@ -110,8 +114,9 @@ function verifyInteractiveScenario(label, result) {
   expect(asArray(result?.rectDiffs).length === 0, "interactive-layout", `${label} rectDiffs must be empty`, {
     rectDiffs: result?.rectDiffs,
   });
-  expect(asArray(result?.selectorDiffs).length === 0, "interactive-selector", `${label} selectorDiffs must be empty`, {
-    selectorDiffs: result?.selectorDiffs,
+  const selectorDiffs = meaningfulDiffs(result?.selectorDiffs);
+  expect(selectorDiffs.length === 0, "interactive-selector", `${label} selectorDiffs must be empty`, {
+    selectorDiffs,
   });
   expect(asArray(result?.failures).length === 0, "interactive-scenario", `${label} scenario failures must be empty`, {
     failures: result?.failures,
@@ -138,7 +143,7 @@ function scenarioIsClean(result) {
     result.textDiff == null &&
     asArray(result.state?.diffs).length === 0 &&
     asArray(result.rectDiffs).length === 0 &&
-    asArray(result.selectorDiffs).length === 0 &&
+    meaningfulDiffs(result.selectorDiffs).length === 0 &&
     asArray(result.failures).length === 0 &&
     result.snapshot?.horizontalOverflow === 0 &&
     result.react?.horizontalOverflow === 0 &&
@@ -240,20 +245,20 @@ function verifyInteractiveReport() {
     "00-initial",
     "student-성장",
     "student-시험",
-    "student-동료",
+    "student-장비",
     "student-직장",
     "student-교육",
     "student-결과",
     "student-도감",
     "modal-shop",
     "modal-settings",
-    "debug-after-companions",
-    "student-companion-after-debug",
+    "debug-after-members",
+    "student-equipment-after-debug",
     "expedition-growth",
     "expedition-after-three-clears",
     "expedition-after-invest",
     "expedition-파티",
-    "expedition-동료-관리",
+    "expedition-대원-관리",
     "expedition-기록",
     "expedition-party-after-remove",
     "expedition-party-after-assign",
@@ -277,7 +282,7 @@ function verifyInteractiveReport() {
 
   const growth = byLabel.get("expedition-growth")?.react?.layoutSignatures;
   const party = byLabel.get("expedition-파티")?.react?.layoutSignatures;
-  const manage = byLabel.get("expedition-동료-관리")?.react?.layoutSignatures;
+  const manage = byLabel.get("expedition-대원-관리")?.react?.layoutSignatures;
   expect(rowPattern(growth?.expeditionBattleUnits) === "2+2+1", "expedition-layout", "expedition battle units must be 2+2+1", growth?.expeditionBattleUnits);
   expect(growth?.expeditionBattleUnits?.frontBandCount === 1, "expedition-layout", "expedition battle front band must have one leader", growth?.expeditionBattleUnits);
   expect((growth?.expeditionBattleUnits?.ySpread ?? 0) >= 20, "expedition-layout", "expedition battle units must not collapse into one row", growth?.expeditionBattleUnits);
@@ -347,7 +352,7 @@ function verifyDeepReport() {
   expect(asArray(report.failures).length === 0, "deep-parity", "deep parity should have no failures", {
     failures: report.failures,
   });
-  expect(asArray(report.shop).length === 6, "deep-parity", "deep parity should cover six shop categories", {
+  expect(asArray(report.shop).length === 7, "deep-parity", "deep parity should cover seven shop categories", {
     count: asArray(report.shop).length,
   });
   for (const entry of asArray(report.shop)) {
@@ -441,20 +446,20 @@ function verifyCompletionEvidence(summary) {
   const studentLabels = [
     "student-성장",
     "student-시험",
-    "student-동료",
+    "student-장비",
     "student-직장",
     "student-교육",
     "student-결과",
     "student-도감",
-    "student-companion-after-debug",
+    "student-equipment-after-debug",
   ];
-  const modalLabels = ["modal-shop", "modal-settings", "debug-after-companions"];
+  const modalLabels = ["modal-shop", "modal-settings", "debug-after-members"];
   const expeditionLabels = [
     "expedition-growth",
     "expedition-after-three-clears",
     "expedition-after-invest",
     "expedition-파티",
-    "expedition-동료-관리",
+    "expedition-대원-관리",
     "expedition-기록",
     "expedition-party-after-remove",
     "expedition-party-after-assign",
@@ -464,7 +469,7 @@ function verifyCompletionEvidence(summary) {
   ];
   const growthLayout = byLabel.get("expedition-growth")?.react?.layoutSignatures;
   const partyLayout = byLabel.get("expedition-파티")?.react?.layoutSignatures;
-  const manageLayout = byLabel.get("expedition-동료-관리")?.react?.layoutSignatures;
+  const manageLayout = byLabel.get("expedition-대원-관리")?.react?.layoutSignatures;
   const expeditionLayoutPass =
     rowPattern(growthLayout?.expeditionBattleUnits) === "2+2+1" &&
     growthLayout?.expeditionBattleUnits?.frontBandCount === 1 &&
@@ -484,7 +489,7 @@ function verifyCompletionEvidence(summary) {
       return surfaces.every((metrics) => metrics.horizontalOverflow === 0 && asArray(metrics.buttonOverflow).length === 0 && asArray(metrics.failures).length === 0);
     });
   const deepPass = asArray(deep?.failures).length === 0 &&
-    asArray(deep?.shop).length === 6 &&
+    asArray(deep?.shop).length === 7 &&
     asArray(deep?.shop).every((entry) => entry.equal === true && asArray(entry.styleDiffs).length === 0) &&
     deep?.gacha?.equal === true &&
     asArray(deep?.gacha?.styleDiffs).length === 0 &&
@@ -503,7 +508,7 @@ function verifyCompletionEvidence(summary) {
     evidenceItem("strict-first-screen-parity", "기본 첫 화면 strict visual parity가 2개 모바일 viewport에서 픽셀 차이 0", strictParityPass, {
       checked: parityEntries.length,
     }),
-    evidenceItem("student-tab-interaction-parity", "학생 7개 탭과 DEBUG 이후 학생 동료 탭의 텍스트/상태/레이아웃 증거가 일치", labelsPresent(studentLabels) && labelsClean(studentLabels), {
+    evidenceItem("student-tab-interaction-parity", "학생 7개 탭과 DEBUG 이후 학생 장비 탭의 텍스트/상태/레이아웃 증거가 일치", labelsPresent(studentLabels) && labelsClean(studentLabels), {
       labels: studentLabels,
     }),
     evidenceItem("modal-shop-settings-debug-parity", "상점/설정/디버그 표면과 deep parity가 원본 기준을 만족", labelsPresent(modalLabels) && labelsClean(modalLabels) && deepPass, {
@@ -515,7 +520,7 @@ function verifyCompletionEvidence(summary) {
       labels: expeditionLabels,
     }),
     evidenceItem("expedition-rules-state", "원정대 보스 보상, 전투력 부족, 성장 투자, 승급 합성 상태 규칙이 통과", expeditionRulesPass, summary.expeditionRules),
-    evidenceItem("expedition-non-linear-layout", "원정대 동료는 일렬이 아니라 전투 2+2+1, 파티 3+2, 카드 2열 배치를 유지", expeditionLayoutPass, {
+    evidenceItem("expedition-non-linear-layout", "원정대원은 일렬이 아니라 전투 2+2+1, 파티 3+2, 카드 2열 배치를 유지", expeditionLayoutPass, {
       battle: growthLayout?.expeditionBattleUnits,
       growthCards: growthLayout?.expeditionGrowthCards,
       partySlots: partyLayout?.expeditionPartySlots,

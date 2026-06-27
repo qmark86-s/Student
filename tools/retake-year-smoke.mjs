@@ -191,7 +191,7 @@ try {
     ({ key, state }) => localStorage.setItem(key, JSON.stringify(state)),
     { key: saveKey, state: makeAwaitingDecisionState(careers, topUniversity) },
   );
-  await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "networkidle" });
+  await page.goto(`http://127.0.0.1:${port}/?qaTools=1&pauseAutoBattle=1`, { waitUntil: "networkidle" });
   await page.waitForSelector("#root > *", { timeout: 15000 });
   await page.evaluate((index) => document.querySelectorAll("button.tab")[index].click(), resultTabIndex);
   await page.waitForSelector(".career-choice-ranked", { timeout: 15000 });
@@ -203,14 +203,6 @@ try {
     button.click();
   });
   await page.waitForTimeout(300);
-
-  await page.evaluate(() => {
-    const autoButton = [...document.querySelectorAll(".battle-auto-toggle, .scene-controls .hud-button")].find((button) =>
-      ["Auto", "자동"].includes(button.innerText.trim()),
-    );
-    autoButton?.click();
-  });
-  await page.waitForTimeout(250);
 
   const collectBattleSnapshot = () => page.evaluate(() => {
     const text = document.body.innerText;
@@ -225,7 +217,7 @@ try {
       sceneEnemies: sceneEnemies.length,
       // url(...) 이면 실제 이미지 — 인라인(data:image)/외부 자산(assets/*.png) 빌드를 모두 허용한다.
       sceneEnemyImages: sceneMonsterArt.filter((monster) => getComputedStyle(monster).backgroundImage.includes("url(")).length,
-      sceneEnemyFrames: new Set(sceneMonsterArt.map((monster) => [...monster.classList].find((item) => item.startsWith("main-monster-"))).filter(Boolean)).size,
+      sceneEnemyFrames: new Set(sceneMonsterArt.map((monster) => getComputedStyle(monster).backgroundPositionX).filter(Boolean)).size,
       sceneBosses: sceneEnemies.filter((enemy) => enemy.classList.contains("boss")).length,
       sceneSuneungEnemies: sceneEnemies.filter((enemy) => enemy.classList.contains("suneung")).length,
       sceneHpBars: document.querySelectorAll(".battle-scene-enemy .battle-scene-hp").length,

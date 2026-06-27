@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Component, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   BarChart3,
   BookOpen,
@@ -1612,15 +1612,77 @@ function clampRealEstatePan(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
-function panForDistrictFocus(viewport, focus) {
-  const contentWidth = viewport.width * 2;
-  const contentHeight = viewport.height * 2;
-  const x = viewport.width / 2 - (Number(focus[0]) / 100) * contentWidth;
-  const y = viewport.height / 2 - (Number(focus[1]) / 100) * contentHeight;
+const REAL_ESTATE_DETAIL_CONTENT_SCALE = 2;
+const REAL_ESTATE_DETAIL_MIN_ZOOM = 0.5;
+const REAL_ESTATE_DETAIL_DEFAULT_ZOOM = REAL_ESTATE_DETAIL_MIN_ZOOM;
+const REAL_ESTATE_DETAIL_MAX_ZOOM = 1;
+const REAL_ESTATE_DETAIL_WHEEL_STEP = 0.08;
+const REAL_ESTATE_DETAIL_DEFAULT_VIEW = {
+  zoom: REAL_ESTATE_DETAIL_DEFAULT_ZOOM,
+  x: 0,
+  y: 0,
+};
+
+function realEstateNumberOr(value, defaultValue) {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : defaultValue;
+}
+
+function clampRealEstateDetailView(viewport, candidate) {
+  const zoom = clampRealEstatePan(
+    realEstateNumberOr(candidate.zoom, REAL_ESTATE_DETAIL_DEFAULT_ZOOM),
+    REAL_ESTATE_DETAIL_MIN_ZOOM,
+    REAL_ESTATE_DETAIL_MAX_ZOOM,
+  );
+  const x = realEstateNumberOr(candidate.x, 0);
+  const y = realEstateNumberOr(candidate.y, 0);
+  if (!viewport) return { zoom, x, y };
+  const rect = viewport.getBoundingClientRect();
+  if (rect.width <= 0 || rect.height <= 0) return { zoom, x, y };
+  const minX = Math.min(0, rect.width - rect.width * REAL_ESTATE_DETAIL_CONTENT_SCALE * zoom);
+  const minY = Math.min(0, rect.height - rect.height * REAL_ESTATE_DETAIL_CONTENT_SCALE * zoom);
   return {
-    x: clampRealEstatePan(x, -viewport.width, 0),
-    y: clampRealEstatePan(y, -viewport.height, 0),
+    zoom,
+    x: clampRealEstatePan(x, minX, 0),
+    y: clampRealEstatePan(y, minY, 0),
   };
+}
+
+function realEstatePointInViewport(viewport, clientX, clientY) {
+  const rect = viewport.getBoundingClientRect();
+  return {
+    x: clientX - rect.left,
+    y: clientY - rect.top,
+  };
+}
+
+function realEstatePointerCentroid(pointers) {
+  if (pointers.length === 0) return null;
+  const total = pointers.reduce((sum, pointer) => ({
+    x: sum.x + pointer.clientX,
+    y: sum.y + pointer.clientY,
+  }), { x: 0, y: 0 });
+  return {
+    x: total.x / pointers.length,
+    y: total.y / pointers.length,
+  };
+}
+
+function realEstatePointerDistance(pointers) {
+  if (pointers.length < 2) return 0;
+  const [first, second] = pointers;
+  return Math.hypot(second.clientX - first.clientX, second.clientY - first.clientY);
+}
+
+function zoomRealEstateDetailAtPoint(viewport, currentView, nextZoom, viewportPoint) {
+  const safeZoom = Math.max(currentView.zoom, 0.001);
+  const contentX = (viewportPoint.x - currentView.x) / safeZoom;
+  const contentY = (viewportPoint.y - currentView.y) / safeZoom;
+  return clampRealEstateDetailView(viewport, {
+    zoom: nextZoom,
+    x: viewportPoint.x - contentX * nextZoom,
+    y: viewportPoint.y - contentY * nextZoom,
+  });
 }
 
 function RealEstateOverviewScene({ notice, onDistrictClick, realEstateSummary }) {
@@ -1650,63 +1712,151 @@ function RealEstateDistrictScene({ onBackToOverview, realEstateSummary, selected
     : realEstateDistrictBackgrounds[selectedCard.districtBackgroundAsset];
   assert(selectedBackground, `부동산 상세 배경을 찾을 수 없습니다: ${selectedCard.districtBackgroundAsset}`);
   const viewportRef = useRef(null);
-  const dragRef = useRef(null);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const viewRef = useRef(REAL_ESTATE_DETAIL_DEFAULT_VIEW);
+  const gestureRef = useRef({
+    pointers: new Map(),
+    startCentroid: null,
+    startDistance: 0,
+    startView: REAL_ESTATE_DETAIL_DEFAULT_VIEW,
+  });
+  const [detailView, setDetailView] = useState(REAL_ESTATE_DETAIL_DEFAULT_VIEW);
+  const [detailViewportFocused, setDetailViewportFocused] = useState(false);
 
-  const clampPanWithViewport = (candidate) => {
+  const applyDetailView = (candidate) => {
     const viewport = viewportRef.current;
-    if (!viewport) return candidate;
-    const rect = viewport.getBoundingClientRect();
-    return {
-      x: clampRealEstatePan(candidate.x, -rect.width, 0),
-      y: clampRealEstatePan(candidate.y, -rect.height, 0),
+    const nextView = clampRealEstateDetailView(viewport, candidate);
+    viewRef.current = nextView;
+    setDetailView(nextView);
+    return nextView;
+  };
+
+  const resetGesture = (pointers) => {
+    const pointerList = Array.from(pointers.values());
+    gestureRef.current = {
+      pointers,
+      startCentroid: realEstatePointerCentroid(pointerList),
+      startDistance: realEstatePointerDistance(pointerList),
+      startView: viewRef.current,
     };
   };
 
   useLayoutEffect(() => {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
-    const rect = viewport.getBoundingClientRect();
-    setPan(panForDistrictFocus({ width: rect.width, height: rect.height }, selectedCard.districtDetailFocus));
+    viewRef.current = REAL_ESTATE_DETAIL_DEFAULT_VIEW;
+    gestureRef.current = {
+      pointers: new Map(),
+      startCentroid: null,
+      startDistance: 0,
+      startView: REAL_ESTATE_DETAIL_DEFAULT_VIEW,
+    };
+    setDetailView(REAL_ESTATE_DETAIL_DEFAULT_VIEW);
+    const handleResize = () => {
+      const nextView = clampRealEstateDetailView(viewportRef.current, viewRef.current);
+      viewRef.current = nextView;
+      setDetailView(nextView);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [selectedCard.id]);
 
   const handlePointerDown = (event) => {
+    if (event.button !== undefined && event.button !== 0) return;
+    viewportRef.current?.focus({ preventScroll: true });
     event.currentTarget.setPointerCapture(event.pointerId);
-    dragRef.current = {
+    const pointers = new Map(gestureRef.current.pointers);
+    pointers.set(event.pointerId, {
+      clientX: event.clientX,
+      clientY: event.clientY,
       pointerId: event.pointerId,
-      startX: event.clientX,
-      startY: event.clientY,
-      originX: pan.x,
-      originY: pan.y,
-    };
+    });
+    resetGesture(pointers);
   };
 
   const handlePointerMove = (event) => {
-    const drag = dragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) return;
-    setPan(clampPanWithViewport({
-      x: drag.originX + event.clientX - drag.startX,
-      y: drag.originY + event.clientY - drag.startY,
-    }));
+    const gesture = gestureRef.current;
+    if (!gesture.pointers.has(event.pointerId)) return;
+    event.preventDefault();
+    const pointers = new Map(gesture.pointers);
+    pointers.set(event.pointerId, {
+      clientX: event.clientX,
+      clientY: event.clientY,
+      pointerId: event.pointerId,
+    });
+    gestureRef.current = { ...gesture, pointers };
+    const pointerList = Array.from(pointers.values());
+    const currentCentroid = realEstatePointerCentroid(pointerList);
+    if (!currentCentroid || !gesture.startCentroid) return;
+    if (pointerList.length === 1) {
+      applyDetailView({
+        zoom: gesture.startView.zoom,
+        x: gesture.startView.x + currentCentroid.x - gesture.startCentroid.x,
+        y: gesture.startView.y + currentCentroid.y - gesture.startCentroid.y,
+      });
+      return;
+    }
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    const currentDistance = realEstatePointerDistance(pointerList);
+    const zoomRatio = gesture.startDistance > 0 ? currentDistance / gesture.startDistance : 1;
+    const nextZoom = gesture.startView.zoom * zoomRatio;
+    const startPoint = realEstatePointInViewport(viewport, gesture.startCentroid.x, gesture.startCentroid.y);
+    const currentPoint = realEstatePointInViewport(viewport, currentCentroid.x, currentCentroid.y);
+    const safeZoom = Math.max(gesture.startView.zoom, 0.001);
+    const contentX = (startPoint.x - gesture.startView.x) / safeZoom;
+    const contentY = (startPoint.y - gesture.startView.y) / safeZoom;
+    applyDetailView({
+      zoom: nextZoom,
+      x: currentPoint.x - contentX * nextZoom,
+      y: currentPoint.y - contentY * nextZoom,
+    });
   };
 
   const handlePointerEnd = (event) => {
-    const drag = dragRef.current;
-    if (drag && drag.pointerId === event.pointerId) dragRef.current = null;
+    const pointers = new Map(gestureRef.current.pointers);
+    pointers.delete(event.pointerId);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    resetGesture(pointers);
+  };
+
+  const handleWheel = (event) => {
+    if (!detailViewportFocused) return;
+    event.preventDefault();
+    const direction = event.deltaY > 0 ? -1 : 1;
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    const currentView = viewRef.current;
+    const point = realEstatePointInViewport(viewport, event.clientX, event.clientY);
+    applyDetailView(zoomRealEstateDetailAtPoint(
+      viewport,
+      currentView,
+      currentView.zoom + direction * REAL_ESTATE_DETAIL_WHEEL_STEP,
+      point,
+    ));
   };
 
   return (
     <section className="real-estate-scene real-estate-district" aria-label={`${selectedCard.name} 지역 상세 보기`} data-real-estate-view="district" data-selected-property-id={selectedCard.id} data-uses-baked-growth={selectedCard.usesBakedDistrictGrowth ? "true" : "false"}>
-      <div className="real-estate-detail-viewport" ref={viewportRef}>
+      <div
+        className="real-estate-detail-viewport"
+        data-focused={detailViewportFocused ? "true" : "false"}
+        data-zoom={detailView.zoom.toFixed(2)}
+        onBlur={() => setDetailViewportFocused(false)}
+        onFocus={() => setDetailViewportFocused(true)}
+        onWheel={handleWheel}
+        ref={viewportRef}
+        tabIndex={0}
+      >
         <div
           className="real-estate-detail-map"
-          data-pan-x={Math.round(pan.x)}
-          data-pan-y={Math.round(pan.y)}
+          data-pan-x={Math.round(detailView.x)}
+          data-pan-y={Math.round(detailView.y)}
+          data-zoom={detailView.zoom.toFixed(2)}
           onPointerCancel={handlePointerEnd}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerEnd}
-          style={{ transform: `translate(${Math.round(pan.x)}px, ${Math.round(pan.y)}px)` }}
+          style={{ transform: `translate(${detailView.x.toFixed(1)}px, ${detailView.y.toFixed(1)}px) scale(${detailView.zoom.toFixed(3)})` }}
         >
           <img className="real-estate-detail-background" src={selectedBackground} alt="" aria-hidden="true" data-district-background={selectedCard.districtBackgroundAsset} data-growth-asset={selectedCard.districtGrowthStageAsset || ""} draggable="false" />
           {selectedCard.usesBakedDistrictGrowth ? null : (
@@ -2830,6 +2980,59 @@ function LoadFailureScreen({ loadResult }) {
   );
 }
 
+function RenderGuardScreen({ error }) {
+  const [notice, setNotice] = useState("");
+  const message = error instanceof Error ? error.message : String(error);
+
+  const handleReset = () => {
+    try {
+      saveGameState(createDefaultGameState());
+      globalThis.location?.reload();
+    } catch (resetError) {
+      setNotice(resetError instanceof Error ? resetError.message : String(resetError));
+    }
+  };
+
+  return (
+    <div className="app-shell">
+      <main className="load-failure render-guard" role="alert">
+        <section>
+          <Database size={28} />
+          <p>렌더링 오류</p>
+          <h1>화면을 그리는 중 문제가 발생했습니다</h1>
+          <strong>{message}</strong>
+          <span>브라우저 콘솔에 상세 스택을 남겼습니다.</span>
+          <button className="primary-action compact" type="button" onClick={handleReset}>
+            <RefreshCcw size={18} />
+            <span>새 게임으로 다시 시작</span>
+          </button>
+          {notice && <small>{notice}</small>}
+        </section>
+      </main>
+    </div>
+  );
+}
+
+class RenderGuard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+
+  componentDidCatch(error, info) {
+    console.error("[Student render error]", error, info);
+  }
+
+  render() {
+    if (this.state.error) return <RenderGuardScreen error={this.state.error} />;
+    return this.props.children;
+  }
+}
+
 function GameApp({ loaded }) {
   const [gameState, setGameState] = useState(() => ensureBattleState(loaded.state));
   const [saveError] = useState(loaded.error);
@@ -3117,5 +3320,9 @@ function GameApp({ loaded }) {
 export function App() {
   const loaded = useMemo(() => loadGameState(), []);
   if (loaded.fatal) return <LoadFailureScreen loadResult={loaded} />;
-  return <GameApp loaded={loaded} />;
+  return (
+    <RenderGuard>
+      <GameApp loaded={loaded} />
+    </RenderGuard>
+  );
 }

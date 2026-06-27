@@ -40,9 +40,16 @@ function positiveNumber(value, path) {
   return numeric;
 }
 
+function assertNoMojibake(value, path) {
+  assert(!/�|\?{2,}/.test(value), `${path} 값에 인코딩이 깨진 문자가 있습니다(연속된 ? 또는 �). UTF-8 한글로 다시 작성하세요.`);
+}
+
 function help(source, path, keys) {
   assertObject(source.help, `${path}.help`);
-  for (const key of keys) assertString(source.help[key], `${path}.help.${key}`);
+  for (const key of keys) {
+    assertString(source.help[key], `${path}.help.${key}`);
+    assertNoMojibake(source.help[key], `${path}.help.${key}`);
+  }
 }
 
 function uniqueId(source, ids, path) {

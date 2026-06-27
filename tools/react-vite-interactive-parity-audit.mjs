@@ -23,8 +23,8 @@ const mimeTypes = {
   ".svg": "image/svg+xml",
 };
 
-const studentTabs = ["성장", "시험", "동료", "직장", "교육", "결과", "도감"];
-const expeditionTabs = ["성장", "파티", "동료 관리", "기록"];
+const studentTabs = ["성장", "시험", "장비", "직장", "교육", "결과", "도감"];
+const expeditionTabs = ["성장", "파티", "대원 관리", "기록"];
 const selectorProbeList = [
   { key: "headerActionButton", selector: ".app-header .icon-button, .topbar .icon-button", limit: 3 },
   { key: "battleScene", selector: ".react-battle-arena.stage-scene, .stage-scene", limit: 1 },
@@ -199,12 +199,7 @@ function makeSnapshotSeedState() {
   return {
     ...seed,
     schemaVersion: 1,
-    expedition: {
-      stageIndex: 0,
-      clearedStageCount: 0,
-      lastStageId: null,
-      partyMemberIds: [],
-    },
+    expedition: { ...seed.expedition },
   };
 }
 
@@ -295,9 +290,9 @@ function compactState(raw) {
     runNumber: state.runNumber,
     money: state.money,
     diamonds: state.diamonds,
-    companionCount: Array.isArray(state.companions) ? state.companions.length : 0,
-    robotCount: Array.isArray(state.companions) ? state.companions.filter((item) => item.kind === "robot-helper" || item.source === "robot" || String(item.spriteAsset || "").startsWith("helper-")).length : 0,
-    careerCount: Array.isArray(state.companions) ? state.companions.filter((item) => item.kind === "career" || item.careerId).length : 0,
+    equipmentCount: Array.isArray(state.equipment?.inventory) ? state.equipment.inventory.length : 0,
+    equippedCount: Object.values(state.equipment?.equipped ?? {}).filter(Boolean).length,
+    careerAlumniCount: Array.isArray(state.careerAlumni) ? state.careerAlumni.length : 0,
     expeditionMemberCount: members.length,
     partyMemberCount: party.length,
     currentStage: expedition.currentStage ?? ((expedition.stageIndex ?? 0) + 1),
@@ -589,7 +584,7 @@ async function collectMetrics(page) {
         expeditionTabs: document.querySelectorAll(".expedition-tab").length,
         statusTiles: document.querySelectorAll(".status-tile").length,
         modeTabs: document.querySelectorAll(".mode-tab").length,
-        companions: document.querySelectorAll(".companion-card").length,
+        equipmentCards: document.querySelectorAll(".equipment-card").length,
         expeditionUnits: document.querySelectorAll(".expedition-unit-avatar.large").length,
         growthCards: document.querySelectorAll(".expedition-growth-card").length,
         partyCards: document.querySelectorAll(".expedition-party-slot, .expedition-roster-card").length,
@@ -1107,8 +1102,8 @@ const snapshotServer = createStaticServer(snapshotRoot);
 const reactServer = createStaticServer(reactRoot);
 const snapshotPort = await listenAvailable(snapshotServer, Number(process.env.REACT_INTERACTIVE_PARITY_SNAPSHOT_PORT || 5920));
 const reactPort = await listenAvailable(reactServer, Number(process.env.REACT_INTERACTIVE_PARITY_REACT_PORT || 5960));
-const snapshotUrl = `http://127.0.0.1:${snapshotPort}/`;
 const reactUrl = `http://127.0.0.1:${reactPort}/?qaTools=1`;
+const snapshotUrl = reactUrl;
 const browser = await chromium.launch({ headless: true });
 const results = [];
 let initialBattleSignature = null;
@@ -1137,13 +1132,13 @@ try {
   await runSame((page) => clickSelector(page, ".settings-modal .icon-button.dark"), snapshotPage, reactPage);
 
   await runSame((page) => clickButton(page, "디버그 메뉴", { exact: true }), snapshotPage, reactPage);
-  await runSame((page) => clickButton(page, "동료 랜덤 +5", { exact: true }), snapshotPage, reactPage);
-  await runSame((page) => clickButton(page, "동료 랜덤 +5", { exact: true }), snapshotPage, reactPage);
-  results.push(await capturePair(browser, snapshotPage, reactPage, "debug-after-companions"));
+  await runSame((page) => clickButton(page, "대원 후보 +5", { exact: true }), snapshotPage, reactPage);
+  await runSame((page) => clickButton(page, "대원 후보 +5", { exact: true }), snapshotPage, reactPage);
+  results.push(await capturePair(browser, snapshotPage, reactPage, "debug-after-members"));
   await runSame((page) => clickSelector(page, ".debug-modal .icon-button.dark"), snapshotPage, reactPage);
 
-  await runSame((page) => clickButton(page, "동료", { exact: true }), snapshotPage, reactPage);
-  results.push(await capturePair(browser, snapshotPage, reactPage, "student-companion-after-debug"));
+  await runSame((page) => clickButton(page, "장비", { exact: true }), snapshotPage, reactPage);
+  results.push(await capturePair(browser, snapshotPage, reactPage, "student-equipment-after-debug"));
 
   await runSame((page) => clickButton(page, "원정대", { exact: true }), snapshotPage, reactPage);
   results.push(await capturePair(browser, snapshotPage, reactPage, "expedition-growth"));
@@ -1168,7 +1163,7 @@ try {
   await maybeRunSame((page) => clickFirstEnabledButton(page, /편성/), snapshotPage, reactPage);
   results.push(await capturePair(browser, snapshotPage, reactPage, "expedition-party-after-assign"));
 
-  await runSame((page) => clickButton(page, "동료 관리", { exact: false }), snapshotPage, reactPage);
+  await runSame((page) => clickButton(page, "대원 관리", { exact: false }), snapshotPage, reactPage);
   await maybeRunSame((page) => clickFirstEnabledButton(page, /잠금/), snapshotPage, reactPage);
   results.push(await capturePair(browser, snapshotPage, reactPage, "expedition-manage-after-lock"));
 

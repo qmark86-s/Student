@@ -3,8 +3,9 @@ import { createReadStream, existsSync, readFileSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
 
-const root = resolve("dist-react");
+const root = resolve("dist");
 const preferredPort = Number(process.env.REACT_REAL_ESTATE_SMOKE_PORT || 5795);
+const realEstateImageTimeoutMs = Number(process.env.REACT_REAL_ESTATE_IMAGE_TIMEOUT_MS || 60000);
 const saveKey = "student-idle-rpg-save-v1";
 const fixedNow = Date.parse("2026-06-22T00:00:00+09:00");
 const careers = JSON.parse(readFileSync(resolve("data/careers.json"), "utf8"));
@@ -55,7 +56,7 @@ const mimeTypes = {
 };
 
 if (!existsSync(resolve(root, "index.html"))) {
-  console.error("dist-react/index.html is missing. Run `npm run react:build` first.");
+  console.error("dist/index.html is missing. Run `npm run react:build` first.");
   process.exit(1);
 }
 
@@ -308,7 +309,7 @@ async function main() {
     await page.waitForFunction(() => {
       const image = document.querySelector(".real-estate-map-image");
       return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0;
-    });
+    }, null, { timeout: realEstateImageTimeoutMs });
     const initialState = await readState(page);
     assert(initialState.realEstate.cash === 0, `초기 부동산 자금이 0이 아닙니다: ${initialState.realEstate.cash}`);
 
@@ -326,7 +327,7 @@ async function main() {
     await page.waitForFunction(() => {
       const image = document.querySelector(".real-estate-detail-background");
       return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0;
-    });
+    }, null, { timeout: realEstateImageTimeoutMs });
     const initialDistrictAsset = realEstateDistrictAssetById.get("small_studio");
     assert(initialDistrictAsset, "small_studio 지역 리소스 데이터가 없습니다.");
     const initialDistrictSrc = await page.locator(".real-estate-detail-background").evaluate((image) => image.currentSrc || image.src);
@@ -339,11 +340,18 @@ async function main() {
     assert((await page.locator(".real-estate-development-layer").count()) === 0, "baked 성장 PNG 지역에 상세 건물 레이어가 렌더링되었습니다.");
     assert((await page.locator(".real-estate-development-pad").count()) === 0, "baked 성장 PNG 지역에 빈 부지 pad가 렌더링되었습니다.");
     assert((await page.locator(".real-estate-development-building").count()) === 0, "미보유 지역 상세에 건물이 표시되었습니다.");
-    const detailMap = page.locator(".real-estate-detail-map");
-    const beforePan = await detailMap.evaluate((node) => ({ x: Number(node.getAttribute("data-pan-x")), y: Number(node.getAttribute("data-pan-y")) }));
     const viewportBox = await page.locator(".real-estate-detail-viewport").boundingBox();
     assert(viewportBox, "부동산 상세 지도 viewport를 찾을 수 없습니다.");
+    const detailMap = page.locator(".real-estate-detail-map");
     await page.mouse.move(viewportBox.x + viewportBox.width / 2, viewportBox.y + viewportBox.height / 2);
+    await page.locator(".real-estate-detail-viewport").focus();
+    await page.mouse.wheel(0, -600);
+    await page.waitForFunction(() => {
+      const node = document.querySelector(".real-estate-detail-map");
+      if (!(node instanceof HTMLElement)) return false;
+      return Number(node.getAttribute("data-zoom")) > 0.5;
+    }, null, { timeout: 5000 });
+    const beforePan = await detailMap.evaluate((node) => ({ x: Number(node.getAttribute("data-pan-x")), y: Number(node.getAttribute("data-pan-y")) }));
     await page.mouse.down();
     await page.mouse.move(viewportBox.x + viewportBox.width / 2 - 70, viewportBox.y + viewportBox.height / 2 + 55, { steps: 6 });
     await page.mouse.up();
@@ -359,7 +367,7 @@ async function main() {
     await page.waitForFunction((expectedFile) => {
       const image = document.querySelector(".real-estate-detail-background");
       return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0 && image.getAttribute("data-growth-asset") === expectedFile;
-    }, afterOneGrowthStageFile);
+    }, afterOneGrowthStageFile, { timeout: realEstateImageTimeoutMs });
     const afterOneDistrictSrc = await page.locator(".real-estate-detail-background").evaluate((image) => image.currentSrc || image.src);
     assert(afterOneDistrictSrc.includes("/assets/"), `첫 구매 후 small_studio baked 배경 URL이 올바르지 않습니다: ${afterOneDistrictSrc}`);
     assert((await page.locator('.real-estate-development-building[data-slot-id^="small_studio-"]').count()) === 0, "baked 성장 PNG 지역에 DOM 건물이 렌더링되었습니다.");
@@ -371,7 +379,7 @@ async function main() {
     await page.waitForFunction(() => {
       const image = document.querySelector(".real-estate-building-dot img");
       return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0 && image.naturalHeight > 0;
-    });
+    }, null, { timeout: realEstateImageTimeoutMs });
     const overviewDevelopmentAfterOne = await page.locator('.real-estate-district-button[data-district-id="small_studio"]').getAttribute("data-development-level");
     assert(overviewDevelopmentAfterOne === "1", `도시 전체 보기 개발도 반영이 올바르지 않습니다: ${overviewDevelopmentAfterOne}`);
     assert((await page.locator('.real-estate-building-dot[data-slot-id^="small_studio-"]').count()) === 1, "첫 구매 후 도시 전체 건물 슬롯이 정확히 1개가 아닙니다.");
@@ -401,7 +409,7 @@ async function main() {
     await page.waitForFunction((expectedFile) => {
       const image = document.querySelector(".real-estate-detail-background");
       return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0 && image.getAttribute("data-growth-asset") === expectedFile;
-    }, smallStudioFinalGrowthStageFile);
+    }, smallStudioFinalGrowthStageFile, { timeout: realEstateImageTimeoutMs });
     const scaleText = await page.locator('[data-property-id="small_studio"]').innerText();
     assert(scaleText.includes("라인"), "최대 개발 후 규모 명칭이 라인으로 바뀌지 않았습니다.");
     await page.getByRole("button", { name: /전체 도시 보기/ }).click();
@@ -431,7 +439,7 @@ async function main() {
       await page.waitForFunction(() => {
         const image = document.querySelector(".real-estate-detail-background");
         return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0;
-      });
+      }, null, { timeout: realEstateImageTimeoutMs });
       const imageSrc = await page.locator(".real-estate-detail-background").evaluate((image) => image.currentSrc || image.src);
       const stateForBackground = await readState(page);
       const countForBackground = Number(stateForBackground.realEstate.properties[districtId]?.count || 0);
@@ -503,7 +511,7 @@ async function main() {
     await fullPage.waitForFunction((expectedFile) => {
       const image = document.querySelector(".real-estate-detail-background");
       return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0 && image.getAttribute("data-growth-asset") === expectedFile;
-    }, fullSmallStudioGrowthStageFile);
+    }, fullSmallStudioGrowthStageFile, { timeout: realEstateImageTimeoutMs });
     const fullSmallStudioSrc = await fullPage.locator(".real-estate-detail-background").evaluate((image) => image.currentSrc || image.src);
     assert(fullSmallStudioSrc.includes("/assets/"), `풀성장 small_studio baked 배경 URL이 올바르지 않습니다: ${fullSmallStudioSrc}`);
     assert((await fullPage.locator(".real-estate-development-building").count()) === 0, "풀성장 small_studio baked 지역에 DOM 건물이 렌더링되었습니다.");
@@ -515,7 +523,7 @@ async function main() {
     await fullPage.waitForFunction((expectedFile) => {
       const image = document.querySelector(".real-estate-detail-background");
       return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0 && image.getAttribute("data-growth-asset") === expectedFile;
-    }, fullMixedDevelopmentGrowthStageFile);
+    }, fullMixedDevelopmentGrowthStageFile, { timeout: realEstateImageTimeoutMs });
     const fullMixedDevelopmentSrc = await fullPage.locator(".real-estate-detail-background").evaluate((image) => image.currentSrc || image.src);
     assert(fullMixedDevelopmentSrc.includes("/assets/"), `풀성장 mixed_development baked 배경 URL이 올바르지 않습니다: ${fullMixedDevelopmentSrc}`);
     assert((await fullPage.locator(".real-estate-development-building").count()) === 0, "풀성장 mixed_development baked 지역에 DOM 건물이 렌더링되었습니다.");

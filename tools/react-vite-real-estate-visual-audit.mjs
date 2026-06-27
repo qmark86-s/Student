@@ -4,7 +4,7 @@ import { createServer } from "node:http";
 import { basename, extname, join, normalize, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 
-const root = resolve("dist-react");
+const root = resolve("dist");
 const outDir = resolve("artifacts/real-estate-resource-quality-audit");
 const preferredPort = Number(process.env.REACT_REAL_ESTATE_VISUAL_AUDIT_PORT || 5815);
 const saveKey = "student-idle-rpg-save-v1";
@@ -26,7 +26,7 @@ const mimeTypes = {
 };
 
 if (!existsSync(resolve(root, "index.html"))) {
-  console.error("dist-react/index.html is missing. Run `npm run react:build` first.");
+  console.error("dist/index.html is missing. Run `npm run react:build` first.");
   process.exit(1);
 }
 

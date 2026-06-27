@@ -3,9 +3,10 @@ import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
 import { chromium } from "@playwright/test";
 
-const root = resolve("dist-react");
+const root = resolve("dist");
 const preferredPort = Number(process.env.REACT_SHOP_DEBUG_SMOKE_PORT || 5710);
 const saveKey = "student-idle-rpg-save-v1";
+const interactionTimeout = 15000;
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -17,7 +18,7 @@ const mimeTypes = {
 };
 
 if (!existsSync(resolve(root, "index.html"))) {
-  console.error("dist-react/index.html is missing. Run `npm run react:build` first.");
+  console.error("dist/index.html is missing. Run `npm run react:build` first.");
   process.exit(1);
 }
 
@@ -122,7 +123,8 @@ function makeSeedState() {
       awaitingDecision: false,
       outcome: null,
     },
-    companions: [],
+    careerAlumni: [],
+    equipment: { inventory: [], equipped: { stationery: null, book: null } },
     expedition: {
       members: [],
       partyMemberIds: [],
@@ -147,16 +149,16 @@ async function stateSnapshot(page) {
   return page.evaluate((key) => {
     const state = JSON.parse(localStorage.getItem(key));
     const doc = document.documentElement;
-    const helperFrames = [...document.querySelectorAll(".learning-helper-frame, .robot-helper-frame")];
     const unitFrames = [...document.querySelectorAll(".expedition-unit-frame")];
     const enemyFrames = [...document.querySelectorAll(".expedition-enemy-frame")];
     return {
       text: document.body.innerText,
       diamonds: state.diamonds,
       money: state.money,
-      companionCount: state.companions?.length ?? 0,
-      robotCount: state.companions?.filter((companion) => companion.kind === "robot-helper" || companion.source === "robot").length ?? 0,
-      careerCount: state.companions?.filter((companion) => companion.careerId).length ?? 0,
+      equipmentCount: state.equipment?.inventory?.length ?? 0,
+      stationeryEquipped: Boolean(state.equipment?.equipped?.stationery),
+      bookEquipped: Boolean(state.equipment?.equipped?.book),
+      careerAlumniCount: state.careerAlumni?.length ?? 0,
       expeditionMemberCount: state.expedition?.members?.length ?? 0,
       partyMemberCount: state.expedition?.partyMemberIds?.length ?? 0,
       stageIndex: state.expedition?.stageIndex ?? -1,
@@ -164,10 +166,9 @@ async function stateSnapshot(page) {
       shopModal: document.querySelectorAll(".shop-modal").length,
       debugModal: document.querySelectorAll(".debug-modal").length,
       gachaPopup: document.querySelectorAll(".gacha-popup").length,
-      helperUnits: document.querySelectorAll(".learning-helper-unit").length,
-      helperFrames: helperFrames.length,
-      helperFramesLoaded: helperFrames.filter((image) => image.complete && image.naturalWidth > 0).length,
-      companionCards: document.querySelectorAll(".companion-card").length,
+      equippedIcons: document.querySelectorAll(".equipment-orbit-item:not(.empty)").length,
+      equipmentCards: document.querySelectorAll(".equipment-card").length,
+      filledEquipmentSlots: document.querySelectorAll(".equipment-slot-card.filled").length,
       expeditionUnits: document.querySelectorAll(".expedition-unit-avatar.large").length,
       unitFrames: unitFrames.length,
       unitFramesLoaded: unitFrames.filter((image) => image.complete && image.naturalWidth > 0).length,
@@ -199,39 +200,36 @@ try {
   await page.waitForSelector(".phone-frame", { timeout: 15000 });
 
   await page.getByRole("button", { name: "상점" }).click();
-  await page.waitForSelector(".shop-modal", { timeout: 6000 });
-  await page.getByRole("button", { name: "로봇" }).click();
-  await page.getByRole("button", { name: /호출 300/ }).click();
-  await page.waitForSelector(".gacha-popup", { timeout: 6000 });
+  await page.waitForSelector(".shop-modal", { timeout: interactionTimeout });
+  await page.getByRole("button", { name: "문방구" }).click();
+  await page.getByRole("button", { name: /뽑기 300/ }).first().click();
+  await page.waitForSelector(".gacha-popup", { timeout: interactionTimeout });
   const afterGacha = await stateSnapshot(page);
 
   await page.getByRole("button", { name: "확인" }).click();
   await page.locator(".shop-modal .icon-button.dark").click();
-  await page.waitForSelector(".shop-modal", { state: "detached", timeout: 6000 });
-  await page.waitForSelector(".learning-helper-unit", { timeout: 6000 });
-  await page.waitForFunction(() => [...document.querySelectorAll(".learning-helper-frame")].every((image) => image.complete && image.naturalWidth > 0), null, {
-    timeout: 6000,
-  });
+  await page.waitForSelector(".shop-modal", { state: "detached", timeout: interactionTimeout });
+  await page.waitForSelector(".equipment-orbit-item:not(.empty)", { timeout: interactionTimeout });
   const afterShopClose = await stateSnapshot(page);
 
-  await page.getByRole("button", { name: "동료" }).click();
-  await page.waitForSelector(".companion-card.robot-companion", { timeout: 6000 });
-  const afterCompanionTab = await stateSnapshot(page);
+  await page.getByRole("button", { name: "장비" }).click();
+  await page.waitForSelector(".equipment-card", { timeout: interactionTimeout });
+  const afterEquipmentTab = await stateSnapshot(page);
 
   await page.getByRole("button", { name: "디버그 메뉴" }).click();
-  await page.waitForSelector(".debug-modal", { timeout: 6000 });
-  await page.getByRole("button", { name: "동료 랜덤 +5" }).click();
+  await page.waitForSelector(".debug-modal", { timeout: interactionTimeout });
+  await page.getByRole("button", { name: "대원 후보 +5" }).click();
   await page.waitForFunction((key) => {
     const state = JSON.parse(localStorage.getItem(key));
-    return state.companions?.filter((companion) => companion.careerId).length === 0 && state.expedition?.members?.length === 5 && state.expedition?.partyMemberIds?.length === 5;
-  }, saveKey, { timeout: 6000 });
+    return state.careerAlumni?.length === 0 && state.expedition?.members?.length === 5 && state.expedition?.partyMemberIds?.length === 5;
+  }, saveKey, { timeout: interactionTimeout });
   const afterDebugAdd = await stateSnapshot(page);
 
   await page.locator(".debug-modal .icon-button.dark").click();
   await page.getByRole("button", { name: "원정대" }).click();
-  await page.waitForSelector(".expedition-scene .expedition-unit-frame", { timeout: 6000 });
+  await page.waitForSelector(".expedition-scene .expedition-unit-frame", { timeout: interactionTimeout });
   await page.waitForFunction(() => [...document.querySelectorAll(".expedition-unit-frame, .expedition-enemy-frame")].every((image) => image.complete && image.naturalWidth > 0), null, {
-    timeout: 6000,
+    timeout: interactionTimeout,
   });
   const afterExpedition = await stateSnapshot(page);
 
@@ -239,23 +237,23 @@ try {
   await page.waitForFunction((key) => {
     const state = JSON.parse(localStorage.getItem(key));
     return state.expedition?.stageIndex === 1 && state.expedition?.clearedStageCount === 1;
-  }, saveKey, { timeout: 6000 });
+  }, saveKey, { timeout: interactionTimeout });
   await page.waitForFunction(() => [...document.querySelectorAll(".expedition-unit-frame, .expedition-enemy-frame")].every((image) => image.complete && image.naturalWidth > 0), null, {
-    timeout: 6000,
+    timeout: interactionTimeout,
   });
   const afterClear = await stateSnapshot(page);
 
   const failures = [];
   if (!response || response.status() !== 200) failures.push(`HTTP status ${response?.status() ?? "missing"}`);
   if (afterGacha.gachaPopup !== 1) failures.push(`Expected gacha popup, got ${afterGacha.gachaPopup}`);
-  if (afterGacha.robotCount !== 1) failures.push(`Expected 1 robot helper after gacha, got ${afterGacha.robotCount}`);
+  if (afterGacha.equipmentCount !== 1) failures.push(`Expected 1 equipment item after gacha, got ${afterGacha.equipmentCount}`);
+  if (!afterGacha.stationeryEquipped) failures.push("Expected stationery equipment to auto-equip after 문방구 draw");
   if (afterGacha.diamonds !== 19700) failures.push(`Expected diamonds 19700 after gacha, got ${afterGacha.diamonds}`);
-  if (afterShopClose.helperUnits !== 1) failures.push(`Expected 1 visible learning helper, got ${afterShopClose.helperUnits}`);
-  if (afterShopClose.helperFrames !== 4 || afterShopClose.helperFramesLoaded !== 4) failures.push(`Expected 4 loaded helper frames, got ${afterShopClose.helperFramesLoaded}/${afterShopClose.helperFrames}`);
-  if (!afterShopClose.text.includes("학습 도우미 1/3")) failures.push("Growth panel did not show 학습 도우미 1/3");
-  if (afterCompanionTab.companionCards !== 1) failures.push(`Expected robot companion card, got ${afterCompanionTab.companionCards}`);
+  if (afterShopClose.equippedIcons !== 1) failures.push(`Expected 1 visible equipped item icon, got ${afterShopClose.equippedIcons}`);
+  if (!afterShopClose.text.includes("장착 장비 1/2")) failures.push("Growth panel did not show 장착 장비 1/2");
+  if (afterEquipmentTab.equipmentCards !== 1 || afterEquipmentTab.filledEquipmentSlots !== 1) failures.push(`Expected equipment tab card/slot 1/1, got ${afterEquipmentTab.equipmentCards}/${afterEquipmentTab.filledEquipmentSlots}`);
   if (afterDebugAdd.debugModal !== 1) failures.push(`Expected debug modal, got ${afterDebugAdd.debugModal}`);
-  if (afterDebugAdd.companionCount !== 1 || afterDebugAdd.careerCount !== 0) failures.push(`Expected debug to keep student companions at robot-only 1/0, got ${afterDebugAdd.companionCount}/${afterDebugAdd.careerCount}`);
+  if (afterDebugAdd.equipmentCount !== 1 || afterDebugAdd.careerAlumniCount !== 0) failures.push(`Expected debug to keep student equipment/careerAlumni at 1/0, got ${afterDebugAdd.equipmentCount}/${afterDebugAdd.careerAlumniCount}`);
   if (afterDebugAdd.expeditionMemberCount !== 5) failures.push(`Expected 5 expedition members from debug, got ${afterDebugAdd.expeditionMemberCount}`);
   if (afterDebugAdd.partyMemberCount !== 5) failures.push(`Expected 5 expedition party members, got ${afterDebugAdd.partyMemberCount}`);
   if (afterExpedition.expeditionUnits !== 5) failures.push(`Expected 5 expedition unit avatars, got ${afterExpedition.expeditionUnits}`);
@@ -267,12 +265,12 @@ try {
   if (afterClear.unitFrames !== 20 || afterClear.unitFramesLoaded !== 20) failures.push(`Expected 20 loaded unit frames after clear, got ${afterClear.unitFramesLoaded}/${afterClear.unitFrames}`);
   if (afterClear.enemyVisualCount < 1 || afterClear.enemyVisualCount > 3) failures.push(`Expected 1-3 expedition enemies after clear, got ${afterClear.enemyVisualCount}`);
   if (afterClear.enemyFrames !== afterClear.enemyVisualCount * 4 || afterClear.enemyFramesLoaded !== afterClear.enemyFrames) failures.push(`Expected loaded enemy frames after clear to match enemies, got ${afterClear.enemyFramesLoaded}/${afterClear.enemyFrames} for ${afterClear.enemyVisualCount} enemies`);
-  for (const snapshot of [afterGacha, afterShopClose, afterCompanionTab, afterDebugAdd, afterExpedition, afterClear]) {
+  for (const snapshot of [afterGacha, afterShopClose, afterEquipmentTab, afterDebugAdd, afterExpedition, afterClear]) {
     if (snapshot.horizontalOverflow > 4) failures.push(`Horizontal overflow ${snapshot.horizontalOverflow}px`);
   }
   if (consoleErrors.length > 0) failures.push(`Console errors: ${consoleErrors.slice(0, 3).join(" | ")}`);
 
-  console.log(JSON.stringify({ baseUrl, afterGacha, afterShopClose, afterCompanionTab, afterDebugAdd, afterExpedition, afterClear, failures }, null, 2));
+  console.log(JSON.stringify({ baseUrl, afterGacha, afterShopClose, afterEquipmentTab, afterDebugAdd, afterExpedition, afterClear, failures }, null, 2));
 
   if (failures.length > 0) {
     console.error(`REACT_VITE_SHOP_DEBUG_SMOKE_FAILED failures=${failures.length}`);

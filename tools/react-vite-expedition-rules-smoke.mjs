@@ -3,7 +3,7 @@ import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
 import { chromium } from "@playwright/test";
 
-const root = resolve("dist-react");
+const root = resolve("dist");
 const outDir = resolve("artifacts/react-vite-expedition-rules-smoke");
 const reportPath = resolve(outDir, "report.json");
 const preferredPort = Number(process.env.REACT_EXPEDITION_RULES_SMOKE_PORT || 5710);
@@ -216,7 +216,12 @@ async function readState(page) {
 async function openScenario(browser, baseUrl, seed) {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
   await page.addInitScript(({ key, state }) => localStorage.setItem(key, JSON.stringify(state)), { key: saveKey, state: seed });
-  const response = await page.goto(baseUrl, { waitUntil: "networkidle" });
+  let response = null;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    response = await page.goto(baseUrl, { waitUntil: "networkidle" });
+    if (response && response.status() === 200) break;
+    await page.waitForTimeout(200);
+  }
   assert(response && response.status() === 200, `HTTP status ${response?.status()}`);
   if (await page.locator(".load-failure").count()) throw new Error(await page.locator(".load-failure").innerText());
   await page.getByRole("button", { name: "원정대" }).click();
@@ -252,7 +257,7 @@ async function scenario(browser, baseUrl, name, seed, run) {
 }
 
 if (!existsSync(resolve(root, "index.html"))) {
-  console.error("dist-react/index.html is missing. Run `npm run react:build` first.");
+  console.error("dist/index.html is missing. Run `npm run react:build` first.");
   process.exit(1);
 }
 
@@ -322,7 +327,7 @@ try {
   }));
 
   checks.push(await scenario(browser, baseUrl, "fusion-promotes-two-members", gameState({ currentStage: 1, highestStage: 0, members: fusionMembers, partyMemberIds: [] }), async (page) => {
-    await page.getByRole("button", { name: "동료 관리" }).click();
+    await page.getByRole("button", { name: "대원 관리" }).click();
     await page.waitForSelector(".expedition-fusion-card", { timeout: 6000 });
     await page.getByRole("button", { name: "합성" }).first().click();
     await waitForState(page, "state => state.expedition.members.length === 1 && state.expedition.members[0].promotionTier === 'assistant_manager'");

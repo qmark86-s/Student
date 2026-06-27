@@ -1,6 +1,6 @@
 # Mobile APK Workflow
 
-이 레포는 Godot 이식 없이 현재 단일 HTML 웹앱 형태를 유지하고, Capacitor로 Android APK를 감싸는 방향을 기준으로 한다.
+이 레포는 Godot 이식 없이 React/Vite 웹앱을 유지하고, Capacitor로 Android APK를 감싸는 방향을 기준으로 한다.
 
 ## Local Web Bundle
 
@@ -8,7 +8,7 @@
 npm run build:web
 ```
 
-스냅샷 소스에서 파일 확인용 `index.html`, 공유 HTML, Capacitor가 사용할 `dist/index.html`을 함께 만든다.
+React/Vite 앱과 필요한 시각 자산을 빌드해 Capacitor가 사용할 `dist/index.html`과 `dist/assets/`를 만든다.
 
 ## Mobile Smoke Test
 
@@ -16,7 +16,7 @@ npm run build:web
 npm run verify:mobile
 ```
 
-기준 HTML 감사, 스냅샷 소스 기반 단일 HTML 산출물 생성, Playwright 모바일 뷰포트 렌더링 검증을 실행한다. 스크린샷은 `artifacts/mobile-smoke/`에 생성된다. reference HTML에서 데이터/번들을 다시 추출하려면 `npm run reference:refresh`를 별도로 실행한다.
+React 검증, React `dist/` 산출물 생성, Playwright 모바일 뷰포트 렌더링 검증을 실행한다. 스크린샷은 `artifacts/mobile-smoke/`에 생성된다. snapshot/reference 추출은 active APK workflow에서 사용하지 않는다.
 
 ## Android Setup
 

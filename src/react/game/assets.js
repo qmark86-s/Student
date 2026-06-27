@@ -37,32 +37,32 @@ export function getStudentFrameUrls(gradeVisual, gender) {
 }
 
 export function getCareerPortraitUrl(career, gender) {
-  const safeGender = requireGender(gender, "직업 동료 초상");
+  const safeGender = requireGender(gender, "직업 대원 초상");
   return requireAsset(
     companionFrameUrls,
     `../../snapshot/assets/individual/companions/${career.spriteAsset}/${safeGender}/move_0.png`,
-    "직업 동료 초상",
+    "직업 대원 초상",
   );
 }
 
 export function getCompanionFrameUrls(career, gender) {
-  const safeGender = requireGender(gender, "직업 동료 스프라이트");
+  const safeGender = requireGender(gender, "직업 대원 스프라이트");
   return [0, 1, 2, 3].map((frame) =>
     requireAsset(
       companionFrameUrls,
       `../../snapshot/assets/individual/companions/${career.spriteAsset}/${safeGender}/move_${frame}.png`,
-      "직업 동료 스프라이트",
+      "직업 대원 스프라이트",
     ),
   );
 }
 
 export function getHelperFrameUrls(spriteAsset, gender) {
-  const safeGender = requireGender(gender, "학습 도우미 스프라이트");
+  const safeGender = requireGender(gender, "지원 스프라이트");
   return [0, 1, 2, 3].map((frame) =>
     requireAsset(
       companionFrameUrls,
       `../../snapshot/assets/individual/companions/${spriteAsset}/${safeGender}/move_${frame}.png`,
-      "학습 도우미 스프라이트",
+      "지원 스프라이트",
     ),
   );
 }

@@ -44,6 +44,18 @@
       "inquirySubjectAliases": "사회/과학 탐구처럼 같은 탐구 계열로 묶어 토큰 풀을 함께 참고할 과목 alias입니다."
     }
   },
+  "requiredSubjectsByPhase": {
+    "elementary": ["korean", "english", "math", "science", "exam"],
+    "middle": ["korean", "english", "math", "science", "exam"],
+    "high": ["korean", "english", "math", "science", "exam"],
+    "repeater": ["korean", "english", "math", "science", "exam"],
+    "help": {
+      "elementary": "초등 Battle Road 조우가 렌더링할 수 있는 필수 교과 VFX 과목입니다. social은 science alias로 커버합니다.",
+      "middle": "중등 Battle Road 조우가 렌더링할 수 있는 필수 교과 VFX 과목입니다. social은 science alias로 커버합니다.",
+      "high": "고등 및 수능 조우가 렌더링할 수 있는 필수 교과 VFX 과목입니다. social은 science alias로 커버합니다.",
+      "repeater": "N수 과정 및 N수 수능 조우가 렌더링할 수 있는 필수 교과 VFX 과목입니다. social은 science alias로 커버합니다."
+    }
+  },
   "styles": [
     {
       "id": "glyph",
@@ -134,7 +146,8 @@
         { "id": "korean_letters", "subject": "korean", "style": "glyph", "weight": 4, "tokens": ["ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ", "아", "어", "이"] },
         { "id": "english_letters", "subject": "english", "style": "glyph", "weight": 3, "tokens": ["A-a", "B-b", "C-c", "D-d", "E-e", "cat", "dog", "book"] },
         { "id": "counting", "subject": "math", "style": "formula", "weight": 3, "tokens": ["1+1", "2+1", "3-1", "2+2", "5-1", "1<2"] },
-        { "id": "first_inquiry", "subject": "science", "style": "card", "weight": 2, "tokens": ["봄", "여름", "가을", "겨울", "동네", "학교"] }
+        { "id": "first_inquiry", "subject": "science", "style": "card", "weight": 2, "tokens": ["봄", "여름", "가을", "겨울", "동네", "학교"] },
+        { "id": "first_exam", "subject": "exam", "style": "card", "weight": 2, "tokens": ["쪽지", "퀴즈", "평가", "복습", "도장"] }
       ]
     },
     {
@@ -147,7 +160,8 @@
         { "id": "easy_korean_words", "subject": "korean", "style": "word", "weight": 4, "tokens": ["안녕", "고마워", "사랑해", "학교", "친구", "가족", "바다", "하늘"] },
         { "id": "easy_english_words", "subject": "english", "style": "word", "weight": 3, "tokens": ["hello", "name", "friend", "family", "school", "apple", "baby", "book"] },
         { "id": "basic_addition", "subject": "math", "style": "formula", "weight": 3, "tokens": ["1+1=2", "2+2=4", "3+1=4", "5-2=3", "2x2=4", "10-3"] },
-        { "id": "second_inquiry", "subject": "science", "style": "card", "weight": 2, "tokens": ["계절", "마을", "지도", "나침반", "식물", "날씨"] }
+        { "id": "second_inquiry", "subject": "science", "style": "card", "weight": 2, "tokens": ["계절", "마을", "지도", "나침반", "식물", "날씨"] },
+        { "id": "second_exam", "subject": "exam", "style": "card", "weight": 2, "tokens": ["받아쓰기", "쪽지", "퀴즈", "평가", "채점"] }
       ]
     },
     {
@@ -160,7 +174,8 @@
         { "id": "reading_basics", "subject": "korean", "style": "word", "weight": 3, "tokens": ["낱말", "문장", "문단", "일기", "중심", "주제"] },
         { "id": "english_action", "subject": "english", "style": "word", "weight": 2, "tokens": ["read", "write", "listen", "speak", "clock", "class"] },
         { "id": "math_units", "subject": "math", "style": "formula", "weight": 3, "tokens": ["1/2", "3x4", "12÷3", "100cm", "1m", "1L"] },
-        { "id": "observation", "subject": "science", "style": "formula", "weight": 2, "tokens": ["N-S", "S-N", "H2O", "O2", "CO2", "20°C"] }
+        { "id": "observation", "subject": "science", "style": "formula", "weight": 2, "tokens": ["N-S", "S-N", "H2O", "O2", "CO2", "20°C"] },
+        { "id": "third_exam", "subject": "exam", "style": "card", "weight": 2, "tokens": ["단원평가", "쪽지", "채점", "검산", "복습"] }
       ]
     },
     {
@@ -173,7 +188,8 @@
         { "id": "korean_expression", "subject": "korean", "style": "word", "weight": 3, "tokens": ["요약", "주제", "토론", "설명문", "비유", "발표"] },
         { "id": "english_time", "subject": "english", "style": "word", "weight": 2, "tokens": ["today", "time", "story", "where", "when", "favorite"] },
         { "id": "geometry", "subject": "math", "style": "formula", "weight": 3, "tokens": ["90°", "180°", "1/4", "0.5", "3km", "A=bh"] },
-        { "id": "world_basic", "subject": "science", "style": "formula", "weight": 2, "tokens": ["V=IR", "S-N", "N-S", "H2O", "CO2", "O2"] }
+        { "id": "world_basic", "subject": "science", "style": "formula", "weight": 2, "tokens": ["V=IR", "S-N", "N-S", "H2O", "CO2", "O2"] },
+        { "id": "fourth_exam", "subject": "exam", "style": "card", "weight": 2, "tokens": ["단원평가", "서술형", "채점", "검산", "복습"] }
       ]
     },
     {
@@ -186,7 +202,8 @@
         { "id": "argument", "subject": "korean", "style": "word", "weight": 3, "tokens": ["근거", "주장", "토의", "속담", "자료", "요약"] },
         { "id": "english_sentence", "subject": "english", "style": "word", "weight": 2, "tokens": ["because", "before", "after", "always", "usually"] },
         { "id": "ratio_area", "subject": "math", "style": "formula", "weight": 3, "tokens": ["3/5", "2:3", "0.25", "A=lw", "V=lwh", "12%"] },
-        { "id": "science_history", "subject": "science", "style": "formula", "weight": 2, "tokens": ["pH7", "H2O", "CO2", "O2", "NaCl", "1AU"] }
+        { "id": "science_history", "subject": "science", "style": "formula", "weight": 2, "tokens": ["pH7", "H2O", "CO2", "O2", "NaCl", "1AU"] },
+        { "id": "fifth_exam", "subject": "exam", "style": "card", "weight": 2, "tokens": ["단원평가", "서술형", "오답", "검산", "복습"] }
       ]
     },
     {
@@ -199,7 +216,8 @@
         { "id": "advanced_reading", "subject": "korean", "style": "word", "weight": 3, "tokens": ["논설", "비문학", "문맥", "토론", "요약", "근거"] },
         { "id": "middle_ready_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["future", "travel", "people", "subject", "middle"] },
         { "id": "proportion_volume", "subject": "math", "style": "formula", "weight": 3, "tokens": ["v=d/t", "2:3", "πr", "V=Bh", "x+1", "3.14"] },
-        { "id": "civic_science", "subject": "science", "style": "formula", "weight": 2, "tokens": ["kWh", "CO2", "O2", "H2O", "1atm", "pH7"] }
+        { "id": "civic_science", "subject": "science", "style": "formula", "weight": 2, "tokens": ["kWh", "CO2", "O2", "H2O", "1atm", "pH7"] },
+        { "id": "sixth_exam", "subject": "exam", "style": "card", "weight": 2, "tokens": ["단원평가", "서술형", "오답", "검산", "총정리"] }
       ]
     },
     {
@@ -212,7 +230,8 @@
         { "id": "middle_korean", "subject": "korean", "style": "word", "weight": 3, "tokens": ["시", "소설", "화자", "갈등", "품사", "음운"] },
         { "id": "middle_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["be", "do", "have", "past", "will", "can"] },
         { "id": "linear_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["2x=6", "x+3", "a+b", "(x,y)", "y=ax", "3:5"] },
-        { "id": "middle_science_social", "subject": "science", "style": "formula", "weight": 2, "tokens": ["F=ma", "v=d/t", "H2O", "O2", "CO2", "DNA"] }
+        { "id": "middle_science_social", "subject": "science", "style": "formula", "weight": 2, "tokens": ["F=ma", "v=d/t", "H2O", "O2", "CO2", "DNA"] },
+        { "id": "middle1_exam", "subject": "exam", "style": "card", "weight": 2, "tokens": ["중간", "기말", "수행", "서술형", "채점"] }
       ]
     },
     {
@@ -225,7 +244,8 @@
         { "id": "logic_media", "subject": "korean", "style": "word", "weight": 3, "tokens": ["시점", "문법", "매체", "근거", "논증", "표현"] },
         { "id": "english_structure", "subject": "english", "style": "word", "weight": 2, "tokens": ["tense", "voice", "clause", "topic", "essay"] },
         { "id": "function_start", "subject": "math", "style": "formula", "weight": 4, "tokens": ["x+y=5", "y=2x", "a^2", "P(A)", "2x-y", "x<3"] },
-        { "id": "lab_history", "subject": "science", "style": "formula", "weight": 2, "tokens": ["I=V/R", "V=IR", "H2O", "NaCl", "CO2", "pH7"] }
+        { "id": "lab_history", "subject": "science", "style": "formula", "weight": 2, "tokens": ["I=V/R", "V=IR", "H2O", "NaCl", "CO2", "pH7"] },
+        { "id": "middle2_exam", "subject": "exam", "style": "card", "weight": 2, "tokens": ["중간", "기말", "수행", "서술형", "오답"] }
       ]
     },
     {
@@ -238,7 +258,8 @@
         { "id": "graduation_reading", "subject": "korean", "style": "word", "weight": 3, "tokens": ["고전", "논술", "문장", "독해", "문맥", "요지"] },
         { "id": "exam_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["syntax", "context", "infer", "review", "debate"] },
         { "id": "quadratic_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["x^2", "√2", "a^2+b^2", "y=ax^2", "x=2", "P(A)"] },
-        { "id": "high_ready", "subject": "science", "style": "formula", "weight": 2, "tokens": ["F=ma", "E=mc^2", "DNA", "CO2", "pH", "I=V/R"] }
+        { "id": "high_ready", "subject": "science", "style": "formula", "weight": 2, "tokens": ["F=ma", "E=mc^2", "DNA", "CO2", "pH", "I=V/R"] },
+        { "id": "middle3_exam", "subject": "exam", "style": "card", "weight": 2, "tokens": ["중간", "기말", "수행", "서술형", "총정리"] }
       ]
     },
     {
@@ -251,7 +272,8 @@
         { "id": "common_korean", "subject": "korean", "style": "word", "weight": 3, "tokens": ["독서", "문학", "화법", "작문", "문법", "매체"] },
         { "id": "high_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["idea", "topic", "title", "blank", "order"] },
         { "id": "common_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["f(x)", "A∩B", "A∪B", "p→q", "log2", "|x|"] },
-        { "id": "integrated_subjects", "subject": "science", "style": "formula", "weight": 2, "tokens": ["GDP", "CPI", "pH", "CO2", "F=ma", "E=hf"] }
+        { "id": "integrated_subjects", "subject": "science", "style": "formula", "weight": 2, "tokens": ["GDP", "CPI", "pH", "CO2", "F=ma", "E=hf"] },
+        { "id": "high1_exam", "subject": "exam", "style": "burst", "weight": 2, "tokens": ["모의고사", "내신", "중간", "기말", "등급컷"] }
       ]
     },
     {
@@ -264,7 +286,8 @@
         { "id": "elective_korean", "subject": "korean", "style": "word", "weight": 3, "tokens": ["문학", "독서", "작문", "매체", "고전", "담화"] },
         { "id": "exam_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["infer", "summary", "blank", "order", "title"] },
         { "id": "elective_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["lim", "dy/dx", "∫f(x)", "P(A)", "nCr", "a_n"] },
-        { "id": "track_subjects", "subject": "science", "style": "formula", "weight": 2, "tokens": ["F=ma", "PV=nRT", "pH=-logH", "DNA", "CO2", "GNI"] }
+        { "id": "track_subjects", "subject": "science", "style": "formula", "weight": 2, "tokens": ["F=ma", "PV=nRT", "pH=-logH", "DNA", "CO2", "GNI"] },
+        { "id": "high2_exam", "subject": "exam", "style": "burst", "weight": 2, "tokens": ["모의고사", "내신", "중간", "기말", "킬러"] }
       ]
     },
     {
@@ -290,6 +313,7 @@
       "defaultStyle": "card",
       "tokenPools": [
         { "id": "review_start", "subject": "habit", "style": "card", "weight": 3, "tokens": ["개념", "1회독", "오답", "루틴", "복습", "호흡"] },
+        { "id": "repeater_korean", "subject": "korean", "style": "word", "weight": 3, "tokens": ["독서", "문학", "화작", "언매", "지문", "요지"] },
         { "id": "repeater_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["review", "vocab", "blank", "logic", "speed"] },
         { "id": "repeater_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["f(x)", "P(A)", "dy/dx", "∫", "log", "nCr"] },
         { "id": "repeater_inquiry", "subject": "science", "style": "formula", "weight": 2, "tokens": ["GDP", "CPI", "pH", "DNA", "CO2", "역학"] },
@@ -304,6 +328,7 @@
       "defaultStyle": "card",
       "tokenPools": [
         { "id": "routine_fixed", "subject": "habit", "style": "card", "weight": 3, "tokens": ["2회독", "압축", "실전", "오답", "루틴", "수면"] },
+        { "id": "repeater2_korean", "subject": "korean", "style": "word", "weight": 3, "tokens": ["독서", "문학", "화작", "언매", "지문", "추론"] },
         { "id": "speed_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["speed", "logic", "review", "blank", "order"] },
         { "id": "simulation_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["f'(x)", "∫f(x)", "P(A)", "nCr", "a_n", "lim"] },
         { "id": "repeater2_inquiry", "subject": "science", "style": "formula", "weight": 2, "tokens": ["사문", "생윤", "물리", "화학", "생명", "지학"] },
@@ -318,6 +343,7 @@
       "defaultStyle": "burst",
       "tokenPools": [
         { "id": "long_runner_mind", "subject": "habit", "style": "card", "weight": 3, "tokens": ["장수", "재정리", "불안컷", "최종", "집중", "압축"] },
+        { "id": "long_runner_korean", "subject": "korean", "style": "word", "weight": 3, "tokens": ["독서", "문학", "화작", "언매", "지문", "맥락"] },
         { "id": "long_runner_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["calm", "focus", "review", "logic", "blank"] },
         { "id": "long_runner_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["dy/dx", "∫f(x)", "P(A)", "nCr", "f(x)", "lim"] },
         { "id": "long_runner_inquiry", "subject": "science", "style": "formula", "weight": 2, "tokens": ["탐구", "자료", "도표", "실험", "개념", "선지"] },
@@ -332,6 +358,7 @@
       "defaultStyle": "burst",
       "tokenPools": [
         { "id": "veteran_finish", "subject": "habit", "style": "card", "weight": 3, "tokens": ["마지막", "초압축", "실전감", "확신", "정리"] },
+        { "id": "veteran_korean", "subject": "korean", "style": "word", "weight": 3, "tokens": ["독서", "문학", "화작", "언매", "지문", "요지"] },
         { "id": "veteran_english", "subject": "english", "style": "word", "weight": 2, "tokens": ["focus", "final", "calm", "review", "speed"] },
         { "id": "veteran_math", "subject": "math", "style": "formula", "weight": 4, "tokens": ["f'(x)", "∫", "P(A)", "nCr", "log", "lim"] },
         { "id": "veteran_inquiry", "subject": "science", "style": "formula", "weight": 2, "tokens": ["탐구", "킬러", "도표", "개념", "자료", "선지"] },
@@ -342,6 +369,8 @@
   "help": {
     "selection": "한 번 공격할 때 하나씩 랜덤하게 나가는 교과 VFX 선택 정책입니다.",
     "runtime": "교과 공격 VFX 테이블을 런타임 렌더러와 스킨/로컬라이제이션 구조에 연결하는 메타 설정입니다.",
+    "rules": "토큰 길이, 최소 풀 수, 허용 과목과 탐구 alias를 제한하는 검증 규칙입니다.",
+    "requiredSubjectsByPhase": "학년군별 Battle Road와 수능 조우가 요구하는 교과 VFX 과목 커버리지입니다.",
     "styles": "렌더러가 표현할 수 있는 텍스트 VFX 스타일 목록입니다.",
     "palettes": "학년군별 교과 VFX 색상 기준입니다.",
     "bossStyleByVisualKey": "보스 또는 시험 조우에서 사용할 강조 스타일 매핑입니다.",

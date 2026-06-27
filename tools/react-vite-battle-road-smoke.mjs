@@ -3,7 +3,7 @@ import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
 import { chromium } from "@playwright/test";
 
-const root = resolve("dist-react");
+const root = resolve("dist");
 const preferredPort = Number(process.env.REACT_BATTLE_SMOKE_PORT || 5680);
 const saveKey = "student-idle-rpg-save-v1";
 const resultTabIndex = 5;
@@ -18,7 +18,7 @@ const mimeTypes = {
 };
 
 if (!existsSync(resolve(root, "index.html"))) {
-  console.error("dist-react/index.html is missing. Run `npm run react:build` first.");
+  console.error("dist/index.html is missing. Run `npm run react:build` first.");
   process.exit(1);
 }
 

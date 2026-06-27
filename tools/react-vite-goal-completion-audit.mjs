@@ -17,20 +17,20 @@ const requiredInteractiveLabels = [
   "00-initial",
   "student-성장",
   "student-시험",
-  "student-동료",
+  "student-장비",
   "student-직장",
   "student-교육",
   "student-결과",
   "student-도감",
   "modal-shop",
   "modal-settings",
-  "debug-after-companions",
-  "student-companion-after-debug",
+  "debug-after-members",
+  "student-equipment-after-debug",
   "expedition-growth",
   "expedition-after-three-clears",
   "expedition-after-invest",
   "expedition-파티",
-  "expedition-동료-관리",
+  "expedition-대원-관리",
   "expedition-기록",
   "expedition-party-after-remove",
   "expedition-party-after-assign",
@@ -148,7 +148,7 @@ function buildAudit() {
   items.push(interactiveItem);
 
   const studentItem = requirement("student-tab-parity", "학생 7개 탭 UI와 상태 비교가 직접 증거를 가진다");
-  const studentLabels = requiredInteractiveLabels.filter((label) => label.startsWith("student-") && label !== "student-companion-after-debug");
+  const studentLabels = requiredInteractiveLabels.filter((label) => label.startsWith("student-") && label !== "student-equipment-after-debug");
   studentItem.evidence = {
     labels: studentLabels,
     activePanelDiffPercent: Object.fromEntries(
@@ -163,11 +163,11 @@ function buildAudit() {
   if (missingStudent.length > 0) fail(studentItem, "학생 탭 비교 시나리오가 부족합니다.", missingStudent);
   items.push(studentItem);
 
-  const expeditionItem = requirement("expedition-ui-and-layout-parity", "원정대 탭과 동료 비일렬 레이아웃이 사용자 기준을 만족한다");
+  const expeditionItem = requirement("expedition-ui-and-layout-parity", "원정대 탭과 대원 비일렬 레이아웃이 사용자 기준을 만족한다");
   const expeditionLabels = requiredInteractiveLabels.filter((label) => label.startsWith("expedition-"));
   const growth = interactiveResults.find((entry) => entry.label === "expedition-growth");
   const party = interactiveResults.find((entry) => entry.label === "expedition-파티");
-  const manage = interactiveResults.find((entry) => entry.label === "expedition-동료-관리");
+  const manage = interactiveResults.find((entry) => entry.label === "expedition-대원-관리");
   const growthLayout = growth && growth.react && growth.react.layoutSignatures ? growth.react.layoutSignatures : {};
   const partyLayout = party && party.react && party.react.layoutSignatures ? party.react.layoutSignatures : {};
   const manageLayout = manage && manage.react && manage.react.layoutSignatures ? manage.react.layoutSignatures : {};
@@ -181,16 +181,16 @@ function buildAudit() {
   };
   const missingExpedition = listMissing(expeditionLabels, interactiveLabels);
   if (missingExpedition.length > 0) fail(expeditionItem, "원정대 조작 비교 시나리오가 부족합니다.", missingExpedition);
-  if (countsPattern(growthLayout.expeditionBattleUnits) !== "2+2+1") fail(expeditionItem, "원정대 전투 동료가 2+2+1이 아닙니다.", growthLayout.expeditionBattleUnits);
+  if (countsPattern(growthLayout.expeditionBattleUnits) !== "2+2+1") fail(expeditionItem, "원정대 전투 대원이 2+2+1이 아닙니다.", growthLayout.expeditionBattleUnits);
   if (!growthLayout.expeditionBattleUnits || growthLayout.expeditionBattleUnits.frontBandCount !== 1) fail(expeditionItem, "원정대 앞줄 리더가 1명이 아닙니다.", growthLayout.expeditionBattleUnits);
-  if (!growthLayout.expeditionBattleUnits || growthLayout.expeditionBattleUnits.horizontalCenterSpread < 94) fail(expeditionItem, "원정대 전투 동료 좌우 폭이 좁아 일렬처럼 보일 수 있습니다.", growthLayout.expeditionBattleUnits);
+  if (!growthLayout.expeditionBattleUnits || growthLayout.expeditionBattleUnits.horizontalCenterSpread < 94) fail(expeditionItem, "원정대 전투 대원 좌우 폭이 좁아 일렬처럼 보일 수 있습니다.", growthLayout.expeditionBattleUnits);
   if (countsPattern(partyLayout.expeditionPartySlots) !== "3+2") fail(expeditionItem, "원정대 파티 슬롯이 3+2가 아닙니다.", partyLayout.expeditionPartySlots);
   if (countsPattern(growthLayout.expeditionGrowthCards) !== "2+2+1") fail(expeditionItem, "원정대 성장 카드가 2+2+1이 아닙니다.", growthLayout.expeditionGrowthCards);
   if (partyLayout.expeditionRosterCards && partyLayout.expeditionRosterCards.count >= 5 && !isTwoColumnGrid(partyLayout.expeditionRosterCards)) fail(expeditionItem, "원정대 파티 후보 카드가 2열 그리드가 아닙니다.", partyLayout.expeditionRosterCards);
-  if (manageLayout.expeditionManageCards && manageLayout.expeditionManageCards.count >= 5 && !isTwoColumnGrid(manageLayout.expeditionManageCards)) fail(expeditionItem, "원정대 동료 관리 카드가 2열 그리드가 아닙니다.", manageLayout.expeditionManageCards);
+  if (manageLayout.expeditionManageCards && manageLayout.expeditionManageCards.count >= 5 && !isTwoColumnGrid(manageLayout.expeditionManageCards)) fail(expeditionItem, "원정대 대원 관리 카드가 2열 그리드가 아닙니다.", manageLayout.expeditionManageCards);
   items.push(expeditionItem);
 
-  const deepItem = requirement("shop-settings-debug-deep-parity", "상점 6개 탭, 뽑기, 설정, 디버그 deep parity가 통과한다");
+  const deepItem = requirement("shop-settings-debug-deep-parity", "상점 7개 탭, 장비 뽑기, 설정, 디버그 deep parity가 통과한다");
   const shop = array(deep.shop, "deep.shop");
   deepItem.evidence = {
     shop: shop.map((entry) => ({ category: entry.category, equal: entry.equal, styleDiffs: array(entry.styleDiffs, `${entry.category}.styleDiffs`).length })),
@@ -198,7 +198,7 @@ function buildAudit() {
     settings: { equal: deep.settings.equal, styleDiffs: deep.settings.styleDiffs.length, svgDiffs: deep.settings.svgDiffs.length },
     debug: { equal: deep.debug.equal, styleDiffs: deep.debug.styleDiffs.length, svgDiffs: deep.debug.svgDiffs.length },
   };
-  if (shop.length !== 6) fail(deepItem, "상점 탭 수가 6개가 아닙니다.", shop.map((entry) => entry.category));
+  if (shop.length !== 7) fail(deepItem, "상점 탭 수가 7개가 아닙니다.", shop.map((entry) => entry.category));
   for (const entry of shop) {
     if (entry.equal !== true) fail(deepItem, `${entry.category} 상점 텍스트가 일치하지 않습니다.`, entry);
     if (entry.styleDiffs.length !== 0) fail(deepItem, `${entry.category} 상점 styleDiffs가 있습니다.`, entry.styleDiffs);
@@ -293,7 +293,7 @@ function writeMatrix(report) {
   }
   lines.push("");
   lines.push("## 해석 기준");
-  lines.push("- 원정대 동료 비일렬 배치는 최신 사용자 지시가 원본 HTML보다 우선하는 의도된 차이다.");
+  lines.push("- 원정대원 비일렬 배치는 최신 사용자 지시가 원본 HTML보다 우선하는 의도된 차이다.");
   lines.push("- live animation과 글리프 rasterization 잔차는 selector/state/rect/style 증거와 함께 해석한다.");
   lines.push("- 상점 결제, 광고 실연동, Android AAB는 현재 React/Vite UI parity 목표와 별도 릴리스 차수다.");
   return `${lines.join("\n")}\n`;

@@ -117,6 +117,7 @@
 - 스타일은 `glyph`, `word`, `formula`, `card`, `burst`를 사용한다.
 - 보스/시험 조우의 강조 스타일은 `bossStyleByVisualKey`에서 관리한다.
 - 탐구 계열 subject alias는 `rules.inquirySubjectAliases`에서 관리한다. 사회/과학 탐구가 분리되어 있어도 탐구 VFX 풀을 함께 사용할 수 있어야 한다.
+- `requiredSubjectsByPhase`는 학년군별 필수 교과 커버리지다. 초등/중등/고등/N수 모두 `korean`, `english`, `math`, `science`, `exam`을 커버해야 하며, social은 science alias로 커버한다.
 - 표시 크기, 지속 시간, 출발/도착 offset은 `data/battle_road_config.json`의 `presentation.curriculumAttackVfx`에서 한글 help와 함께 관리한다.
 - 생성 CSS는 `tools/build-visual-assets.mjs`에서 만들며, `glyph`, `word`, `formula`, `card`, `burst` 각각의 keyframes와 `reduced-effects` 규칙을 포함해야 한다.
 - 학생/원정대의 움직이는 공격선과 dust에는 빨강/노랑 불꽃 계열을 쓰지 않는다. 흰색, 청록, 하늘색 중심으로 맞춰 교과 토큰 VFX와 같은 톤으로 보이게 한다.

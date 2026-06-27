@@ -3,7 +3,7 @@ import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
 import { chromium } from "@playwright/test";
 
-const root = resolve("dist-react");
+const root = resolve("dist");
 const preferredPort = Number(process.env.REACT_EXPEDITION_SMOKE_PORT || 5690);
 const saveKey = "student-idle-rpg-save-v1";
 const careers = JSON.parse(readFileSync(resolve("data/careers.json"), "utf8"));
@@ -20,7 +20,7 @@ const mimeTypes = {
 };
 
 if (!existsSync(resolve(root, "index.html"))) {
-  console.error("dist-react/index.html is missing. Run `npm run react:build` first.");
+  console.error("dist/index.html is missing. Run `npm run react:build` first.");
   process.exit(1);
 }
 
@@ -261,7 +261,7 @@ async function collectSnapshot(page) {
       runNumber: state.runNumber,
       gradeId: state.current.gradeId,
       awaitingDecision: Boolean(state.current.awaitingDecision),
-      companionCount: state.companions.length,
+      careerAlumniCount: state.careerAlumni?.length ?? 0,
       partyMemberCount: state.expedition.partyMemberIds.length,
       stageIndex: state.expedition.stageIndex,
       clearedStageCount: state.expedition.clearedStageCount,
@@ -271,7 +271,7 @@ async function collectSnapshot(page) {
       realEstateCash: state.realEstate?.cash ?? -1,
       money: state.money,
       careerChoiceCount: document.querySelectorAll(".career-choice.ranked").length,
-      companionCards: document.querySelectorAll(".companion-card").length,
+      careerAlumniCards: document.querySelectorAll(".work-card").length,
       expeditionMembers: state.expedition.members?.length ?? 0,
       expeditionTabs: document.querySelectorAll(".expedition-tab").length,
       expeditionGrowthCards: document.querySelectorAll(".expedition-growth-card").length,
@@ -345,7 +345,7 @@ try {
         state.runNumber === 22 &&
         state.current.gradeId === "E1" &&
         state.current.awaitingDecision === false &&
-        state.companions.length === 1 &&
+        state.careerAlumni?.length === 1 &&
         state.expedition.partyMemberIds.length === 1
       );
     },
@@ -361,7 +361,7 @@ try {
   await page.locator(".expedition-tab", { hasText: "파티" }).click();
   await page.waitForSelector(".expedition-party-slot", { timeout: 6000 });
   const partyTab = await collectSnapshot(page);
-  await page.locator(".expedition-tab", { hasText: "동료 관리" }).click();
+  await page.locator(".expedition-tab", { hasText: "대원 관리" }).click();
   await page.waitForSelector(".expedition-manage-card", { timeout: 6000 });
   const manageTab = await collectSnapshot(page);
   await page.locator(".expedition-tab", { hasText: "기록" }).click();
@@ -391,7 +391,7 @@ try {
   if (afterAccept.runNumber !== 22) failures.push(`Career accept did not advance runNumber to 22, got ${afterAccept.runNumber}`);
   if (afterAccept.gradeId !== "E1") failures.push(`Career accept did not reset current grade to E1, got ${afterAccept.gradeId}`);
   if (afterAccept.awaitingDecision) failures.push("Career accept left awaitingDecision=true");
-  if (afterAccept.companionCount !== 1) failures.push(`Expected 1 companion after accept, got ${afterAccept.companionCount}`);
+  if (afterAccept.careerAlumniCount !== 1) failures.push(`Expected 1 career alumni after accept, got ${afterAccept.careerAlumniCount}`);
   if (afterAccept.partyMemberCount !== 1) failures.push(`Expected 1 expedition party member, got ${afterAccept.partyMemberCount}`);
   if (afterAccept.expeditionMembers !== 1) failures.push(`Expected 1 expedition member, got ${afterAccept.expeditionMembers}`);
   if (afterAccept.expeditionTabs !== 4) failures.push(`Expected 4 expedition tabs, got ${afterAccept.expeditionTabs}`);

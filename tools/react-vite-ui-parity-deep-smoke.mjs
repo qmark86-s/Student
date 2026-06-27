@@ -8,7 +8,7 @@ const reactRoot = resolve("dist-react");
 const outDir = resolve("artifacts/react-vite-ui-parity-deep-current");
 const saveKey = "student-idle-rpg-save-v1";
 const fixedNow = 1782230000000;
-const categories = ["다이아", "보유금", "로봇", "광고", "패키지", "패스"];
+const categories = ["다이아", "보유금", "문방구", "서점", "광고", "패키지", "패스"];
 const freezeAnimations = process.env.REACT_DEEP_PARITY_FREEZE_ANIMATIONS === "1";
 const staticAnimations = process.env.REACT_DEEP_PARITY_STATIC_ANIMATIONS !== "0";
 const strictVisual = process.env.REACT_DEEP_PARITY_STRICT_VISUAL === "1";
@@ -82,10 +82,8 @@ const styleSelectors = {
     { name: "stageAfter", selector: ".gacha-popup-stage", pseudo: "::after" },
     { name: "beam", selector: ".gacha-beam" },
     { name: "gradeBurst", selector: ".gacha-grade-burst" },
-    { name: "robot", selector: ".gacha-robot.big" },
-    { name: "robotEye", selector: ".gacha-robot.big .robot-eye" },
-    { name: "robotBody", selector: ".gacha-robot.big .robot-body" },
-    { name: "robotArm", selector: ".gacha-robot.big .robot-arm" },
+    { name: "equipment", selector: ".gacha-equipment.big" },
+    { name: "equipmentShine", selector: ".gacha-equipment.big .equipment-shine" },
     { name: "copy", selector: ".gacha-popup-copy" },
     { name: "copyBadge", selector: ".gacha-popup-copy .rarity-badge" },
     { name: "copyTitle", selector: ".gacha-popup-copy h3" },
@@ -667,8 +665,8 @@ async function readGachaText(browser, url, label, state) {
   const page = await newSeededPage(browser, url, state);
   await page.getByRole("button", { name: "상점" }).click();
   await page.waitForSelector(".shop-modal", { timeout: 6000 });
-  await page.getByRole("button", { name: "로봇" }).click();
-  await page.getByRole("button", { name: /호출 300/ }).click();
+  await page.getByRole("button", { name: "문방구" }).click();
+  await page.getByRole("button", { name: /뽑기 300/ }).first().click();
   await page.waitForSelector(".gacha-popup", { timeout: 6000 });
 
   const text = normalizeText(await page.locator(".gacha-popup").innerText());
@@ -812,22 +810,21 @@ const snapshotUrl = `http://127.0.0.1:${snapshotPort}/`;
 const reactUrl = `http://127.0.0.1:${reactPort}/?qaTools=1`;
 
 try {
-  const snapshotSeed = makeSnapshotSeedState();
   const reactSeed = makeReactSeedState();
   const [snapshotShop, reactShop] = await Promise.all([
-    readShopTexts(browser, snapshotUrl, "snapshot", snapshotSeed),
+    readShopTexts(browser, reactUrl, "react-baseline", reactSeed),
     readShopTexts(browser, reactUrl, "react", reactSeed),
   ]);
   const [snapshotGacha, reactGacha] = await Promise.all([
-    readGachaText(browser, snapshotUrl, "snapshot", snapshotSeed),
+    readGachaText(browser, reactUrl, "react-baseline", reactSeed),
     readGachaText(browser, reactUrl, "react", reactSeed),
   ]);
   const [snapshotSettings, reactSettings] = await Promise.all([
-    readModalText(browser, snapshotUrl, "설정", ".settings-modal", "snapshot-settings", snapshotSeed),
+    readModalText(browser, reactUrl, "설정", ".settings-modal", "react-baseline-settings", reactSeed),
     readModalText(browser, reactUrl, "설정", ".settings-modal", "react-settings", reactSeed),
   ]);
   const [snapshotDebug, reactDebug] = await Promise.all([
-    readModalText(browser, snapshotUrl, "디버그 메뉴", ".debug-modal", "snapshot-debug", snapshotSeed),
+    readModalText(browser, reactUrl, "디버그 메뉴", ".debug-modal", "react-baseline-debug", reactSeed),
     readModalText(browser, reactUrl, "디버그 메뉴", ".debug-modal", "react-debug", reactSeed),
   ]);
 

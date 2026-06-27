@@ -12,8 +12,8 @@
         "type": "expeditionStage",
         "stage": 1,
         "help": {
-          "type": "? ??? ?? ?????.",
-          "stage": "? ??? ?? Stage ??? ? ??? ? ????."
+          "type": "해금 조건의 종류입니다. expeditionStage는 원정대 Stage 도달로 해금합니다.",
+          "stage": "원정대가 이 Stage 이상 진행하면 이 지역이 해금됩니다."
         }
       },
       "stages": [
@@ -98,8 +98,8 @@
         "type": "previousMaxOwned",
         "previousDistrictId": "small_studio",
         "help": {
-          "type": "?? ??? ?? ?? ???? ???? ?????.",
-          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+          "type": "해금 조건의 종류입니다. previousMaxOwned는 직전 부동산의 최대 보유 수량 달성으로 해금합니다.",
+          "previousDistrictId": "이 지역을 해금하려면 최대 보유 수량을 채워야 하는 직전 부동산 지역 id입니다."
         }
       },
       "stages": [
@@ -174,8 +174,8 @@
         "type": "previousMaxOwned",
         "previousDistrictId": "two_room",
         "help": {
-          "type": "?? ??? ?? ?? ???? ???? ?????.",
-          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+          "type": "해금 조건의 종류입니다. previousMaxOwned는 직전 부동산의 최대 보유 수량 달성으로 해금합니다.",
+          "previousDistrictId": "이 지역을 해금하려면 최대 보유 수량을 채워야 하는 직전 부동산 지역 id입니다."
         }
       },
       "stages": [
@@ -250,8 +250,8 @@
         "type": "previousMaxOwned",
         "previousDistrictId": "villa",
         "help": {
-          "type": "?? ??? ?? ?? ???? ???? ?????.",
-          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+          "type": "해금 조건의 종류입니다. previousMaxOwned는 직전 부동산의 최대 보유 수량 달성으로 해금합니다.",
+          "previousDistrictId": "이 지역을 해금하려면 최대 보유 수량을 채워야 하는 직전 부동산 지역 id입니다."
         }
       },
       "stages": [
@@ -336,8 +336,8 @@
         "type": "previousMaxOwned",
         "previousDistrictId": "officetel",
         "help": {
-          "type": "?? ??? ?? ?? ???? ???? ?????.",
-          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+          "type": "해금 조건의 종류입니다. previousMaxOwned는 직전 부동산의 최대 보유 수량 달성으로 해금합니다.",
+          "previousDistrictId": "이 지역을 해금하려면 최대 보유 수량을 채워야 하는 직전 부동산 지역 id입니다."
         }
       },
       "stages": [
@@ -412,8 +412,8 @@
         "type": "previousMaxOwned",
         "previousDistrictId": "shop_unit",
         "help": {
-          "type": "?? ??? ?? ?? ???? ???? ?????.",
-          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+          "type": "해금 조건의 종류입니다. previousMaxOwned는 직전 부동산의 최대 보유 수량 달성으로 해금합니다.",
+          "previousDistrictId": "이 지역을 해금하려면 최대 보유 수량을 채워야 하는 직전 부동산 지역 id입니다."
         }
       },
       "stages": [
@@ -478,8 +478,8 @@
         "type": "previousMaxOwned",
         "previousDistrictId": "small_building",
         "help": {
-          "type": "?? ??? ?? ?? ???? ???? ?????.",
-          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+          "type": "해금 조건의 종류입니다. previousMaxOwned는 직전 부동산의 최대 보유 수량 달성으로 해금합니다.",
+          "previousDistrictId": "이 지역을 해금하려면 최대 보유 수량을 채워야 하는 직전 부동산 지역 id입니다."
         }
       },
       "stages": [
@@ -554,8 +554,8 @@
         "type": "previousMaxOwned",
         "previousDistrictId": "apartment_building",
         "help": {
-          "type": "?? ??? ?? ?? ???? ???? ?????.",
-          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+          "type": "해금 조건의 종류입니다. previousMaxOwned는 직전 부동산의 최대 보유 수량 달성으로 해금합니다.",
+          "previousDistrictId": "이 지역을 해금하려면 최대 보유 수량을 채워야 하는 직전 부동산 지역 id입니다."
         }
       },
       "stages": [
@@ -620,8 +620,8 @@
         "type": "previousMaxOwned",
         "previousDistrictId": "apartment_complex",
         "help": {
-          "type": "?? ??? ?? ?? ???? ???? ?????.",
-          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+          "type": "해금 조건의 종류입니다. previousMaxOwned는 직전 부동산의 최대 보유 수량 달성으로 해금합니다.",
+          "previousDistrictId": "이 지역을 해금하려면 최대 보유 수량을 채워야 하는 직전 부동산 지역 id입니다."
         }
       },
       "stages": [
@@ -696,8 +696,8 @@
         "type": "previousMaxOwned",
         "previousDistrictId": "office_tower",
         "help": {
-          "type": "?? ??? ?? ?? ???? ???? ?????.",
-          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+          "type": "해금 조건의 종류입니다. previousMaxOwned는 직전 부동산의 최대 보유 수량 달성으로 해금합니다.",
+          "previousDistrictId": "이 지역을 해금하려면 최대 보유 수량을 채워야 하는 직전 부동산 지역 id입니다."
         }
       },
       "stages": [

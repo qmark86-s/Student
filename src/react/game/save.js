@@ -1,11 +1,23 @@
 import { courseBandForCurrent, courseLabelForCurrent, resolveGradeVisual } from "./grades.js";
+import battleRoadConfig from "../../../data/battle_road_config.json";
+import careers from "../../../data/careers.json";
+import studentProgression from "../../../data/student_progression_balance.json";
 import { educationPointMultiplier } from "./education.js";
-import { activeLearningHelpers, helperPower } from "./companions.js";
+import { normalizeCareerAlumniList } from "./companions.js";
+import {
+  createDefaultEquipmentState,
+  equippedEquipment,
+  equippedEquipmentPower,
+  isLegacyStudentHelper,
+  legacyStudentHelperToEquipment,
+  normalizeEquipmentState,
+  validateEquipmentState,
+} from "./equipment.js";
 import { createDefaultExpeditionState, migrateLegacyExpeditionState, validateExpeditionState } from "./expedition.js";
 import { createDefaultRealEstateState, normalizeRealEstateState, validateRealEstateState } from "./realEstate.js";
 
 export const SAVE_KEY = "student-idle-rpg-save-v1";
-export const SAVE_SCHEMA_VERSION = 3;
+export const SAVE_SCHEMA_VERSION = 4;
 export const CONTENT_REVISION = "lzg40t";
 
 const defaultWeights = {
@@ -39,6 +51,8 @@ const subjectDisplayOrder = [
   { id: "social", label: "사회" },
   { id: "science", label: "과학" },
 ];
+const careerById = new Map(careers.map((career) => [career.id, career]));
+const maxBattleDurationMs = Number(studentProgression.balance.maxBattleDurationMs);
 
 function visibleSubjectDisplayOrder(current = {}) {
   const phase = resolveGradeVisual(current).phase;
@@ -48,6 +62,10 @@ function visibleSubjectDisplayOrder(current = {}) {
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
+}
+
+function hasOwn(source, key) {
+  return Object.prototype.hasOwnProperty.call(source, key);
 }
 
 function assertObject(value, path) {
@@ -247,7 +265,8 @@ export function validateGameState(state) {
   assertNumber(state.workSlots, "save.workSlots");
   assertNumber(state.lastIncomeAt, "save.lastIncomeAt");
   validateCurrentState(state.current, "save.current");
-  assertArray(state.companions, "save.companions");
+  assertArray(state.careerAlumni, "save.careerAlumni");
+  validateEquipmentState(state.equipment, "save.equipment");
   validateExpeditionState(state.expedition, "save.expedition");
   validateRealEstateState(state.realEstate, "save.realEstate");
   assertArray(state.archive, "save.archive");
@@ -299,7 +318,8 @@ export function createDefaultGameState() {
       awaitingDecision: false,
       outcome: null,
     },
-    companions: [],
+    careerAlumni: [],
+    equipment: createDefaultEquipmentState(),
     expedition: createDefaultExpeditionState(),
     realEstate: createDefaultRealEstateState(),
     archive: [],
@@ -330,23 +350,248 @@ export function saveGameState(state, storage = globalThis.localStorage) {
   storage.setItem(SAVE_KEY, JSON.stringify(state));
 }
 
+function valueOrDefault(source, key, defaultValue) {
+  return hasOwn(source, key) ? source[key] : defaultValue;
+}
+
+function objectOrDefault(source, key, defaultValue) {
+  if (!hasOwn(source, key)) return { ...defaultValue };
+  const value = source[key];
+  if (!value || typeof value !== "object" || Array.isArray(value)) return value;
+  return { ...defaultValue, ...value };
+}
+
+function arrayOrDefault(source, key) {
+  return hasOwn(source, key) ? source[key] : [];
+}
+
+function validGender(value, defaultGender = "male") {
+  if (value === "female") return "female";
+  if (value === "male") return "male";
+  return defaultGender;
+}
+
+function battleRoadEncounterCount(mode) {
+  const table = mode === "suneung" ? battleRoadConfig.suneung.encounters : battleRoadConfig.schoolYear.encounters;
+  assert(Array.isArray(table) && table.length > 0, `Battle Road ${mode} 조우 데이터가 비어 있습니다.`);
+  return table.length;
+}
+
+function legacyRoadState(current, defaultCurrent) {
+  const rawRoad = current.road;
+  if (hasOwn(current, "road") && (!rawRoad || typeof rawRoad !== "object" || Array.isArray(rawRoad))) return rawRoad;
+  const hasRoad = rawRoad && typeof rawRoad === "object" && !Array.isArray(rawRoad);
+  const battle = current.battle && typeof current.battle === "object" && !Array.isArray(current.battle) ? current.battle : {};
+  const requestedMode =
+    current.awaitingDecision === true || current.gradeId === "H3" || battle.kind === "suneung" || (hasRoad && rawRoad.mode === "suneung")
+      ? "suneung"
+      : "school";
+  const total = battleRoadEncounterCount(requestedMode);
+  const decisionIndex = current.awaitingDecision === true && requestedMode === "suneung" ? total - 1 : 0;
+  const encounterIndex = hasRoad && hasOwn(rawRoad, "encounterIndex")
+    ? rawRoad.encounterIndex
+    : hasOwn(battle, "encounterIndex")
+      ? battle.encounterIndex
+      : decisionIndex;
+  return {
+    mode: requestedMode,
+    phase: hasRoad && hasOwn(rawRoad, "phase") ? rawRoad.phase : defaultCurrent.road.phase,
+    encounterIndex,
+    encounterTotal: total,
+    phaseStartedAt: hasRoad && hasOwn(rawRoad, "phaseStartedAt") ? rawRoad.phaseStartedAt : defaultCurrent.road.phaseStartedAt,
+    lastCompletedEncounterId: hasRoad && hasOwn(rawRoad, "lastCompletedEncounterId") ? rawRoad.lastCompletedEncounterId : null,
+  };
+}
+
+function legacyDecisionBattle(current) {
+  const encounters = battleRoadConfig.suneung.encounters;
+  assert(Array.isArray(encounters) && encounters.length > 0, "Battle Road 수능 조우 데이터가 비어 있습니다.");
+  const encounterIndex = encounters.length - 1;
+  const encounter = encounters[encounterIndex];
+  assert(encounter && typeof encounter === "object", "Battle Road 수능 최종 조우 데이터가 객체가 아닙니다.");
+  assert(Array.isArray(encounter.enemies) && encounter.enemies.length > 0, "Battle Road 수능 최종 조우 적 데이터가 비어 있습니다.");
+  const gradeVisual = resolveGradeVisual(current);
+  return {
+    gradeId: current.gradeId,
+    gradeOrder: gradeVisual.order,
+    kind: "suneung",
+    roadMode: "suneung",
+    encounterIndex,
+    encounterTotal: encounters.length,
+    encounterId: encounter.id,
+    encounterLabel: encounter.label,
+    roadTiming: { ...battleRoadConfig.timing },
+    roadCamera: { ...battleRoadConfig.camera },
+    elapsedMs: maxBattleDurationMs,
+    maxDurationMs: maxBattleDurationMs,
+    finished: true,
+    enemies: encounter.enemies.map((enemy) => ({
+      id: `legacy-suneung-${enemy.id}`,
+      label: enemy.label,
+      kind: "suneung",
+      month: enemy.visualMonth,
+      subjects: Array.isArray(enemy.subjects) ? [...enemy.subjects] : enemy.subjects,
+      weight: 1,
+      maxHp: 1,
+      remainingHp: 0,
+      studyPointReward: 0,
+      rewardClaimed: true,
+    })),
+  };
+}
+
+function legacyCareerCandidate(candidate, gender) {
+  if (!candidate || typeof candidate !== "object" || Array.isArray(candidate)) return candidate;
+  const career = typeof candidate.careerId === "string" ? careerById.get(candidate.careerId) : null;
+  return {
+    ...candidate,
+    avatarGender: validGender(candidate.avatarGender, gender),
+    name: typeof candidate.name === "string" && candidate.name.length > 0 ? candidate.name : career ? career.name : undefined,
+    tier: hasOwn(candidate, "tier") ? candidate.tier : career ? career.tier : undefined,
+    choiceRank: hasOwn(candidate, "choiceRank") ? candidate.choiceRank : career ? career.choiceRank : undefined,
+    choiceBand: typeof candidate.choiceBand === "string" && candidate.choiceBand.length > 0 ? candidate.choiceBand : career ? career.choiceBand : undefined,
+    minPrestige: hasOwn(candidate, "minPrestige") ? candidate.minPrestige : career ? career.minPrestige : undefined,
+    incomePerMinute: hasOwn(candidate, "incomePerMinute") ? candidate.incomePerMinute : career ? career.baseIncomePerMinute : undefined,
+    powerMultiplier: hasOwn(candidate, "powerMultiplier") ? candidate.powerMultiplier : career ? career.powerMultiplier : undefined,
+    score: hasOwn(candidate, "score") ? candidate.score : 0,
+    selectable: typeof candidate.selectable === "boolean" ? candidate.selectable : false,
+    lockedReason: typeof candidate.lockedReason === "string" ? candidate.lockedReason : "",
+  };
+}
+
+function legacyOutcome(outcome, gender) {
+  if (!outcome || typeof outcome !== "object" || Array.isArray(outcome)) return outcome;
+  const careerCandidates = Array.isArray(outcome.careerCandidates)
+    ? outcome.careerCandidates.map((candidate) => legacyCareerCandidate(candidate, gender))
+    : outcome.careerCandidates;
+  const selectableCount = Array.isArray(careerCandidates) ? careerCandidates.filter((candidate) => candidate && candidate.selectable === true).length : 0;
+  return {
+    ...outcome,
+    avatarGender: validGender(outcome.avatarGender, gender),
+    careerCandidates,
+    careerSelectableCount: hasOwn(outcome, "careerSelectableCount") ? outcome.careerSelectableCount : selectableCount,
+    forcedArchiveAvailable: hasOwn(outcome, "forcedArchiveAvailable") ? outcome.forcedArchiveAvailable : false,
+  };
+}
+
+function legacyCurrentState(current) {
+  if (!current || typeof current !== "object" || Array.isArray(current)) return current;
+  const defaultCurrent = createDefaultGameState().current;
+  const gender = validGender(current.avatarGender, defaultCurrent.avatarGender);
+  const next = {
+    ...defaultCurrent,
+    ...current,
+    avatarGender: gender,
+    retakeCount: valueOrDefault(current, "retakeCount", defaultCurrent.retakeCount),
+    road: legacyRoadState(current, defaultCurrent),
+    studyLevels: objectOrDefault(current, "studyLevels", defaultCurrent.studyLevels),
+    aptitude: objectOrDefault(current, "aptitude", defaultCurrent.aptitude),
+    educationLevels: objectOrDefault(current, "educationLevels", defaultCurrent.educationLevels),
+    studyAllocationWeights: objectOrDefault(current, "studyAllocationWeights", defaultCurrent.studyAllocationWeights),
+    stats: objectOrDefault(current, "stats", defaultCurrent.stats),
+    examResults: arrayOrDefault(current, "examResults"),
+    outcome: current.awaitingDecision === true ? legacyOutcome(current.outcome, gender) : null,
+  };
+  if (current.awaitingDecision === true) {
+    next.battle = legacyDecisionBattle(next);
+  } else {
+    next.battle = undefined;
+  }
+  return next;
+}
+
+function legacyTopLevelState(state) {
+  const defaults = createDefaultGameState();
+  const createdAt = Number.isFinite(Number(state.lastIncomeAt)) ? Number(state.lastIncomeAt) : Date.now();
+  return {
+    ...defaults,
+    ...state,
+    runNumber: valueOrDefault(state, "runNumber", defaults.runNumber),
+    money: valueOrDefault(state, "money", defaults.money),
+    diamonds: valueOrDefault(state, "diamonds", defaults.diamonds),
+    workSlots: valueOrDefault(state, "workSlots", defaults.workSlots),
+    lastIncomeAt: valueOrDefault(state, "lastIncomeAt", defaults.lastIncomeAt),
+    current: legacyCurrentState(state.current),
+    expedition: state.expedition && typeof state.expedition === "object" && !Array.isArray(state.expedition)
+      ? state.expedition
+      : createDefaultExpeditionState(createdAt),
+    realEstate: state.realEstate && typeof state.realEstate === "object" && !Array.isArray(state.realEstate)
+      ? state.realEstate
+      : createDefaultRealEstateState(createdAt),
+    archive: arrayOrDefault(state, "archive"),
+    history: arrayOrDefault(state, "history"),
+    log: arrayOrDefault(state, "log"),
+  };
+}
+
 function migrateGameState(state) {
   assertObject(state, "save");
-  if (state.schemaVersion === SAVE_SCHEMA_VERSION) return state;
-  if (state.schemaVersion === 1) {
-    assertArray(state.companions, "save.companions");
+  const migrateLegacyPeopleAndEquipment = (source) => {
+    const legacyPeople = Array.isArray(source.companions) ? source.companions : Array.isArray(source.careerAlumni) ? source.careerAlumni : [];
+    const legacyEquipment = legacyPeople.filter((item) => isLegacyStudentHelper(item)).map((item, index) => legacyStudentHelperToEquipment(item, index));
+    const careerAlumni = normalizeCareerAlumniList(legacyPeople.filter((item) => !isLegacyStudentHelper(item)));
+    const currentEquipment = source.equipment && typeof source.equipment === "object" ? source.equipment : createDefaultEquipmentState();
+    const equipment = normalizeEquipmentState({
+      inventory: [...(Array.isArray(currentEquipment.inventory) ? currentEquipment.inventory : []), ...legacyEquipment],
+      equipped: currentEquipment.equipped || {},
+    });
+    return { careerAlumni, equipment };
+  };
+  if (state.schemaVersion === SAVE_SCHEMA_VERSION) {
+    if (Array.isArray(state.careerAlumni) && state.equipment) return state;
+    const migratedLegacy = migrateLegacyPeopleAndEquipment(state);
     return {
       ...state,
+      careerAlumni: migratedLegacy.careerAlumni,
+      equipment: migratedLegacy.equipment,
+    };
+  }
+  if (state.schemaVersion === 1) {
+    const legacy = legacyTopLevelState(state);
+    const migratedLegacy = migrateLegacyPeopleAndEquipment(legacy);
+    return {
+      ...legacy,
       schemaVersion: SAVE_SCHEMA_VERSION,
-      expedition: migrateLegacyExpeditionState(state.expedition, state.companions),
-      realEstate: createDefaultRealEstateState(),
+      careerAlumni: migratedLegacy.careerAlumni,
+      equipment: migratedLegacy.equipment,
+      expedition: state.expedition && typeof state.expedition === "object" && !Array.isArray(state.expedition)
+        ? migrateLegacyExpeditionState(legacy.expedition, migratedLegacy.careerAlumni)
+        : legacy.expedition,
+      realEstate: state.realEstate && typeof state.realEstate === "object" && !Array.isArray(state.realEstate)
+        ? normalizeRealEstateState(legacy.realEstate)
+        : legacy.realEstate,
     };
   }
   if (state.schemaVersion === 2) {
+    const legacy = legacyTopLevelState(state);
+    const migratedLegacy = migrateLegacyPeopleAndEquipment(legacy);
     return {
-      ...state,
+      ...legacy,
       schemaVersion: SAVE_SCHEMA_VERSION,
-      realEstate: createDefaultRealEstateState(),
+      careerAlumni: migratedLegacy.careerAlumni,
+      equipment: migratedLegacy.equipment,
+      expedition: state.expedition && typeof state.expedition === "object" && !Array.isArray(state.expedition)
+        ? migrateLegacyExpeditionState(legacy.expedition, migratedLegacy.careerAlumni)
+        : legacy.expedition,
+      realEstate: state.realEstate && typeof state.realEstate === "object" && !Array.isArray(state.realEstate)
+        ? normalizeRealEstateState(legacy.realEstate)
+        : legacy.realEstate,
+    };
+  }
+  if (state.schemaVersion === 3) {
+    const legacy = legacyTopLevelState(state);
+    const migratedLegacy = migrateLegacyPeopleAndEquipment(legacy);
+    return {
+      ...legacy,
+      schemaVersion: SAVE_SCHEMA_VERSION,
+      careerAlumni: migratedLegacy.careerAlumni,
+      equipment: migratedLegacy.equipment,
+      expedition: state.expedition && typeof state.expedition === "object" && !Array.isArray(state.expedition)
+        ? migrateLegacyExpeditionState(legacy.expedition, migratedLegacy.careerAlumni)
+        : legacy.expedition,
+      realEstate: state.realEstate && typeof state.realEstate === "object" && !Array.isArray(state.realEstate)
+        ? normalizeRealEstateState(legacy.realEstate)
+        : legacy.realEstate,
     };
   }
   throw new Error(`지원하지 않는 저장 버전입니다: ${String(state.schemaVersion)}`);
@@ -357,8 +602,9 @@ export function normalizeGameState(state) {
   validateGameState(migrated);
   const current = migrated.current;
   const hasContentRevision = Object.prototype.hasOwnProperty.call(migrated, "contentRevision");
+  const { companions: _legacyCompanions, ...stateWithoutLegacyCompanions } = migrated;
   return {
-    ...migrated,
+    ...stateWithoutLegacyCompanions,
     schemaVersion: SAVE_SCHEMA_VERSION,
     contentRevision: hasContentRevision && typeof migrated.contentRevision === "string" ? migrated.contentRevision : undefined,
     current: {
@@ -371,7 +617,8 @@ export function normalizeGameState(state) {
       stats: { ...current.stats },
       examResults: current.examResults,
     },
-    companions: migrated.companions,
+    careerAlumni: normalizeCareerAlumniList(migrated.careerAlumni),
+    equipment: normalizeEquipmentState(migrated.equipment),
     expedition: {
       ...migrated.expedition,
       members: migrated.expedition.members.map((member) => ({
@@ -395,8 +642,8 @@ export function summarizeGameState(state) {
   const current = state.current;
   const retakeCount = Number(current.retakeCount);
   const grade = resolveGradeVisual(current);
-  const activeHelpers = activeLearningHelpers(state);
-  const totalCompanionPower = activeHelpers.reduce((sum, companion) => sum + helperPower(companion), 0);
+  const equippedItems = equippedEquipment(state);
+  const totalEquipmentPower = equippedEquipmentPower(state);
   const koreanLevel = sparseNumberOrZero(current.studyLevels, "korean", "save.current.studyLevels");
   const displayStat = (subjectId) => {
     const stat = Number(current.stats[subjectId]);
@@ -414,9 +661,9 @@ export function summarizeGameState(state) {
     unspentStudyPoints: Number(current.unspentStudyPoints),
     totalStudyPoints: Number(current.totalStudyPoints),
     totalKills: Number(current.totalKills),
-    helperCount: activeHelpers.length,
-    activeHelpers,
-    helperPower: totalCompanionPower,
+    equipmentCount: equippedItems.filter(Boolean).length,
+    equippedItems,
+    equipmentPower: totalEquipmentPower,
     educationMultiplier: educationPointMultiplier(state),
     nextStudyGain: 1 + Math.floor(koreanLevel / 4),
     allocationWeights: { ...current.studyAllocationWeights },

@@ -5,6 +5,7 @@ import growthLevels from "../../../data/growth_levels.json";
 import studentProgression from "../../../data/student_progression_balance.json";
 import universities from "../../../data/universities.json";
 import { educationPointMultiplier } from "./education.js";
+import { equippedEquipment } from "./equipment.js";
 import { registerExpeditionMembersFromCompanions } from "./expedition.js";
 import { createDefaultGameState } from "./save.js";
 import { isRepeaterCurrent, nextSchoolGradeId, resolveGradeOrder, resolveGradeVisual } from "./grades.js";
@@ -195,13 +196,11 @@ function autoAllocateStudyPoints(state) {
 
 function effectiveStatsForBattle(state) {
   const stats = Object.fromEntries(subjectIds.map((subject) => [subject, finiteNumber(state.current.stats[subject], `current.stats.${subject} 값이 올바르지 않습니다.`)]));
-  const share = finiteNumber(progressionBalance.companionStatShare, "companionStatShare 값이 올바르지 않습니다.");
-  if (Array.isArray(state.companions)) {
-    for (const companion of state.companions) {
-      if (companion.status !== "study" || !companion.stats) continue;
-      for (const subject of subjectIds) {
-        stats[subject] += finiteNumber(companion.stats[subject], `동료 stats.${subject} 값이 올바르지 않습니다: ${companion.id}`) * share;
-      }
+  const share = finiteNumber(progressionBalance.equipmentStatShare, "equipmentStatShare 값이 올바르지 않습니다.");
+  for (const equipment of equippedEquipment(state)) {
+    if (!equipment) continue;
+    for (const subject of subjectIds) {
+      stats[subject] += finiteNumber(equipment.stats[subject], `장비 stats.${subject} 값이 올바르지 않습니다: ${equipment.id}`) * share;
     }
   }
   return stats;
@@ -627,32 +626,32 @@ export function acceptCareerChoice(state, { universityId, careerId } = {}) {
   assert(current.avatarGender === "male" || current.avatarGender === "female", `current.avatarGender 값이 올바르지 않습니다: ${current.avatarGender}`);
   const avatarGender = current.avatarGender;
   const runNumber = finiteNumber(next.runNumber, "save.runNumber 값이 올바르지 않습니다.");
-  const companionId = `alumni-${runNumber}-${Date.now()}`;
+  const alumniId = `alumni-${runNumber}-${Date.now()}`;
   const age = graduatedAge(current);
-  const companionPowerMultiplier = finiteNumber(careerCandidate.powerMultiplier, `직업 후보 powerMultiplier 값이 올바르지 않습니다: ${careerCandidate.careerId}`);
-  const companionCareerRank = finiteNumber(careerCandidate.choiceRank, `직업 후보 choiceRank 값이 올바르지 않습니다: ${careerCandidate.careerId}`);
-  const companion = {
-    id: companionId,
-    name: `${careerCandidate.name} 동료`,
+  const alumniPowerMultiplier = finiteNumber(careerCandidate.powerMultiplier, `직업 후보 powerMultiplier 값이 올바르지 않습니다: ${careerCandidate.careerId}`);
+  const alumniCareerRank = finiteNumber(careerCandidate.choiceRank, `직업 후보 choiceRank 값이 올바르지 않습니다: ${careerCandidate.careerId}`);
+  const alumni = {
+    id: alumniId,
+    name: `${careerCandidate.name} 졸업생`,
     careerId: careerCandidate.careerId,
     careerName: careerCandidate.name,
     avatarGender,
     age,
     status: "idle",
     incomePerMinute: careerCandidate.incomePerMinute,
-    powerMultiplier: companionPowerMultiplier,
-    careerRank: companionCareerRank,
+    powerMultiplier: alumniPowerMultiplier,
+    careerRank: alumniCareerRank,
     stats: cloneStats(current.stats),
     createdRun: runNumber,
     source: "human",
     sourceUniversity: admission.name,
   };
 
-  assert(Array.isArray(next.companions), "save.companions 데이터가 배열이 아닙니다.");
+  assert(Array.isArray(next.careerAlumni), "save.careerAlumni 데이터가 배열이 아닙니다.");
   assert(Array.isArray(next.history), "save.history 데이터가 배열이 아닙니다.");
   assert(Array.isArray(next.log), "save.log 데이터가 배열이 아닙니다.");
-  next.companions = [...next.companions, companion];
-  const expeditionRegistration = registerExpeditionMembersFromCompanions(next, [companion], { autoParty: true });
+  next.careerAlumni = [...next.careerAlumni, alumni];
+  const expeditionRegistration = registerExpeditionMembersFromCompanions(next, [alumni], { autoParty: true });
   next.expedition = expeditionRegistration.state.expedition;
   next.history = [
     {
@@ -660,7 +659,7 @@ export function acceptCareerChoice(state, { universityId, careerId } = {}) {
       universityName: admission.name,
       careerId: careerCandidate.careerId,
       careerName: careerCandidate.name,
-      careerRank: companionCareerRank,
+      careerRank: alumniCareerRank,
       avatarGender,
       track: current.track,
       suneungScore: outcome.suneungScore,
@@ -672,7 +671,7 @@ export function acceptCareerChoice(state, { universityId, careerId } = {}) {
   next.log = [
     {
       type: "good",
-      message: `${admission.name} 진학 후 ${careerCandidate.name} 직업 동료가 등록되었다.`,
+      message: `${admission.name} 진학 후 ${careerCandidate.name} 졸업생이 원정대원 후보로 등록되었다.`,
       createdAt: Date.now(),
     },
     ...next.log,

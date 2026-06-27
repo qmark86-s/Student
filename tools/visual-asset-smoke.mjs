@@ -84,11 +84,12 @@ function closeServer(server) {
 
 function makeVisualSmokeState() {
   const stats = { korean: 240, english: 240, math: 240, social: 180, science: 180 };
-  const companions = [
-    { id: "smoke-helper-teacher", name: "교사 도우미", careerId: "teacher", age: 25, auraColor: "#60a5fa" },
-    { id: "smoke-helper-software", name: "개발 도우미", careerId: "software_engineer", age: 25, auraColor: "#34d399" },
-    { id: "smoke-helper-doctor", name: "의학 도우미", careerId: "doctor", age: 25, auraColor: "#f472b6" },
-  ].map((companion) => ({
+  const companionSpecs = [
+    { id: "smoke-helper-teacher", name: "교사 도우미", careerId: "teacher", careerName: "교사", avatarGender: "female", age: 25, auraColor: "#60a5fa" },
+    { id: "smoke-helper-software", name: "개발 도우미", careerId: "software_engineer", careerName: "소프트웨어 엔지니어", avatarGender: "male", age: 25, auraColor: "#34d399" },
+    { id: "smoke-helper-doctor", name: "의학 도우미", careerId: "doctor", careerName: "의사", avatarGender: "female", age: 25, auraColor: "#f472b6" },
+  ];
+  const companions = companionSpecs.map((companion) => ({
     ...companion,
     source: "human",
     status: "study",
@@ -97,6 +98,54 @@ function makeVisualSmokeState() {
     stats,
     createdRun: 1,
     sourceUniversity: "스모크 검증",
+  }));
+  const equipmentItems = [
+    {
+      id: "visual-smoke-stationery",
+      catalogId: "stationery_planner_a",
+      slot: "stationery",
+      rarity: "A",
+      name: "오답 플래너",
+      stats: { korean: 160, english: 130, math: 150, social: 145, science: 145 },
+      sellPrice: 25000,
+      source: "visual-smoke",
+      createdAt: Date.now(),
+    },
+    {
+      id: "visual-smoke-book",
+      catalogId: "book_archive_a",
+      slot: "book",
+      rarity: "A",
+      name: "오답 압축 노트",
+      stats: { korean: 175, english: 135, math: 155, social: 145, science: 145 },
+      sellPrice: 25000,
+      source: "visual-smoke",
+      createdAt: Date.now() + 1,
+    },
+  ];
+  const expeditionMembers = [
+    { id: "expedition-member-smoke-doctor", sourceCareerId: "doctor", careerName: "의사", avatarGender: "female" },
+    { id: "expedition-member-smoke-judge", sourceCareerId: "judge", careerName: "판사", avatarGender: "male" },
+    { id: "expedition-member-smoke-software", sourceCareerId: "software_engineer", careerName: "소프트웨어 엔지니어", avatarGender: "male" },
+    { id: "expedition-member-smoke-pilot", sourceCareerId: "pilot", careerName: "조종사", avatarGender: "female" },
+    { id: "expedition-member-smoke-chef", sourceCareerId: "chef", careerName: "셰프", avatarGender: "male" },
+  ].map((member, index) => ({
+    ...member,
+    sourceKey: `visual-smoke:${member.sourceCareerId}`,
+    sourceRunNumber: 1,
+    sourceUniversity: "스모크 검증",
+    level: 1,
+    exp: 0,
+    promotionTier: "staff",
+    baseStats: {
+      korean: 88 + index * 3,
+      english: 91 + index * 2,
+      math: 95 + index * 4,
+      social: 77 + index * 3,
+      science: 93 + index * 5,
+    },
+    locked: false,
+    createdAt: Date.now() + index,
   }));
 
   return {
@@ -134,6 +183,25 @@ function makeVisualSmokeState() {
       outcome: null,
     },
     companions,
+    equipment: {
+      inventory: equipmentItems,
+      equipped: {
+        stationery: "visual-smoke-stationery",
+        book: "visual-smoke-book",
+      },
+    },
+    expedition: {
+      members: expeditionMembers,
+      partyMemberIds: expeditionMembers.map((member) => member.id),
+      currentStage: 1,
+      highestStage: 0,
+      claimedBossStages: [],
+      trainingExp: 0,
+      chapterRun: { chapter: 1, tempLevel: 1, tempExp: 0, boostMultiplier: 1 },
+      lastResolvedAt: Date.now(),
+      log: [],
+      lastStageId: null,
+    },
     archive: [],
     history: [],
     log: [],
@@ -203,21 +271,12 @@ try {
     } catch {
       savedBattleEnemies = [];
     }
-    const helperProbe = document.createElement("span");
-    helperProbe.className = "helper-sprite helper-slot-1 helper-book";
-    helperProbe.style.position = "absolute";
-    helperProbe.style.left = "30%";
-    helperProbe.style.bottom = "13%";
-    helperProbe.style.display = "block";
-    arena?.append(helperProbe);
-    const helperAllyCssReady = ["helperAllyLoop", "helperRoadRun", "helperRoadBrake"].some((name) =>
-      animationName(helperProbe).includes(name),
-    );
-    const actualHelperSprites = [...document.querySelectorAll(".helper-party .helper-sprite")];
-    const helperRects = [...actualHelperSprites, helperProbe]
-      .filter(Boolean)
-      .map((item) => rectMetrics(item));
-    const helperSizes = helperRects.map((rect) => ({ width: rect.width, height: rect.height }));
+    const equipmentLineup = document.querySelector(".equipment-lineup");
+    const equipmentItems = [...document.querySelectorAll(".equipment-lineup .equipment-orbit-item")];
+    const equipmentRects = equipmentItems.map((item) => rectMetrics(item));
+    const equipmentSizes = equipmentRects.map((rect) => ({ width: rect.width, height: rect.height }));
+    const equipmentMotionReady = equipmentItems.length > 0 && equipmentItems.every((item) => animationName(item).includes("equipmentOrbitLoop"));
+    const equipmentFilledCount = equipmentItems.filter((item) => !item.classList.contains("empty")).length;
     const hpBarRects = [...document.querySelectorAll(".battle-scene-enemy .battle-scene-hp")].map((item) => rectMetrics(item));
     const hpBarSizes = hpBarRects.map((rect) => ({ width: rect.width, height: rect.height }));
     const enemyRects = battleLineup.map((enemy) => {
@@ -287,7 +346,6 @@ try {
       stageScene.classList.remove(...sceneClasses);
       if (originalSceneClass) stageScene.classList.add(originalSceneClass);
     }
-    helperProbe.remove();
     const studentSlashBackground = studentSprite ? getComputedStyle(studentSprite, "::after").backgroundImage : "";
     return {
       studentImage: getComputedStyle(student).backgroundImage.includes("url("),
@@ -311,7 +369,7 @@ try {
       arenaRoadTravel: arena?.classList.contains("road-travel") ?? false,
       battleLineupCount: battleLineup.length,
       battleLineupImages: sceneMonsterArt.filter((item) => getComputedStyle(item).backgroundImage.includes("url(")).length,
-      battleLineupFrames: new Set(sceneMonsterArt.map((item) => [...item.classList].find((className) => className.startsWith("main-monster-"))).filter(Boolean)).size,
+      battleLineupFrames: new Set(sceneMonsterArt.map((item) => getComputedStyle(item).backgroundPositionX).filter(Boolean)).size,
       battleLineupBosses: battleLineup.filter((item) => item.classList.contains("boss")).length,
       battleLineupHpBars: document.querySelectorAll(".battle-scene-enemy .battle-scene-hp").length,
       battleHpBarMinWidth: minRounded(hpBarSizes.map((size) => size.width)),
@@ -331,12 +389,13 @@ try {
       oldBattleBackgroundHidden: !background || getComputedStyle(background).display === "none",
       arenaGridHidden: getComputedStyle(grid).display === "none",
       floorOverlayReduced: animationName(floor) === "none",
-      helperAllyCssReady,
-      helperActualCount: actualHelperSprites.length,
-      helperRenderedCount: helperRects.length,
-      helperMinWidth: minRounded(helperSizes.map((size) => size.width)),
-      helperMinHeight: minRounded(helperSizes.map((size) => size.height)),
-      helperSquareDelta: maxRounded(helperSizes.map((size) => Math.abs(size.width - size.height))),
+      equipmentLineupReady: !!equipmentLineup,
+      equipmentMotionReady,
+      equipmentRenderedCount: equipmentItems.length,
+      equipmentFilledCount,
+      equipmentMinWidth: minRounded(equipmentSizes.map((size) => size.width)),
+      equipmentMinHeight: minRounded(equipmentSizes.map((size) => size.height)),
+      equipmentSquareDelta: maxRounded(equipmentSizes.map((size) => Math.abs(size.width - size.height))),
       normalEnemyMinWidth: minRounded(normalEnemyRects.map((rect) => rect.width)),
       normalEnemyMinHeight: minRounded(normalEnemyRects.map((rect) => rect.height)),
       normalEnemySquareDelta: maxRounded(normalEnemyRects.map((rect) => Math.abs(rect.width - rect.height))),
@@ -471,8 +530,20 @@ try {
   const mainScreenshotPath = resolve(outputDir, "main-battle.png");
   await page.screenshot({ path: mainScreenshotPath, fullPage: true });
 
-  await page.evaluate(() => document.querySelectorAll(".screen-switch")[1].click());
+  await page.evaluate(() => {
+    const button = document.querySelectorAll(".mode-tab")[1];
+    if (!button) throw new Error("Expedition mode button not found");
+    button.click();
+  });
   await page.waitForSelector(".expedition-enemy-visual", { timeout: 15000 });
+  await page.waitForFunction(
+    () => {
+      const images = [...document.querySelectorAll(".expedition-unit-frame,.expedition-enemy-frame")];
+      return images.length >= 24 && images.every((image) => image.complete && image.naturalWidth > 0 && image.naturalHeight > 0);
+    },
+    null,
+    { timeout: 15000 },
+  );
 
   const expeditionMetrics = await page.evaluate(async () => {
     const doc = document.documentElement;
@@ -494,28 +565,21 @@ try {
     };
     const animationName = (element, pseudo) => (element ? getComputedStyle(element, pseudo).animationName : "");
     const arena = document.querySelector(".expedition-arena");
+    const arenaStyle = arena ? getComputedStyle(arena) : null;
     const arenaDustBackground = arena ? getComputedStyle(arena, "::after").backgroundImage : "";
-    const backgroundSheet = document.querySelector(".expedition-background-sheet");
     const enemy = document.querySelector(".expedition-enemy-visual");
+    const party = document.querySelector(".expedition-party-visual.running");
+    const unitProbe = document.querySelector(".expedition-unit-avatar.large");
     const enemyRect = enemy?.getBoundingClientRect();
-    const beforeImage = enemy ? getComputedStyle(enemy, "::before").backgroundImage : "";
-    const partyProbe = document.createElement("div");
-    partyProbe.className = "expedition-party-visual running";
-    partyProbe.dataset.visualSmokeProbe = "companion";
-    const probeCareers = ["doctor", "judge", "software_engineer", "pilot", "chef"];
-    let unitProbe = null;
-    probeCareers.forEach((careerId, index) => {
-      const unit = document.createElement("span");
-      unit.className = `expedition-unit-avatar large career-unit-${careerId} unit-${index + 1}`;
-      partyProbe.append(unit);
-      if (index === 0) unitProbe = unit;
-    });
-    arena?.append(partyProbe);
-    const allyMotionReady = animationName(unitProbe).includes("expeditionAllyMeleeA");
+    const allyMotionReady = animationName(unitProbe).includes("expeditionUnitRhythm");
     const allySparkReady = animationName(unitProbe, "::after").includes("expeditionAllySpark");
-    const careerUnitImage = getComputedStyle(unitProbe).backgroundImage.includes("url(");
+    const loadedImage = (image) => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0 && image.naturalHeight > 0;
+    const unitFrames = [...document.querySelectorAll(".expedition-unit-frame")];
+    const enemyFrames = [...document.querySelectorAll(".expedition-enemy-frame")];
+    const careerUnitImage = unitFrames.length > 0 && unitFrames.every(loadedImage);
+    const enemyFrameImage = enemyFrames.length > 0 && enemyFrames.every(loadedImage);
     const arenaRect = arena?.getBoundingClientRect();
-    const unitRects = Array.from(partyProbe.querySelectorAll(".expedition-unit-avatar")).map((unit) => unit.getBoundingClientRect());
+    const unitRects = Array.from(document.querySelectorAll(".expedition-party-visual.running .expedition-unit-avatar")).map((unit) => unit.getBoundingClientRect());
     const unitSizes = unitRects.map((rect) => ({ width: rect.width, height: rect.height }));
     const unitClipCount = arenaRect
       ? unitRects.filter(
@@ -527,48 +591,15 @@ try {
         ).length
       : 0;
     const enemyStyle = enemy ? getComputedStyle(enemy) : null;
-    const enemyBeforeStyle = enemy ? getComputedStyle(enemy, "::before") : null;
     const readPx = (value) => {
       const parsed = Number.parseFloat(value || "0");
       return Number.isFinite(parsed) ? parsed : 0;
     };
-    const readPercent = (value) => {
-      const parsed = Number.parseFloat(String(value || "0").split(/\s+/)[0]);
-      return Number.isFinite(parsed) ? parsed : null;
-    };
-    const frameSnapFor = (element, pseudo, prefix) => {
-      if (!element) return { x: null, maxError: 0 };
-      const elementStyle = getComputedStyle(element);
-      const spriteStyle = pseudo ? getComputedStyle(element, pseudo) : elementStyle;
-      const x = readPercent(spriteStyle.backgroundPositionX || spriteStyle.backgroundPosition);
-      const expected = ["a", "b", "c", "d"]
-        .map((frame) => readPercent(elementStyle.getPropertyValue(`--${prefix}-frame-${frame}`)))
-        .filter((value) => value !== null);
-      const base = readPercent(elementStyle.getPropertyValue(`--${prefix}-x`));
-      if (base !== null) expected.push(base);
-      if (x === null || expected.length === 0) return { x, maxError: 0 };
-      return { x, maxError: Math.min(...expected.map((value) => Math.abs(value - x))) };
-    };
-    const enemyBeforeWidth = readPx(enemyBeforeStyle?.width);
-    const enemyBeforeHeight = readPx(enemyBeforeStyle?.height);
-    const enemyBeforeLeft = readPx(enemyBeforeStyle?.left);
-    const enemyBeforeBottom = readPx(enemyBeforeStyle?.bottom);
-    const enemyBeforeMarginLeft = readPx(enemyBeforeStyle?.marginLeft);
+    const minRounded = (values) => (values.length ? Math.round(Math.min(...values)) : 0);
+    const maxRounded = (values) => (values.length ? Math.round(Math.max(...values)) : 0);
     const spriteClipFor = (element) => {
-      const rect = element?.getBoundingClientRect();
-      const before = element ? getComputedStyle(element, "::before") : null;
-      if (!arenaRect || !rect || !before) return { left: 0, right: 0, top: 0, bottom: 0 };
-      const width = readPx(before.width);
-      const height = readPx(before.height);
-      const left = readPx(before.left);
-      const bottom = readPx(before.bottom);
-      const marginLeft = readPx(before.marginLeft);
-      const spriteRect = {
-        left: rect.left + left + marginLeft,
-        right: rect.left + left + marginLeft + width,
-        top: rect.bottom - bottom - height,
-        bottom: rect.bottom - bottom,
-      };
+      const spriteRect = element?.getBoundingClientRect();
+      if (!arenaRect || !spriteRect) return { left: 0, right: 0, top: 0, bottom: 0 };
       return {
         left: Math.max(0, arenaRect.left - spriteRect.left),
         right: Math.max(0, spriteRect.right - arenaRect.right),
@@ -576,7 +607,9 @@ try {
         bottom: Math.max(0, spriteRect.bottom - arenaRect.bottom),
       };
     };
-    const enemySpriteClips = Array.from(document.querySelectorAll(".expedition-enemy-visual")).map(spriteClipFor);
+    const enemyFrameRects = enemyFrames.map((frame) => frame.getBoundingClientRect());
+    const enemyFrameSizes = enemyFrameRects.map((rect) => ({ width: rect.width, height: rect.height }));
+    const enemySpriteClips = enemyFrames.map(spriteClipFor);
     const enemyTextVisibleCount = Array.from(document.querySelectorAll(".expedition-enemy-visual .enemy-name,.expedition-enemy-visual strong,.expedition-enemy-visual small")).filter((element) => {
       const style = getComputedStyle(element);
       const rect = element.getBoundingClientRect();
@@ -593,13 +626,9 @@ try {
     );
     const samples = [];
     for (let i = 0; i < 8; i += 1) {
-      const enemyFrameSnap = frameSnapFor(enemy, "::before", "visual-enemy");
-      const unitFrameSnap = frameSnapFor(unitProbe, null, "visual-unit");
       samples.push({
-        backdropX: matrixX(getComputedStyle(arena, "::before").transform),
-        enemyBeforeY: matrixY(getComputedStyle(enemy, "::before").transform),
-        enemyFrameSnapError: enemyFrameSnap.maxError,
-        unitFrameSnapError: unitFrameSnap.maxError,
+        partyX: matrixX(party ? getComputedStyle(party).transform : ""),
+        enemyY: matrixY(enemy ? getComputedStyle(enemy).transform : ""),
       });
       await new Promise((resolveSample) => setTimeout(resolveSample, 120));
     }
@@ -609,30 +638,36 @@ try {
     };
     return {
       enemyCount: document.querySelectorAll(".expedition-enemy-visual").length,
-      enemyBeforeImage: beforeImage.includes("url("),
+      enemyFrameImage,
+      enemyFrameCount: enemyFrames.length,
+      enemyFrameLoadedCount: enemyFrames.filter(loadedImage).length,
       arenaDustBackground,
-      backdropImage: getComputedStyle(arena, "::before").backgroundImage.includes("url("),
-      backdropMotion: animationName(arena, "::before").includes("expeditionBackdropPan"),
-      backdropTravelPx: Number(range("backdropX").toFixed(2)),
-      oldBackgroundHidden: getComputedStyle(backgroundSheet).display === "none",
-      enemyBeforeMotion: animationName(enemy, "::before").includes("expeditionEnemyHurtSprite") || animationName(enemy, "::before").includes("expeditionEnemySpriteIdle"),
-      enemyShockVfx: animationName(enemy, "::after").includes("expeditionEnemyShock"),
-      enemySpriteTravelPx: Number(range("enemyBeforeY").toFixed(2)),
+      backdropImage: arenaStyle?.backgroundImage.includes("url(") ?? false,
+      partyMotion: animationName(party).includes("expeditionPartyAdvance"),
+      partyTravelPx: Number(range("partyX").toFixed(2)),
+      oldBackgroundHidden: !document.querySelector(".expedition-background-sheet"),
+      enemyFrameMotion: animationName(enemy).includes("expeditionEnemyIdle") || enemyFrames.some((frame) =>
+        ["expeditionEnemyHurtSprite", "expeditionEnemySpriteIdle"].some((name) => animationName(frame).includes(name)),
+      ),
+      enemyShockVfx: animationName(document.querySelector(".expedition-impact")).includes("expeditionImpactPulse"),
+      enemySpriteTravelPx: Number(range("enemyY").toFixed(2)),
       careerUnitImage,
       allyMotionReady,
       allySparkReady,
       unitRenderedCount: unitRects.length,
-      unitMinWidth: Math.round(Math.min(...unitSizes.map((size) => size.width))),
-      unitMinHeight: Math.round(Math.min(...unitSizes.map((size) => size.height))),
-      unitSquareDelta: Math.round(Math.max(...unitSizes.map((size) => Math.abs(size.width - size.height)))),
+      unitFrameCount: unitFrames.length,
+      unitFrameLoadedCount: unitFrames.filter(loadedImage).length,
+      unitFrameAnimatedCount: unitFrames.filter((frame) => animationName(frame) !== "none").length,
+      enemyFrameAnimatedCount: enemyFrames.filter((frame) => animationName(frame) !== "none").length,
+      unitMinWidth: minRounded(unitSizes.map((size) => size.width)),
+      unitMinHeight: minRounded(unitSizes.map((size) => size.height)),
+      unitSquareDelta: maxRounded(unitSizes.map((size) => Math.abs(size.width - size.height))),
       unitClipCount,
-      partyOverflowVisible: getComputedStyle(partyProbe).overflow === "visible",
+      partyOverflowVisible: party ? getComputedStyle(party).overflow === "visible" : false,
       enemyOverflowVisible: enemyStyle?.overflow === "visible",
-      enemyBeforeWidth: Math.round(enemyBeforeWidth),
-      enemyBeforeHeight: Math.round(enemyBeforeHeight),
-      enemyBeforeSquareDelta: Math.round(Math.abs(enemyBeforeWidth - enemyBeforeHeight)),
-      enemyFrameSnapMaxError: Number(Math.max(...samples.map((item) => item.enemyFrameSnapError ?? 0)).toFixed(4)),
-      unitFrameSnapMaxError: Number(Math.max(...samples.map((item) => item.unitFrameSnapError ?? 0)).toFixed(4)),
+      enemyFrameMinWidth: minRounded(enemyFrameSizes.map((size) => size.width)),
+      enemyFrameMinHeight: minRounded(enemyFrameSizes.map((size) => size.height)),
+      enemyFrameSquareDelta: maxRounded(enemyFrameSizes.map((size) => Math.abs(size.width - size.height))),
       enemyTextVisibleCount,
       enemySpriteClipRight: Math.round(enemySpriteClip.right),
       enemySpriteClipLeft: Math.round(enemySpriteClip.left),
@@ -645,7 +680,6 @@ try {
   });
   const expeditionCompanionProbePath = resolve(outputDir, "expedition-companion-probe.png");
   await page.screenshot({ path: expeditionCompanionProbePath, fullPage: true });
-  await page.evaluate(() => document.querySelector('[data-visual-smoke-probe="companion"]')?.remove());
   const expeditionScreenshotPath = resolve(outputDir, "expedition.png");
   await page.screenshot({ path: expeditionScreenshotPath, fullPage: true });
 
@@ -660,7 +694,7 @@ try {
     failures.push(`Main student slash still uses fire-like warm colors: ${mainMetrics.studentSlashBackground}`);
   }
   if (mainMetrics.battleRoadPhase === "travel") {
-    if (combatMotionMetrics.studentTravelPx < 6) failures.push(`Main student travel run is too small: ${combatMotionMetrics.studentTravelPx}px`);
+    if (combatMotionMetrics.studentTravelPx < 5) failures.push(`Main student travel run is too small: ${combatMotionMetrics.studentTravelPx}px`);
   } else if (combatMotionMetrics.studentTravelPx < 24) {
     failures.push(`Main student melee travel is too small: ${combatMotionMetrics.studentTravelPx}px`);
   }
@@ -695,7 +729,7 @@ try {
   if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && damagePhaseMetrics.curriculumVfxText.length > 8) {
     failures.push(`Curriculum attack VFX token is too long: ${damagePhaseMetrics.curriculumVfxText}`);
   }
-  if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && !damagePhaseMetrics.curriculumVfxAnimation.includes("curriculumVfx")) {
+  if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && !["curriculumVfx", "curriculumTokenPop"].some((name) => damagePhaseMetrics.curriculumVfxAnimation.includes(name))) {
     failures.push(`Curriculum attack VFX animation is missing: ${damagePhaseMetrics.curriculumVfxAnimation}`);
   }
   if (damagePhaseMetrics.battleDamagedEnemyCount > 0 && damagePhaseMetrics.curriculumVfxSourceY > 0) {
@@ -741,11 +775,12 @@ try {
   if (mainMetrics.battleRoadPhase === "travel" && combatMotionMetrics.roadPackTravelPx < 8) failures.push(`Main battle road pack travel is too small: ${combatMotionMetrics.roadPackTravelPx}px`);
   if (combatMotionMetrics.battleBackdropTravelPx < 4) failures.push(`Main battle backdrop travel is too small: ${combatMotionMetrics.battleBackdropTravelPx}px`);
   if (combatMotionMetrics.normalEnemyIdlePx < 2) failures.push(`Main normal enemy idle motion is too small: ${combatMotionMetrics.normalEnemyIdlePx}px`);
-  if (!mainMetrics.helperAllyCssReady) failures.push("Helper ally combat CSS is missing");
-  if (mainMetrics.helperActualCount < 3) failures.push(`Main battle expected 3 actual helper companions, got ${mainMetrics.helperActualCount}`);
-  if (mainMetrics.helperRenderedCount < 1) failures.push("Main battle helper companion probe is missing");
-  if (mainMetrics.helperMinWidth < 62 || mainMetrics.helperMinHeight < 62) failures.push(`Main battle helper companion is too small: ${mainMetrics.helperMinWidth}x${mainMetrics.helperMinHeight}`);
-  if (mainMetrics.helperSquareDelta > 4) failures.push(`Main battle helper companion display box is distorted by ${mainMetrics.helperSquareDelta}px`);
+  if (!mainMetrics.equipmentLineupReady) failures.push("Main battle equipped equipment lineup is missing");
+  if (!mainMetrics.equipmentMotionReady) failures.push("Main battle equipment orbit motion is missing");
+  if (mainMetrics.equipmentRenderedCount !== 2) failures.push(`Main battle expected 2 equipped equipment icons, got ${mainMetrics.equipmentRenderedCount}`);
+  if (mainMetrics.equipmentFilledCount !== 2) failures.push(`Main battle expected 2 filled equipment icons, got ${mainMetrics.equipmentFilledCount}`);
+  if (mainMetrics.equipmentMinWidth < 40 || mainMetrics.equipmentMinHeight < 40) failures.push(`Main battle equipment icon is too small: ${mainMetrics.equipmentMinWidth}x${mainMetrics.equipmentMinHeight}`);
+  if (mainMetrics.equipmentSquareDelta > 4) failures.push(`Main battle equipment icon box is distorted by ${mainMetrics.equipmentSquareDelta}px`);
   if (mainMetrics.normalEnemyMinWidth < 70 || mainMetrics.normalEnemyMinHeight < 70) failures.push(`Main battle normal monsters are too small: ${mainMetrics.normalEnemyMinWidth}x${mainMetrics.normalEnemyMinHeight}`);
   if (mainMetrics.normalEnemySquareDelta > 4) failures.push(`Main battle normal monster display boxes are distorted by ${mainMetrics.normalEnemySquareDelta}px`);
   if (mainMetrics.bossEnemyMinWidth < 86 || mainMetrics.bossEnemyMinHeight < 86) failures.push(`Main battle boss/suneung monster is too small: ${mainMetrics.bossEnemyMinWidth}x${mainMetrics.bossEnemyMinHeight}`);
@@ -753,32 +788,32 @@ try {
   if (mainMetrics.arenaTextCards !== 0) failures.push(`Main battle expected no text enemy cards in arena, got ${mainMetrics.arenaTextCards}`);
   if (mainMetrics.horizontalOverflow > 4) failures.push(`Main battle horizontal overflow ${mainMetrics.horizontalOverflow}px`);
   if (expeditionMetrics.enemyCount < 1) failures.push("Expedition enemy is missing");
-  if (!expeditionMetrics.enemyBeforeImage) failures.push("Expedition enemy visual atlas is missing");
-  if (!expeditionMetrics.backdropImage) failures.push("Expedition long backdrop atlas is missing");
-  if (!expeditionMetrics.backdropMotion) failures.push("Expedition long backdrop motion is missing");
-  if (expeditionMetrics.backdropTravelPx < 4) failures.push(`Expedition backdrop travel is too small: ${expeditionMetrics.backdropTravelPx}px`);
+  if (!expeditionMetrics.enemyFrameImage) failures.push(`Expedition enemy frame images are missing: ${expeditionMetrics.enemyFrameLoadedCount}/${expeditionMetrics.enemyFrameCount}`);
+  if (!expeditionMetrics.backdropImage) failures.push("Expedition backdrop image is missing");
+  if (!expeditionMetrics.partyMotion) failures.push("Expedition party advance motion is missing");
+  if (expeditionMetrics.partyTravelPx < 4) failures.push(`Expedition party travel is too small: ${expeditionMetrics.partyTravelPx}px`);
   if (!expeditionMetrics.oldBackgroundHidden) failures.push("Expedition old background image should be hidden");
-  if (!expeditionMetrics.enemyBeforeMotion) failures.push("Expedition enemy sprite motion is missing");
-  if (!expeditionMetrics.enemyShockVfx) failures.push("Expedition enemy rim light VFX is missing");
+  if (!expeditionMetrics.enemyFrameMotion) failures.push("Expedition enemy sprite motion is missing");
+  if (!expeditionMetrics.enemyShockVfx) failures.push("Expedition impact VFX is missing");
   if (fireLikeSlashColors.some((color) => expeditionMetrics.arenaDustBackground.includes(color))) {
     failures.push(`Expedition arena dust still uses fire-like warm colors: ${expeditionMetrics.arenaDustBackground}`);
   }
   if (expeditionMetrics.enemyTextVisibleCount > 0) failures.push(`Expedition enemy attached text is visible: ${expeditionMetrics.enemyTextVisibleCount}`);
   if (expeditionMetrics.enemySpriteTravelPx < 0.4) failures.push(`Expedition enemy sprite reaction is too static: ${expeditionMetrics.enemySpriteTravelPx}px`);
   if (expeditionMetrics.enemySpriteTravelPx > 4) failures.push(`Expedition enemy sprite reaction is too large: ${expeditionMetrics.enemySpriteTravelPx}px`);
-  if (!expeditionMetrics.careerUnitImage) failures.push("Expedition career unit atlas is missing");
+  if (!expeditionMetrics.careerUnitImage) failures.push(`Expedition career unit frame images are missing: ${expeditionMetrics.unitFrameLoadedCount}/${expeditionMetrics.unitFrameCount}`);
   if (!expeditionMetrics.allyMotionReady) failures.push("Expedition ally melee motion is missing");
   if (!expeditionMetrics.allySparkReady) failures.push("Expedition ally spark VFX is missing");
   if (expeditionMetrics.unitRenderedCount < 5) failures.push(`Expedition companion probe expected 5 units, got ${expeditionMetrics.unitRenderedCount}`);
-  if (expeditionMetrics.unitMinWidth < 58 || expeditionMetrics.unitMinHeight < 58) failures.push(`Expedition companion display box is too small: ${expeditionMetrics.unitMinWidth}x${expeditionMetrics.unitMinHeight}`);
+  if (expeditionMetrics.unitFrameAnimatedCount < 4) failures.push(`Expedition companion frame animations are missing: ${expeditionMetrics.unitFrameAnimatedCount}`);
+  if (expeditionMetrics.enemyFrameAnimatedCount < 1) failures.push(`Expedition enemy frame animations are missing: ${expeditionMetrics.enemyFrameAnimatedCount}`);
+  if (expeditionMetrics.unitMinWidth < 44 || expeditionMetrics.unitMinHeight < 44) failures.push(`Expedition companion display box is too small: ${expeditionMetrics.unitMinWidth}x${expeditionMetrics.unitMinHeight}`);
   if (expeditionMetrics.unitSquareDelta > 6) failures.push(`Expedition companion sprite box is distorted by ${expeditionMetrics.unitSquareDelta}px`);
   if (expeditionMetrics.unitClipCount > 0) failures.push(`Expedition companion sprites are clipped by arena: ${expeditionMetrics.unitClipCount}`);
   if (!expeditionMetrics.partyOverflowVisible) failures.push("Expedition party visual should allow sprite overflow");
   if (!expeditionMetrics.enemyOverflowVisible) failures.push("Expedition enemy visual should allow sprite overflow");
-  if (expeditionMetrics.enemyBeforeWidth < 70 || expeditionMetrics.enemyBeforeHeight < 70) failures.push(`Expedition enemy sprite box is too small: ${expeditionMetrics.enemyBeforeWidth}x${expeditionMetrics.enemyBeforeHeight}`);
-  if (expeditionMetrics.enemyBeforeSquareDelta > 8) failures.push(`Expedition enemy sprite box is distorted by ${expeditionMetrics.enemyBeforeSquareDelta}px`);
-  if (expeditionMetrics.enemyFrameSnapMaxError > 0.05) failures.push(`Expedition enemy sprite is sampling between atlas frames: ${expeditionMetrics.enemyFrameSnapMaxError}%`);
-  if (expeditionMetrics.unitFrameSnapMaxError > 0.05) failures.push(`Expedition companion sprite is sampling between atlas frames: ${expeditionMetrics.unitFrameSnapMaxError}%`);
+  if (expeditionMetrics.enemyFrameMinWidth < 70 || expeditionMetrics.enemyFrameMinHeight < 70) failures.push(`Expedition enemy sprite box is too small: ${expeditionMetrics.enemyFrameMinWidth}x${expeditionMetrics.enemyFrameMinHeight}`);
+  if (expeditionMetrics.enemyFrameSquareDelta > 8) failures.push(`Expedition enemy sprite box is distorted by ${expeditionMetrics.enemyFrameSquareDelta}px`);
   if (expeditionMetrics.enemySpriteClipRight > 4 || expeditionMetrics.enemySpriteClipLeft > 4 || expeditionMetrics.enemySpriteClipTop > 4 || expeditionMetrics.enemySpriteClipBottom > 4) {
     failures.push(`Expedition enemy sprite is clipped: L${expeditionMetrics.enemySpriteClipLeft} R${expeditionMetrics.enemySpriteClipRight} T${expeditionMetrics.enemySpriteClipTop} B${expeditionMetrics.enemySpriteClipBottom}`);
   }

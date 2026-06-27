@@ -75,6 +75,27 @@ for (const [subjectId, subjectAliases] of Object.entries(aliases)) {
     if (!allowedSubjects.has(alias)) fail(`rules.inquirySubjectAliases.${subjectId} contains unknown subject ${alias}`);
   }
 }
+
+const requiredSubjectsByPhase = table.requiredSubjectsByPhase ?? {};
+for (const phase of ["elementary", "middle", "high", "repeater"]) {
+  const requiredSubjects = requiredSubjectsByPhase[phase] ?? [];
+  if (!Array.isArray(requiredSubjects) || requiredSubjects.length < 1) {
+    fail(`requiredSubjectsByPhase.${phase} must contain at least one subject`);
+    continue;
+  }
+  uniqueValues(requiredSubjects, `requiredSubjectsByPhase.${phase}`);
+  for (const subject of requiredSubjects) {
+    if (!allowedSubjects.has(subject)) fail(`requiredSubjectsByPhase.${phase} contains unknown subject ${subject}`);
+  }
+}
+requireHelp(requiredSubjectsByPhase, ["elementary", "middle", "high", "repeater"], "requiredSubjectsByPhase");
+
+function coversSubject(poolSubjects, subject) {
+  if (poolSubjects.has(subject)) return true;
+  const subjectAliases = aliases[subject] ?? [];
+  return subjectAliases.some((alias) => poolSubjects.has(alias));
+}
+
 const styles = table.styles ?? [];
 if (!Array.isArray(styles) || styles.length < 1) fail("styles must contain at least one style");
 const styleIds = uniqueValues(styles.map((style) => style.id), "styles.id");
@@ -126,10 +147,12 @@ for (const [index, mapping] of mappings.entries()) {
   }
   uniqueValues(tokenPools.map((pool) => pool.id), `${path}.tokenPools.id`);
   const gradeTokens = [];
+  const poolSubjects = new Set();
   for (const [poolIndex, pool] of tokenPools.entries()) {
     const poolPath = `${path}.tokenPools[${poolIndex}]`;
     if (!pool.id || typeof pool.id !== "string") fail(`${poolPath}.id is required`);
     if (!allowedSubjects.has(pool.subject)) fail(`${poolPath}.subject ${pool.subject} is not allowed`);
+    if (allowedSubjects.has(pool.subject)) poolSubjects.add(pool.subject);
     if (!styleIds.has(pool.style)) fail(`${poolPath}.style must reference a known style`);
     if (!isPositiveNumber(pool.weight)) fail(`${poolPath}.weight must be a positive number`);
     if (!Array.isArray(pool.tokens) || pool.tokens.length < rules.minTokensPerPool) {
@@ -152,13 +175,19 @@ for (const [index, mapping] of mappings.entries()) {
     }
   }
   uniqueValues(gradeTokens, `${path}.allTokens`);
+  const requiredSubjects = requiredSubjectsByPhase[mapping.phase] ?? [];
+  for (const subject of requiredSubjects) {
+    if (!coversSubject(poolSubjects, subject)) {
+      fail(`${path}.tokenPools must cover ${subject} for ${mapping.phase}`);
+    }
+  }
 }
 
 for (const visual of gradeVisuals) {
   if (!mappingOrders.has(visual.order)) fail(`grade ${visual.order} ${visual.studentTitle} is missing curriculum attack VFX mapping`);
 }
 
-requireHelp(table, ["selection", "runtime", "styles", "palettes", "bossStyleByVisualKey", "gradeMappings"], "root");
+requireHelp(table, ["selection", "runtime", "rules", "requiredSubjectsByPhase", "styles", "palettes", "bossStyleByVisualKey", "gradeMappings"], "root");
 
 if (failures.length) {
   console.error("CURRICULUM_ATTACK_VFX_INVALID");

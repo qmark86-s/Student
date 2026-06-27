@@ -357,7 +357,7 @@ function partyMembers(expedition) {
   validateExpeditionState(expedition, "save.expedition");
   return expedition.partyMemberIds.map((id) => {
     const member = expedition.members.find((candidate) => candidate.id === id);
-    assert(member, `원정대 편성 동료를 찾을 수 없습니다: ${id}`);
+    assert(member, `원정대 편성 대원을 찾을 수 없습니다: ${id}`);
     return member;
   });
 }
@@ -417,26 +417,26 @@ function createBaseStatsFromRawStats(rawStats, careerId, powerMultiplier, path) 
 }
 
 export function createExpeditionMemberFromCompanion(companion, createdAt = now()) {
-  assert(companion && typeof companion === "object" && !Array.isArray(companion), "동료 데이터가 객체가 아닙니다.");
-  assert(typeof companion.id === "string" && companion.id.length > 0, "동료 id 값이 없습니다.");
+  assert(companion && typeof companion === "object" && !Array.isArray(companion), "원정대원 후보 데이터가 객체가 아닙니다.");
+  assert(typeof companion.id === "string" && companion.id.length > 0, "원정대원 후보 id 값이 없습니다.");
   assert(typeof companion.careerId === "string" && careerById.has(companion.careerId), `원정대 등록 가능한 직업을 찾을 수 없습니다: ${companion.careerId}`);
-  assert(companion.avatarGender === "male" || companion.avatarGender === "female", `동료 avatarGender 값이 올바르지 않습니다: ${companion.id}`);
+  assert(companion.avatarGender === "male" || companion.avatarGender === "female", `원정대원 후보 avatarGender 값이 올바르지 않습니다: ${companion.id}`);
   const career = careerById.get(companion.careerId);
   assert(career, `careers.json에서 직업을 찾을 수 없습니다: ${companion.careerId}`);
-  assert(typeof companion.careerName === "string" && companion.careerName.length > 0, `동료 careerName 값이 없습니다: ${companion.id}`);
-  assert(typeof companion.sourceUniversity === "string" && companion.sourceUniversity.length > 0, `동료 sourceUniversity 값이 없습니다: ${companion.id}`);
-  assert(hasOwn(companion, "createdRun"), `동료 createdRun 값이 없습니다: ${companion.id}`);
+  assert(typeof companion.careerName === "string" && companion.careerName.length > 0, `원정대원 후보 careerName 값이 없습니다: ${companion.id}`);
+  assert(typeof companion.sourceUniversity === "string" && companion.sourceUniversity.length > 0, `원정대원 후보 sourceUniversity 값이 없습니다: ${companion.id}`);
+  assert(hasOwn(companion, "createdRun"), `원정대원 후보 createdRun 값이 없습니다: ${companion.id}`);
   return {
     id: `expedition-member-${companion.id}`,
     sourceKey: `companion:${companion.id}`,
-    sourceRunNumber: Math.max(0, Math.floor(finiteNumber(companion.createdRun, `동료 createdRun 값이 올바르지 않습니다: ${companion.id}`))),
+    sourceRunNumber: Math.max(0, Math.floor(finiteNumber(companion.createdRun, `원정대원 후보 createdRun 값이 올바르지 않습니다: ${companion.id}`))),
     sourceCareerId: companion.careerId,
     careerName: companion.careerName,
     sourceUniversity: companion.sourceUniversity,
     level: 1,
     exp: 0,
     promotionTier: "staff",
-    baseStats: createBaseStatsFromRawStats(companion.stats, companion.careerId, companion.powerMultiplier, `동료 ${companion.id}.stats`),
+    baseStats: createBaseStatsFromRawStats(companion.stats, companion.careerId, companion.powerMultiplier, `원정대원 후보 ${companion.id}.stats`),
     locked: false,
     createdAt,
     avatarGender: companion.avatarGender,
@@ -516,14 +516,14 @@ export function migrateLegacyExpeditionState(expedition, companions = [], create
 }
 
 export function registerExpeditionMembersFromCompanions(state, companions, { autoParty = true } = {}) {
-  assert(Array.isArray(companions), "등록할 원정대 동료 목록이 배열이 아닙니다.");
+  assert(Array.isArray(companions), "등록할 원정대원 후보 목록이 배열이 아닙니다.");
   const next = cloneState(state);
   validateExpeditionState(next.expedition, "save.expedition");
   const existingSourceKeys = new Set(next.expedition.members.map((member) => member.sourceKey));
   const added = [];
   for (const companion of companions) {
-    assertObject(companion, "등록할 원정대 동료");
-    assert(typeof companion.careerId === "string" && companion.careerId.length > 0, `등록할 원정대 동료 careerId 값이 없습니다: ${companion.id}`);
+    assertObject(companion, "등록할 원정대원 후보");
+    assert(typeof companion.careerId === "string" && companion.careerId.length > 0, `등록할 원정대원 후보 careerId 값이 없습니다: ${companion.id}`);
     const member = createExpeditionMemberFromCompanion(companion, now() + added.length);
     if (existingSourceKeys.has(member.sourceKey)) continue;
     next.expedition.members.push(member);
@@ -538,9 +538,9 @@ export function registerExpeditionMembersFromCompanions(state, companions, { aut
 }
 
 export function addDebugExpeditionMembers(state, count, { autoParty = true } = {}) {
-  assert(careers.length > 0, "careers.json이 비어 있어 DEBUG 원정대 동료를 추가할 수 없습니다.");
-  const additionCount = finiteNumber(count, `DEBUG 원정대 동료 추가 수가 올바르지 않습니다: ${count}`);
-  assert(Number.isInteger(additionCount) && additionCount > 0, `DEBUG 원정대 동료 추가 수는 1 이상의 정수여야 합니다: ${count}`);
+  assert(careers.length > 0, "careers.json이 비어 있어 DEBUG 원정대원을 추가할 수 없습니다.");
+  const additionCount = finiteNumber(count, `DEBUG 원정대원 추가 수가 올바르지 않습니다: ${count}`);
+  assert(Number.isInteger(additionCount) && additionCount > 0, `DEBUG 원정대원 추가 수는 1 이상의 정수여야 합니다: ${count}`);
   const next = cloneState(state);
   validateExpeditionState(next.expedition, "save.expedition");
   const existingSourceKeys = new Set(next.expedition.members.map((member) => member.sourceKey));
@@ -556,7 +556,7 @@ export function addDebugExpeditionMembers(state, count, { autoParty = true } = {
     added.push(member);
     if (autoParty && next.expedition.partyMemberIds.length < expeditionPartySize) next.expedition.partyMemberIds.push(member.id);
   }
-  if (added.length > 0) pushExpeditionLog(next.expedition, `디버그 동료 ${added.length}명이 합류했다.`, "good");
+  if (added.length > 0) pushExpeditionLog(next.expedition, `디버그 대원 ${added.length}명이 합류했다.`, "good");
   next.expedition = expeditionAliases(next.expedition);
   validateExpeditionState(next.expedition, "save.expedition");
   return { state: next, added };
@@ -668,7 +668,7 @@ export function createExpeditionManagementViewModel(state) {
   const members = expedition.members.map((member, index) => ({ ...memberView(member, stage, partyIds.has(member.id) ? expedition.partyMemberIds.indexOf(member.id) + 1 : null), rosterIndex: index }));
   const party = expedition.partyMemberIds.map((id, index) => {
     const member = expedition.members.find((candidate) => candidate.id === id);
-    assert(member, `원정대 편성 동료를 찾을 수 없습니다: ${id}`);
+    assert(member, `원정대 편성 대원을 찾을 수 없습니다: ${id}`);
     return memberView(member, stage, index + 1);
   });
   const growthMembers = party;
@@ -723,7 +723,7 @@ export function assignExpeditionMember(state, memberId, slotIndex = expeditionPa
     assert(expedition.partyMemberIds.length < expeditionPartySize, "원정대 파티가 가득 찼습니다.");
     expedition.partyMemberIds.push(memberId);
   }
-  pushExpeditionLog(expedition, `${member.careerName} 동료를 파티에 편성했다.`, "info");
+  pushExpeditionLog(expedition, `${member.careerName} 대원을 파티에 편성했다.`, "info");
   next.expedition = expeditionAliases(expedition);
   return next;
 }
@@ -751,7 +751,7 @@ export function levelUpExpeditionMember(state, memberId) {
   assert(expedition.trainingExp >= cost, `${member.careerName} 성장에 필요한 EXP가 부족합니다.`);
   expedition.trainingExp -= cost;
   member.level += 1;
-  pushExpeditionLog(expedition, `${member.careerName} 동료가 Lv.${member.level}로 성장했다. EXP ${cost} 사용.`, "good");
+  pushExpeditionLog(expedition, `${member.careerName} 대원이 Lv.${member.level}로 성장했다. EXP ${cost} 사용.`, "good");
   next.expedition = expeditionAliases(expedition);
   return next;
 }
@@ -761,7 +761,7 @@ export function toggleExpeditionMemberLock(state, memberId) {
   const member = next.expedition.members.find((candidate) => candidate.id === memberId);
   assert(member, `원정대원을 찾을 수 없습니다: ${memberId}`);
   member.locked = !member.locked;
-  pushExpeditionLog(next.expedition, `${member.careerName} 동료를 ${member.locked ? "잠금" : "잠금 해제"} 처리했다.`, "info");
+  pushExpeditionLog(next.expedition, `${member.careerName} 대원을 ${member.locked ? "잠금" : "잠금 해제"} 처리했다.`, "info");
   next.expedition = expeditionAliases(next.expedition);
   return next;
 }
@@ -775,7 +775,7 @@ export function fuseExpeditionMembers(state, careerId, promotionTier) {
   const candidates = expedition.members
     .filter((member) => member.sourceCareerId === careerId && member.promotionTier === promotionTier && !member.locked && !partyIds.has(member.id))
     .sort((a, b) => a.createdAt - b.createdAt);
-  assert(candidates.length >= 2, "합성 가능한 동료가 부족합니다.");
+  assert(candidates.length >= 2, "합성 가능한 대원이 부족합니다.");
   const consumed = candidates.slice(0, 2);
   const consumedIds = new Set(consumed.map((member) => member.id));
   const baseStats = blankStats();
@@ -789,7 +789,7 @@ export function fuseExpeditionMembers(state, careerId, promotionTier) {
     sourceRunNumber: 0,
     sourceCareerId: careerId,
     careerName: career.name,
-    sourceUniversity: "동료 관리",
+    sourceUniversity: "대원 관리",
     level: Math.max(consumed[0].level, consumed[1].level),
     exp: 0,
     promotionTier: nextTier,
@@ -808,7 +808,7 @@ export function fuseExpeditionMembers(state, careerId, promotionTier) {
 export function completeExpeditionStage(state) {
   const next = normalizeExpeditionState(state);
   const view = createExpeditionViewModel(next);
-  assert(view.ready, "원정대에 편성된 동료가 없어 Stage를 돌파할 수 없습니다.");
+  assert(view.ready, "원정대에 편성된 대원이 없어 Stage를 돌파할 수 없습니다.");
 
   const expedition = next.expedition;
   const currentStage = expedition.currentStage;

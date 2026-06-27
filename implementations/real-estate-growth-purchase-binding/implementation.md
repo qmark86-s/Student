@@ -57,3 +57,13 @@
 - `office_tower`는 tower group을 완성 단위로 묶어 `office-tower-growth-00..04.png`로 조정했다.
 - `mixed_development`는 변화 없는 반복 단계와 작은 조각 단독 노출을 제거하고 하단-left 녹색 X group을 최종으로 미뤄 `mixed-development-growth-00..05.png`로 조정했다.
 - 단일 지역 재생성 시 `real_estate_district_growth_assets.json.districts` 순서가 바뀌지 않도록 생성 스크립트의 upsert는 기존 위치 교체 방식이어야 한다.
+
+## 인코딩 무결성 보강 (2026-06-27 감사 후속)
+
+- `data/real_estate_district_growth_assets.json`의 `unlock.help` 20곳이 `?`로 깨져 있던 것을 한글로 복구했다(파일 내 `?` 0개). `unlock` 블록은 생성 스크립트가 입력을 그대로 통과시키는 authored 필드라 재생성으로는 복구되지 않으므로 데이터에서 직접 고친다.
+  - `expeditionStage`: `type`=해금 조건 종류 설명, `stage`=원정대 Stage 도달 해금 설명.
+  - `previousMaxOwned`: `type`=직전 부동산 최대 보유 달성 해금 설명, `previousDistrictId`=직전 지역 id 설명.
+- 재발 방지로 help 검증에 mojibake 가드를 추가했다. 연속된 `?`(`/\?{2,}/`) 또는 `�`가 있으면 실패한다. 단일 물음표가 포함된 정상 한글 문장은 통과한다.
+  - `tools/validate-real-estate-config.mjs`: `assertNoMojibake`를 추가하고 `help()`에서 모든 부동산 help 문자열을 검사한다.
+  - `src/react/game/realEstate.js`: `validateHelp`에 같은 가드를 추가해 런타임 로드/smoke에서 깨짐을 fatal로 드러낸다.
+- 검증: `npm run real-estate:verify` 통과(validator + small_studio 픽셀 감사 `coverage=1.000`, `meanAbsDelta=0.00`).

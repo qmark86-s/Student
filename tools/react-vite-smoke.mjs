@@ -3,7 +3,7 @@ import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
 import { chromium } from "@playwright/test";
 
-const root = resolve("dist-react");
+const root = resolve("dist");
 const outputDir = resolve("artifacts/react-vite-smoke");
 const preferredPort = Number(process.env.REACT_SMOKE_PORT || 5620);
 const viewports = [
@@ -20,10 +20,19 @@ const mimeTypes = {
   ".svg": "image/svg+xml",
 };
 
-if (!existsSync(resolve(root, "index.html"))) {
-  console.error("dist-react/index.html is missing. Run `npm run react:build` first.");
-  process.exit(1);
+async function waitForBuildOutput() {
+  const indexPath = resolve(root, "index.html");
+  const deadline = Date.now() + 5000;
+  while (!existsSync(indexPath) && Date.now() < deadline) {
+    await new Promise((resolveDelay) => setTimeout(resolveDelay, 100));
+  }
+  if (!existsSync(indexPath)) {
+    console.error("dist/index.html is missing. Run `npm run react:build` first.");
+    process.exit(1);
+  }
 }
+
+await waitForBuildOutput();
 
 function resolveRequest(url) {
   const rawPath = decodeURIComponent(new URL(url, "http://127.0.0.1").pathname);

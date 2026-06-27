@@ -1,7 +1,6 @@
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
-import { buildSnapshot } from "./snapshot-build.mjs";
 
 const root = resolve("dist");
 const preferredPort = Number(process.env.PORT || 5173);
@@ -55,7 +54,10 @@ async function listenAvailable(server) {
   throw new Error(`No available port from ${preferredPort} to ${preferredPort + 49}`);
 }
 
-await buildSnapshot({ distOnly: true });
+if (!existsSync(resolve(root, "index.html"))) {
+  console.error("dist/index.html is missing. Run `npm run build:web` first.");
+  process.exit(1);
+}
 
 const server = createServer((request, response) => {
   const file = resolveRequest(request.url || "/");
@@ -74,4 +76,4 @@ const server = createServer((request, response) => {
 
 const port = await listenAvailable(server);
 console.log(`Student preview: http://127.0.0.1:${port}/`);
-console.log("Serving generated single HTML from dist/index.html");
+console.log("Serving React build from dist/index.html");

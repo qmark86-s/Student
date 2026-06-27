@@ -3,9 +3,10 @@ import { createReadStream, existsSync, mkdirSync, statSync, writeFileSync } from
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
 
-const root = resolve("dist-react");
+const root = resolve("dist");
 const outDir = resolve("artifacts/react-vite-responsive-audit");
 const preferredPort = Number(process.env.REACT_RESPONSIVE_AUDIT_PORT || 5786);
+const appReadyTimeoutMs = Number(process.env.REACT_RESPONSIVE_READY_TIMEOUT_MS || 45000);
 const saveKey = "student-idle-rpg-save-v1";
 
 const mimeTypes = {
@@ -35,7 +36,7 @@ const viewports = [
 const featureViewportNames = new Set(["phone-narrow", "phone-parity", "landscape-small", "tablet-portrait"]);
 
 if (!existsSync(resolve(root, "index.html"))) {
-  console.error("dist-react/index.html is missing. Run `npm run react:build` first.");
+  console.error("dist/index.html is missing. Run `npm run react:build` first.");
   process.exit(1);
 }
 
@@ -173,7 +174,7 @@ async function seedPage(page, state) {
 
 async function waitReady(page, baseUrl) {
   await page.goto(baseUrl, { waitUntil: "networkidle" });
-  await page.waitForSelector(".phone-frame", { timeout: 15000 });
+  await page.waitForSelector(".phone-frame", { timeout: appReadyTimeoutMs });
   await page.waitForTimeout(300);
 }
 
@@ -240,8 +241,8 @@ async function readMetrics(page, scenario) {
       statusTileCount: document.querySelectorAll(".status-tile").length,
       modeTabCount: document.querySelectorAll(".mode-tab").length,
       battleEnemyCount: document.querySelectorAll(".battle-scene-enemy").length,
-      helperUnitCount: document.querySelectorAll(".learning-helper-unit").length,
-      companionCardCount: document.querySelectorAll(".companion-card").length,
+      equippedItemCount: document.querySelectorAll(".equipment-orbit-item:not(.empty)").length,
+      equipmentCardCount: document.querySelectorAll(".equipment-card").length,
       expeditionUnitCount: document.querySelectorAll(".expedition-unit-avatar.large").length,
       gachaPopupCount: document.querySelectorAll(".gacha-popup").length,
       visibleImages: loadedImages.length,
@@ -492,7 +493,7 @@ function collectFailures(metrics, scenario) {
     }
   }
   if (scenario === "expedition-debug" && metrics.expeditionUnitCount !== 5) {
-    failures.push(`expedition companions ${metrics.expeditionUnitCount}/5`);
+    failures.push(`expedition members ${metrics.expeditionUnitCount}/5`);
   }
   return failures;
 }
@@ -555,8 +556,8 @@ function collectBattleLayoutParityFailures(student, expedition) {
   if (!expedition.activeTabLabel.startsWith("성장")) {
     failures.push(`expedition active lower tab ${expedition.activeTabLabel || "(missing)"}/성장`);
   }
-  if (!expedition.managementTitle.startsWith("출전 동료 성장")) {
-    failures.push(`expedition management title ${expedition.managementTitle || "(missing)"}/출전 동료 성장`);
+  if (!expedition.managementTitle.startsWith("출전 대원 성장")) {
+    failures.push(`expedition management title ${expedition.managementTitle || "(missing)"}/출전 대원 성장`);
   }
 
   return failures;
@@ -627,26 +628,26 @@ function collectExpeditionBattleUnitLayoutFailures(layout) {
 function collectExpeditionCompanionCardGridFailures(layout, label) {
   const failures = [];
   if (layout.cardCount !== 5) {
-    failures.push(`${label} companion card count ${layout.cardCount}/5`);
+    failures.push(`${label} member card count ${layout.cardCount}/5`);
     return failures;
   }
   if (layout.gridDisplay !== "grid") {
-    failures.push(`${label} companion container display ${layout.gridDisplay}/grid`);
+    failures.push(`${label} member container display ${layout.gridDisplay}/grid`);
   }
   if (layout.gridColumnCount > 2) {
-    failures.push(`${label} companion grid columns ${layout.gridColumnCount}/2 max`);
+    failures.push(`${label} member grid columns ${layout.gridColumnCount}/2 max`);
   }
   if (layout.rowCounts.length !== 3) {
-    failures.push(`${label} companion card rows ${layout.rowCounts.length}/3 (${layout.rowCounts.join("+")})`);
+    failures.push(`${label} member card rows ${layout.rowCounts.length}/3 (${layout.rowCounts.join("+")})`);
   }
   if (layout.rowCounts[0] !== 2 || layout.rowCounts[1] !== 2 || layout.rowCounts[2] !== 1) {
-    failures.push(`${label} companion card row distribution ${layout.rowCounts.join("+")}/2+2+1`);
+    failures.push(`${label} member card row distribution ${layout.rowCounts.join("+")}/2+2+1`);
   }
   if (Math.max(...layout.rowCounts) > 2) {
-    failures.push(`${label} companion cards appear in one row ${layout.rowCounts.join("+")}`);
+    failures.push(`${label} member cards appear in one row ${layout.rowCounts.join("+")}`);
   }
   if (Math.max(...layout.rowCounts) < 2) {
-    failures.push(`${label} companion cards remain a single-column list ${layout.rowCounts.join("+")}`);
+    failures.push(`${label} member cards remain a single-column list ${layout.rowCounts.join("+")}`);
   }
   return failures;
 }
@@ -714,7 +715,7 @@ async function auditFeatureViewport(browser, baseUrl, viewport) {
   await page.locator(".shop-modal .icon-button.dark").click();
   await page.locator(".tab").nth(2).click();
   await page.locator(".header-actions .icon-button").first().click();
-  await page.getByRole("button", { name: /동료 랜덤 \+5/ }).click();
+  await page.getByRole("button", { name: /대원 후보 \+5/ }).click();
   await page.locator(".debug-modal .icon-button.dark").click();
   await page.locator(".mode-tab").nth(1).click();
   await page.waitForSelector(".expedition-unit-avatar.large", { timeout: 5000 });
@@ -736,7 +737,7 @@ async function auditFeatureViewport(browser, baseUrl, viewport) {
   const expeditionRosterCardLayout = await readExpeditionCompanionCardGrid(page, ".expedition-roster-card");
   expeditionRosterCardLayout.failures = collectExpeditionCompanionCardGridFailures(expeditionRosterCardLayout, "expedition roster");
 
-  await page.locator(".expedition-tab", { hasText: "동료 관리" }).click();
+  await page.locator(".expedition-tab", { hasText: "대원 관리" }).click();
   await page.waitForSelector(".expedition-manage-card.expedition-manage-member", { timeout: 5000 });
   await page.evaluate(() => window.scrollTo(0, 0));
   await capture(page, `expedition-manage-grid-${viewport.name}`);

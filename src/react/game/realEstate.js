@@ -60,7 +60,10 @@ function cloneState(state) {
 
 function validateHelp(source, path, keys) {
   assertObject(source.help, `${path}.help`);
-  for (const key of keys) assertString(source.help[key], `${path}.help.${key}`);
+  for (const key of keys) {
+    assertString(source.help[key], `${path}.help.${key}`);
+    assert(!/�|\?{2,}/.test(source.help[key]), `${path}.help.${key} 값에 인코딩이 깨진 문자가 있습니다(연속된 ? 또는 �). UTF-8 한글로 다시 작성하세요.`);
+  }
 }
 
 function validateProperty(property, index, ids) {

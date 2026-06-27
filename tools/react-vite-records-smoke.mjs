@@ -3,10 +3,10 @@ import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
 import { chromium } from "@playwright/test";
 
-const root = resolve("dist-react");
+const root = resolve("dist");
 const preferredPort = Number(process.env.REACT_RECORDS_SMOKE_PORT || 5700);
 const saveKey = "student-idle-rpg-save-v1";
-const tabIndexes = { exam: 1, work: 3, archive: 6 };
+const tabLabels = { exam: "시험", work: "직장", archive: "도감" };
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -18,7 +18,7 @@ const mimeTypes = {
 };
 
 if (!existsSync(resolve(root, "index.html"))) {
-  console.error("dist-react/index.html is missing. Run `npm run react:build` first.");
+  console.error("dist/index.html is missing. Run `npm run react:build` first.");
   process.exit(1);
 }
 
@@ -151,7 +151,7 @@ function makeRecordsState() {
     companions: [
       {
         id: "alumni-records-1",
-        name: "의사 동료",
+        name: "의사 졸업생",
         careerId: "doctor",
         careerName: "의사",
         avatarGender: "male",
@@ -167,7 +167,7 @@ function makeRecordsState() {
       },
       {
         id: "alumni-records-2",
-        name: "소프트웨어 엔지니어 동료",
+        name: "소프트웨어 엔지니어 졸업생",
         careerId: "software_engineer",
         careerName: "소프트웨어 엔지니어",
         avatarGender: "female",
@@ -258,9 +258,24 @@ function makeRecordsState() {
   };
 }
 
-async function openTab(page, index, selector) {
-  await page.evaluate((tabIndex) => document.querySelectorAll("button.tab")[tabIndex].click(), index);
-  await page.waitForSelector(selector, { timeout: 6000 });
+async function openTab(page, label, selector) {
+  await page.getByRole("button", { name: label, exact: true }).click();
+  try {
+    await page.waitForSelector(selector, { timeout: 6000 });
+  } catch (error) {
+    const snapshot = await page.evaluate((key) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      return {
+        activeTab: document.querySelector(".tab.active")?.getAttribute("aria-label") || document.querySelector(".tab.active")?.textContent || "",
+        tabLabels: [...document.querySelectorAll(".tab")].map((item) => item.getAttribute("aria-label") || item.textContent || ""),
+        bodyText: document.body.innerText.slice(0, 1600),
+        careerAlumniCount: state.careerAlumni?.length ?? null,
+        equipmentCount: state.equipment?.inventory?.length ?? null,
+        schemaVersion: state.schemaVersion,
+      };
+    }, saveKey);
+    throw new Error(`탭 렌더링 실패: ${label} / ${selector} / ${JSON.stringify(snapshot, null, 2)}`, { cause: error });
+  }
   await page.waitForTimeout(100);
 }
 
@@ -280,7 +295,7 @@ async function collectPanel(page) {
       examEnemyGridHeight: Math.round(document.querySelector(".battle-enemy-grid")?.getBoundingClientRect().height || 0),
       workPanels: document.querySelectorAll(".work-panel").length,
       workIncomeCards: document.querySelectorAll(".work-income-card").length,
-      workCompanionCards: document.querySelectorAll(".work-companion-card").length,
+      workCareerCards: document.querySelectorAll(".work-companion-card").length,
       archivePanels: document.querySelectorAll(".archive-panel").length,
       archiveHistoryCards: document.querySelectorAll(".archive-history-card").length,
       archiveCareerCards: document.querySelectorAll(".archive-career-card").length,
@@ -311,11 +326,11 @@ try {
   });
 
   const response = await page.goto(baseUrl, { waitUntil: "networkidle" });
-  await openTab(page, tabIndexes.exam, ".exam-panel");
+  await openTab(page, tabLabels.exam, ".exam-panel");
   const exam = await collectPanel(page);
-  await openTab(page, tabIndexes.work, ".work-panel");
+  await openTab(page, tabLabels.work, ".work-panel");
   const work = await collectPanel(page);
-  await openTab(page, tabIndexes.archive, ".archive-panel");
+  await openTab(page, tabLabels.archive, ".archive-panel");
   const archive = await collectPanel(page);
 
   const failures = [];
@@ -331,7 +346,7 @@ try {
     if (!exam.text.includes(expectedText)) failures.push(`Missing exam text: ${expectedText}`);
   }
   if (work.workPanels !== 1 || work.workIncomeCards !== 1) failures.push(`Expected work panel/income card, got ${work.workPanels}/${work.workIncomeCards}`);
-  if (work.workCompanionCards !== 2) failures.push(`Expected 2 work companion cards, got ${work.workCompanionCards}`);
+  if (work.workCareerCards !== 2) failures.push(`Expected 2 work career cards, got ${work.workCareerCards}`);
   for (const expectedText of ["42원/분", "의사", "소프트웨어 엔지니어", "서울대학교", "한국과학기술원"]) {
     if (!work.text.includes(expectedText)) failures.push(`Missing work text: ${expectedText}`);
   }

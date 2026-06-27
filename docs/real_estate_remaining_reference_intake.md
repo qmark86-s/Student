@@ -38,8 +38,8 @@
 ## 접수 체크
 
 - `base`와 `finalReference` 해상도는 같아야 한다.
-- finalReference는 16단계 완성본이어야 하며, UI, 버튼, 텍스트, 검수 표시가 섞이면 안 된다.
-- 중간 단계용 조각 이미지는 받지 않는다. 단계는 base/final diff와 visual group patch로 역산한다. base/final 구도 차이가 커서 중간 patch가 어색하면 해당 visual group의 reveal을 뒤로 미루거나, 최후의 안전장치로만 16단계 전체 이미지를 사용한다.
+- finalReference는 풀성장 최종 완성본이어야 하며, UI, 버튼, 텍스트, 검수 표시가 섞이면 안 된다.
+- 중간 단계용 조각 이미지는 받지 않는다. 단계는 base/final diff와 visual group patch로 역산한다. base/final 구도 차이가 커서 중간 patch가 어색하면 해당 visual group의 reveal을 뒤로 미루거나, 최후의 안전장치로만 최종 단계 전체 이미지를 사용한다.
 - 건물 시트가 따로 제공되면 `assets/visual-source/real-estate/real-estate-building-reference-sheet-20260626-<slug>.png` 형식으로 둔다. 시트가 없으면 먼저 finalReference 기반 patch 결과를 보고 필요할 때만 추가 요청한다.
 
 ## 생성 명령
@@ -82,7 +82,7 @@ npm run real-estate:growth-review -- --index-file all-reference-growth-review-ga
 
 ## 완료 기준
 
-- 16단계 master PNG가 해당 finalReference와 픽셀 단위로 일치하거나, 승인된 차이만 남아야 한다.
+- 최종 단계 master PNG가 해당 finalReference와 픽셀 단위로 일치하거나, 승인된 차이만 남아야 한다.
 - `meanAbsoluteDeltaAgainstFinalReference`는 기본 목표 `0.00`이다.
 - visual group 단위로 등장해야 하며, 중간 단계에서 건물 외곽이나 단지가 슬롯 경계로 잘려 보이면 실패다.
 - 검수 산출물은 `artifacts/real-estate-reconstruction/<slug>-growth-review-gallery.html`, `<slug>-growth-all-stages-contact-sheet.png`, `<slug>-stage-contact-sheet.png`, `<slug>-slot-zoom-review.png`, `<slug>-slot-candidate-overlay.png`, `<slug>-reconstruction-audit-report.json`를 확인한다.

@@ -23,9 +23,20 @@ if (!result) {
 }
 
 const visualRegion = result.visualRegions?.[region];
-const hotspot = visualRegion?.hotspots?.[hotspotIndex];
 const snapshotRect = result.snapshot?.rects?.[region];
 const reactRect = result.react?.rects?.[region];
+let hotspot = visualRegion?.hotspots?.[hotspotIndex];
+if (!hotspot && visualRegion && snapshotRect && reactRect) {
+  const width = Math.max(1, Math.min(160, Math.floor(visualRegion.width || 1)));
+  const height = Math.max(1, Math.min(160, Math.floor(visualRegion.height || 1)));
+  hotspot = {
+    x: Math.max(0, Math.floor(((visualRegion.width || width) - width) / 2)),
+    y: Math.max(0, Math.floor(((visualRegion.height || height) - height) / 2)),
+    width,
+    height,
+    synthetic: true,
+  };
+}
 if (!hotspot || !snapshotRect || !reactRect) {
   console.error(`missing hotspot or rects. Rerun npm run react:interactive-parity after the latest audit script.`);
   process.exit(1);
@@ -196,4 +207,3 @@ try {
   await page.close();
   await browser.close();
 }
-

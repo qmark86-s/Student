@@ -10,7 +10,7 @@
 - 브라우저 플러그인은 현재 내부 메타 오류로 직접 제어가 막혀 있어, 실제 브라우저를 띄우고 repo-local Playwright 검수 스크립트로 화면을 캡처한다.
 - 기존 `visual:smoke`는 기본 화면 검증에는 좋지만, 폴리싱 중 특정 시점/탭/상태를 반복 비교하기에는 캡처 목록이 제한적이다.
 - 학생탭 배경, 캐릭터 위치, 공격 거리, 원정대 캐릭터/몬스터 클리핑은 실제 화면 캡처를 기준으로 판단해야 한다.
-- `build:web`가 기존에는 `dist/index.html`만 갱신해 루트 `index.html` 미리보기와 `dist` 미리보기가 서로 다른 전투 배치 값을 보여줄 수 있었다.
+- 현재 기준의 `build:web`는 React/Vite 앱을 `dist/`로 직접 빌드한다.
 - 학생탭 몬스터 슬롯 데이터는 새 값이었지만, 도구 fallback과 루트 단일 HTML에 옛 소형 슬롯 값이 남아 실제 화면에서 몬스터 존재감이 약해졌다.
 
 ## 사용 도구
@@ -43,7 +43,7 @@
    - 자산 자체 문제이면 Asset Sprite Factory 검증 기준을 통과하도록 전처리/프로필을 수정한다.
    - `tools/apply-battle-road-patch.mjs`와 `tools/build-visual-assets.mjs`의 fallback 슬롯도 `data/battle_road_config.json`과 같은 값으로 맞춘다.
    - 모바일 미디어쿼리에서 줄어드는 몬스터 크기를 보정해 학생탭에서 일반 몬스터와 보스가 캐릭터형 오브젝트로 읽히게 한다.
-   - `tools/prepare-web.mjs`는 `build:web` 실행 시 `index.html`, 공유 HTML, `dist/index.html`을 함께 생성한다.
+   - `build:web` 실행 시 React 앱이 `dist/index.html`로 생성되는지 확인한다.
 
 4. 반복 검증
    - 변경 후 `npm run build:web`로 단일 HTML을 갱신한다.
@@ -61,7 +61,7 @@
 ## 수행 결과
 
 - `tools/live-visual-polish-check.mjs`를 추가하고 `npm run live:polish`로 실행 가능하게 했다.
-- `build:web`가 `index.html`, `share/Student-Idle-RPG-mobile.html`, `dist/index.html`을 모두 갱신하도록 정리했다.
+- 현재 기준의 `build:web`는 React 앱을 `dist/`로 갱신한다.
 - 학생탭 몬스터 슬롯 fallback을 `school=[[60,80,1],[73,76,1.08],[85,80,1]]`, `suneungSingle=[[76,76,1]]`, `suneungPair=[[68,74,0.95],[82,80,0.9]]`로 통일했다.
 - 모바일 학생탭 몬스터 표시 크기를 일반 32px, 보스/수능 46px로 보정했다.
 - 초등 배경 시작 offset은 교실 바닥과 칠판이 안정적으로 보이는 구간으로 유지했다.

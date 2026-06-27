@@ -733,7 +733,7 @@ button:disabled {
   background: #f1fbf8;
 }
 
-.panel.helper-impact-panel,
+.panel.equipment-impact-panel,
 .buff-grid {
   border-color: #c7d2fe;
   background: #f5f7ff;
@@ -2228,51 +2228,143 @@ button:disabled {
   padding: 10px;
 }
 
-.companion-panel {
+.equipment-panel {
   padding: 22px 20px 28px;
   display: grid;
   align-content: start;
   gap: 16px;
 }
 
-.companion-list {
+.equipment-inventory-list {
   display: grid;
   gap: 10px;
 }
 
-.companion-card {
-  min-height: 76px;
+.equipment-card {
+  min-height: 96px;
   padding: 10px 12px;
   display: grid;
-  grid-template-columns: 56px minmax(0, 1fr) auto;
+  grid-template-columns: 48px minmax(0, 1fr);
   align-items: center;
   gap: 12px;
-  border: 1px solid #d9e1ec;
+  border: 1px solid color-mix(in srgb, var(--equipment-color, #94a3b8) 28%, #d9e1ec);
   border-radius: 12px;
-  background: #fff;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--equipment-color, #94a3b8) 9%, transparent), transparent), #fff;
 }
 
-.companion-card div {
+.equipment-card-main {
   min-width: 0;
   display: grid;
   gap: 4px;
 }
 
-.companion-card strong,
-.companion-card small {
+.equipment-card strong,
+.equipment-card small {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.companion-card small {
+.equipment-card small {
   color: #657083;
   font-weight: 850;
 }
 
-.companion-card b {
-  color: #d94f6b;
+.equipment-card-icon,
+.equipment-slot-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--equipment-color, #94a3b8) 22%, #fff);
+  color: color-mix(in srgb, var(--equipment-color, #94a3b8) 82%, #111827);
+}
+
+.equipment-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.equipment-slot-card {
+  min-width: 0;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid color-mix(in srgb, var(--equipment-color, #94a3b8) 28%, #d9e1ec);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.equipment-slot-card div {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.equipment-slot-card strong,
+.equipment-slot-card small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.equipment-slot-card small {
+  color: #657083;
+  font-size: .68rem;
+  font-weight: 850;
+}
+
+.equipment-slot-card b {
+  color: color-mix(in srgb, var(--equipment-color, #94a3b8) 85%, #111827);
   font-size: .96rem;
+  font-weight: 950;
+}
+
+.equipment-card-stats {
+  grid-column: 1 / -1;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.equipment-card-stats div {
+  padding: 7px;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.equipment-card-stats dt,
+.equipment-card-stats dd {
+  margin: 0;
+}
+
+.equipment-card-stats dt {
+  color: #687489;
+  font-size: .6rem;
+  font-weight: 900;
+}
+
+.equipment-card-stats dd {
+  margin-top: 2px;
+  color: #202938;
+  font-size: .74rem;
+  font-weight: 950;
+}
+
+.equipment-card-actions {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.equipment-empty {
+  min-height: 96px;
 }
 
 .records-panel {
@@ -3727,7 +3819,7 @@ button:disabled {
   }
 
   .result-panel,
-  .companion-panel,
+  .equipment-panel,
   .records-panel {
     padding: 20px 16px 28px;
   }
@@ -4504,7 +4596,7 @@ body {
   filter: drop-shadow(0 2px 3px #0007);
   opacity: 0;
   transform: none;
-  animation: none;
+  animation: curriculumTokenPop .9s ease-out infinite;
 }
 
 .battle-scene-lineup {
@@ -5059,7 +5151,7 @@ body {
 
 .growth-panel,
 .result-panel,
-.companion-panel,
+.equipment-panel,
 .records-panel {
   flex: 1 1 auto;
   min-height: 0;
@@ -5069,7 +5161,7 @@ body {
 
 .growth-panel,
 .records-panel,
-.companion-panel {
+.equipment-panel {
   padding: 8px 10px 10px;
   gap: 8px;
 }
@@ -5284,59 +5376,48 @@ body {
   white-space: nowrap;
 }
 
-.learning-helper-lineup {
+.equipment-lineup {
   position: absolute;
   z-index: 7;
   left: 21%;
   bottom: 19%;
-  width: 132px;
-  height: 78px;
+  width: 112px;
+  height: 64px;
   pointer-events: none;
 }
 
-.learning-helper-unit {
+.equipment-orbit-item {
   position: absolute;
-  width: 46px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #ffffffb8;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--equipment-color) 70%, #fff);
+  color: #fff;
   filter: drop-shadow(4px 5px #00000038);
-  animation: helperAssistLoop 1.1s steps(4, end) infinite;
+  animation: equipmentOrbitLoop 1.4s steps(4, end) infinite;
 }
 
-.learning-helper-unit.helper-slot-1 {
+.equipment-orbit-item:nth-child(1) {
   left: 0;
   bottom: 0;
 }
 
-.learning-helper-unit.helper-slot-2 {
-  left: 35px;
-  bottom: 18px;
+.equipment-orbit-item:nth-child(2) {
+  left: 48px;
+  bottom: 14px;
   animation-delay: -.18s;
-  transform: scale(.92);
+  transform: scale(.94);
 }
 
-.learning-helper-unit.helper-slot-3 {
-  left: 72px;
-  bottom: 2px;
-  animation-delay: -.32s;
-  transform: scale(.88);
+.equipment-orbit-item.empty {
+  opacity: .58;
+  background: #64748b;
 }
 
-.learning-helper-frame,
-.robot-helper-frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  opacity: 0;
-}
-
-.learning-helper-frame.frame-0,
-.robot-helper-frame.frame-0 {
-  opacity: 1;
-}
-
-.learning-helper-unit span {
+.equipment-orbit-item span {
   position: absolute;
   right: -3px;
   bottom: -3px;
@@ -5346,7 +5427,7 @@ body {
   place-items: center;
   border: 1px solid #ffffffa8;
   border-radius: 999px;
-  background: var(--helper-color);
+  background: #111827;
   color: #fff;
   font-size: .52rem;
   font-weight: 950;
@@ -5509,7 +5590,7 @@ body {
   color: #fff;
 }
 
-.shop-product-icon.robot {
+.shop-product-icon.equipment {
   background: #2b8a7e;
 }
 
@@ -5683,54 +5764,26 @@ body {
   font-weight: 950;
 }
 
-.gacha-robot.big {
+.gacha-equipment.big {
   position: relative;
   width: 82px;
   height: 82px;
+  display: grid;
+  place-items: center;
+  border: 3px solid #ffffffb8;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--rarity-main) 34%, #fff);
+  color: color-mix(in srgb, var(--rarity-dark) 78%, #111827);
   filter: drop-shadow(6px 8px #0000003d);
 }
 
-.gacha-robot.big .robot-eye,
-.gacha-robot.big .robot-body,
-.gacha-robot.big .robot-arm {
+.gacha-equipment.big .equipment-shine {
   position: absolute;
+  inset: 8px;
   display: block;
-}
-
-.gacha-robot.big .robot-eye {
-  left: 19px;
-  top: 15px;
-  width: 44px;
-  height: 22px;
-  border-radius: 8px;
-  background: #0f172a;
-  box-shadow: 0 -8px 0 var(--rarity-main);
-}
-
-.gacha-robot.big .robot-body {
-  left: 14px;
-  top: 43px;
-  width: 54px;
-  height: 30px;
-  border: 4px solid #0f172a;
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--rarity-main) 72%, #fff);
-}
-
-.gacha-robot.big .robot-arm {
-  top: 50px;
-  width: 11px;
-  height: 20px;
-  border-radius: 8px;
-  background: #dbeafe;
-}
-
-.gacha-robot.big .robot-arm.left {
-  left: 1px;
-}
-
-.gacha-robot.big .robot-arm.right {
-  right: 1px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffffff8a, transparent 45%);
+  pointer-events: none;
 }
 
 .gacha-popup-copy {
@@ -6401,7 +6454,7 @@ body {
 
 .shop-category-tabs {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 1px;
   overflow: visible;
   padding: 0;
@@ -6479,7 +6532,7 @@ body {
   box-shadow: inset 0 -10px #ffffff14;
 }
 
-.shop-product-icon.robot {
+.shop-product-icon.equipment {
   background: #2b8a7e;
 }
 
@@ -6717,57 +6770,29 @@ body {
   font-weight: 950;
 }
 
-.gacha-robot.big {
+.gacha-equipment.big {
   position: relative;
   z-index: 1;
   width: 82px;
   height: 82px;
+  display: grid;
+  place-items: center;
+  border: 3px solid #ffffffb8;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--rarity-main) 34%, #fff);
+  color: color-mix(in srgb, var(--rarity-dark) 78%, #111827);
   filter: drop-shadow(6px 8px 0 #0000003d) drop-shadow(0 0 18px var(--rarity-glow));
   transform: translateY(4px);
   animation: .52s steps(6, end) both gachaRobotDrop;
 }
 
-.gacha-robot.big .robot-eye {
+.gacha-equipment.big .equipment-shine {
   position: absolute;
+  inset: 8px;
   display: block;
-  left: 19px;
-  top: 15px;
-  width: 44px;
-  height: 22px;
-  border-radius: 0;
-  background: linear-gradient(90deg, #0f172a 0 28%, #7dd3fc 28% 72%, #0f172a 72%), #e2e8f0;
-  box-shadow: 0 -8px 0 var(--rarity-main);
-}
-
-.gacha-robot.big .robot-body {
-  position: absolute;
-  display: block;
-  left: 14px;
-  top: 43px;
-  width: 54px;
-  height: 30px;
-  border: 4px solid #e2e8f0;
-  border-radius: 0;
-  background: var(--rarity-main);
-  box-shadow: inset 0 -12px #0000003d;
-}
-
-.gacha-robot.big .robot-arm {
-  position: absolute;
-  display: block;
-  top: 50px;
-  width: 11px;
-  height: 20px;
-  border-radius: 0;
-  background: #0f172a;
-}
-
-.gacha-robot.big .robot-arm.left {
-  left: 1px;
-}
-
-.gacha-robot.big .robot-arm.right {
-  right: 1px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffffff8a, transparent 45%);
+  pointer-events: none;
 }
 
 .gacha-popup-copy {
@@ -7083,22 +7108,7 @@ body {
   grid-template-columns: 1fr;
 }
 
-.robot-helper-portrait {
-  position: relative;
-  width: 48px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--rarity-main, #2b8a7e) 22%, #fff);
-}
-
-.robot-companion {
-  border-color: color-mix(in srgb, var(--rarity-main, #2b8a7e) 32%, #fff);
-  background: linear-gradient(90deg, color-mix(in srgb, var(--rarity-main, #2b8a7e) 11%, transparent), transparent), #fff;
-}
-
-@keyframes helperAssistLoop {
+@keyframes equipmentOrbitLoop {
   0%,
   100% {
     translate: 0 0;
@@ -7211,7 +7221,7 @@ body {
 
   .growth-panel,
   .records-panel,
-  .companion-panel {
+  .equipment-panel {
     padding: 10px;
   }
 
@@ -7685,10 +7695,18 @@ body {
 
 .real-estate-detail-viewport {
   cursor: grab;
+  outline: none;
+  overscroll-behavior: contain;
+  user-select: none;
 }
 
 .real-estate-detail-viewport:active {
   cursor: grabbing;
+}
+
+.real-estate-detail-viewport:focus-visible {
+  border-color: #fde68a;
+  box-shadow: inset 0 0 0 1px #fff8c84d, 0 0 0 3px #facc1540;
 }
 
 .real-estate-detail-map {
@@ -7698,8 +7716,10 @@ body {
   top: 0;
   width: 200%;
   height: 200%;
+  transform-origin: 0 0;
   will-change: transform;
   touch-action: none;
+  user-select: none;
 }
 
 .real-estate-detail-viewport::after {
