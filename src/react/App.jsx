@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   BarChart3,
-  Bot,
+  BookOpen,
   BriefcaseBusiness,
   CalendarDays,
   CheckCircle,
@@ -20,6 +20,7 @@ import {
   Medal,
   Package,
   PauseCircle,
+  Pencil,
   RefreshCcw,
   RefreshCw,
   ScrollText,
@@ -50,23 +51,27 @@ import {
   startRetakeYear,
   studentAutoTickMs,
 } from "./game/battleRoad.js";
-import { getCareerPortraitUrl, getCompanionFrameUrls, getExpeditionEnemyFrameUrls, getHelperFrameUrls, getStudentFrameUrls } from "./game/assets.js";
+import { getCareerPortraitUrl, getCompanionFrameUrls, getExpeditionEnemyFrameUrls, getStudentFrameUrls } from "./game/assets.js";
+import {
+  careerAlumniCareer,
+} from "./game/companions.js";
 import {
   addDiamonds,
-  callRobotHelperProduct,
-  companionCareer,
-  companionGender,
+  drawEquipmentProduct,
+  equipEquipment,
+  equipmentDrawCopy,
+  equipmentPower,
+  equipmentSellValue,
+  equipmentSlotLabel,
+  equipmentSlots,
   exchangeMoneyProduct,
-  helperDisplayName,
-  helperPower,
-  helperSellValue,
-  isRobotHelper,
-  rarityCopy,
+  fuseEquipment,
+  fusionMaterialCount,
   rarityLabels,
   rarityTiers,
   shopCategories,
   shopProducts,
-} from "./game/companions.js";
+} from "./game/equipment.js";
 import { autoBattlePausedForQa, qaToolsEnabled } from "./game/debugTools.js";
 import {
   educationActions,
@@ -139,6 +144,8 @@ const backdrops = {
 };
 const realEstateDistrictBackgroundModules = import.meta.glob(["../snapshot/assets/visual-real-estate-district-*.png", "!../snapshot/assets/visual-real-estate-district-detail.png"], { eager: true, import: "default" });
 const realEstateDistrictBackgrounds = Object.fromEntries(Object.entries(realEstateDistrictBackgroundModules).map(([path, asset]) => [path.split("/").pop(), asset]));
+const realEstateDistrictGrowthModules = import.meta.glob("../snapshot/assets/real-estate-district-growth/*.png", { eager: true, import: "default" });
+const realEstateDistrictGrowthImages = Object.fromEntries(Object.entries(realEstateDistrictGrowthModules).map(([path, asset]) => [path.slice(path.indexOf("real-estate-district-growth/")), asset]));
 const realEstateBuildingModules = import.meta.glob("../snapshot/assets/real-estate-buildings/*.png", { eager: true, import: "default" });
 const realEstateBuildingImages = Object.fromEntries(Object.entries(realEstateBuildingModules).map(([path, asset]) => [path.slice(path.indexOf("real-estate-buildings/")), asset]));
 const totalCareerAtlasFrames = careers.length * 2;
@@ -244,7 +251,7 @@ function Trophy({ size = 24 }) {
 const tabs = [
   { id: "growth", label: "성장", icon: BarChart3 },
   { id: "exam", label: "시험", icon: ScrollText },
-  { id: "companion", label: "동료", icon: Users },
+  { id: "equipment", label: "장비", icon: Pencil },
   { id: "work", label: "직장", icon: BriefcaseBusiness },
   { id: "education", label: "교육", icon: GraduationCap },
   { id: "result", label: "결과", icon: Trophy },
@@ -265,20 +272,21 @@ const suneungVisualKeyByMonth = {
 };
 const companionStatusLabels = {
   idle: "대기",
-  study: "학습",
   work: "근무",
 };
 const shopCategoryIcons = {
   diamond: Gem,
   money: Coins,
-  robot_gacha: Bot,
+  stationery_gacha: Pencil,
+  book_gacha: BookOpen,
   remove_ads: ShieldCheck,
   package: Package,
   pass: CalendarDays,
 };
 const productIcons = {
   gem: Gem,
-  bot: Bot,
+  pencil: Pencil,
+  book: BookOpen,
   coins: Coins,
   shield: ShieldCheck,
   package: Package,
@@ -658,29 +666,28 @@ function BattleLineup({ battle, gradeVisual }) {
   );
 }
 
-function LearningHelperLineup({ helpers }) {
-  assert(Array.isArray(helpers), "학습 도우미 목록 데이터가 배열이 아닙니다.");
-  const visibleHelpers = helpers.slice(0, 3);
-  if (visibleHelpers.length === 0) return null;
-
+function EquippedItemIcon({ item, slotId }) {
+  const Icon = slotId === "book" ? BookOpen : Pencil;
+  const tier = item ? rarityTiers[item.rarity] : null;
+  if (item) assert(tier, `지원하지 않는 장비 등급입니다: ${item.id} / ${item.rarity}`);
   return (
-    <div className="learning-helper-lineup" aria-label="학습 도우미 편대">
-      {visibleHelpers.map((helper, index) => {
-        const tier = rarityTiers[helper.rarity];
-        assert(tier, `지원하지 않는 학습 도우미 rarity입니다: ${helper.id} / ${helper.rarity}`);
-        assert(helper.spriteAsset, `학습 도우미 spriteAsset이 없습니다: ${helper.id}`);
-        return (
-          <div
-            className={`learning-helper-unit helper-slot-${index + 1} rarity-${helper.rarity}`}
-            key={helper.id}
-            style={{ "--helper-color": tier.color }}
-            title={`${helperDisplayName(helper)} · 전투력 +${helperPower(helper)}`}
-          >
-            <SpriteFrames className="learning-helper-frame" frames={getHelperFrameUrls(helper.spriteAsset, companionGender(helper))} />
-            <span>{helper.rarity}</span>
-          </div>
-        );
-      })}
+    <span
+      className={item ? `equipment-orbit-item rarity-${item.rarity}` : "equipment-orbit-item empty"}
+      style={{ "--equipment-color": tier?.color || "#94a3b8" }}
+      title={item ? `${item.name} · 전투력 +${equipmentPower(item)}` : `${equipmentSlotLabel(slotId)} 비어 있음`}
+    >
+      <Icon size={24} />
+      <span>{item ? item.rarity : "-"}</span>
+    </span>
+  );
+}
+
+function EquipmentLineup({ items }) {
+  assert(Array.isArray(items), "장착 장비 목록 데이터가 배열이 아닙니다.");
+  const bySlot = Object.fromEntries(equipmentSlots.map((slot, index) => [slot.id, items[index] || null]));
+  return (
+    <div className="equipment-lineup" aria-label="장착 장비">
+      {equipmentSlots.map((slot) => <EquippedItemIcon key={slot.id} item={bySlot[slot.id]} slotId={slot.id} />)}
     </div>
   );
 }
@@ -731,7 +738,7 @@ function BattleArena({ awaitingDecision, battle, gradeVisual, onDebugComplete, o
             }}
           />
         </div>
-        <LearningHelperLineup helpers={summary.activeHelpers} />
+        <EquipmentLineup items={summary.equippedItems} />
         <span className="pencil-shot" aria-hidden="true" />
         <CurriculumAttackVfx battle={battle} />
         <BattleLineup battle={battle} gradeVisual={gradeVisual} />
@@ -806,7 +813,7 @@ function ExpeditionScene({ gameState, onExpeditionComplete }) {
               </div>
             ))
           ) : (
-            <span className="expedition-empty-party">동료 없음</span>
+            <span className="expedition-empty-party">대원 없음</span>
           )}
         </div>
         <span className="expedition-impact" aria-hidden="true" />
@@ -867,8 +874,8 @@ function SummaryCards({ summary }) {
 
 function BuffCards({ summary }) {
   return (
-    <div className="panel helper-impact-panel buff-grid">
-      <Metric label={`학습 도우미 ${summary.helperCount}/3`} value={`전투력 +${summary.helperPower}`} />
+    <div className="panel equipment-impact-panel buff-grid">
+      <Metric label={`장착 장비 ${summary.equipmentCount}/2`} value={`전투력 +${summary.equipmentPower}`} />
       <Metric label="교육 성장 배율" value={`x${summary.educationMultiplier.toFixed(2)}`} />
       <Metric label="다음 공부량" value={`+${summary.nextStudyGain}`} />
     </div>
@@ -931,7 +938,7 @@ function GrowthPanel({ saveError, saveSource, summary }) {
             <div>
               <span className="subject-dot" style={{ background: subject.color }} />
               <strong>{subject.fullLabel}</strong>
-              <small>Lv.{subjectStat.level} · 학습 도우미 +{summary.helperPower} · 적성 {subjectStat.aptitude}</small>
+              <small>Lv.{subjectStat.level} · 장비 +{summary.equipmentPower} · 적성 {subjectStat.aptitude}</small>
             </div>
             <b>{subjectStat.stat}</b>
             <div className="stat-actions">
@@ -1066,69 +1073,89 @@ function ResultPanel({ gameState, onAcceptCareer, onRetake }) {
   );
 }
 
-function CompanionPanel({ gameState }) {
-  const companions = gameState.companions;
-  const expeditionPartyCount = gameState.expedition.partyMemberIds.length;
-  if (companions.length === 0) {
-    return (
-      <main className="companion-panel">
-        <header className="section-title">
-          <div>
-            <Users size={25} />
-            <h2>동료</h2>
-          </div>
-          <span>0명</span>
-        </header>
-      </main>
-    );
-  }
-
+function EquipmentPanel({ gameState, onEquipEquipment, onFuseEquipment }) {
+  const equipment = gameState.equipment;
+  assert(equipment && typeof equipment === "object", "save.equipment 데이터가 객체가 아닙니다.");
+  assert(Array.isArray(equipment.inventory), "save.equipment.inventory 데이터가 배열이 아닙니다.");
+  const equippedIds = new Set(Object.values(equipment.equipped || {}).filter(Boolean));
+  const bySlot = Object.fromEntries(equipmentSlots.map((slot) => [slot.id, equipment.inventory.find((item) => item.id === equipment.equipped?.[slot.id]) || null]));
   return (
-    <main className="companion-panel">
+    <main className="equipment-panel">
       <header className="section-title">
         <div>
-          <Users size={25} />
-          <h2>동료</h2>
+          <Pencil size={25} />
+          <h2>장비</h2>
         </div>
-        <span>{expeditionPartyCount}/5 편성</span>
+        <span>{equipment.inventory.length}개 보유</span>
       </header>
-      <div className="companion-list">
-        {companions.map((companion) => {
-          if (isRobotHelper(companion)) {
-            assert(companion.spriteAsset, `로봇 도우미 spriteAsset이 비어 있습니다: ${companion.id}`);
-            const tier = rarityTiers[companion.rarity];
-            assert(tier, `지원하지 않는 로봇 도우미 rarity입니다: ${companion.id} / ${companion.rarity}`);
-            const frames = getHelperFrameUrls(companion.spriteAsset, companionGender(companion));
-            return (
-              <article className="companion-card robot-companion" key={companion.id} style={{ "--rarity-main": tier.color }}>
-                <span className="robot-helper-portrait" aria-hidden="true">
-                  <SpriteFrames className="robot-helper-frame" frames={frames} />
-                </span>
-                <div>
-                  <strong>{helperDisplayName(companion)}</strong>
-                  <small>학생 학습 도우미 · 전투력 +{helperPower(companion)}</small>
-                </div>
-                <b>{companion.rarity}</b>
-              </article>
-            );
-          }
-
-          const career = companionCareer(companion);
-          assert(career, `careers.json에서 직업을 찾을 수 없습니다: ${companion.careerId}`);
-          assert(Number.isFinite(Number(companion.powerMultiplier)), `동료 powerMultiplier가 없습니다: ${companion.id}`);
-          const portrait = getCareerPortraitUrl(career, companion.avatarGender);
+      <section className="equipment-slot-grid" aria-label="장착 장비 슬롯">
+        {equipmentSlots.map((slot) => {
+          const item = bySlot[slot.id];
+          const tier = item ? rarityTiers[item.rarity] : null;
+          if (item) assert(tier, `지원하지 않는 장비 등급입니다: ${item.id} / ${item.rarity}`);
+          const Icon = slot.id === "book" ? BookOpen : Pencil;
           return (
-            <article className="companion-card" key={companion.id}>
-                <span className="career-choice-aura career-portrait" style={{ backgroundColor: career.auraColor, backgroundImage: `url(${portrait})` }} />
-                <div>
-                  <strong>{companion.name}</strong>
-                  <small>{companion.sourceUniversity} · 전투 x{Number(companion.powerMultiplier).toFixed(2)}</small>
-                </div>
-              <b>#{companion.careerRank}</b>
+            <article className={item ? `equipment-slot-card filled rarity-${item.rarity}` : "equipment-slot-card"} key={slot.id} style={{ "--equipment-color": tier?.color || "#94a3b8" }}>
+              <span className="equipment-slot-icon" aria-hidden="true">
+                <Icon size={28} />
+              </span>
+              <div>
+                <strong>{slot.label}</strong>
+                <small>{item ? `${item.name} · ${rarityLabels[item.rarity]} · 전투력 +${equipmentPower(item)}` : "장착한 장비 없음"}</small>
+              </div>
+              <b>{item ? item.rarity : "-"}</b>
             </article>
           );
         })}
-      </div>
+      </section>
+      {equipment.inventory.length === 0 ? (
+        <article className="record-empty equipment-empty">
+          <strong>보유 장비 없음</strong>
+          <span>상점의 문방구와 서점에서 필기류/책류 장비를 획득할 수 있습니다.</span>
+        </article>
+      ) : (
+        <section className="equipment-inventory-list" aria-label="보유 장비">
+          {equipment.inventory.map((item) => {
+            const tier = rarityTiers[item.rarity];
+            assert(tier, `지원하지 않는 장비 등급입니다: ${item.id} / ${item.rarity}`);
+            const equipped = equippedIds.has(item.id);
+            const materialCount = fusionMaterialCount(equipment, item);
+            const canFuse = item.rarity !== "SSS" && materialCount > 0;
+            const Icon = item.slot === "book" ? BookOpen : Pencil;
+            return (
+              <article className={equipped ? `equipment-card equipped rarity-${item.rarity}` : `equipment-card rarity-${item.rarity}`} key={item.id} style={{ "--equipment-color": tier.color }}>
+                <span className="equipment-card-icon" aria-hidden="true">
+                  <Icon size={24} />
+                </span>
+                <div className="equipment-card-main">
+                  <strong>{item.name}</strong>
+                  <small>{equipmentSlotLabel(item.slot)} · {rarityLabels[item.rarity]} · 판매 {formatMoney(equipmentSellValue(item))}원</small>
+                </div>
+                <dl className="equipment-card-stats">
+                  <div>
+                    <dt>전투</dt>
+                    <dd>+{equipmentPower(item)}</dd>
+                  </div>
+                  <div>
+                    <dt>합성</dt>
+                    <dd>{item.rarity === "SSS" ? "최종" : `${materialCount}/1`}</dd>
+                  </div>
+                </dl>
+                <div className="equipment-card-actions">
+                  <button className="secondary-action compact" type="button" disabled={equipped} onClick={() => onEquipEquipment(item.id)}>
+                    <CheckCircle size={17} />
+                    <span>{equipped ? "장착 중" : "장착"}</span>
+                  </button>
+                  <button className="primary-action compact" type="button" disabled={!canFuse} onClick={() => onFuseEquipment(item.id)}>
+                    <Sparkles size={17} />
+                    <span>합성</span>
+                  </button>
+                </div>
+              </article>
+            );
+          })}
+        </section>
+      )}
     </main>
   );
 }
@@ -1145,7 +1172,7 @@ function ExpeditionTabBar({ activeTab, management, onTabChange }) {
   const tabs = [
     { id: "growth", label: `성장${management.upgradeableCount > 0 ? ` ${management.upgradeableCount}` : ""}`, icon: Sparkles },
     { id: "party", label: "파티", icon: Users },
-    { id: "manage", label: `동료 관리${management.fusionCandidates.length > 0 ? ` ${management.fusionCandidates.length}` : ""}`, icon: Medal },
+    { id: "manage", label: `대원 관리${management.fusionCandidates.length > 0 ? ` ${management.fusionCandidates.length}` : ""}`, icon: Medal },
     { id: "log", label: "기록", icon: ScrollText },
   ];
   const hasOpenPartySlot = activeTab === "party" && management.partySlots.some((slot) => slot === null);
@@ -1177,12 +1204,12 @@ function ExpeditionGrowthPanel({ management, onLevelUp }) {
       <header className="section-title compact-title">
         <div>
           <Sparkles size={18} />
-          <h2>출전 동료 성장 {management.upgradeableCount}명 투자 가능</h2>
+          <h2>출전 대원 성장 {management.upgradeableCount}명 투자 가능</h2>
         </div>
         <span>보유 EXP {formatCompactNumber(management.trainingExp)}</span>
       </header>
       {management.growthMembers.length === 0 ? (
-        <ExpeditionEmpty icon={Users} title="출전 중인 동료가 없습니다." text="파티 탭에서 성장시킬 동료를 먼저 편성해 주세요." />
+        <ExpeditionEmpty icon={Users} title="출전 중인 대원이 없습니다." text="파티 탭에서 성장시킬 대원을 먼저 편성해 주세요." />
       ) : (
         <div className="expedition-growth-list">
           {management.growthMembers.map((member) => {
@@ -1241,7 +1268,7 @@ function ExpeditionPartyPanel({ management, onAssign, onRemove }) {
             ) : (
               <>
                 <strong>빈 슬롯</strong>
-                <span>동료 편성 가능</span>
+                <span>대원 편성 가능</span>
               </>
             )}
           </article>
@@ -1255,7 +1282,7 @@ function ExpeditionPartyPanel({ management, onAssign, onRemove }) {
           </div>
         </header>
         {management.members.length === 0 ? (
-          <ExpeditionEmpty icon={Medal} title="아직 원정대원이 없습니다." text="디버그 메뉴에서 동료를 추가하거나 수능 결과로 원정대원을 획득해 주세요." />
+          <ExpeditionEmpty icon={Medal} title="아직 원정대원이 없습니다." text="디버그 메뉴에서 후보를 추가하거나 수능 결과로 원정대원을 획득해 주세요." />
         ) : (
           <div className="expedition-roster-list">
             {management.members.map((member) => {
@@ -1290,18 +1317,18 @@ function ExpeditionManagePanel({ management, onFuse, onToggleLock }) {
       <header className="section-title compact-title">
         <div>
           <Medal size={18} />
-          <h2>동료 관리</h2>
+          <h2>대원 관리</h2>
         </div>
       </header>
       {management.members.length === 0 ? (
-        <ExpeditionEmpty icon={Medal} title="관리할 동료가 없습니다." text="파티 후보가 생기면 이곳에서 합성과 잠금 관리를 진행합니다." />
+        <ExpeditionEmpty icon={Medal} title="관리할 대원이 없습니다." text="파티 후보가 생기면 이곳에서 합성과 잠금 관리를 진행합니다." />
       ) : (
         <div className="expedition-manage-stack">
           {management.fusionCandidates.length === 0 ? (
             <article className="expedition-empty compact">
               <Medal size={24} />
-              <strong>합성 가능한 동료가 없습니다.</strong>
-              <p>같은 직업과 같은 직급 동료 2명이 필요합니다.</p>
+              <strong>합성 가능한 대원이 없습니다.</strong>
+              <p>같은 직업과 같은 직급 대원 2명이 필요합니다.</p>
             </article>
           ) : (
             <div className="expedition-fusion-list">
@@ -1429,6 +1456,12 @@ function realEstateBuildingImageFor(file) {
   return image;
 }
 
+function realEstateDistrictGrowthImageFor(file) {
+  const image = realEstateDistrictGrowthImages[file];
+  assert(image, `부동산 baked 성장 PNG를 찾을 수 없습니다: ${file}`);
+  return image;
+}
+
 function RealEstateBuildingSlots({ card }) {
   return (
     <div className="real-estate-building-layer" aria-hidden="true">
@@ -1522,7 +1555,7 @@ function RealEstateDistrictLabel({ bounds, card }) {
   return (
     <span className="real-estate-district-label" style={percentPointStyle(localPercentPoint(card.districtLabelAnchor, bounds))}>
       <strong>{card.name}</strong>
-      <small>{card.unlocked ? `${formatCompactNumber(card.count)}채` : `Stage ${card.unlockStage}`}</small>
+      <small>{card.unlocked ? `${formatCompactNumber(card.count)}채` : card.unlockLabel}</small>
     </span>
   );
 }
@@ -1532,7 +1565,7 @@ function RealEstateDistrictButton({ card, onDistrictClick }) {
   const bounds = polygonBounds(card.districtPolygon);
   return (
     <button
-      aria-label={card.unlocked ? `${card.name} 지역 보기` : `${card.name} 잠김 Stage ${card.unlockStage}`}
+      aria-label={card.unlocked ? `${card.name} 지역 보기` : `${card.name} 잠김 ${card.unlockLabel}`}
       className={`real-estate-district-button ${stateClass}`}
       data-development-level={card.developmentLevel}
       data-district-id={card.id}
@@ -1612,7 +1645,9 @@ function RealEstateOverviewScene({ notice, onDistrictClick, realEstateSummary })
 function RealEstateDistrictScene({ onBackToOverview, realEstateSummary, selectedPropertyId }) {
   const selectedCard = realEstateSummary.cards.find((card) => card.id === selectedPropertyId);
   assert(selectedCard, `선택된 부동산 지역을 찾을 수 없습니다: ${selectedPropertyId}`);
-  const selectedBackground = realEstateDistrictBackgrounds[selectedCard.districtBackgroundAsset];
+  const selectedBackground = selectedCard.districtGrowthStageAsset
+    ? realEstateDistrictGrowthImageFor(selectedCard.districtGrowthStageAsset)
+    : realEstateDistrictBackgrounds[selectedCard.districtBackgroundAsset];
   assert(selectedBackground, `부동산 상세 배경을 찾을 수 없습니다: ${selectedCard.districtBackgroundAsset}`);
   const viewportRef = useRef(null);
   const dragRef = useRef(null);
@@ -1661,7 +1696,7 @@ function RealEstateDistrictScene({ onBackToOverview, realEstateSummary, selected
   };
 
   return (
-    <section className="real-estate-scene real-estate-district" aria-label={`${selectedCard.name} 지역 상세 보기`} data-real-estate-view="district" data-selected-property-id={selectedCard.id}>
+    <section className="real-estate-scene real-estate-district" aria-label={`${selectedCard.name} 지역 상세 보기`} data-real-estate-view="district" data-selected-property-id={selectedCard.id} data-uses-baked-growth={selectedCard.usesBakedDistrictGrowth ? "true" : "false"}>
       <div className="real-estate-detail-viewport" ref={viewportRef}>
         <div
           className="real-estate-detail-map"
@@ -1673,10 +1708,12 @@ function RealEstateDistrictScene({ onBackToOverview, realEstateSummary, selected
           onPointerUp={handlePointerEnd}
           style={{ transform: `translate(${Math.round(pan.x)}px, ${Math.round(pan.y)}px)` }}
         >
-          <img className="real-estate-detail-background" src={selectedBackground} alt="" aria-hidden="true" draggable="false" />
-          <div className="real-estate-detail-development-field">
-            <RealEstateDetailDevelopmentLayer card={selectedCard} />
-          </div>
+          <img className="real-estate-detail-background" src={selectedBackground} alt="" aria-hidden="true" data-district-background={selectedCard.districtBackgroundAsset} data-growth-asset={selectedCard.districtGrowthStageAsset || ""} draggable="false" />
+          {selectedCard.usesBakedDistrictGrowth ? null : (
+            <div className="real-estate-detail-development-field">
+              <RealEstateDetailDevelopmentLayer card={selectedCard} />
+            </div>
+          )}
         </div>
         <button className="secondary-action compact real-estate-map-back" type="button" onClick={onBackToOverview}>
           <BriefcaseBusiness size={16} />
@@ -1708,10 +1745,10 @@ function RealEstateCard({ card, featured = false, onBuy, onBuyMax }) {
     <article className={cardClass} data-development-level={card.developmentLevel} data-property-id={card.id} data-real-estate-card="true">
       <header>
         <div>
-          <span>{card.unlocked ? card.scaleLabel : `Stage ${card.unlockStage}`}</span>
+          <span>{card.unlocked ? card.scaleLabel : card.unlockLabel}</span>
           <strong>{card.name}</strong>
         </div>
-        <b>{card.count}채</b>
+        <b>{card.count}/{card.maxOwnedCount}채</b>
       </header>
       <p>{card.description}</p>
       <div className="real-estate-card-stats">
@@ -1726,15 +1763,15 @@ function RealEstateCard({ card, featured = false, onBuy, onBuyMax }) {
       <div className="real-estate-card-actions">
         <button className="secondary-action compact" data-action="buy-one" type="button" disabled={!card.canBuyOne} onClick={() => onBuy(card.id, 1)}>
           <span>{card.unlocked ? "구매" : "잠김"}</span>
-          <small>{card.unlocked ? formatCompactNumber(card.nextCost) : `Stage ${card.unlockStage}`}</small>
+          <small>{card.unlocked ? card.isMaxed ? "최대" : formatCompactNumber(card.nextCost) : card.unlockLabel}</small>
         </button>
         <button className="secondary-action compact" data-action="buy-ten" type="button" disabled={!card.canBuyTen} onClick={() => onBuy(card.id, 10)}>
-          <span>10개</span>
-          <small>{formatCompactNumber(card.cost10)}</small>
+          <span>{card.unlocked ? card.buyTenCount > 0 ? `${card.buyTenCount}개` : "최대" : "잠김"}</span>
+          <small>{card.unlocked ? card.cost10 > 0 ? formatCompactNumber(card.cost10) : "완료" : card.unlockLabel}</small>
         </button>
         <button className="primary-action compact" data-action="buy-max" type="button" disabled={!card.canBuyMax} onClick={() => onBuyMax(card.id)}>
           <span>최대</span>
-          <small>{card.maxBuyCount > 0 ? `${card.maxBuyCount}개` : "부족"}</small>
+          <small>{card.isMaxed ? "완료" : card.maxBuyCount > 0 ? `${card.maxBuyCount}개` : "부족"}</small>
         </button>
       </div>
     </article>
@@ -1895,23 +1932,22 @@ function ExamPanel({ gameState, onBattleComplete, summary }) {
 }
 
 function WorkPanel({ gameState }) {
-  const companions = gameState.companions;
-  const careerCompanions = companions.filter((companion) => companionCareer(companion));
+  const careerAlumni = gameState.careerAlumni.filter((alumni) => careerAlumniCareer(alumni));
   const workSlots = finiteNumber(gameState.workSlots, "workSlots 값이 올바르지 않습니다.");
   assert(workSlots > 0, `workSlots 값은 1 이상이어야 합니다: ${workSlots}`);
-  const totalIncome = careerCompanions.reduce((sum, companion) => {
-    const income = finiteNumber(companion.incomePerMinute, `동료 incomePerMinute 값이 올바르지 않습니다: ${companion.id}`);
+  const totalIncome = careerAlumni.reduce((sum, alumni) => {
+    const income = finiteNumber(alumni.incomePerMinute, `졸업생 incomePerMinute 값이 올바르지 않습니다: ${alumni.id}`);
     return sum + income;
   }, 0);
   const averagePower =
-    careerCompanions.length > 0
-      ? careerCompanions.reduce((sum, companion) => {
-        const powerMultiplier = finiteNumber(companion.powerMultiplier, `동료 powerMultiplier 값이 올바르지 않습니다: ${companion.id}`);
+    careerAlumni.length > 0
+      ? careerAlumni.reduce((sum, alumni) => {
+        const powerMultiplier = finiteNumber(alumni.powerMultiplier, `졸업생 powerMultiplier 값이 올바르지 않습니다: ${alumni.id}`);
         return sum + powerMultiplier;
-      }, 0) / careerCompanions.length
+      }, 0) / careerAlumni.length
       : 1;
 
-  if (careerCompanions.length === 0) {
+  if (careerAlumni.length === 0) {
     return (
       <main className="records-panel work-panel work-panel-empty">
         <header className="section-title">
@@ -1939,7 +1975,7 @@ function WorkPanel({ gameState }) {
           <span>슬롯 확장 · 1.8만원</span>
         </button>
         <div className="list work-empty-list">
-          <p className="empty-state">근무 중 동료 없음</p>
+          <p className="empty-state">근무 중 졸업생 없음</p>
         </div>
       </main>
     );
@@ -1952,12 +1988,12 @@ function WorkPanel({ gameState }) {
           <BriefcaseBusiness size={25} />
           <h2>직장</h2>
         </div>
-        <span>{careerCompanions.length}/{workSlots}</span>
+        <span>{careerAlumni.length}/{workSlots}</span>
       </header>
       <section className="record-summary-grid work-summary-grid" aria-label="직장 요약">
         <article>
-          <span>등록 동료</span>
-          <strong>{careerCompanions.length}명</strong>
+          <span>등록 졸업생</span>
+          <strong>{careerAlumni.length}명</strong>
         </article>
         <article>
           <span>분당 수입</span>
@@ -1971,40 +2007,40 @@ function WorkPanel({ gameState }) {
       <article className="record-card work-income-card">
         <header>
           <div>
-            <strong>동료 직업 수입</strong>
-            <small>슬롯 {workSlots}개 · 직업 동료 {careerCompanions.length}명</small>
+            <strong>졸업생 직업 수입</strong>
+            <small>슬롯 {workSlots}개 · 직업 졸업생 {careerAlumni.length}명</small>
           </div>
           <b>{formatMoney(totalIncome)}원/분</b>
         </header>
       </article>
-      {careerCompanions.length > 0 ? (
-        <section className="record-list work-companion-list" aria-label="직장 동료 목록">
-          {careerCompanions.map((companion) => {
-            const career = companionCareer(companion);
-            assert(career, `careers.json에서 직업을 찾을 수 없습니다: ${companion.careerId}`);
-            const statusLabel = companionStatusLabels[companion.status];
-            assert(statusLabel, `지원하지 않는 동료 상태입니다: ${companion.id} / ${companion.status}`);
-            assert(companion.careerName, `동료 careerName이 없습니다: ${companion.id}`);
-            assert(companion.sourceUniversity, `동료 sourceUniversity가 없습니다: ${companion.id}`);
-            assert(Number.isFinite(Number(companion.powerMultiplier)), `동료 powerMultiplier가 없습니다: ${companion.id}`);
-            assert(Number.isFinite(Number(companion.careerRank)), `동료 careerRank가 없습니다: ${companion.id}`);
+      {careerAlumni.length > 0 ? (
+        <section className="record-list work-companion-list" aria-label="직장 졸업생 목록">
+          {careerAlumni.map((alumni) => {
+            const career = careerAlumniCareer(alumni);
+            assert(career, `careers.json에서 직업을 찾을 수 없습니다: ${alumni.careerId}`);
+            const statusLabel = companionStatusLabels[alumni.status];
+            assert(statusLabel, `지원하지 않는 졸업생 상태입니다: ${alumni.id} / ${alumni.status}`);
+            assert(alumni.careerName, `졸업생 careerName이 없습니다: ${alumni.id}`);
+            assert(alumni.sourceUniversity, `졸업생 sourceUniversity가 없습니다: ${alumni.id}`);
+            assert(Number.isFinite(Number(alumni.powerMultiplier)), `졸업생 powerMultiplier가 없습니다: ${alumni.id}`);
+            assert(Number.isFinite(Number(alumni.careerRank)), `졸업생 careerRank가 없습니다: ${alumni.id}`);
             return (
-              <article className="record-card work-companion-card" key={companion.id}>
+              <article className="record-card work-companion-card" key={alumni.id}>
                 <header>
                   <div>
-                    <strong>{companion.careerName}</strong>
-                    <small>{companion.sourceUniversity} · {statusLabel}</small>
+                    <strong>{alumni.careerName}</strong>
+                    <small>{alumni.sourceUniversity} · {statusLabel}</small>
                   </div>
-                  <b>{formatMoney(companion.incomePerMinute)}원/분</b>
+                  <b>{formatMoney(alumni.incomePerMinute)}원/분</b>
                 </header>
                 <dl className="record-stats">
                   <div>
                     <dt>전투</dt>
-                    <dd>x{Number(companion.powerMultiplier).toFixed(2)}</dd>
+                    <dd>x{Number(alumni.powerMultiplier).toFixed(2)}</dd>
                   </div>
                   <div>
                     <dt>순위</dt>
-                    <dd>#{companion.careerRank}</dd>
+                    <dd>#{alumni.careerRank}</dd>
                   </div>
                 </dl>
               </article>
@@ -2013,8 +2049,8 @@ function WorkPanel({ gameState }) {
         </section>
       ) : (
         <article className="record-empty">
-          <strong>직장 동료 없음</strong>
-          <span>직업을 수락해 동료를 등록하면 직장 수입이 계산됩니다.</span>
+          <strong>직장 졸업생 없음</strong>
+          <span>직업을 수락해 졸업생을 등록하면 직장 수입이 계산됩니다.</span>
         </article>
       )}
     </main>
@@ -2088,8 +2124,8 @@ function ArchivePanel({ gameState }) {
   const archive = gameState.archive;
   const discoveredCareerIds = new Set();
   const retiredCareerIds = new Set();
-  for (const companion of gameState.companions) {
-    if (companion.careerId) discoveredCareerIds.add(companion.careerId);
+  for (const alumni of gameState.careerAlumni) {
+    if (alumni.careerId) discoveredCareerIds.add(alumni.careerId);
   }
   for (const history of histories) {
     if (history.careerId) discoveredCareerIds.add(history.careerId);
@@ -2352,7 +2388,8 @@ function ProductActionLabel({ canUse, product }) {
   const actionIcons = {
     diamond: CreditCard,
     money: Coins,
-    robot_gacha: Bot,
+    stationery_gacha: Pencil,
+    book_gacha: BookOpen,
     remove_ads: CreditCard,
     package: CreditCard,
     pass: CreditCard,
@@ -2361,7 +2398,7 @@ function ProductActionLabel({ canUse, product }) {
   assert(Icon, `상점 상품 액션 아이콘 매핑 누락: ${product.id} / ${product.category}`);
   let label = "결제 준비중";
   if (product.enabled !== false && !canUse) label = "다이아 부족";
-  if (product.category === "robot_gacha" && canUse) label = `호출 ${formatShopCost(product.diamondCost)}`;
+  if (product.equipmentGacha && canUse) label = `뽑기 ${formatShopCost(product.diamondCost)}`;
   if (product.category === "money" && canUse) label = `교환 ${formatShopCost(product.diamondCost)}`;
   return (
     <>
@@ -2374,20 +2411,20 @@ function ProductActionLabel({ canUse, product }) {
 function GachaResultPopup({ onClose, result }) {
   if (!result?.length) return null;
   const rankForRarity = (rarity) => {
-    assert(Number.isFinite(rarityRank[rarity]), `로봇 호출 rarity 순위가 없습니다: ${rarity}`);
+    assert(Number.isFinite(rarityRank[rarity]), `장비 뽑기 rarity 순위가 없습니다: ${rarity}`);
     return rarityRank[rarity];
   };
   const ordered = result.slice().sort((left, right) => rankForRarity(right.rarity) - rankForRarity(left.rarity));
   const best = ordered[0];
   const rarity = best.rarity;
-  assert(rarityLabels[rarity], `지원하지 않는 로봇 호출 rarity입니다: ${rarity}`);
-  const bestTier = rarityCopy[rarity];
-  assert(bestTier, `로봇 호출 카피가 없습니다: ${rarity}`);
-  assert(best.robotModel, `로봇 호출 결과 robotModel이 없습니다: ${best.id}`);
-  const highCount = result.filter((helper) => rankForRarity(helper.rarity) >= rankForRarity("A")).length;
+  assert(rarityLabels[rarity], `지원하지 않는 장비 뽑기 rarity입니다: ${rarity}`);
+  const bestTier = equipmentDrawCopy[rarity];
+  assert(bestTier, `장비 뽑기 카피가 없습니다: ${rarity}`);
+  const highCount = result.filter((item) => rankForRarity(item.rarity) >= rankForRarity("A")).length;
+  const BestIcon = best.slot === "book" ? BookOpen : Pencil;
 
   return (
-    <div className="gacha-popup-backdrop" role="dialog" aria-modal="true" aria-label="로봇 호출 결과">
+    <div className="gacha-popup-backdrop" role="dialog" aria-modal="true" aria-label="장비 뽑기 결과">
       <section className={`gacha-popup rarity-${rarity}`}>
         <button className="gacha-popup-close" type="button" title="결과 닫기" aria-label="결과 닫기" onClick={onClose}>
           <X size={18} />
@@ -2400,34 +2437,32 @@ function GachaResultPopup({ onClose, result }) {
             <span>{rarity}</span>
             <b>{rarityLabels[rarity]}</b>
           </div>
-          <div className={`gacha-robot big ${best.robotModel}`} aria-hidden="true">
-            <span className="robot-eye" />
-            <span className="robot-body" />
-            <span className="robot-arm left" />
-            <span className="robot-arm right" />
+          <div className={`gacha-equipment big slot-${best.slot}`} aria-hidden="true">
+            <BestIcon size={58} />
+            <span className="equipment-shine" />
           </div>
         </div>
         <div className="gacha-popup-copy">
           <span className={`rarity-badge rarity-${rarity}`}>{rarity} {rarityLabels[rarity]}</span>
           <h3>{bestTier.title}</h3>
-          <strong>{helperDisplayName(best)}</strong>
+          <strong>{best.name}</strong>
           <p>{bestTier.subtitle}</p>
         </div>
         <div className="gacha-popup-summary">
-          <Metric label="호출 수" value={`${result.length}기`} />
-          <Metric label="A 이상" value={`${highCount}기`} />
-          <Metric label="최고 판매가" value={`${formatMoney(helperSellValue(best))}원`} />
+          <Metric label="획득 수" value={`${result.length}개`} />
+          <Metric label="A 이상" value={`${highCount}개`} />
+          <Metric label="최고 판매가" value={`${formatMoney(equipmentSellValue(best))}원`} />
         </div>
-        <div className="gacha-popup-results" aria-label="획득 로봇 목록">
-          {ordered.map((helper, index) => {
-            const cardRarity = helper.rarity;
-            assert(rarityLabels[cardRarity], `지원하지 않는 로봇 호출 결과 rarity입니다: ${helper.id} / ${cardRarity}`);
+        <div className="gacha-popup-results" aria-label="획득 장비 목록">
+          {ordered.map((item, index) => {
+            const cardRarity = item.rarity;
+            assert(rarityLabels[cardRarity], `지원하지 않는 장비 뽑기 결과 rarity입니다: ${item.id} / ${cardRarity}`);
             return (
-              <article className={helper.id === best.id ? `gacha-popup-card best rarity-${cardRarity}` : `gacha-popup-card rarity-${cardRarity}`} key={helper.id}>
+              <article className={item.id === best.id ? `gacha-popup-card best rarity-${cardRarity}` : `gacha-popup-card rarity-${cardRarity}`} key={item.id}>
                 <b>{cardRarity}</b>
                 <div>
-                  <strong>{helperDisplayName(helper)}</strong>
-                  <span>{rarityLabels[cardRarity]} · 판매 {formatMoney(helperSellValue(helper))}원</span>
+                  <strong>{item.name}</strong>
+                  <span>{equipmentSlotLabel(item.slot)} · 판매 {formatMoney(equipmentSellValue(item))}원</span>
                 </div>
                 <small>{index + 1}</small>
               </article>
@@ -2447,12 +2482,12 @@ function ShopModal({ gameState, onClose, onSetGameState }) {
   const [category, setCategory] = useState("diamond");
   const [gachaResult, setGachaResult] = useState([]);
   const products = shopProducts.filter((product) => product.category === category);
-  const robotCount = gameState.companions.filter(isRobotHelper).length;
+  const equipmentCount = gameState.equipment.inventory.length;
 
   const handleProduct = (product) => {
     try {
-      if (product.category === "robot_gacha") {
-        const result = callRobotHelperProduct(gameState, product.id);
+      if (product.equipmentGacha) {
+        const result = drawEquipmentProduct(gameState, product.id);
         onSetGameState(result.state);
         setGachaResult(result.result);
       } else if (product.category === "money") {
@@ -2469,7 +2504,7 @@ function ShopModal({ gameState, onClose, onSetGameState }) {
         <div className="shop-wallet">
           <Metric label="보유 다이아" value={formatCompactNumber(gameState.diamonds)} />
           <Metric label="보유금" value={`${formatMoney(gameState.money)}원`} />
-          <Metric label="로봇 도우미" value={`${robotCount}기`} />
+          <Metric label="보유 장비" value={`${equipmentCount}개`} />
         </div>
         <nav className="shop-category-tabs" aria-label="상점 분류">
           {shopCategories.map((item) => {
@@ -2487,7 +2522,7 @@ function ShopModal({ gameState, onClose, onSetGameState }) {
           {products.map((product) => {
             const Icon = productIcons[product.icon];
             assert(Icon, `상점 상품 아이콘을 찾을 수 없습니다: ${product.id} / ${product.icon}`);
-            const commerceProduct = product.category === "robot_gacha" || product.category === "money";
+            const commerceProduct = product.equipmentGacha || product.category === "money";
             if (commerceProduct) {
               assert(Number.isFinite(Number(product.diamondCost)), `상점 상품 diamondCost 값이 없습니다: ${product.id}`);
             }
@@ -2497,7 +2532,7 @@ function ShopModal({ gameState, onClose, onSetGameState }) {
             return (
               <article className={product.highlight ? "shop-product highlight" : "shop-product"} key={product.id}>
                 <div className="shop-product-main">
-                  <div className={product.robotHelper ? "shop-product-icon robot" : product.category === "money" ? "shop-product-icon money" : "shop-product-icon"}>
+                  <div className={product.equipmentGacha ? "shop-product-icon equipment" : product.category === "money" ? "shop-product-icon money" : "shop-product-icon"}>
                     <Icon size={22} />
                   </div>
                   <div>
@@ -2535,7 +2570,7 @@ function DebugModal({ gameState, onClose, onSetGameState, showDebugTools = false
   const handleAddCareerCompanions = (count) => {
     const result = addDebugExpeditionMembers(gameState, count);
     onSetGameState(result.state);
-    setNotice(`동료 랜덤 +${result.added.length} 완료`);
+    setNotice(`대원 후보 +${result.added.length} 완료`);
   };
 
   const handleExport = () => {
@@ -2627,11 +2662,11 @@ function DebugModal({ gameState, onClose, onSetGameState, showDebugTools = false
         )}
         <button className="secondary-action compact" type="button" onClick={() => handleAddCareerCompanions(1)}>
           <Shuffle size={18} />
-          <span>동료 랜덤 +1</span>
+          <span>대원 후보 +1</span>
         </button>
         <button className="secondary-action compact" type="button" onClick={() => handleAddCareerCompanions(5)}>
           <Users size={18} />
-          <span>동료 랜덤 +5</span>
+          <span>대원 후보 +5</span>
         </button>
         <button className="secondary-action compact" type="button" onClick={() => {
           onSetGameState(ensureBattleState({ ...gameState, contentRevision: CONTENT_REVISION }));
@@ -2733,7 +2768,7 @@ function SettingsModal({ gameState, onClose, onResetGame, onSetGameState, settin
         <div className="confirm-panel" role="alertdialog" aria-modal="true" aria-label="저장 초기화 확인">
           <div>
             <strong>정말 초기화할까?</strong>
-            <p>현재 회차, 돈, 동료, 도감 기록이 이 기기에서 삭제돼. 이 작업은 되돌릴 수 없어.</p>
+            <p>현재 회차, 돈, 장비, 도감 기록이 이 기기에서 삭제돼. 이 작업은 되돌릴 수 없어.</p>
           </div>
           <div className="confirm-actions">
             <button className="secondary-action compact" type="button" onClick={() => setConfirmReset(false)}>
@@ -2751,10 +2786,10 @@ function SettingsModal({ gameState, onClose, onResetGame, onSetGameState, settin
   );
 }
 
-function ActivePanel({ activeTab, gameState, onAcceptCareer, onBattleComplete, onEducationUpgrade, onRetake, saveError, saveSource, summary }) {
+function ActivePanel({ activeTab, gameState, onAcceptCareer, onBattleComplete, onEducationUpgrade, onEquipEquipment, onFuseEquipment, onRetake, saveError, saveSource, summary }) {
   if (activeTab === "growth") return <GrowthPanel saveError={saveError} saveSource={saveSource} summary={summary} />;
   if (activeTab === "exam") return <ExamPanel gameState={gameState} onBattleComplete={onBattleComplete} summary={summary} />;
-  if (activeTab === "companion") return <CompanionPanel gameState={gameState} />;
+  if (activeTab === "equipment") return <EquipmentPanel gameState={gameState} onEquipEquipment={onEquipEquipment} onFuseEquipment={onFuseEquipment} />;
   if (activeTab === "work") return <WorkPanel gameState={gameState} />;
   if (activeTab === "education") return <EducationPanel gameState={gameState} onEducationUpgrade={onEducationUpgrade} summary={summary} />;
   if (activeTab === "result") return <ResultPanel gameState={gameState} onAcceptCareer={onAcceptCareer} onRetake={onRetake} />;
@@ -2887,6 +2922,14 @@ function GameApp({ loaded }) {
     setExpeditionTab("growth");
   };
 
+  const handleEquipEquipment = (equipmentId) => {
+    setGameState((state) => equipEquipment(state, equipmentId));
+  };
+
+  const handleFuseEquipment = (equipmentId) => {
+    setGameState((state) => fuseEquipment(state, equipmentId));
+  };
+
   const handleExpeditionComplete = () => {
     setGameState((state) => completeExpeditionStage(state));
   };
@@ -2953,7 +2996,7 @@ function GameApp({ loaded }) {
 
   const handleRealEstateDistrictClick = (card) => {
     if (!card.unlocked) {
-      setRealEstateNotice(`${card.name}은 원정대 Stage ${card.unlockStage} 돌파 후 이용할 수 있습니다.`);
+      setRealEstateNotice(`${card.name}은 ${card.unlockHint}`);
       return;
     }
     setSelectedRealEstateId(card.id);
@@ -3025,6 +3068,8 @@ function GameApp({ loaded }) {
             onAcceptCareer={handleAcceptCareer}
             onBattleComplete={handleDebugComplete}
             onEducationUpgrade={handleEducationUpgrade}
+            onEquipEquipment={handleEquipEquipment}
+            onFuseEquipment={handleFuseEquipment}
             onRetake={handleRetake}
             saveError={saveError}
                 saveSource={saveSource}

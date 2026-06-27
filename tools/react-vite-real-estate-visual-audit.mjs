@@ -11,8 +11,10 @@ const saveKey = "student-idle-rpg-save-v1";
 const realEstates = JSON.parse(readFileSync(resolve("data/real_estates.json"), "utf8"));
 const buildingAssets = JSON.parse(readFileSync(resolve("data/real_estate_building_assets.json"), "utf8"));
 const districtAssets = JSON.parse(readFileSync(resolve("data/real_estate_district_assets.json"), "utf8"));
+const districtGrowthAssets = JSON.parse(readFileSync(resolve("data/real_estate_district_growth_assets.json"), "utf8"));
 const buildingAssetById = new Map(buildingAssets.assets.map((asset) => [asset.id, asset]));
 const districtAssetById = new Map(districtAssets.districts.map((asset) => [asset.id, asset]));
+const districtGrowthAssetById = new Map(districtGrowthAssets.districts.map((asset) => [asset.id, asset]));
 const expectedOverviewBuildingCount = districtAssets.districts.reduce((sum, asset) => sum + asset.detailPads.length, 0);
 
 const mimeTypes = {
@@ -30,6 +32,28 @@ if (!existsSync(resolve(root, "index.html"))) {
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
+}
+
+function maxOwnedCountForDistrict(districtId) {
+  const growthAsset = districtGrowthAssetById.get(districtId);
+  assert(growthAsset, `${districtId} baked 성장 데이터가 없습니다.`);
+  return Number(growthAsset.maxOwnedCount);
+}
+
+function expectedGrowthStageFile(districtId, count) {
+  const growthAsset = districtGrowthAssetById.get(districtId);
+  if (!growthAsset) return "";
+  const growthCount = Math.max(0, Math.min(Math.floor(Number(count)), Number(growthAsset.maxOwnedCount)));
+  let stage = growthAsset.stages[0];
+  for (const candidate of growthAsset.stages) {
+    if (growthCount >= Number(candidate.minOwnedCount)) stage = candidate;
+  }
+  assert(stage, `${districtId} baked 성장 PNG ${growthCount}채 단계가 없습니다.`);
+  return stage.file;
+}
+
+function assetStem(file) {
+  return file.split("/").pop().replace(".png", "");
 }
 
 function resolveRequest(url) {
@@ -106,12 +130,12 @@ async function seedFullGrowth(page) {
       state.expedition.clearedStageCount = 100;
       state.realEstate.cash = 1000000000;
       state.realEstate.properties = {};
-      for (const property of properties) state.realEstate.properties[property.id] = { count: 1000 };
+      for (const property of properties) state.realEstate.properties[property.id] = { count: property.maxOwnedCount };
       state.realEstate.weeklyAssetGain = 0;
       state.realEstate.lastAssetValueSnapshot = 0;
       localStorage.setItem(key, JSON.stringify(state));
     },
-    { key: saveKey, properties: realEstates.properties },
+    { key: saveKey, properties: realEstates.properties.map((property) => ({ id: property.id, maxOwnedCount: maxOwnedCountForDistrict(property.id) })) },
   );
 }
 
@@ -177,16 +201,25 @@ async function inspectDistrict(page, districtId) {
   const asset = districtAssetById.get(districtId);
   assert(asset, `지역 리소스 데이터가 없습니다: ${districtId}`);
   const expectedSlotCount = asset.detailPads.length;
+  const growthStageFile = expectedGrowthStageFile(districtId, maxOwnedCountForDistrict(districtId));
   await page.locator(`.real-estate-district-button[data-district-id="${districtId}"]`).click();
   await page.waitForSelector(`[data-real-estate-view="district"][data-selected-property-id="${districtId}"]`, { timeout: 6000 });
   await page.waitForFunction(() => {
     const image = document.querySelector(".real-estate-detail-background");
     return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0 && image.naturalHeight > 0;
   });
-  await page.waitForSelector(".real-estate-development-building", { timeout: 6000 });
+  if (growthStageFile) {
+    await page.waitForFunction((expectedFile) => {
+      const image = document.querySelector(".real-estate-detail-background");
+      return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0 && image.getAttribute("data-growth-asset") === expectedFile;
+    }, growthStageFile);
+  } else {
+    await page.waitForSelector(".real-estate-development-building", { timeout: 6000 });
+  }
 
   const metrics = await page.evaluate(() => {
     const image = document.querySelector(".real-estate-detail-background");
+    const section = document.querySelector('[data-real-estate-view="district"]');
     const buildings = Array.from(document.querySelectorAll(".real-estate-development-building"));
     const buildingImages = Array.from(document.querySelectorAll(".real-estate-development-building img"));
     const pads = Array.from(document.querySelectorAll(".real-estate-development-pad"));
@@ -197,6 +230,8 @@ async function inspectDistrict(page, districtId) {
     const viewportRect = viewport.getBoundingClientRect();
     return {
       backgroundSrc: image.currentSrc || image.src,
+      growthAsset: image.getAttribute("data-growth-asset") || "",
+      usesBakedGrowth: section?.getAttribute("data-uses-baked-growth") === "true",
       naturalWidth: image.naturalWidth,
       naturalHeight: image.naturalHeight,
       buildingCount: buildings.length,
@@ -212,18 +247,28 @@ async function inspectDistrict(page, districtId) {
     };
   });
 
-  assert(metrics.backgroundSrc.includes(asset.backgroundAsset.replace(".png", "")), `${districtId} 상세 배경 src가 데이터와 다릅니다: ${metrics.backgroundSrc}`);
-  assert(metrics.buildingCount === expectedSlotCount, `${districtId} 풀성장 상세 건물 수가 ${expectedSlotCount}개가 아닙니다: ${metrics.buildingCount}`);
-  assert(metrics.buildingImageCount === expectedSlotCount, `${districtId} 풀성장 상세 건물 PNG 수가 ${expectedSlotCount}개가 아닙니다: ${metrics.buildingImageCount}`);
-  assert(metrics.buildingImagesLoaded === expectedSlotCount, `${districtId} 풀성장 상세 건물 PNG가 모두 로드되지 않았습니다: ${metrics.buildingImagesLoaded}/${expectedSlotCount}`);
-  assert(metrics.padCount === expectedSlotCount, `${districtId} 상세 pad 수가 ${expectedSlotCount}개가 아닙니다: ${metrics.padCount}`);
-  assert(metrics.themes.length === 1 && metrics.themes[0] === asset.buildingTheme, `${districtId} 건물 theme가 데이터와 다릅니다: ${metrics.themes.join(",")}`);
-  assert(metrics.variants.every((variant) => typeof variant === "string" && variant.length > 0), `${districtId} 건물 variant가 비어 있습니다.`);
-  assert(metrics.assetIds.length >= 4, `${districtId} 상세 건물 PNG 종류가 부족합니다: ${metrics.assetIds.length}`);
-  for (const assetId of metrics.assetIds) {
-    const buildingAsset = buildingAssetById.get(assetId);
-    assert(buildingAsset, `${districtId} 건물 asset id를 데이터에서 찾을 수 없습니다: ${assetId}`);
-    assert(buildingAsset.districtId === districtId, `${districtId} 건물 asset districtId가 다릅니다: ${assetId}`);
+  if (growthStageFile) {
+    assert(metrics.usesBakedGrowth, `${districtId} 상세 화면이 baked 성장 PNG 모드가 아닙니다.`);
+    assert(metrics.growthAsset === growthStageFile, `${districtId} baked 성장 PNG data 속성이 다릅니다: ${metrics.growthAsset}`);
+    assert(metrics.backgroundSrc.includes(assetStem(growthStageFile)), `${districtId} baked 상세 배경 src가 데이터와 다릅니다: ${metrics.backgroundSrc}`);
+    assert(metrics.buildingCount === 0, `${districtId} baked 상세에 DOM 건물이 남아 있습니다: ${metrics.buildingCount}`);
+    assert(metrics.buildingImageCount === 0, `${districtId} baked 상세에 DOM 건물 PNG가 남아 있습니다: ${metrics.buildingImageCount}`);
+    assert(metrics.padCount === 0, `${districtId} baked 상세에 pad가 남아 있습니다: ${metrics.padCount}`);
+  } else {
+    assert(!metrics.usesBakedGrowth, `${districtId} 상세 화면 baked 성장 PNG 모드가 잘못 켜졌습니다.`);
+    assert(metrics.backgroundSrc.includes(asset.backgroundAsset.replace(".png", "")), `${districtId} 상세 배경 src가 데이터와 다릅니다: ${metrics.backgroundSrc}`);
+    assert(metrics.buildingCount === expectedSlotCount, `${districtId} 풀성장 상세 건물 수가 ${expectedSlotCount}개가 아닙니다: ${metrics.buildingCount}`);
+    assert(metrics.buildingImageCount === expectedSlotCount, `${districtId} 풀성장 상세 건물 PNG 수가 ${expectedSlotCount}개가 아닙니다: ${metrics.buildingImageCount}`);
+    assert(metrics.buildingImagesLoaded === expectedSlotCount, `${districtId} 풀성장 상세 건물 PNG가 모두 로드되지 않았습니다: ${metrics.buildingImagesLoaded}/${expectedSlotCount}`);
+    assert(metrics.padCount === expectedSlotCount, `${districtId} 상세 pad 수가 ${expectedSlotCount}개가 아닙니다: ${metrics.padCount}`);
+    assert(metrics.themes.length === 1 && metrics.themes[0] === asset.buildingTheme, `${districtId} 건물 theme가 데이터와 다릅니다: ${metrics.themes.join(",")}`);
+    assert(metrics.variants.every((variant) => typeof variant === "string" && variant.length > 0), `${districtId} 건물 variant가 비어 있습니다.`);
+    assert(metrics.assetIds.length >= 4, `${districtId} 상세 건물 PNG 종류가 부족합니다: ${metrics.assetIds.length}`);
+    for (const assetId of metrics.assetIds) {
+      const buildingAsset = buildingAssetById.get(assetId);
+      assert(buildingAsset, `${districtId} 건물 asset id를 데이터에서 찾을 수 없습니다: ${assetId}`);
+      assert(buildingAsset.districtId === districtId, `${districtId} 건물 asset districtId가 다릅니다: ${assetId}`);
+    }
   }
   assert(metrics.horizontalOverflow === 0, `${districtId} 상세 화면 horizontal overflow가 있습니다: ${metrics.horizontalOverflow}`);
 
@@ -236,6 +281,7 @@ async function inspectDistrict(page, districtId) {
     districtId,
     name: realEstates.properties.find((property) => property.id === districtId).name,
     backgroundAsset: asset.backgroundAsset,
+    growthAsset: growthStageFile,
     buildingTheme: asset.buildingTheme,
     uniqueBuildingAssetCount: metrics.assetIds.length,
     screenshot: screenshotName,

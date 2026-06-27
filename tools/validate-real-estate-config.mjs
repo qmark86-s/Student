@@ -55,6 +55,7 @@ const catalog = readJson("data/real_estates.json");
 const buildingAssets = readJson("data/real_estate_building_assets.json");
 const cityLayout = readJson("data/real_estate_city_layout.json");
 const districtAssets = readJson("data/real_estate_district_assets.json");
+const districtGrowthAssets = readJson("data/real_estate_district_growth_assets.json");
 const tiers = readJson("data/real_estate_scale_tiers.json");
 const balance = readJson("data/real_estate_balance.json");
 const rankRewards = readJson("data/real_estate_rank_rewards.json");
@@ -268,6 +269,60 @@ for (const [index, asset] of districtAssets.districts.entries()) {
   help(asset, path, ["backgroundAsset", "buildingTheme", "detailPads", "futureResidentPaths", "speechTone", "buildingAsset", "rotation"]);
 }
 
+assertObject(districtGrowthAssets, "real_estate_district_growth_assets.json");
+integerAtLeast(districtGrowthAssets.version, "real_estate_district_growth_assets.json.version", 2);
+positiveNumber(districtGrowthAssets.outputScale, "real_estate_district_growth_assets.json.outputScale");
+assertArray(districtGrowthAssets.districts, "real_estate_district_growth_assets.json.districts");
+assert(districtGrowthAssets.districts.length === catalog.properties.length, `real_estate_district_growth_assets.json.districts 수는 매물 수와 같아야 합니다: ${districtGrowthAssets.districts.length}`);
+help(districtGrowthAssets, "real_estate_district_growth_assets.json", ["version", "outputScale", "districts"]);
+const districtGrowthIds = new Set();
+for (const [index, asset] of districtGrowthAssets.districts.entries()) {
+  const path = `real_estate_district_growth_assets.json.districts[${index}]`;
+  assertObject(asset, path);
+  uniqueId(asset, districtGrowthIds, path);
+  assert(asset.id === catalog.properties[index].id, `${path}.id 순서가 real_estates.json과 다릅니다: ${asset.id} !== ${catalog.properties[index].id}`);
+  assertString(asset.sourceBackground, `${path}.sourceBackground`);
+  assert(existsSync(resolve("src/snapshot/assets", asset.sourceBackground)), `${path}.sourceBackground 파일이 없습니다: ${asset.sourceBackground}`);
+  positiveNumber(asset.width, `${path}.width`);
+  positiveNumber(asset.height, `${path}.height`);
+  const maxOwnedCount = integerAtLeast(asset.maxOwnedCount, `${path}.maxOwnedCount`, 1);
+  assertObject(asset.unlock, `${path}.unlock`);
+  assertString(asset.unlock.type, `${path}.unlock.type`);
+  if (index === 0) {
+    assert(asset.unlock.type === "expeditionStage", `${path}.unlock.type 첫 부동산은 expeditionStage여야 합니다.`);
+    integerAtLeast(asset.unlock.stage, `${path}.unlock.stage`, 1);
+    help(asset.unlock, `${path}.unlock`, ["type", "stage"]);
+  } else {
+    assert(asset.unlock.type === "previousMaxOwned", `${path}.unlock.type 두 번째 이후 부동산은 previousMaxOwned여야 합니다.`);
+    assertString(asset.unlock.previousDistrictId, `${path}.unlock.previousDistrictId`);
+    assert(asset.unlock.previousDistrictId === catalog.properties[index - 1].id, `${path}.unlock.previousDistrictId 값이 직전 매물과 다릅니다: ${asset.unlock.previousDistrictId} !== ${catalog.properties[index - 1].id}`);
+    help(asset.unlock, `${path}.unlock`, ["type", "previousDistrictId"]);
+  }
+  assertArray(asset.stages, `${path}.stages`);
+  assert(asset.stages.length >= 1, `${path}.stages는 1개 이상이어야 합니다.`);
+  const stageFiles = new Set();
+  let lastMinOwnedCount = -1;
+  for (const [stageIndex, stage] of asset.stages.entries()) {
+    const stagePath = `${path}.stages[${stageIndex}]`;
+    assertObject(stage, stagePath);
+    const growthStage = integerAtLeast(stage.growthStage, `${stagePath}.growthStage`, 0);
+    assert(growthStage === stageIndex, `${stagePath}.growthStage 값은 stages 배열 순서와 같아야 합니다: ${growthStage} !== ${stageIndex}`);
+    const minOwnedCount = integerAtLeast(stage.minOwnedCount, `${stagePath}.minOwnedCount`, 0);
+    assert(minOwnedCount > lastMinOwnedCount, `${stagePath}.minOwnedCount 값은 이전 단계보다 커야 합니다.`);
+    assert(minOwnedCount <= maxOwnedCount, `${stagePath}.minOwnedCount 값이 maxOwnedCount를 넘었습니다: ${minOwnedCount} > ${maxOwnedCount}`);
+    if (stageIndex === 0) assert(minOwnedCount === 0, `${stagePath}.minOwnedCount 첫 단계는 0이어야 합니다.`);
+    lastMinOwnedCount = minOwnedCount;
+    assertString(stage.file, `${stagePath}.file`);
+    assert(stage.file.startsWith("real-estate-district-growth/") && stage.file.endsWith(".png"), `${stagePath}.file 값은 real-estate-district-growth/*.png 형식이어야 합니다.`);
+    assert(!stage.file.includes("..") && !stage.file.includes("\\"), `${stagePath}.file 값이 올바르지 않습니다: ${stage.file}`);
+    assert(!stageFiles.has(stage.file), `${stagePath}.file 값이 중복되었습니다: ${stage.file}`);
+    stageFiles.add(stage.file);
+    assert(existsSync(resolve("src/snapshot/assets", stage.file)), `${stagePath}.file 파일이 없습니다: ${stage.file}`);
+    help(stage, stagePath, ["growthStage", "minOwnedCount", "file"]);
+  }
+  help(asset, path, ["id", "sourceBackground", "width", "height", "maxOwnedCount", "unlock", "stages"]);
+}
+
 assertObject(tiers, "real_estate_scale_tiers.json");
 integerAtLeast(tiers.version, "real_estate_scale_tiers.json.version", 1);
 assertArray(tiers.tiers, "real_estate_scale_tiers.json.tiers");
@@ -353,4 +408,4 @@ for (const [index, reward] of rankRewards.rewards.entries()) {
   }
 }
 
-console.log(`부동산 데이터 검증 완료: 매물 ${catalog.properties.length}종, 도시 지역 ${cityLayout.districts.length}종, 상세 리소스 ${districtAssets.districts.length}종, 건물 PNG ${buildingAssets.assets.length}종, 규모 ${tiers.tiers.length}종, 랭킹 보상 ${rankRewards.rewards.length}종`);
+console.log(`부동산 데이터 검증 완료: 매물 ${catalog.properties.length}종, 도시 지역 ${cityLayout.districts.length}종, 상세 리소스 ${districtAssets.districts.length}종, baked 성장 리소스 ${districtGrowthAssets.districts.length}종, 건물 PNG ${buildingAssets.assets.length}종, 규모 ${tiers.tiers.length}종, 랭킹 보상 ${rankRewards.rewards.length}종`);

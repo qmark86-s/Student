@@ -2,12 +2,12 @@ import realEstateBalance from "../../../data/real_estate_balance.json";
 import realEstateBuildingAssets from "../../../data/real_estate_building_assets.json";
 import realEstateCityLayout from "../../../data/real_estate_city_layout.json";
 import realEstateDistrictAssets from "../../../data/real_estate_district_assets.json";
+import realEstateDistrictGrowthAssets from "../../../data/real_estate_district_growth_assets.json";
 import realEstateRankRewards from "../../../data/real_estate_rank_rewards.json";
 import realEstateScaleTiers from "../../../data/real_estate_scale_tiers.json";
 import realEstates from "../../../data/real_estates.json";
 
 const MIN_REAL_ESTATE_BUILDING_SLOT_COUNT = 16;
-const REAL_ESTATE_BUILDING_SLOT_COUNT_MILESTONES = [1, 2, 3, 4, 5, 6, 8, 10, 15, 25, 50, 100, 200, 300, 600, 1000];
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -282,6 +282,55 @@ function validateDistrictAsset(asset, index, ids, expectedId, expectedSlotCount,
   validateHelp(asset, path, ["backgroundAsset", "buildingTheme", "detailPads", "futureResidentPaths", "speechTone", "buildingAsset", "rotation"]);
 }
 
+function validateDistrictGrowthUnlock(unlock, path, index, propertiesForValidation) {
+  assertObject(unlock, path);
+  assertString(unlock.type, `${path}.type`);
+  if (index === 0) {
+    assert(unlock.type === "expeditionStage", `${path}.type 첫 부동산은 expeditionStage여야 합니다.`);
+    integerAtLeast(unlock.stage, `${path}.stage`, 1);
+    validateHelp(unlock, path, ["type", "stage"]);
+    return;
+  }
+  assert(unlock.type === "previousMaxOwned", `${path}.type 두 번째 이후 부동산은 previousMaxOwned여야 합니다.`);
+  assertString(unlock.previousDistrictId, `${path}.previousDistrictId`);
+  const expectedPreviousId = propertiesForValidation[index - 1].id;
+  assert(unlock.previousDistrictId === expectedPreviousId, `${path}.previousDistrictId 값이 직전 매물과 다릅니다: ${unlock.previousDistrictId} !== ${expectedPreviousId}`);
+  validateHelp(unlock, path, ["type", "previousDistrictId"]);
+}
+
+function validateDistrictGrowthAsset(asset, index, ids, propertiesForValidation) {
+  const path = `real_estate_district_growth_assets.json.districts[${index}]`;
+  assertObject(asset, path);
+  assertString(asset.id, `${path}.id`);
+  const expectedId = propertiesForValidation[index].id;
+  assert(asset.id === expectedId, `${path}.id 순서가 real_estates.json과 다릅니다: ${asset.id} !== ${expectedId}`);
+  assert(!ids.has(asset.id), `${path}.id 값이 중복되었습니다: ${asset.id}`);
+  ids.add(asset.id);
+  assertString(asset.sourceBackground, `${path}.sourceBackground`);
+  positiveNumber(asset.width, `${path}.width`);
+  positiveNumber(asset.height, `${path}.height`);
+  const maxOwnedCount = integerAtLeast(asset.maxOwnedCount, `${path}.maxOwnedCount`, 1);
+  validateDistrictGrowthUnlock(asset.unlock, `${path}.unlock`, index, propertiesForValidation);
+  assertArray(asset.stages, `${path}.stages`);
+  assert(asset.stages.length >= 1, `${path}.stages는 1개 이상이어야 합니다.`);
+  let lastMinOwnedCount = -1;
+  asset.stages.forEach((stage, stageIndex) => {
+    const stagePath = `${path}.stages[${stageIndex}]`;
+    assertObject(stage, stagePath);
+    const growthStage = integerAtLeast(stage.growthStage, `${stagePath}.growthStage`, 0);
+    assert(growthStage === stageIndex, `${stagePath}.growthStage 값은 stages 배열 순서와 같아야 합니다: ${growthStage} !== ${stageIndex}`);
+    const minOwnedCount = integerAtLeast(stage.minOwnedCount, `${stagePath}.minOwnedCount`, 0);
+    assert(minOwnedCount > lastMinOwnedCount, `${stagePath}.minOwnedCount 값은 이전 단계보다 커야 합니다.`);
+    assert(minOwnedCount <= maxOwnedCount, `${stagePath}.minOwnedCount 값이 maxOwnedCount를 넘었습니다: ${minOwnedCount} > ${maxOwnedCount}`);
+    if (stageIndex === 0) assert(minOwnedCount === 0, `${stagePath}.minOwnedCount 첫 단계는 0이어야 합니다.`);
+    lastMinOwnedCount = minOwnedCount;
+    assertString(stage.file, `${stagePath}.file`);
+    assert(stage.file.startsWith("real-estate-district-growth/") && stage.file.endsWith(".png"), `${stagePath}.file 값이 올바르지 않습니다: ${stage.file}`);
+    validateHelp(stage, stagePath, ["growthStage", "minOwnedCount", "file"]);
+  });
+  validateHelp(asset, path, ["id", "sourceBackground", "width", "height", "maxOwnedCount", "unlock", "stages"]);
+}
+
 export function validateRealEstateConfig() {
   assertObject(realEstates, "real_estates.json");
   integerAtLeast(realEstates.version, "real_estates.json.version", 1);
@@ -320,6 +369,15 @@ export function validateRealEstateConfig() {
     districtAssetFiles.add(asset.backgroundAsset);
   });
   validateHelp(realEstateDistrictAssets, "real_estate_district_assets.json", ["version", "districts"]);
+
+  assertObject(realEstateDistrictGrowthAssets, "real_estate_district_growth_assets.json");
+  integerAtLeast(realEstateDistrictGrowthAssets.version, "real_estate_district_growth_assets.json.version", 2);
+  positiveNumber(realEstateDistrictGrowthAssets.outputScale, "real_estate_district_growth_assets.json.outputScale");
+  assertArray(realEstateDistrictGrowthAssets.districts, "real_estate_district_growth_assets.json.districts");
+  assert(realEstateDistrictGrowthAssets.districts.length === realEstates.properties.length, `real_estate_district_growth_assets.json.districts 수는 매물 수와 같아야 합니다: ${realEstateDistrictGrowthAssets.districts.length}`);
+  const districtGrowthAssetIds = new Set();
+  realEstateDistrictGrowthAssets.districts.forEach((asset, index) => validateDistrictGrowthAsset(asset, index, districtGrowthAssetIds, realEstates.properties));
+  validateHelp(realEstateDistrictGrowthAssets, "real_estate_district_growth_assets.json", ["version", "outputScale", "districts"]);
 
   assertObject(realEstateScaleTiers, "real_estate_scale_tiers.json");
   integerAtLeast(realEstateScaleTiers.version, "real_estate_scale_tiers.json.version", 1);
@@ -376,6 +434,8 @@ const buildingAssets = realEstateBuildingAssets.assets;
 const buildingAssetById = new Map(buildingAssets.map((asset) => [asset.id, asset]));
 const districtAssets = realEstateDistrictAssets.districts;
 const districtAssetById = new Map(districtAssets.map((asset) => [asset.id, asset]));
+const districtGrowthAssets = realEstateDistrictGrowthAssets.districts;
+const districtGrowthAssetById = new Map(districtGrowthAssets.map((asset) => [asset.id, asset]));
 const scaleTiers = realEstateScaleTiers.tiers.slice().sort((a, b) => Number(a.minCount) - Number(b.minCount));
 const artStages = realEstateBalance.artStages.slice().sort((a, b) => Number(a.minAssetValue) - Number(b.minAssetValue));
 
@@ -451,6 +511,59 @@ function ownedCount(realEstate, propertyId) {
   return owned ? Math.floor(Number(owned.count)) : 0;
 }
 
+function districtGrowthAssetForId(propertyId) {
+  const asset = districtGrowthAssetById.get(propertyId);
+  assert(asset, `real_estate_district_growth_assets.json에서 성장 테이블을 찾을 수 없습니다: ${propertyId}`);
+  return asset;
+}
+
+function maxOwnedCountForPropertyId(propertyId) {
+  return Number(districtGrowthAssetForId(propertyId).maxOwnedCount);
+}
+
+function effectiveGrowthCount(propertyId, count) {
+  return Math.max(0, Math.min(Math.floor(Number(count)), maxOwnedCountForPropertyId(propertyId)));
+}
+
+function realEstateUnlockInfo(realEstate, propertyId, highestStage) {
+  const asset = districtGrowthAssetForId(propertyId);
+  const unlock = asset.unlock;
+  const count = ownedCount(realEstate, propertyId);
+  if (count > 0) {
+    return {
+      unlocked: true,
+      label: "보유 중",
+      hint: "이미 보유 중인 부동산입니다.",
+    };
+  }
+  if (unlock.type === "expeditionStage") {
+    const stage = Number(unlock.stage);
+    return {
+      unlocked: highestStage >= stage,
+      label: `Stage ${stage}`,
+      hint: `원정대 Stage ${stage} 돌파 후 이용할 수 있습니다.`,
+    };
+  }
+  const previousPropertyId = unlock.previousDistrictId;
+  const previousProperty = propertyForId(previousPropertyId);
+  const previousMaxOwnedCount = maxOwnedCountForPropertyId(previousPropertyId);
+  const previousCount = ownedCount(realEstate, previousPropertyId);
+  return {
+    unlocked: previousCount >= previousMaxOwnedCount,
+    label: `${previousProperty.name} 최대 개발`,
+    hint: `${previousProperty.name} ${previousMaxOwnedCount}채 최대 개발 후 이용할 수 있습니다.`,
+    previousPropertyId,
+    previousMaxOwnedCount,
+    previousCount,
+  };
+}
+
+function isRealEstatePropertyUnlocked(state, propertyId) {
+  assertObject(state.expedition, "save.expedition");
+  const highestStage = integerAtLeast(state.expedition.highestStage, "save.expedition.highestStage", 0);
+  return realEstateUnlockInfo(state.realEstate, propertyId, highestStage).unlocked;
+}
+
 function nextPurchaseCost(property, owned) {
   const value = Number(property.basePrice) * Number(property.priceGrowth) ** owned;
   assert(Number.isFinite(value), `${property.id} 구매가 계산값이 올바르지 않습니다.`);
@@ -466,10 +579,11 @@ function purchaseCostForCount(property, currentCount, quantity) {
   return Math.floor(total);
 }
 
-function maxPurchaseCount(property, currentCount, cash) {
+function maxPurchaseCount(property, currentCount, cash, limit = 10000) {
   let available = Math.max(0, Math.floor(Number(cash)));
   let count = 0;
-  while (count < 10000) {
+  const maxCount = Math.max(0, Math.floor(Number(limit)));
+  while (count < maxCount) {
     const cost = nextPurchaseCost(property, currentCount + count);
     if (available < cost) break;
     available -= cost;
@@ -611,8 +725,11 @@ export function grantRealEstateExpeditionStageReward(state, stage, now = Date.no
 export function purchaseRealEstateProperty(state, propertyId, quantity, now = Date.now()) {
   const next = accrueRealEstateIncome(state, now);
   const property = propertyForId(propertyId);
+  if (!isRealEstatePropertyUnlocked(next, propertyId)) return next;
   const count = ownedCount(next.realEstate, propertyId);
-  const amount = integerAtLeast(quantity, `${propertyId}.quantity`, 1);
+  const remainingCount = Math.max(0, maxOwnedCountForPropertyId(propertyId) - count);
+  if (remainingCount <= 0) return next;
+  const amount = Math.min(integerAtLeast(quantity, `${propertyId}.quantity`, 1), remainingCount);
   const cost = purchaseCostForCount(property, count, amount);
   if (Number(next.realEstate.cash) < cost) return next;
   next.realEstate.cash -= cost;
@@ -625,8 +742,10 @@ export function purchaseRealEstateProperty(state, propertyId, quantity, now = Da
 export function purchaseMaxRealEstateProperty(state, propertyId, now = Date.now()) {
   const next = accrueRealEstateIncome(state, now);
   const property = propertyForId(propertyId);
+  if (!isRealEstatePropertyUnlocked(next, propertyId)) return next;
   const count = ownedCount(next.realEstate, propertyId);
-  const amount = maxPurchaseCount(property, count, next.realEstate.cash);
+  const remainingCount = Math.max(0, maxOwnedCountForPropertyId(propertyId) - count);
+  const amount = maxPurchaseCount(property, count, next.realEstate.cash, remainingCount);
   if (amount <= 0) return next;
   const cost = purchaseCostForCount(property, count, amount);
   next.realEstate.cash -= cost;
@@ -644,13 +763,11 @@ function scaleTierForCount(count) {
   return tier;
 }
 
-function developmentLevelForCount(count) {
-  if (count <= 0) return 0;
-  let level = 0;
-  for (const tier of scaleTiers) {
-    if (count >= Number(tier.minCount)) level += 1;
-  }
-  return Math.min(scaleTiers.length, level);
+function developmentLevelForGrowthCount(propertyId, count) {
+  const maxOwnedCount = maxOwnedCountForPropertyId(propertyId);
+  const growthCount = effectiveGrowthCount(propertyId, count);
+  if (growthCount <= 0) return 0;
+  return Math.max(1, Math.min(scaleTiers.length, Math.ceil((growthCount / maxOwnedCount) * scaleTiers.length)));
 }
 
 function detailPadsForDistrictAsset(districtAsset) {
@@ -671,19 +788,17 @@ function detailPadsForDistrictAsset(districtAsset) {
   });
 }
 
-function visibleBuildingSlotCountForCount(count, totalSlots) {
+function visibleBuildingSlotCountForCount(propertyId, count, totalSlots) {
   if (count <= 0) return 0;
-  let visibleCount = 0;
-  for (const milestone of REAL_ESTATE_BUILDING_SLOT_COUNT_MILESTONES.slice(0, totalSlots)) {
-    if (count >= milestone) visibleCount += 1;
-  }
-  return Math.max(1, Math.min(totalSlots, visibleCount));
+  const maxOwnedCount = maxOwnedCountForPropertyId(propertyId);
+  const growthCount = effectiveGrowthCount(propertyId, count);
+  return Math.max(1, Math.min(totalSlots, Math.floor((growthCount / maxOwnedCount) * totalSlots)));
 }
 
 function visibleBuildingSlotsForDistrict(district, detailPads, count) {
   const totalSlots = district.buildingSlots.length;
   assert(detailPads.length === totalSlots, `부동산 도시 건물 슬롯과 상세 pad 수가 다릅니다: ${district.id}`);
-  const visibleCount = visibleBuildingSlotCountForCount(count, totalSlots);
+  const visibleCount = visibleBuildingSlotCountForCount(district.id, count, totalSlots);
   return district.buildingSlots.slice(0, visibleCount).map((slot, index) => {
     const pad = detailPads[index];
     assert(pad, `부동산 상세 pad를 찾을 수 없습니다: ${district.id} ${index}`);
@@ -699,6 +814,18 @@ function visibleBuildingSlotsForDistrict(district, detailPads, count) {
       rotation: pad.rotation,
     };
   });
+}
+
+function districtGrowthStageForCount(districtId, count) {
+  const growthAsset = districtGrowthAssetById.get(districtId);
+  if (!growthAsset) return null;
+  const growthCount = effectiveGrowthCount(districtId, count);
+  let stage = growthAsset.stages[0];
+  for (const candidate of growthAsset.stages) {
+    if (growthCount >= Number(candidate.minOwnedCount)) stage = candidate;
+  }
+  assert(stage, `부동산 baked 성장 PNG stage를 찾을 수 없습니다: ${districtId} ${growthCount}`);
+  return stage;
 }
 
 function nextScaleTier(count) {
@@ -797,7 +924,11 @@ export function debugSetAllRealEstateCounts(state, count, now = Date.now()) {
   const next = debugUnlockRealEstateStages(state, 100, now);
   const amount = integerAtLeast(count, "debug.realEstate.count", 0);
   next.realEstate.properties = {};
-  for (const property of properties) next.realEstate.properties[property.id] = { count: amount };
+  for (const property of properties) {
+    const maxOwnedCount = maxOwnedCountForPropertyId(property.id);
+    const targetCount = amount >= 1000 ? maxOwnedCount : Math.min(amount, maxOwnedCount);
+    if (targetCount > 0) next.realEstate.properties[property.id] = { count: targetCount };
+  }
   if (amount >= 1000) next.realEstate.cash = Math.max(Number(next.realEstate.cash), 1000000000);
   if (amount > 0 && amount < 1000) next.realEstate.cash = Math.max(Number(next.realEstate.cash), 1000000);
   syncWeeklyAssetGain(next, now);
@@ -836,32 +967,46 @@ export function createRealEstateViewModel(state) {
     assert(district, `real_estate_city_layout.json에서 지역을 찾을 수 없습니다: ${property.id}`);
     const districtAsset = districtAssetById.get(property.id);
     assert(districtAsset, `real_estate_district_assets.json에서 지역 리소스를 찾을 수 없습니다: ${property.id}`);
-    const unlocked = highestStage >= Number(property.unlockStage);
+    const unlockInfo = realEstateUnlockInfo(state.realEstate, property.id, highestStage);
+    const unlocked = unlockInfo.unlocked;
+    const maxOwnedCount = maxOwnedCountForPropertyId(property.id);
+    const growthCount = effectiveGrowthCount(property.id, count);
+    const remainingCount = Math.max(0, maxOwnedCount - count);
+    const isMaxed = remainingCount <= 0;
     const scale = count > 0 ? scaleTierForCount(count) : null;
-    const nextScale = nextScaleTier(count);
-    const nextCost = nextPurchaseCost(property, count);
-    const cost10 = purchaseCostForCount(property, count, 10);
-    const maxBuyCount = maxPurchaseCount(property, count, state.realEstate.cash);
+    const nextCost = remainingCount > 0 ? nextPurchaseCost(property, count) : 0;
+    const buyTenCount = Math.min(10, remainingCount);
+    const cost10 = buyTenCount > 0 ? purchaseCostForCount(property, count, buyTenCount) : 0;
+    const maxBuyCount = maxPurchaseCount(property, count, state.realEstate.cash, remainingCount);
     const maxBuyCost = maxBuyCount > 0 ? purchaseCostForCount(property, count, maxBuyCount) : 0;
-    const nextScaleProgress = nextScale ? Math.min(100, Math.floor((count / Number(nextScale.minCount)) * 100)) : 100;
-    const developmentLevel = developmentLevelForCount(count);
-    const developmentRatio = Math.floor((developmentLevel / scaleTiers.length) * 100);
+    const nextScaleProgress = Math.min(100, Math.floor((growthCount / maxOwnedCount) * 100));
+    const developmentLevel = developmentLevelForGrowthCount(property.id, count);
+    const developmentRatio = nextScaleProgress;
     const districtDetailPads = detailPadsForDistrictAsset(districtAsset);
+    const visibleSlotCount = visibleBuildingSlotCountForCount(property.id, count, district.buildingSlots.length);
     const visibleBuildingSlots = visibleBuildingSlotsForDistrict(district, districtDetailPads, count);
+    const districtGrowthStage = districtGrowthStageForCount(property.id, count);
     return {
       id: property.id,
       name: property.name,
       description: property.description,
       unlockStage: Number(property.unlockStage),
+      unlockLabel: unlockInfo.label,
+      unlockHint: unlockInfo.hint,
       unlocked,
       count,
+      maxOwnedCount,
+      growthCount,
+      remainingCount,
+      isMaxed,
       scaleLabel: scale ? scale.label : "미보유",
       portfolioLabel: scale ? scale.portfolioLabel : "아직 보유 없음",
-      nextScaleLabel: nextScale ? nextScale.label : "최대 규모",
+      nextScaleLabel: isMaxed ? "최대 개발" : `${growthCount}/${maxOwnedCount}채`,
       nextScaleProgress,
       rentPerMinute: count * Number(property.baseIncomePerMinute),
       assetValue: assetValueForCount(property, count),
       nextCost,
+      buyTenCount,
       cost10,
       maxBuyCount,
       maxBuyCost,
@@ -873,12 +1018,14 @@ export function createRealEstateViewModel(state) {
       buildingSlots: district.buildingSlots,
       visibleBuildingSlots,
       districtBackgroundAsset: districtAsset.backgroundAsset,
+      districtGrowthStageAsset: districtGrowthStage ? districtGrowthStage.file : "",
+      usesBakedDistrictGrowth: Boolean(districtGrowthStage),
       districtBuildingTheme: districtAsset.buildingTheme,
       districtDetailPads,
       districtFutureResidentPaths: districtAsset.futureResidentPaths,
       districtSpeechTone: districtAsset.speechTone,
-      canBuyOne: unlocked && Number(state.realEstate.cash) >= nextCost,
-      canBuyTen: unlocked && Number(state.realEstate.cash) >= cost10,
+      canBuyOne: unlocked && remainingCount > 0 && Number(state.realEstate.cash) >= nextCost,
+      canBuyTen: unlocked && buyTenCount > 0 && Number(state.realEstate.cash) >= cost10,
       canBuyMax: unlocked && maxBuyCount > 0,
     };
   });

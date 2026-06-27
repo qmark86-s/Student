@@ -1,0 +1,781 @@
+{
+  "version": 2,
+  "outputScale": 0.5,
+  "districts": [
+    {
+      "id": "small_studio",
+      "sourceBackground": "visual-real-estate-district-small-studio.png",
+      "width": 836,
+      "height": 470,
+      "maxOwnedCount": 10,
+      "unlock": {
+        "type": "expeditionStage",
+        "stage": 1,
+        "help": {
+          "type": "? ??? ?? ?????.",
+          "stage": "? ??? ?? Stage ??? ? ??? ? ????."
+        }
+      },
+      "stages": [
+        {
+          "growthStage": 0,
+          "minOwnedCount": 0,
+          "file": "real-estate-district-growth/small-studio-growth-00.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 1,
+          "minOwnedCount": 1,
+          "file": "real-estate-district-growth/small-studio-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 2,
+          "minOwnedCount": 2,
+          "file": "real-estate-district-growth/small-studio-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 3,
+          "minOwnedCount": 4,
+          "file": "real-estate-district-growth/small-studio-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 4,
+          "minOwnedCount": 6,
+          "file": "real-estate-district-growth/small-studio-growth-04.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 5,
+          "minOwnedCount": 9,
+          "file": "real-estate-district-growth/small-studio-growth-05.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        }
+      ],
+      "help": {
+        "id": "부동산 매물/지역 id입니다.",
+        "sourceBackground": "0단계 base와 같은 원본 상세 배경 PNG 파일명입니다.",
+        "width": "baked 성장 PNG의 가로 해상도입니다.",
+        "height": "baked 성장 PNG의 세로 해상도입니다.",
+        "maxOwnedCount": "이 지역에서 구매 가능한 최대 보유 수량이며 다음 지역 해금 조건입니다.",
+        "unlock": "이 지역을 매입 가능 상태로 여는 조건입니다.",
+        "stages": "보유 수량에 따라 선택할 단계별 baked PNG 목록입니다."
+      }
+    },
+    {
+      "id": "two_room",
+      "sourceBackground": "visual-real-estate-district-two-room.png",
+      "width": 836,
+      "height": 470,
+      "maxOwnedCount": 12,
+      "unlock": {
+        "type": "previousMaxOwned",
+        "previousDistrictId": "small_studio",
+        "help": {
+          "type": "?? ??? ?? ?? ???? ???? ?????.",
+          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+        }
+      },
+      "stages": [
+        {
+          "growthStage": 0,
+          "minOwnedCount": 0,
+          "file": "real-estate-district-growth/two-room-growth-00.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 1,
+          "minOwnedCount": 1,
+          "file": "real-estate-district-growth/two-room-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 2,
+          "minOwnedCount": 4,
+          "file": "real-estate-district-growth/two-room-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 3,
+          "minOwnedCount": 7,
+          "file": "real-estate-district-growth/two-room-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 4,
+          "minOwnedCount": 11,
+          "file": "real-estate-district-growth/two-room-growth-04.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        }
+      ],
+      "help": {
+        "id": "부동산 매물/지역 id입니다.",
+        "sourceBackground": "0단계 base와 같은 원본 상세 배경 PNG 파일명입니다.",
+        "width": "baked 성장 PNG의 가로 해상도입니다.",
+        "height": "baked 성장 PNG의 세로 해상도입니다.",
+        "maxOwnedCount": "이 지역에서 구매 가능한 최대 보유 수량이며 다음 지역 해금 조건입니다.",
+        "unlock": "이 지역을 매입 가능 상태로 여는 조건입니다.",
+        "stages": "보유 수량에 따라 선택할 단계별 baked PNG 목록입니다."
+      }
+    },
+    {
+      "id": "villa",
+      "sourceBackground": "visual-real-estate-district-villa.png",
+      "width": 836,
+      "height": 470,
+      "maxOwnedCount": 14,
+      "unlock": {
+        "type": "previousMaxOwned",
+        "previousDistrictId": "two_room",
+        "help": {
+          "type": "?? ??? ?? ?? ???? ???? ?????.",
+          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+        }
+      },
+      "stages": [
+        {
+          "growthStage": 0,
+          "minOwnedCount": 0,
+          "file": "real-estate-district-growth/villa-growth-00.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 1,
+          "minOwnedCount": 1,
+          "file": "real-estate-district-growth/villa-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 2,
+          "minOwnedCount": 2,
+          "file": "real-estate-district-growth/villa-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 3,
+          "minOwnedCount": 4,
+          "file": "real-estate-district-growth/villa-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 4,
+          "minOwnedCount": 13,
+          "file": "real-estate-district-growth/villa-growth-04.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        }
+      ],
+      "help": {
+        "id": "부동산 매물/지역 id입니다.",
+        "sourceBackground": "0단계 base와 같은 원본 상세 배경 PNG 파일명입니다.",
+        "width": "baked 성장 PNG의 가로 해상도입니다.",
+        "height": "baked 성장 PNG의 세로 해상도입니다.",
+        "maxOwnedCount": "이 지역에서 구매 가능한 최대 보유 수량이며 다음 지역 해금 조건입니다.",
+        "unlock": "이 지역을 매입 가능 상태로 여는 조건입니다.",
+        "stages": "보유 수량에 따라 선택할 단계별 baked PNG 목록입니다."
+      }
+    },
+    {
+      "id": "officetel",
+      "sourceBackground": "visual-real-estate-district-officetel.png",
+      "width": 836,
+      "height": 470,
+      "maxOwnedCount": 16,
+      "unlock": {
+        "type": "previousMaxOwned",
+        "previousDistrictId": "villa",
+        "help": {
+          "type": "?? ??? ?? ?? ???? ???? ?????.",
+          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+        }
+      },
+      "stages": [
+        {
+          "growthStage": 0,
+          "minOwnedCount": 0,
+          "file": "real-estate-district-growth/officetel-growth-00.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 1,
+          "minOwnedCount": 1,
+          "file": "real-estate-district-growth/officetel-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 2,
+          "minOwnedCount": 4,
+          "file": "real-estate-district-growth/officetel-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 3,
+          "minOwnedCount": 8,
+          "file": "real-estate-district-growth/officetel-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 4,
+          "minOwnedCount": 12,
+          "file": "real-estate-district-growth/officetel-growth-04.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 5,
+          "minOwnedCount": 15,
+          "file": "real-estate-district-growth/officetel-growth-05.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        }
+      ],
+      "help": {
+        "id": "부동산 매물/지역 id입니다.",
+        "sourceBackground": "0단계 base와 같은 원본 상세 배경 PNG 파일명입니다.",
+        "width": "baked 성장 PNG의 가로 해상도입니다.",
+        "height": "baked 성장 PNG의 세로 해상도입니다.",
+        "maxOwnedCount": "이 지역에서 구매 가능한 최대 보유 수량이며 다음 지역 해금 조건입니다.",
+        "unlock": "이 지역을 매입 가능 상태로 여는 조건입니다.",
+        "stages": "보유 수량에 따라 선택할 단계별 baked PNG 목록입니다."
+      }
+    },
+    {
+      "id": "shop_unit",
+      "sourceBackground": "visual-real-estate-district-shop-unit.png",
+      "width": 836,
+      "height": 470,
+      "maxOwnedCount": 16,
+      "unlock": {
+        "type": "previousMaxOwned",
+        "previousDistrictId": "officetel",
+        "help": {
+          "type": "?? ??? ?? ?? ???? ???? ?????.",
+          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+        }
+      },
+      "stages": [
+        {
+          "growthStage": 0,
+          "minOwnedCount": 0,
+          "file": "real-estate-district-growth/shop-unit-growth-00.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 1,
+          "minOwnedCount": 1,
+          "file": "real-estate-district-growth/shop-unit-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 2,
+          "minOwnedCount": 4,
+          "file": "real-estate-district-growth/shop-unit-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 3,
+          "minOwnedCount": 8,
+          "file": "real-estate-district-growth/shop-unit-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 4,
+          "minOwnedCount": 15,
+          "file": "real-estate-district-growth/shop-unit-growth-04.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        }
+      ],
+      "help": {
+        "id": "부동산 매물/지역 id입니다.",
+        "sourceBackground": "0단계 base와 같은 원본 상세 배경 PNG 파일명입니다.",
+        "width": "baked 성장 PNG의 가로 해상도입니다.",
+        "height": "baked 성장 PNG의 세로 해상도입니다.",
+        "maxOwnedCount": "이 지역에서 구매 가능한 최대 보유 수량이며 다음 지역 해금 조건입니다.",
+        "unlock": "이 지역을 매입 가능 상태로 여는 조건입니다.",
+        "stages": "보유 수량에 따라 선택할 단계별 baked PNG 목록입니다."
+      }
+    },
+    {
+      "id": "small_building",
+      "sourceBackground": "visual-real-estate-district-small-building.png",
+      "width": 836,
+      "height": 470,
+      "maxOwnedCount": 18,
+      "unlock": {
+        "type": "previousMaxOwned",
+        "previousDistrictId": "shop_unit",
+        "help": {
+          "type": "?? ??? ?? ?? ???? ???? ?????.",
+          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+        }
+      },
+      "stages": [
+        {
+          "growthStage": 0,
+          "minOwnedCount": 0,
+          "file": "real-estate-district-growth/small-building-growth-00.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 1,
+          "minOwnedCount": 6,
+          "file": "real-estate-district-growth/small-building-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 2,
+          "minOwnedCount": 10,
+          "file": "real-estate-district-growth/small-building-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 3,
+          "minOwnedCount": 17,
+          "file": "real-estate-district-growth/small-building-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        }
+      ],
+      "help": {
+        "id": "부동산 매물/지역 id입니다.",
+        "sourceBackground": "0단계 base와 같은 원본 상세 배경 PNG 파일명입니다.",
+        "width": "baked 성장 PNG의 가로 해상도입니다.",
+        "height": "baked 성장 PNG의 세로 해상도입니다.",
+        "maxOwnedCount": "이 지역에서 구매 가능한 최대 보유 수량이며 다음 지역 해금 조건입니다.",
+        "unlock": "이 지역을 매입 가능 상태로 여는 조건입니다.",
+        "stages": "보유 수량에 따라 선택할 단계별 baked PNG 목록입니다."
+      }
+    },
+    {
+      "id": "apartment_building",
+      "sourceBackground": "visual-real-estate-district-apartment-building.png",
+      "width": 836,
+      "height": 470,
+      "maxOwnedCount": 24,
+      "unlock": {
+        "type": "previousMaxOwned",
+        "previousDistrictId": "small_building",
+        "help": {
+          "type": "?? ??? ?? ?? ???? ???? ?????.",
+          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+        }
+      },
+      "stages": [
+        {
+          "growthStage": 0,
+          "minOwnedCount": 0,
+          "file": "real-estate-district-growth/apartment-building-growth-00.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 1,
+          "minOwnedCount": 1,
+          "file": "real-estate-district-growth/apartment-building-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 2,
+          "minOwnedCount": 3,
+          "file": "real-estate-district-growth/apartment-building-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 3,
+          "minOwnedCount": 7,
+          "file": "real-estate-district-growth/apartment-building-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 4,
+          "minOwnedCount": 13,
+          "file": "real-estate-district-growth/apartment-building-growth-04.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        }
+      ],
+      "help": {
+        "id": "부동산 매물/지역 id입니다.",
+        "sourceBackground": "0단계 base와 같은 원본 상세 배경 PNG 파일명입니다.",
+        "width": "baked 성장 PNG의 가로 해상도입니다.",
+        "height": "baked 성장 PNG의 세로 해상도입니다.",
+        "maxOwnedCount": "이 지역에서 구매 가능한 최대 보유 수량이며 다음 지역 해금 조건입니다.",
+        "unlock": "이 지역을 매입 가능 상태로 여는 조건입니다.",
+        "stages": "보유 수량에 따라 선택할 단계별 baked PNG 목록입니다."
+      }
+    },
+    {
+      "id": "apartment_complex",
+      "sourceBackground": "visual-real-estate-district-apartment-complex.png",
+      "width": 836,
+      "height": 470,
+      "maxOwnedCount": 28,
+      "unlock": {
+        "type": "previousMaxOwned",
+        "previousDistrictId": "apartment_building",
+        "help": {
+          "type": "?? ??? ?? ?? ???? ???? ?????.",
+          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+        }
+      },
+      "stages": [
+        {
+          "growthStage": 0,
+          "minOwnedCount": 0,
+          "file": "real-estate-district-growth/apartment-complex-growth-00.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 1,
+          "minOwnedCount": 1,
+          "file": "real-estate-district-growth/apartment-complex-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 2,
+          "minOwnedCount": 11,
+          "file": "real-estate-district-growth/apartment-complex-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 3,
+          "minOwnedCount": 27,
+          "file": "real-estate-district-growth/apartment-complex-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        }
+      ],
+      "help": {
+        "id": "부동산 매물/지역 id입니다.",
+        "sourceBackground": "0단계 base와 같은 원본 상세 배경 PNG 파일명입니다.",
+        "width": "baked 성장 PNG의 가로 해상도입니다.",
+        "height": "baked 성장 PNG의 세로 해상도입니다.",
+        "maxOwnedCount": "이 지역에서 구매 가능한 최대 보유 수량이며 다음 지역 해금 조건입니다.",
+        "unlock": "이 지역을 매입 가능 상태로 여는 조건입니다.",
+        "stages": "보유 수량에 따라 선택할 단계별 baked PNG 목록입니다."
+      }
+    },
+    {
+      "id": "office_tower",
+      "sourceBackground": "visual-real-estate-district-office-tower.png",
+      "width": 836,
+      "height": 470,
+      "maxOwnedCount": 32,
+      "unlock": {
+        "type": "previousMaxOwned",
+        "previousDistrictId": "apartment_complex",
+        "help": {
+          "type": "?? ??? ?? ?? ???? ???? ?????.",
+          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+        }
+      },
+      "stages": [
+        {
+          "growthStage": 0,
+          "minOwnedCount": 0,
+          "file": "real-estate-district-growth/office-tower-growth-00.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 1,
+          "minOwnedCount": 1,
+          "file": "real-estate-district-growth/office-tower-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 2,
+          "minOwnedCount": 6,
+          "file": "real-estate-district-growth/office-tower-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 3,
+          "minOwnedCount": 13,
+          "file": "real-estate-district-growth/office-tower-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 4,
+          "minOwnedCount": 21,
+          "file": "real-estate-district-growth/office-tower-growth-04.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        }
+      ],
+      "help": {
+        "id": "부동산 매물/지역 id입니다.",
+        "sourceBackground": "0단계 base와 같은 원본 상세 배경 PNG 파일명입니다.",
+        "width": "baked 성장 PNG의 가로 해상도입니다.",
+        "height": "baked 성장 PNG의 세로 해상도입니다.",
+        "maxOwnedCount": "이 지역에서 구매 가능한 최대 보유 수량이며 다음 지역 해금 조건입니다.",
+        "unlock": "이 지역을 매입 가능 상태로 여는 조건입니다.",
+        "stages": "보유 수량에 따라 선택할 단계별 baked PNG 목록입니다."
+      }
+    },
+    {
+      "id": "mixed_development",
+      "sourceBackground": "visual-real-estate-district-mixed-development.png",
+      "width": 836,
+      "height": 470,
+      "maxOwnedCount": 40,
+      "unlock": {
+        "type": "previousMaxOwned",
+        "previousDistrictId": "office_tower",
+        "help": {
+          "type": "?? ??? ?? ?? ???? ???? ?????.",
+          "previousDistrictId": "?? ???? ??? ?? ??? id???."
+        }
+      },
+      "stages": [
+        {
+          "growthStage": 0,
+          "minOwnedCount": 0,
+          "file": "real-estate-district-growth/mixed-development-growth-00.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 1,
+          "minOwnedCount": 1,
+          "file": "real-estate-district-growth/mixed-development-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 2,
+          "minOwnedCount": 5,
+          "file": "real-estate-district-growth/mixed-development-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 3,
+          "minOwnedCount": 8,
+          "file": "real-estate-district-growth/mixed-development-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 4,
+          "minOwnedCount": 12,
+          "file": "real-estate-district-growth/mixed-development-growth-04.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 5,
+          "minOwnedCount": 39,
+          "file": "real-estate-district-growth/mixed-development-growth-05.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        }
+      ],
+      "help": {
+        "id": "부동산 매물/지역 id입니다.",
+        "sourceBackground": "0단계 base와 같은 원본 상세 배경 PNG 파일명입니다.",
+        "width": "baked 성장 PNG의 가로 해상도입니다.",
+        "height": "baked 성장 PNG의 세로 해상도입니다.",
+        "maxOwnedCount": "이 지역에서 구매 가능한 최대 보유 수량이며 다음 지역 해금 조건입니다.",
+        "unlock": "이 지역을 매입 가능 상태로 여는 조건입니다.",
+        "stages": "보유 수량에 따라 선택할 단계별 baked PNG 목록입니다."
+      }
+    }
+  ],
+  "help": {
+    "version": "부동산 지역 상세 baked 성장 이미지 테이블 버전입니다.",
+    "outputScale": "원본 상세 배경 대비 앱용 baked PNG 산출 배율입니다.",
+    "districts": "지역별 공터 베이스, 해금 조건, 최대 보유 수량, 단계별 baked PNG 목록입니다."
+  }
+}

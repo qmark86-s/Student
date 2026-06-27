@@ -7841,7 +7841,7 @@ body {
 @keyframes realEstateBuildIn {
   from {
     opacity: .76;
-    transform: translate(var(--building-anchor-x-offset), calc(var(--building-anchor-y-offset) + 8%)) rotate(var(--building-rotation, -8deg)) scale(calc(var(--building-scale) * .9));
+    transform: translate(var(--building-anchor-x-offset), var(--building-anchor-y-offset)) rotate(var(--building-rotation, -8deg)) scale(var(--building-scale));
   }
   to {
     opacity: 1;

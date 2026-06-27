@@ -133,7 +133,7 @@ npm run react:verify
 - 지역 상세 화면은 `real_estate_district_assets.json.backgroundAsset`에 정의된 지역별 PNG 10장을 200% x 200% 대형 배경으로 표시하고, `real_estate_city_layout.json.detailFocus`로 초기 카메라 중심을 잡으며, pointer 기반 드래그 pan을 지원한다. 우상단 `전체 도시 보기` 버튼은 pan과 무관하게 고정되어야 한다.
 - 구매 수량이 늘면 `createRealEstateViewModel()`의 `developmentLevel`, `developmentRatio`, `visibleBuildingSlots`에서 파생된 도시 전체 마커와 지역 상세 건물이 즉시 증가해야 한다.
 - 도시 전체와 지역 상세 건물은 CSS 도형이 아니라 `real_estate_building_assets.json`의 PNG를 `detailPads[].buildingAsset`로 매핑해 렌더링한다. 건물 원본은 형광분홍 크로마키 시트이며, 파일 누락/잘못된 참조는 verify 또는 런타임 assert로 드러나야 한다.
-- 각 지역은 16개 건물 슬롯을 가지며, 첫 구매는 1칸만 표시하고 보유 수량 마일스톤에 따라 점차 채워져 풀성장 1000채에서 16칸이 모두 표시되어야 한다.
+- 각 지역은 도시 overview용 16개 건물 슬롯을 가지며, 상세 baked PNG는 `real_estate_district_growth_assets.json` v2의 `minOwnedCount -> file` 테이블로 선택한다. 풀성장은 지역별 `maxOwnedCount` 기준이며, 다음 부동산은 직전 부동산 최대 개발 달성 시 해금된다.
 - 지역 상세 화면은 `districtDetailPads` 기반 빈 부지 패드와 PNG wrapper인 `real-estate-development-building` 레이어를 분리하고, 향후 주민/차량 이동을 올릴 수 있는 ambient 레이어를 유지한다. 건물이 들어선 pad는 자리표시자처럼 보이지 않도록 숨긴다. `futureResidentPaths`는 추후 주민이 도로를 따라 걷도록 쓰는 검증 대상 데이터다.
 - 관리 패널은 도시 전체 보기에서는 매물 10개, 지역 상세 보기에서는 선택 지역 1개를 표시하며, 보유 수량, 규모 명칭, 임대/분, 개발도, 다음 구매가, `구매 / 10개 / 최대` 버튼을 제공한다.
 - 총 자산가치는 `보유 부동산 평가액 + floor(부동산 자금 * cashAssetWeight)`이며 기본 `cashAssetWeight`는 `0.15`다.
@@ -508,7 +508,7 @@ npm run react:verify
 - `data/real_estate_district_assets.json.detailPads[].buildingAsset`과 `rotation`이 각 pad의 실제 PNG와 바닥 각도를 명시한다. 같은 지역 안에서도 여러 asset을 섞어 반복감을 줄인다.
 - `src/snapshot/assets/real-estate-buildings/*.png`는 `tools/generate-real-estate-building-assets.py`로 형광분홍 크로마키 원본 시트 2장에서 생성하며, React는 `import.meta.glob`로 명시 로드한다.
 - 상세 화면의 CSS 건물 몸체/지붕/창문 드로잉은 제거했고, `real-estate-development-building`은 PNG 배치/앵커/그림자 wrapper만 담당한다.
-- DEBUG 메뉴는 QA 모드에서 부동산 자금 +1M, Stage 100, 모든 매물 1채, 모든 매물 1000채, 부동산 초기화를 제공한다.
+- DEBUG 메뉴는 QA 모드에서 부동산 자금 +1M, Stage 100, 모든 매물 1채, 모든 매물 지역별 최대 개발, 부동산 초기화를 제공한다.
 - `npm run real-estate:verify`: 통과, 건물 PNG 테이블과 pad 참조의 district/theme/variant 매칭, 파일 존재, anchor 범위, help를 검증한다.
 - `npm run react:real-estate-smoke`: 통과, 상세/도시 전체 PNG 로드와 DEBUG 부동산 조작을 확인한다.
 - `npm run react:real-estate-visual-audit`: 통과, 풀성장 도시 전체 보기 PNG 슬롯 160개와 10개 상세 지역의 PNG 건물 16개씩을 전수 확인한다.
