@@ -13,11 +13,11 @@ import {
   normalizeEquipmentState,
   validateEquipmentState,
 } from "./equipment.js";
-import { createDefaultExpeditionState, migrateLegacyExpeditionState, validateExpeditionState } from "./expedition.js";
+import { createDefaultExpeditionState, migrateLegacyExpeditionState, normalizeExpeditionState, validateExpeditionState } from "./expedition.js";
 import { createDefaultRealEstateState, normalizeRealEstateState, validateRealEstateState } from "./realEstate.js";
 
 export const SAVE_KEY = "student-idle-rpg-save-v1";
-export const SAVE_SCHEMA_VERSION = 4;
+export const SAVE_SCHEMA_VERSION = 5;
 export const CONTENT_REVISION = "lzg40t";
 
 const defaultWeights = {
@@ -578,7 +578,7 @@ function migrateGameState(state) {
         : legacy.realEstate,
     };
   }
-  if (state.schemaVersion === 3) {
+  if (state.schemaVersion === 3 || state.schemaVersion === 4) {
     const legacy = legacyTopLevelState(state);
     const migratedLegacy = migrateLegacyPeopleAndEquipment(legacy);
     return {
@@ -598,7 +598,11 @@ function migrateGameState(state) {
 }
 
 export function normalizeGameState(state) {
-  const migrated = migrateGameState(state);
+  const migratedRaw = migrateGameState(state);
+  const migrated = {
+    ...migratedRaw,
+    expedition: normalizeExpeditionState(migratedRaw).expedition,
+  };
   validateGameState(migrated);
   const current = migrated.current;
   const hasContentRevision = Object.prototype.hasOwnProperty.call(migrated, "contentRevision");
@@ -628,6 +632,15 @@ export function normalizeGameState(state) {
       partyMemberIds: [...migrated.expedition.partyMemberIds],
       claimedBossStages: [...migrated.expedition.claimedBossStages],
       chapterRun: { ...migrated.expedition.chapterRun },
+      pendingReward: {
+        ...migrated.expedition.pendingReward,
+        lastBattle: migrated.expedition.pendingReward.lastBattle
+          ? {
+              ...migrated.expedition.pendingReward.lastBattle,
+              events: migrated.expedition.pendingReward.lastBattle.events.map((event) => ({ ...event })),
+            }
+          : null,
+      },
       log: migrated.expedition.log.map((entry) => ({ ...entry })),
     },
     realEstate: normalizeRealEstateState(migrated.realEstate),

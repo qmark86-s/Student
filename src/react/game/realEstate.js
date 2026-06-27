@@ -707,8 +707,24 @@ export function accrueRealEstateIncome(state, now = Date.now()) {
   validateRealEstateState(next.realEstate);
   syncWeekForState(next, now);
   const rentEarned = accrueRentIntoState(next, now);
-  const expeditionEarned = accrueExpeditionFundsIntoState(next, now);
-  if (rentEarned > 0 || expeditionEarned > 0) syncWeeklyAssetGain(next, now);
+  if (rentEarned > 0) syncWeeklyAssetGain(next, now);
+  validateRealEstateState(next.realEstate);
+  return next;
+}
+
+export function realEstateExpeditionStageReward(stage) {
+  return stageRewardForStage(stage);
+}
+
+export function grantRealEstateExpeditionPendingCash(state, amount, now = Date.now()) {
+  const next = cloneState(state);
+  validateRealEstateState(next.realEstate);
+  const reward = integerAtLeast(amount, "원정대 pending 부동산 보상", 0);
+  if (reward <= 0) return next;
+  syncWeekForState(next, now);
+  next.realEstate.cash += reward;
+  next.realEstate.lastExpeditionFundAt = Number(now);
+  syncWeeklyAssetGain(next, now);
   validateRealEstateState(next.realEstate);
   return next;
 }

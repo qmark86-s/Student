@@ -316,7 +316,7 @@ async function main() {
     await page.getByRole("button", { name: "원정대" }).click();
     await page.waitForSelector(".expedition-scene", { timeout: 6000 });
     await page.locator(".expedition-action-button").click();
-    await waitForState(page, "(state) => state.expedition.highestStage >= 1 && state.realEstate.cash >= 100");
+    await waitForState(page, "(state) => state.expedition.highestStage >= 1 && state.realEstate.cash >= 100 && state.expedition.pendingReward.realEstateCash === 0");
 
     await page.getByRole("button", { name: "부동산" }).click();
     await page.waitForSelector('[data-real-estate-view="overview"]', { timeout: 6000 });

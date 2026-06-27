@@ -2,7 +2,7 @@ import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve, sep } from "node:path";
 
-const root = resolve(process.cwd());
+const root = resolve("dist");
 const preferredPort = Number(process.env.PORT || 5173);
 
 const mimeTypes = {
@@ -51,8 +51,13 @@ function listen(port) {
   });
 
   server.listen(port, "127.0.0.1", () => {
-    console.log(`Student latest HTML server: http://127.0.0.1:${port}/`);
+    console.log(`Student React build server: http://127.0.0.1:${port}/ (dist/)`);
   });
+}
+
+if (!existsSync(resolve(root, "index.html"))) {
+  console.error("dist/index.html is missing. Run `npm run build:web` first.");
+  process.exit(1);
 }
 
 listen(preferredPort);

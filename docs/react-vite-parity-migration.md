@@ -75,8 +75,9 @@ npm run verify:mobile
 - `tools/react-vite-smoke.mjs`: 모바일 렌더링, 핵심 UI, production 기본 DEBUG 미노출 검사
 - `tools/react-vite-save-smoke.mjs`: save 호환, QA 조작, legacy save 승격, fresh save 흐름 검사
 - `tools/react-vite-battle-road-smoke.mjs`: Battle Road/N수/수능/결과 흐름 검사
-- `tools/react-vite-expedition-smoke.mjs`: 직업 수락, 졸업생 보존, 원정대원 등록, 원정대 stage 진행 검사
-- `tools/react-vite-expedition-rules-smoke.mjs`: 원정대 보스 보상, 전투력 부족, 성장 투자, 승급 합성 규칙 검사
+- `tools/react-vite-expedition-smoke.mjs`: 직업 수락, 졸업생 보존, 원정대원 등록, 원정대 stage 진행, 수동 즉시 보상, 보상 모달 미표시, HP bar 검사
+- `tools/react-vite-expedition-rules-smoke.mjs`: 원정대 실시간 역할 전투, 수동/온라인 즉시 보상, 오프라인 pending 보상, 480전투 cap, 보스 보상, 실패 처리, 추천 편성, 성장 투자, 승급 합성 규칙 검사
+- `tools/validate-expedition-combat-balance.mjs`: 직업 62개 역할 스탯, 일반/보스 enemy 100개씩, 한글 help, 화면 몬스터 수 일치 검사
 - `tools/react-vite-real-estate-smoke.mjs`: 부동산 모드, 도시/지역, 대형 배경 이미지, 기본 전체 보기, 포커스 휠 확대, 상세 지도 pan, 구매/임대/랭킹/DEBUG 흐름 검사
 - `tools/react-vite-real-estate-visual-audit.mjs`: 부동산 도시와 지역 상세 화면 시각 audit
 - `tools/react-vite-records-smoke.mjs`: 시험/직장/도감 저장 상태 검사
@@ -92,7 +93,7 @@ npm run verify:mobile
 - 상단 모드 탭은 `학생 / 원정대 / 부동산` 3개다.
 - 부동산 데이터는 루트 `data/` JSON과 `src/snapshot/assets/` 자산을 명시 참조한다.
 - 부동산 전용 재화는 기존 보유금/다이아와 분리된 `부동산 자금`이다.
-- 원정대 Stage 돌파 성공 시 부동산 자금을 지급하고, 보스 Stage는 부동산 밸런스 배수를 적용한다.
+- 수동 원정대 Stage 승리와 실행 중 자동 전투는 부동산 자금을 즉시 지급하고, 앱 로드/복귀 오프라인 정산분만 pending 보상에 누적한다. 보스 Stage는 부동산 밸런스 배수를 적용한다.
 - 부동산 탭 기본 화면은 `도시 전체 보기`다.
 - 지역 상세 화면은 baked PNG 성장 단계를 구매 수량 기준으로 선택한다.
 - 지역 상세 화면은 기본 `0.5` 배율 전체 보기로 시작하고, 최대 `1` 배율까지 확대한다.

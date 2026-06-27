@@ -86,14 +86,18 @@ import {
 } from "./game/education.js";
 import {
   addDebugExpeditionMembers,
+  assignRecommendedExpeditionParty,
   assignExpeditionMember,
+  claimExpeditionPendingReward,
   completeExpeditionStage,
   createExpeditionManagementViewModel,
   createExpeditionSummary,
   createExpeditionViewModel,
+  expeditionAutoTickMs,
   fuseExpeditionMembers,
   levelUpExpeditionMember,
   removeExpeditionMemberFromParty,
+  resolveExpeditionAutoCombat,
   toggleExpeditionMemberLock,
 } from "./game/expedition.js";
 import {
@@ -121,9 +125,16 @@ import studentAtlas from "../snapshot/assets/asset-002.png";
 import mainMonsterAtlas from "../snapshot/assets/asset-003.png";
 
 const LOCKED_CAREER_LABEL = "\u003f\u003f\u003f";
+const EXPEDITION_STAGE_TRANSITION_MS = 2000;
+const EXPEDITION_STAGE_BACKDROP_STEP_PX = 180;
 
 function requireConfig(condition, message) {
   if (!condition) throw new Error(message);
+}
+
+function expeditionStageBackdropOffset(stageNumber) {
+  const stage = Math.max(1, Math.floor(Number(stageNumber) || 1));
+  return -((stage - 1) * EXPEDITION_STAGE_BACKDROP_STEP_PX);
 }
 
 const firstGrowth = growthLevels[0];
@@ -329,6 +340,19 @@ function formatCompactNumber(value) {
   if (abs >= 10_000) return `${(number / 1_000).toFixed(1)}K`;
   if (abs >= 1_000) return `${(number / 1_000).toFixed(2)}K`;
   return formatMoney(Math.round(number));
+}
+
+function expeditionRewardToastText(before, after) {
+  const trainingExp = Math.max(0, Math.floor(Number(after.expedition?.trainingExp || 0) - Number(before.expedition?.trainingExp || 0)));
+  const realEstateCash = Math.max(0, Math.floor(Number(after.realEstate?.cash || 0) - Number(before.realEstate?.cash || 0)));
+  const diamonds = Math.max(0, Math.floor(Number(after.diamonds || 0) - Number(before.diamonds || 0)));
+  const money = Math.max(0, Math.floor(Number(after.money || 0) - Number(before.money || 0)));
+  const pieces = [];
+  if (trainingExp > 0) pieces.push(`EXP +${formatCompactNumber(trainingExp)}`);
+  if (realEstateCash > 0) pieces.push(`부동산 +${formatCompactNumber(realEstateCash)}`);
+  if (diamonds > 0) pieces.push(`다이아 +${formatCompactNumber(diamonds)}`);
+  if (money > 0) pieces.push(`돈 +${formatCompactNumber(money)}`);
+  return pieces.join(" · ");
 }
 
 function formatShopCost(value) {
@@ -782,19 +806,91 @@ function SpriteFrames({ className, frames }) {
   );
 }
 
-function ExpeditionScene({ gameState, onExpeditionComplete }) {
-  const expedition = createExpeditionViewModel(gameState);
+function ExpeditionScene({ gameState, onExpeditionComplete, onOpenPendingReward, rewardToast }) {
+  const [displayGameState, setDisplayGameState] = useState(gameState);
+  const [stageTransition, setStageTransition] = useState(null);
+  const latestGameStateRef = useRef(gameState);
+  const previousGameStateRef = useRef(gameState);
+  const stageTransitionRef = useRef(null);
+  const transitionTimerRef = useRef(0);
+
+  useEffect(() => {
+    return () => {
+      if (transitionTimerRef.current) window.clearTimeout(transitionTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    stageTransitionRef.current = stageTransition;
+  }, [stageTransition]);
+
+  useEffect(() => {
+    latestGameStateRef.current = gameState;
+    const previousGameState = previousGameStateRef.current;
+    const previousStage = Number(previousGameState?.expedition?.currentStage || 1);
+    const nextStage = Number(gameState?.expedition?.currentStage || 1);
+    const stageAdvanced = nextStage > previousStage && Number(gameState?.expedition?.highestStage || 0) >= previousStage;
+
+    if (stageAdvanced) {
+      if (transitionTimerRef.current) window.clearTimeout(transitionTimerRef.current);
+      const transition = {
+        id: `${previousStage}-${nextStage}-${Date.now()}`,
+        fromStage: previousStage,
+        toStage: nextStage,
+      };
+      setDisplayGameState(previousGameState);
+      setStageTransition(transition);
+      stageTransitionRef.current = transition;
+      transitionTimerRef.current = window.setTimeout(() => {
+        setDisplayGameState(latestGameStateRef.current);
+        setStageTransition(null);
+        stageTransitionRef.current = null;
+        transitionTimerRef.current = 0;
+      }, EXPEDITION_STAGE_TRANSITION_MS);
+    } else if (!stageTransitionRef.current) {
+      setDisplayGameState(gameState);
+    }
+
+    previousGameStateRef.current = gameState;
+  }, [gameState]);
+
+  const expedition = createExpeditionViewModel(displayGameState);
+  const latestExpedition = stageTransition ? createExpeditionViewModel(gameState) : expedition;
   const stage = expedition.stage;
   const enemyFrames = getExpeditionEnemyFrameUrls(stage.enemyAsset);
   assert(Array.isArray(stage.normalEnemyNames) && stage.normalEnemyNames.length > 0, `원정대 stage normalEnemyNames 누락: ${stage.id}`);
   assert(Number.isFinite(Number(stage.enemyVariant)), `원정대 stage enemyVariant 누락: ${stage.id}`);
-  const enemyNames = stage.normalEnemyNames.slice(0, stage.enemyCount);
+  const enemyVisuals = expedition.enemyMembers.slice(0, stage.enemyCount);
   const powerPercent = Math.max(0, Math.min(100, Math.round((expedition.partyPower / Math.max(1, expedition.enemyPower)) * 100)));
   const routeProgressPercent = Math.max(0, Math.min(100, (stage.stageInChapter / 1000) * 100));
+  const battleResultLabel = !expedition.ready ? "편성 필요" : expedition.canClear ? "자동 승리 예상" : stage.isBoss ? "보스 재도전 위험" : "성장 필요";
+  const isStageTransitioning = Boolean(stageTransition);
+  const floatEvents = (isStageTransitioning ? latestExpedition.lastBattle?.events || [] : expedition.recentCombatEvents).slice(-5);
+  const backdropStage = isStageTransitioning ? stageTransition.toStage : expedition.currentStage || 1;
+  const backdropFromStage = isStageTransitioning ? stageTransition.fromStage : backdropStage;
+  const backdropFromX = expeditionStageBackdropOffset(backdropFromStage);
+  const backdropToX = expeditionStageBackdropOffset(backdropStage);
+  const backdropStyle = {
+    "--expedition-bg-x": `${backdropToX}px`,
+    "--expedition-bg-from-x": `${backdropFromX}px`,
+    "--expedition-bg-to-x": `${backdropToX}px`,
+  };
 
   return (
-    <section className={`expedition-scene chapter-${stage.chapter} backdrop-${stage.backdropClass}${stage.isBoss ? " boss" : ""}`} aria-label="원정대 전투장">
-      <div className="expedition-arena">
+    <section
+      className={`expedition-scene chapter-${stage.chapter} backdrop-${stage.backdropClass}${stage.isBoss ? " boss" : ""}${isStageTransitioning ? " stage-transitioning" : ""}`}
+      aria-busy={isStageTransitioning ? "true" : "false"}
+      aria-label="원정대 전투장"
+      data-stage-transition={isStageTransitioning ? "moving" : "idle"}
+      data-transition-from-stage={stageTransition?.fromStage || ""}
+      data-transition-to-stage={stageTransition?.toStage || ""}
+    >
+      <div
+        className="expedition-arena"
+        data-bg-from-x={backdropFromX}
+        data-bg-to-x={backdropToX}
+        style={backdropStyle}
+      >
         <div className="expedition-route-card">
           <div>
             <strong>CH.{stage.chapter} {stage.stageInChapter}/1000</strong>
@@ -803,13 +899,17 @@ function ExpeditionScene({ gameState, onExpeditionComplete }) {
           <div className="expedition-arena-rail" aria-hidden="true">
             <i style={{ width: `${routeProgressPercent}%` }} />
           </div>
-          <em>{stage.isBoss ? "보스 게이트" : `다음 보스 ${stage.nextBossStageCount} Stage`}</em>
+          <em>{isStageTransitioning ? `Stage ${stageTransition.toStage} 이동중` : stage.isBoss ? "보스 게이트" : `다음 보스 ${stage.nextBossStageCount} Stage`}</em>
         </div>
         <div className={expedition.ready ? "expedition-party-visual running" : "expedition-party-visual empty"}>
           {expedition.ready ? (
             expedition.partyMembers.map((member) => (
-              <div className={`expedition-unit-avatar large unit-${member.slot}`} key={member.id} title={`${member.careerName} · Lv.${member.level} · 전투력 ${formatMoney(member.power)}`}>
+              <div className={`expedition-unit-avatar large unit-${member.slot} role-${member.role}`} key={member.id} title={`${member.careerName} · ${member.roleLabel} · HP ${formatCompactNumber(member.combatStats.hp)} · 공격 ${formatCompactNumber(member.combatStats.attack)}`}>
                 <SpriteFrames className="expedition-unit-frame" frames={getCompanionFrameUrls(member.career, member.avatarGender)} />
+                <span className="expedition-role-badge">{member.roleLabel}</span>
+                <i className="expedition-hp-bar ally" aria-label={`${member.careerName} HP`}>
+                  <span style={{ width: `${Math.max(0, Math.min(100, Math.round((member.remainingHp / Math.max(1, member.maxHp)) * 100)))}%` }} />
+                </i>
               </div>
             ))
           ) : (
@@ -817,24 +917,47 @@ function ExpeditionScene({ gameState, onExpeditionComplete }) {
           )}
         </div>
         <span className="expedition-impact" aria-hidden="true" />
+        <div className="expedition-float-layer" aria-hidden="true">
+          {floatEvents.map((event, index) => (
+            <span className={`expedition-float ${event.kind} float-${index + 1}`} key={`${event.time}-${event.actor}-${event.target}-${index}`}>
+              {event.kind === "heal" ? "+" : "-"}{formatCompactNumber(event.value)}
+            </span>
+          ))}
+        </div>
+        {rewardToast && (
+          <div className="expedition-reward-toast" role="status">
+            <Sparkles size={14} />
+            <span>{rewardToast.text}</span>
+          </div>
+        )}
         <div className="expedition-enemy-group" aria-label={stage.enemyName}>
-          {enemyNames.map((name, index) => (
-            <div className={`expedition-enemy-visual mob-${stage.enemyVariant} enemy-${index + 1}`} key={`${stage.id}-${name}`} title={name}>
+          {enemyVisuals.map((enemy, index) => (
+            <div className={`expedition-enemy-visual mob-${stage.enemyVariant} enemy-${index + 1}${isStageTransitioning ? " defeated" : ""}`} key={`${stage.id}-${enemy.id}`} title={enemy.name}>
               <SpriteFrames className="expedition-enemy-frame" frames={enemyFrames} />
+              <i className="expedition-hp-bar enemy" aria-label={`${enemy.name} HP`}>
+                <span style={{ width: `${isStageTransitioning ? 0 : Math.max(0, Math.min(100, Math.round((enemy.remainingHp / Math.max(1, enemy.maxHp)) * 100)))}%` }} />
+              </i>
               <span className="enemy-shadow" aria-hidden="true" />
             </div>
           ))}
         </div>
         <div className="expedition-scene-footer">
           <div className="expedition-scene-run">
-            <span>전투력 {formatCompactNumber(expedition.partyPower)} / {formatCompactNumber(expedition.enemyPower)}</span>
+            <span>{battleResultLabel} · {expedition.battleDurationSeconds}초 전투</span>
+            <strong>{formatCompactNumber(expedition.partyPower)} / {formatCompactNumber(expedition.enemyPower)}</strong>
             <i className="progress-bar">
               <span style={{ width: `${powerPercent}%` }} />
             </i>
           </div>
-          <button className="expedition-action-button" disabled={!expedition.ready} type="button" onClick={onExpeditionComplete}>
-            {expedition.ready ? "돌파" : "편성 필요"}
+          <button className="expedition-action-button" disabled={!expedition.ready || isStageTransitioning} type="button" onClick={onExpeditionComplete}>
+            {isStageTransitioning ? "이동중" : expedition.ready ? "돌파" : "편성 필요"}
           </button>
+          {expedition.hasPendingReward && (
+            <button className="expedition-pending-reward-button" type="button" onClick={onOpenPendingReward}>
+              <Package size={14} />
+              <span>누적 보상 받기</span>
+            </button>
+          )}
         </div>
       </div>
     </section>
@@ -1198,6 +1321,26 @@ function ExpeditionEmpty({ icon: Icon, title, text }) {
   );
 }
 
+const expeditionRoleFilters = [
+  { id: "all", label: "전체" },
+  { id: "tank", label: "탱커" },
+  { id: "dealer", label: "딜러" },
+  { id: "healer", label: "힐러" },
+];
+
+function ExpeditionRoleFilter({ value, onChange }) {
+  return (
+    <div className="expedition-role-filter" aria-label="원정대 역할 필터">
+      <SlidersHorizontal size={14} />
+      {expeditionRoleFilters.map((filter) => (
+        <button className={value === filter.id ? "active" : ""} key={filter.id} type="button" onClick={() => onChange(filter.id)}>
+          {filter.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function ExpeditionGrowthPanel({ management, onLevelUp }) {
   return (
     <section className="expedition-growth-panel">
@@ -1222,7 +1365,7 @@ function ExpeditionGrowthPanel({ management, onLevelUp }) {
                 <div className="expedition-growth-main">
                   <div>
                     <strong>{member.careerName}</strong>
-                    <span>Lv.{member.level} → {member.level + 1} · 전투력 +{formatCompactNumber(powerGain)}</span>
+                    <span>{member.roleLabel} · Lv.{member.level} → {member.level + 1} · 전투력 +{formatCompactNumber(powerGain)}</span>
                   </div>
                   <div className="expedition-exp-bar" aria-label={`${member.careerName} 경험치`}>
                     <i style={{ width: `${expPercent}%` }} />
@@ -1242,8 +1385,10 @@ function ExpeditionGrowthPanel({ management, onLevelUp }) {
   );
 }
 
-function ExpeditionPartyPanel({ management, onAssign, onRemove }) {
+function ExpeditionPartyPanel({ management, onAssign, onRecommend, onRemove }) {
+  const [roleFilter, setRoleFilter] = useState("all");
   const partyFull = management.party.length >= management.partySize;
+  const filteredMembers = roleFilter === "all" ? management.members : management.members.filter((member) => member.role === roleFilter);
   return (
     <section className="expedition-party-panel">
       <header className="section-title compact-title">
@@ -1251,6 +1396,10 @@ function ExpeditionPartyPanel({ management, onAssign, onRemove }) {
           <Users size={18} />
           <h2>원정 파티 {management.party.length}/{management.partySize}</h2>
         </div>
+        <button className="secondary-action compact expedition-recommend-button" type="button" disabled={management.members.length === 0} onClick={onRecommend}>
+          <Shuffle size={15} />
+          <span>추천 편성</span>
+        </button>
       </header>
       <div className="expedition-party-slots">
         {management.partySlots.map((member, index) => (
@@ -1260,7 +1409,7 @@ function ExpeditionPartyPanel({ management, onAssign, onRemove }) {
               <>
                 <ExpeditionMemberPortrait member={member} size="medium" />
                 <strong>{member.careerName}</strong>
-                <span>{member.tierName} · Lv.{member.level}</span>
+                <span>{member.roleLabel} · {member.tierName} · Lv.{member.level}</span>
                 <button className="icon-button dark" type="button" title="파티 해제" onClick={() => onRemove(member.id)}>
                   <X size={15} />
                 </button>
@@ -1278,25 +1427,29 @@ function ExpeditionPartyPanel({ management, onAssign, onRemove }) {
         <header className="section-title compact-title">
           <div>
             <Medal size={18} />
-            <h2>편성 후보 {management.members.length}명</h2>
+            <h2>편성 후보 {filteredMembers.length}/{management.members.length}명</h2>
           </div>
         </header>
+        <ExpeditionRoleFilter value={roleFilter} onChange={setRoleFilter} />
         {management.members.length === 0 ? (
           <ExpeditionEmpty icon={Medal} title="아직 원정대원이 없습니다." text="디버그 메뉴에서 후보를 추가하거나 수능 결과로 원정대원을 획득해 주세요." />
+        ) : filteredMembers.length === 0 ? (
+          <ExpeditionEmpty icon={SlidersHorizontal} title="해당 역할 대원이 없습니다." text="다른 역할 필터를 선택해 주세요." />
         ) : (
           <div className="expedition-roster-list">
-            {management.members.map((member) => {
+            {filteredMembers.map((member) => {
               const inParty = management.partyIds.has(member.id);
               return (
                 <article className={inParty ? "expedition-roster-card expedition-member-card active in-party" : "expedition-roster-card expedition-member-card"} key={member.id}>
                   <ExpeditionMemberPortrait member={member} />
                   <div className="expedition-member-main">
                     <strong>{member.careerName}</strong>
-                    <span>{member.tierName} Lv.{member.level} · {member.battleProp}</span>
+                    <span>{member.roleLabel} · {member.tierName} Lv.{member.level}</span>
                   </div>
                   <div className="expedition-card-meta">
-                    <small>전투력 {formatCompactNumber(member.power)}</small>
-                    <small>강점 {member.topSubjectShortLabels.join("/")}</small>
+                    <small>HP {formatCompactNumber(member.combatStats.hp)}</small>
+                    <small>공격 {formatCompactNumber(member.combatStats.attack)}</small>
+                    <small>공속 {member.combatStats.attackSpeed.toFixed(2)}</small>
                   </div>
                   <button className="secondary-action compact" type="button" disabled={inParty || partyFull} onClick={() => onAssign(member.id)}>
                     <span>{inParty ? "편성중" : partyFull ? "가득 참" : "편성"}</span>
@@ -1312,6 +1465,8 @@ function ExpeditionPartyPanel({ management, onAssign, onRemove }) {
 }
 
 function ExpeditionManagePanel({ management, onFuse, onToggleLock }) {
+  const [roleFilter, setRoleFilter] = useState("all");
+  const filteredMembers = roleFilter === "all" ? management.members : management.members.filter((member) => member.role === roleFilter);
   return (
     <section className="expedition-manage-panel">
       <header className="section-title compact-title">
@@ -1324,6 +1479,7 @@ function ExpeditionManagePanel({ management, onFuse, onToggleLock }) {
         <ExpeditionEmpty icon={Medal} title="관리할 대원이 없습니다." text="파티 후보가 생기면 이곳에서 합성과 잠금 관리를 진행합니다." />
       ) : (
         <div className="expedition-manage-stack">
+          <ExpeditionRoleFilter value={roleFilter} onChange={setRoleFilter} />
           {management.fusionCandidates.length === 0 ? (
             <article className="expedition-empty compact">
               <Medal size={24} />
@@ -1346,14 +1502,14 @@ function ExpeditionManagePanel({ management, onFuse, onToggleLock }) {
             </div>
           )}
           <div className="expedition-manage-list">
-            {management.members.map((member) => {
+            {filteredMembers.map((member) => {
               const inParty = management.partyIds.has(member.id);
               return (
                 <article className={member.locked ? "expedition-manage-card expedition-manage-member locked" : "expedition-manage-card expedition-manage-member"} key={member.id}>
                   <ExpeditionMemberPortrait member={member} />
                   <div className="expedition-member-main">
                     <strong>{member.careerName}</strong>
-                    <span>{member.tierName} Lv.{member.level} · {member.battleProp}</span>
+                    <span>{member.roleLabel} · {member.tierName} Lv.{member.level}</span>
                   </div>
                   <small className={inParty ? "expedition-manage-status party" : member.locked ? "expedition-manage-status locked" : "expedition-manage-status available"}>
                     {inParty ? "출전중" : member.locked ? "잠금" : "합성 가능"}
@@ -1373,6 +1529,7 @@ function ExpeditionManagePanel({ management, onFuse, onToggleLock }) {
 }
 
 function ExpeditionLogPanel({ management }) {
+  const lastBattle = management.pendingReward.lastBattle;
   return (
     <section className="expedition-log-panel">
       <header className="section-title compact-title">
@@ -1390,18 +1547,26 @@ function ExpeditionLogPanel({ management }) {
       ) : (
         <p className="empty-state">원정 기록이 아직 없습니다.</p>
       )}
+      {lastBattle && (
+        <div className="expedition-battle-log">
+          <strong>마지막 전투 · Stage {lastBattle.stage} · {lastBattle.result === "win" ? "승리" : "실패"} · {lastBattle.resultReason}</strong>
+          {lastBattle.events.slice(-8).map((event, index) => (
+            <p key={`${event.time}-${event.actor}-${event.target}-${index}`}>{event.time.toFixed(2)}초 · {event.text}</p>
+          ))}
+        </div>
+      )}
     </section>
   );
 }
 
-function ExpeditionManagementPanel({ activeTab, gameState, onAssign, onFuse, onLevelUp, onRemove, onTabChange, onToggleLock }) {
+function ExpeditionManagementPanel({ activeTab, gameState, onAssign, onFuse, onLevelUp, onRecommend, onRemove, onTabChange, onToggleLock }) {
   const management = createExpeditionManagementViewModel(gameState);
   return (
     <>
       <ExpeditionTabBar activeTab={activeTab} management={management} onTabChange={onTabChange} />
       <section className="expedition-viewport">
         {activeTab === "growth" && <ExpeditionGrowthPanel management={management} onLevelUp={onLevelUp} />}
-        {activeTab === "party" && <ExpeditionPartyPanel management={management} onAssign={onAssign} onRemove={onRemove} />}
+        {activeTab === "party" && <ExpeditionPartyPanel management={management} onAssign={onAssign} onRecommend={onRecommend} onRemove={onRemove} />}
         {activeTab === "manage" && <ExpeditionManagePanel management={management} onFuse={onFuse} onToggleLock={onToggleLock} />}
         {activeTab === "log" && <ExpeditionLogPanel management={management} />}
       </section>
@@ -2545,6 +2710,39 @@ function ModalShell({ children, className, kicker, label, onClose, title }) {
   );
 }
 
+function ExpeditionRewardModal({ onClaim, onClose, pendingReward }) {
+  return (
+    <ModalShell className="expedition-reward-modal" kicker="EXPEDITION" label="원정 보상" title="원정 보상" onClose={onClose}>
+      <div className="expedition-reward-summary">
+        <Metric label="전투" value={`${formatCompactNumber(pendingReward.battles)}회`} />
+        <Metric label="승리" value={`${formatCompactNumber(pendingReward.wins)}회`} />
+        <Metric label="실패" value={`${formatCompactNumber(pendingReward.losses)}회`} />
+      </div>
+      <div className="expedition-reward-list">
+        <span>EXP <strong>{formatCompactNumber(pendingReward.trainingExp)}</strong></span>
+        <span>부동산 자금 <strong>{formatCompactNumber(pendingReward.realEstateCash)}</strong></span>
+        <span>다이아 <strong>{formatCompactNumber(pendingReward.diamonds)}</strong></span>
+      </div>
+      <div className="modal-actions expedition-reward-actions">
+        <button className="primary-action compact" type="button" onClick={onClaim}>
+          <CheckCircle size={17} />
+          <span>받기</span>
+        </button>
+        <button className="secondary-action compact" type="button" disabled>
+          <Gem size={17} />
+          <span>다이아로 더받기</span>
+          <small>준비중</small>
+        </button>
+        <button className="secondary-action compact" type="button" disabled>
+          <Bell size={17} />
+          <span>광고보고 더받기</span>
+          <small>준비중</small>
+        </button>
+      </div>
+    </ModalShell>
+  );
+}
+
 function ProductActionLabel({ canUse, product }) {
   const actionIcons = {
     diamond: CreditCard,
@@ -3055,6 +3253,9 @@ function GameApp({ loaded }) {
   const [selectedRealEstateId, setSelectedRealEstateId] = useState("");
   const [realEstateNotice, setRealEstateNotice] = useState("");
   const [activeModal, setActiveModal] = useState(null);
+  const [dismissedExpeditionRewardAt, setDismissedExpeditionRewardAt] = useState(0);
+  const [expeditionRewardModalOpen, setExpeditionRewardModalOpen] = useState(false);
+  const [expeditionRewardToast, setExpeditionRewardToast] = useState(null);
   const [settings, setSettings] = useState({
     autosave: true,
     offlineAlerts: true,
@@ -3074,10 +3275,28 @@ function GameApp({ loaded }) {
   assert(battle, "current.battle 데이터가 없습니다.");
   const showDebugTools = useMemo(() => qaToolsEnabled(), []);
   const pauseAutoBattle = useMemo(() => autoBattlePausedForQa(), []);
+  const expeditionPendingReward = gameState.expedition.pendingReward;
+  const hasExpeditionPendingReward = expeditionPendingReward && (
+    Number(expeditionPendingReward.trainingExp) > 0 ||
+    Number(expeditionPendingReward.money) > 0 ||
+    Number(expeditionPendingReward.diamonds) > 0 ||
+    Number(expeditionPendingReward.realEstateCash) > 0
+  );
+
+  const showExpeditionRewardToast = (text) => {
+    if (!text) return;
+    setExpeditionRewardToast({ id: Date.now(), text });
+  };
 
   useEffect(() => {
     if (!saveError) saveGameState(gameState);
   }, [gameState, saveError]);
+
+  useEffect(() => {
+    if (!expeditionRewardToast) return undefined;
+    const timer = window.setTimeout(() => setExpeditionRewardToast(null), 2200);
+    return () => window.clearTimeout(timer);
+  }, [expeditionRewardToast]);
 
   useEffect(() => {
     if (pauseAutoBattle) return undefined;
@@ -3094,12 +3313,35 @@ function GameApp({ loaded }) {
     const timer = window.setInterval(() => {
       setGameState((state) => {
         const owned = Object.keys(state.realEstate.properties).length > 0;
-        const expeditionIdle = state.expedition.partyMemberIds.length > 0 && Number(state.expedition.highestStage) > 0;
-        return owned || expeditionIdle ? accrueRealEstateIncome(state) : state;
+        return owned ? accrueRealEstateIncome(state) : state;
       });
     }, tickMs);
     return () => window.clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    if (pauseAutoBattle) return undefined;
+    const tickMs = finiteNumber(expeditionAutoTickMs, "원정대 자동 정산 tick 값이 올바르지 않습니다.");
+    setGameState((state) => resolveExpeditionAutoCombat(state, Date.now(), { rewardDelivery: "pending" }));
+    const handleVisible = () => {
+      if (document.visibilityState !== "visible") return;
+      setGameState((state) => resolveExpeditionAutoCombat(state, Date.now(), { rewardDelivery: "pending" }));
+    };
+    document.addEventListener("visibilitychange", handleVisible);
+    const timer = window.setInterval(() => {
+      let toastText = "";
+      setGameState((state) => {
+        const next = resolveExpeditionAutoCombat(state, Date.now(), { rewardDelivery: "instant" });
+        toastText = expeditionRewardToastText(state, next);
+        return next;
+      });
+      showExpeditionRewardToast(toastText);
+    }, tickMs);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisible);
+      window.clearInterval(timer);
+    };
+  }, [pauseAutoBattle]);
 
   const handleModeChange = (nextMode) => {
     if (nextMode === "realEstate") {
@@ -3145,7 +3387,23 @@ function GameApp({ loaded }) {
   };
 
   const handleExpeditionComplete = () => {
-    setGameState((state) => completeExpeditionStage(state));
+    let toastText = "";
+    setGameState((state) => {
+      const next = completeExpeditionStage(state);
+      toastText = expeditionRewardToastText(state, next);
+      return next;
+    });
+    showExpeditionRewardToast(toastText);
+  };
+
+  const handleClaimExpeditionReward = () => {
+    setGameState((state) => claimExpeditionPendingReward(state, "base"));
+    setExpeditionRewardModalOpen(false);
+    setDismissedExpeditionRewardAt(0);
+  };
+
+  const handleOpenExpeditionReward = () => {
+    setExpeditionRewardModalOpen(true);
   };
 
   const handleExpeditionAssign = (memberId) => {
@@ -3178,6 +3436,10 @@ function GameApp({ loaded }) {
       }
       return next;
     });
+  };
+
+  const handleExpeditionRecommend = () => {
+    setGameState((state) => assignRecommendedExpeditionParty(state));
   };
 
   const handleExpeditionLevelUp = (memberId) => {
@@ -3261,7 +3523,12 @@ function GameApp({ loaded }) {
             summary={summary}
           />
         ) : mode === "expedition" ? (
-          <ExpeditionScene gameState={gameState} onExpeditionComplete={handleExpeditionComplete} />
+          <ExpeditionScene
+            gameState={gameState}
+            onExpeditionComplete={handleExpeditionComplete}
+            onOpenPendingReward={handleOpenExpeditionReward}
+            rewardToast={expeditionRewardToast}
+          />
         ) : (
           <RealEstateScene
             notice={realEstateNotice}
@@ -3297,6 +3564,7 @@ function GameApp({ loaded }) {
               onAssign={handleExpeditionAssign}
               onFuse={handleExpeditionFuse}
               onLevelUp={handleExpeditionLevelUp}
+              onRecommend={handleExpeditionRecommend}
               onRemove={handleExpeditionRemove}
               onTabChange={setExpeditionTab}
               onToggleLock={handleExpeditionToggleLock}
@@ -3322,6 +3590,16 @@ function GameApp({ loaded }) {
           onSetGameState={setGameState}
           settings={settings}
           setSettings={setSettings}
+        />
+      )}
+      {activeModal === null && hasExpeditionPendingReward && (expeditionRewardModalOpen || dismissedExpeditionRewardAt !== Number(expeditionPendingReward.updatedAt)) && (
+        <ExpeditionRewardModal
+          pendingReward={expeditionPendingReward}
+          onClaim={handleClaimExpeditionReward}
+          onClose={() => {
+            setExpeditionRewardModalOpen(false);
+            setDismissedExpeditionRewardAt(Number(expeditionPendingReward.updatedAt));
+          }}
         />
       )}
     </div>

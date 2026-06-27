@@ -8,9 +8,11 @@ const outDir = resolve("artifacts/react-vite-expedition-rules-smoke");
 const reportPath = resolve(outDir, "report.json");
 const preferredPort = Number(process.env.REACT_EXPEDITION_RULES_SMOKE_PORT || 5710);
 const saveKey = "student-idle-rpg-save-v1";
-const fixedNow = 1782230000000;
+const fixedNow = Date.now();
 const careers = JSON.parse(readFileSync(resolve("data/careers.json"), "utf8"));
 const expeditionBalance = JSON.parse(readFileSync(resolve("data/expedition_balance.json"), "utf8"));
+const defaultCombatCareer = careers.find((career) => career.id === "ai_researcher") || careers[0];
+const defaultFailureCareer = careers.find((career) => career.id === "doctor") || careers[0];
 const subjectIds = ["korean", "english", "math", "social", "science"];
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -98,7 +100,7 @@ function stats(value) {
   return Object.fromEntries(subjectIds.map((subject) => [subject, value]));
 }
 
-function member(index, { career = careers[0], statValue = 1000, tier = "staff", party = true, locked = false } = {}) {
+function member(index, { career = defaultCombatCareer, statValue = 1000, tier = "staff", party = true, locked = false } = {}) {
   return {
     id: `rules-member-${index}`,
     sourceKey: `rules:${career.id}:${index}`,
@@ -127,6 +129,7 @@ function gameState({
   diamonds = 0,
   money = 1200,
   tempExp = 0,
+  lastResolvedAt = fixedNow,
 } = {}) {
   return {
     schemaVersion: 2,
@@ -180,11 +183,22 @@ function gameState({
       claimedBossStages,
       trainingExp,
       chapterRun: chapterRun(currentStage, tempExp),
-      lastResolvedAt: fixedNow,
+      lastResolvedAt,
       log: [],
       stageIndex: currentStage - 1,
       clearedStageCount: highestStage,
       lastStageId: null,
+    },
+    realEstate: {
+      cash: 0,
+      properties: {},
+      rentCarry: 0,
+      lastRentAt: fixedNow,
+      lastExpeditionFundAt: fixedNow,
+      weeklyAssetGain: 0,
+      lastWeeklyResetAt: fixedNow,
+      claimedWeeklyRewardWeek: null,
+      lastAssetValueSnapshot: 0,
     },
     archive: [],
     history: [],
@@ -206,6 +220,15 @@ function stripState(state) {
     firstMemberLevel: state.expedition.members[0]?.level,
     firstMemberTier: state.expedition.members[0]?.promotionTier,
     logText: state.expedition.log[0]?.text || "",
+    pendingTrainingExp: state.expedition.pendingReward?.trainingExp ?? 0,
+    pendingDiamonds: state.expedition.pendingReward?.diamonds ?? 0,
+    pendingRealEstateCash: state.expedition.pendingReward?.realEstateCash ?? 0,
+    pendingBattles: state.expedition.pendingReward?.battles ?? 0,
+    realEstateCash: state.realEstate?.cash ?? 0,
+    partyMemberIds: state.expedition.partyMemberIds,
+    lastBattleResult: state.expedition.pendingReward?.lastBattle?.result || "",
+    lastBattleReason: state.expedition.pendingReward?.lastBattle?.resultReason || "",
+    lastBattleEvents: state.expedition.pendingReward?.lastBattle?.events?.length ?? 0,
   };
 }
 
@@ -224,6 +247,10 @@ async function openScenario(browser, baseUrl, seed) {
   }
   assert(response && response.status() === 200, `HTTP status ${response?.status()}`);
   if (await page.locator(".load-failure").count()) throw new Error(await page.locator(".load-failure").innerText());
+  const rewardDialog = page.getByRole("dialog", { name: "원정 보상" });
+  if (await rewardDialog.count()) {
+    await rewardDialog.getByRole("button", { name: "닫기" }).click();
+  }
   await page.getByRole("button", { name: "원정대" }).click();
   await page.waitForSelector(".expedition-scene", { timeout: 6000 });
   return page;
@@ -264,7 +291,7 @@ if (!existsSync(resolve(root, "index.html"))) {
 mkdirSync(outDir, { recursive: true });
 
 const highParty = Array.from({ length: 5 }, (_, index) => member(index + 1, { statValue: 100000 }));
-const lowParty = Array.from({ length: 5 }, (_, index) => member(index + 1, { statValue: 1 }));
+const lowParty = Array.from({ length: 5 }, (_, index) => member(index + 1, { career: defaultFailureCareer, statValue: 0 }));
 const fusionCareer = careers[0];
 const fusionMembers = [
   member(101, { career: fusionCareer, statValue: 5000, party: false }),
@@ -285,8 +312,11 @@ try {
     const after = await readState(page);
     assert(after.expedition.highestStage === 100, "보스 첫 클리어 highestStage가 100이어야 합니다.");
     assert(after.expedition.claimedBossStages.includes(100), "보스 첫 클리어 기록이 필요합니다.");
-    assert(after.diamonds > before.diamonds, "보스 첫 클리어 다이아 보상이 필요합니다.");
-    assert(after.expedition.trainingExp > before.expedition.trainingExp, "보스 첫 클리어 EXP 보상이 필요합니다.");
+    assert(after.diamonds > before.diamonds, "수동 보스 첫 클리어 다이아가 즉시 지급되어야 합니다.");
+    assert(after.expedition.trainingExp > before.expedition.trainingExp, "수동 보스 첫 클리어 EXP가 즉시 지급되어야 합니다.");
+    assert(after.realEstate.cash > before.realEstate.cash, "수동 보스 첫 클리어 부동산 자금이 즉시 지급되어야 합니다.");
+    assert(after.expedition.pendingReward.diamonds === 0, "수동 보스 첫 클리어 다이아가 pending에 누적되면 안 됩니다.");
+    assert(after.expedition.pendingReward.trainingExp === 0, "수동 보스 첫 클리어 EXP가 pending에 누적되면 안 됩니다.");
     return {};
   }));
 
@@ -295,6 +325,8 @@ try {
     await waitForState(page, "state => state.expedition.currentStage === 101");
     const after = await readState(page);
     assert(after.diamonds === before.diamonds, "이미 claim된 보스 다이아가 중복 지급되면 안 됩니다.");
+    assert(after.expedition.pendingReward.diamonds === 0, "이미 claim된 보스 다이아가 pending에도 중복 누적되면 안 됩니다.");
+    assert(after.expedition.trainingExp > before.expedition.trainingExp, "반복 보스 EXP는 즉시 지급되어야 합니다.");
     return {};
   }));
 
@@ -305,7 +337,8 @@ try {
     assert(after.expedition.highestStage === before.expedition.highestStage, "보스 실패가 최고 Stage를 올리면 안 됩니다.");
     assert(after.expedition.trainingExp === before.expedition.trainingExp, "보스 실패가 EXP를 지급하면 안 됩니다.");
     assert(after.expedition.claimedBossStages.length === 0, "보스 실패가 claim 기록을 남기면 안 됩니다.");
-    assert(after.expedition.log[0].text.includes("돌파 실패"), "보스 실패 로그가 필요합니다.");
+    assert(after.expedition.pendingReward.lastBattle.result !== "win", "보스 실패 전투 리포트가 필요합니다.");
+    assert(after.expedition.pendingReward.lastBattle.resultReason === "보스 실패 롤백", "보스 실패 롤백 사유가 전투 리포트에 필요합니다.");
     return {};
   }));
 
@@ -315,6 +348,46 @@ try {
     const after = await readState(page);
     assert(after.expedition.highestStage === before.expedition.highestStage, "일반 Stage 실패가 최고 Stage를 올리면 안 됩니다.");
     assert(after.expedition.trainingExp === before.expedition.trainingExp, "일반 Stage 실패가 EXP를 지급하면 안 됩니다.");
+    assert(after.expedition.pendingReward.trainingExp === 0, "일반 실패가 pending EXP를 지급하면 안 됩니다.");
+    assert(after.expedition.pendingReward.battles === 0, "수동 일반 실패가 pending 전투 수를 올리면 안 됩니다.");
+    const report = after.expedition.pendingReward.lastBattle;
+    assert(Array.isArray(report.partyHp) && report.partyHp.length === 5, "아군 개별 HP 배열이 필요합니다.");
+    assert(Array.isArray(report.enemyHp) && report.enemyHp.length >= 1, "적 개별 HP 배열이 필요합니다.");
+    assert(report.events.some((event) => event.kind === "heal"), "힐러가 공격 대신 회복 이벤트를 남겨야 합니다.");
+    assert(new Set(report.events.filter((event) => event.kind === "damage").map((event) => event.actor)).size >= 2, "개별 몬스터가 각각 전투에 참여해야 합니다.");
+    const enemyActionCounts = Object.values(report.actionCounts.enemies);
+    assert(Math.max(...enemyActionCounts) > Math.min(...enemyActionCounts), "몬스터 공격속도 차이가 행동 횟수에 반영되어야 합니다.");
+    return {};
+  }));
+
+  checks.push(await scenario(browser, baseUrl, "offline-auto-pending-and-cap", gameState({ currentStage: 1, highestStage: 0, members: highParty, lastResolvedAt: fixedNow - 9 * 60 * 60 * 1000 }), async (page) => {
+    await waitForState(page, "state => state.expedition.pendingReward.battles > 0");
+    const after = await readState(page);
+    assert(after.expedition.pendingReward.battles <= 480, "오프라인 정산 전투 수가 480 상한을 넘으면 안 됩니다.");
+    assert(after.expedition.currentStage > 1, "오프라인 자동 정산이 Stage를 진행해야 합니다.");
+    assert(after.expedition.pendingReward.trainingExp > 0, "오프라인 자동 정산 EXP가 pending에 필요합니다.");
+    const beforeClaim = await readState(page);
+    await page.getByRole("button", { name: "누적 보상 받기" }).click();
+    await page.getByRole("button", { name: "받기", exact: true }).click();
+    await waitForState(page, "state => state.expedition.pendingReward.trainingExp === 0 && state.realEstate.cash > 0");
+    const afterClaim = await readState(page);
+    assert(afterClaim.expedition.trainingExp > beforeClaim.expedition.trainingExp, "pending 받기 후 EXP가 지급되어야 합니다.");
+    assert(afterClaim.realEstate.cash >= beforeClaim.expedition.pendingReward.realEstateCash, "pending 받기 후 부동산 자금이 지급되어야 합니다.");
+    return {};
+  }));
+
+  checks.push(await scenario(browser, baseUrl, "recommended-party-fills-top-five-by-power", gameState({
+    currentStage: 1,
+    highestStage: 0,
+    members: [10, 70, 50, 100, 30, 90, 60].map((statValue, index) => member(301 + index, { statValue, party: false })),
+    partyMemberIds: [],
+  }), async (page) => {
+    await page.getByRole("button", { name: "파티" }).click();
+    await page.getByRole("button", { name: "추천 편성" }).click();
+    await waitForState(page, "state => state.expedition.partyMemberIds.length === 5");
+    const after = await readState(page);
+    const expected = ["rules-member-304", "rules-member-306", "rules-member-302", "rules-member-307", "rules-member-303"];
+    assert(JSON.stringify(after.expedition.partyMemberIds) === JSON.stringify(expected), `추천 편성이 전투력순 상위 5명이 아닙니다: ${after.expedition.partyMemberIds.join(",")}`);
     return {};
   }));
 

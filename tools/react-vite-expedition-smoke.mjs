@@ -255,6 +255,8 @@ async function collectSnapshot(page) {
     const unitFrames = [...document.querySelectorAll(".expedition-unit-frame")];
     const enemyFrames = [...document.querySelectorAll(".expedition-enemy-frame")];
     const actionButton = document.querySelector(".expedition-action-button");
+    const arena = document.querySelector(".expedition-arena");
+    const backdropStyle = arena ? getComputedStyle(arena, "::before") : null;
     const doc = document.documentElement;
     return {
       text: document.body.innerText,
@@ -268,6 +270,11 @@ async function collectSnapshot(page) {
       currentStage: state.expedition.currentStage ?? -1,
       highestStage: state.expedition.highestStage ?? -1,
       trainingExp: state.expedition.trainingExp ?? -1,
+      pendingTrainingExp: state.expedition.pendingReward?.trainingExp ?? 0,
+      pendingRealEstateCash: state.expedition.pendingReward?.realEstateCash ?? 0,
+      pendingBattles: state.expedition.pendingReward?.battles ?? 0,
+      lastBattleEvents: state.expedition.pendingReward?.lastBattle?.events?.length ?? 0,
+      expeditionLogText: state.expedition.log?.[0]?.text || "",
       realEstateCash: state.realEstate?.cash ?? -1,
       money: state.money,
       careerChoiceCount: document.querySelectorAll(".career-choice.ranked").length,
@@ -281,12 +288,23 @@ async function collectSnapshot(page) {
       expeditionLogEntries: document.querySelectorAll(".log-entry").length,
       expeditionScene: document.querySelectorAll(".expedition-scene").length,
       expeditionArena: document.querySelectorAll(".expedition-arena").length,
+      expeditionStageTransition: document.querySelector(".expedition-scene")?.getAttribute("data-stage-transition") || "",
+      expeditionTransitionFromStage: document.querySelector(".expedition-scene")?.getAttribute("data-transition-from-stage") || "",
+      expeditionTransitionToStage: document.querySelector(".expedition-scene")?.getAttribute("data-transition-to-stage") || "",
+      expeditionBackdropFromX: Number(arena?.getAttribute("data-bg-from-x") || 0),
+      expeditionBackdropToX: Number(arena?.getAttribute("data-bg-to-x") || 0),
+      expeditionBackdropImage: backdropStyle?.backgroundImage || "",
+      expeditionDefeatedEnemies: document.querySelectorAll(".expedition-enemy-visual.defeated").length,
+      expeditionRewardDialogs: document.querySelectorAll('[role="dialog"][aria-label="원정 보상"]').length,
+      expeditionRewardToasts: document.querySelectorAll(".expedition-reward-toast").length,
+      expeditionHpBars: document.querySelectorAll(".expedition-hp-bar").length,
       unitFrameCount: unitFrames.length,
       unitFramesLoaded: unitFrames.filter((image) => image.complete && image.naturalWidth > 0).length,
       enemyFrameCount: enemyFrames.length,
       enemyFramesLoaded: enemyFrames.filter((image) => image.complete && image.naturalWidth > 0).length,
       enemyVisualCount: document.querySelectorAll(".expedition-enemy-visual").length,
       actionText: actionButton ? actionButton.innerText.trim() : "",
+      actionDisabled: actionButton instanceof HTMLButtonElement ? actionButton.disabled : false,
       hiddenLegacyHud: document.querySelectorAll(".expedition-scene-hud, .expedition-reward-strip, .expedition-scene-tags").length,
       horizontalOverflow: Math.max(0, doc.scrollWidth - doc.clientWidth),
     };
@@ -337,7 +355,7 @@ try {
   await page.waitForSelector(".panel.decision .career-choice.ranked", { timeout: 15000 });
   const beforeAccept = await collectSnapshot(page);
 
-  await page.locator(".career-choice.ranked:not(.locked)").first().click();
+  await page.locator(".career-choice.ranked:not(.locked)", { hasText: "AI 연구원" }).first().click();
   await page.waitForFunction(
     (key) => {
       const state = JSON.parse(localStorage.getItem(key));
@@ -371,14 +389,17 @@ try {
   await page.waitForSelector(".expedition-growth-card", { timeout: 6000 });
 
   await page.click(".expedition-action-button");
+  await page.waitForSelector('.expedition-scene[data-stage-transition="moving"]', { timeout: 2000 });
+  const duringStageTransition = await collectSnapshot(page);
   await page.waitForFunction(
     (key) => {
       const state = JSON.parse(localStorage.getItem(key));
-      return state.expedition.stageIndex === 1 && state.expedition.clearedStageCount === 1;
+      return state.expedition.highestStage >= 1 && state.expedition.trainingExp > 0 && state.realEstate?.cash > 0 && state.expedition.pendingReward?.lastBattle;
     },
     saveKey,
     { timeout: 6000 },
   );
+  await page.waitForFunction(() => document.querySelector(".expedition-scene")?.getAttribute("data-stage-transition") === "idle", null, { timeout: 4000 });
   await page.waitForFunction(() => [...document.querySelectorAll(".expedition-unit-frame, .expedition-enemy-frame")].every((image) => image.complete && image.naturalWidth > 0), null, {
     timeout: 6000,
   });
@@ -401,17 +422,29 @@ try {
   if (manageTab.expeditionManageCards !== 1) failures.push(`Expected 1 expedition manage card, got ${manageTab.expeditionManageCards}`);
   if (!logTab.text.includes("원정 기록")) failures.push("Expedition log tab did not render 원정 기록");
   if (afterAccept.expeditionScene !== 1 || afterAccept.expeditionArena !== 1) failures.push(`Expected expedition scene/arena, got ${afterAccept.expeditionScene}/${afterAccept.expeditionArena}`);
+  if (!afterAccept.expeditionBackdropImage || afterAccept.expeditionBackdropImage === "none") failures.push("Expected expedition backdrop image on arena ::before");
   if (afterAccept.unitFrameCount !== 4 || afterAccept.unitFramesLoaded !== 4) failures.push(`Expected 4 loaded unit frames, got ${afterAccept.unitFramesLoaded}/${afterAccept.unitFrameCount}`);
   if (afterAccept.enemyVisualCount < 1 || afterAccept.enemyVisualCount > 3) failures.push(`Expected 1-3 expedition enemies, got ${afterAccept.enemyVisualCount}`);
   if (afterAccept.enemyFrameCount !== afterAccept.enemyVisualCount * 4 || afterAccept.enemyFramesLoaded !== afterAccept.enemyFrameCount) failures.push(`Expected loaded enemy frames to match enemies, got ${afterAccept.enemyFramesLoaded}/${afterAccept.enemyFrameCount} for ${afterAccept.enemyVisualCount} enemies`);
   if (afterAccept.actionText !== "돌파") failures.push(`Expected expedition action text 돌파, got ${afterAccept.actionText}`);
   if (afterAccept.hiddenLegacyHud !== 0) failures.push(`Expected no legacy expedition hud/reward/tag nodes, got ${afterAccept.hiddenLegacyHud}`);
   if (afterAccept.horizontalOverflow > 4) failures.push(`Horizontal overflow after accept ${afterAccept.horizontalOverflow}px`);
-  if (afterClear.stageIndex !== 1) failures.push(`Expected stageIndex 1 after clear, got ${afterClear.stageIndex}`);
+  if (duringStageTransition.expeditionStageTransition !== "moving") failures.push(`Expected moving stage transition after clear, got ${duringStageTransition.expeditionStageTransition}`);
+  if (duringStageTransition.expeditionTransitionFromStage !== "1" || duringStageTransition.expeditionTransitionToStage !== "2") failures.push(`Expected transition 1 -> 2, got ${duringStageTransition.expeditionTransitionFromStage} -> ${duringStageTransition.expeditionTransitionToStage}`);
+  if (!(duringStageTransition.expeditionBackdropToX < duringStageTransition.expeditionBackdropFromX)) failures.push(`Expected expedition backdrop to move left, got ${duringStageTransition.expeditionBackdropFromX} -> ${duringStageTransition.expeditionBackdropToX}`);
+  if (duringStageTransition.expeditionDefeatedEnemies < 1) failures.push(`Expected defeated enemy visuals during stage transition, got ${duringStageTransition.expeditionDefeatedEnemies}`);
+  if (!duringStageTransition.actionDisabled || duringStageTransition.actionText !== "이동중") failures.push(`Expected expedition action disabled 이동중 during transition, got disabled=${duringStageTransition.actionDisabled} text=${duringStageTransition.actionText}`);
   if (afterClear.clearedStageCount !== 1) failures.push(`Expected clearedStageCount 1 after clear, got ${afterClear.clearedStageCount}`);
-  if (afterClear.currentStage !== 2 || afterClear.highestStage !== 1) failures.push(`Expected current/highest stage 2/1 after clear, got ${afterClear.currentStage}/${afterClear.highestStage}`);
-  if (afterClear.trainingExp <= afterAccept.trainingExp) failures.push(`Expected trainingExp to increase after clear, got ${afterAccept.trainingExp} -> ${afterClear.trainingExp}`);
-  if (afterClear.realEstateCash <= afterAccept.realEstateCash) failures.push(`Expected realEstate cash to increase after clear, got ${afterAccept.realEstateCash} -> ${afterClear.realEstateCash}`);
+  if (afterClear.expeditionStageTransition !== "idle") failures.push(`Expected idle stage transition after 2s, got ${afterClear.expeditionStageTransition}`);
+  if (afterClear.expeditionBackdropToX !== duringStageTransition.expeditionBackdropToX) failures.push(`Expected expedition backdrop to persist at ${duringStageTransition.expeditionBackdropToX}, got ${afterClear.expeditionBackdropToX}`);
+  if (afterClear.lastBattleEvents < 1) failures.push(`Expected last battle events after expedition action, got ${afterClear.lastBattleEvents}`);
+  if (afterClear.trainingExp <= afterAccept.trainingExp) failures.push(`Expected trainingExp to increase instantly after clear, got ${afterAccept.trainingExp} -> ${afterClear.trainingExp}`);
+  if (afterClear.pendingTrainingExp !== 0) failures.push(`Expected no pending trainingExp after manual clear, got ${afterClear.pendingTrainingExp}`);
+  if (afterClear.realEstateCash <= afterAccept.realEstateCash) failures.push(`Expected realEstate cash to increase instantly after clear, got ${afterAccept.realEstateCash} -> ${afterClear.realEstateCash}`);
+  if (afterClear.pendingRealEstateCash !== 0) failures.push(`Expected no pending realEstate cash after manual clear, got ${afterClear.pendingRealEstateCash}`);
+  if (afterClear.expeditionRewardDialogs !== 0) failures.push(`Expected no reward modal after manual clear, got ${afterClear.expeditionRewardDialogs}`);
+  if (afterClear.expeditionRewardToasts < 1 && !afterClear.expeditionLogText.includes("전투 승리")) failures.push("Expected compact expedition reward toast or reward log after manual clear");
+  if (afterClear.expeditionHpBars < 2) failures.push(`Expected expedition HP bars, got ${afterClear.expeditionHpBars}`);
   if (afterClear.money !== afterAccept.money) failures.push(`Expected money to stay unchanged after clear, before ${afterAccept.money}, after ${afterClear.money}`);
   if (afterClear.unitFrameCount !== 4 || afterClear.unitFramesLoaded !== 4) failures.push(`Expected 4 loaded unit frames after clear, got ${afterClear.unitFramesLoaded}/${afterClear.unitFrameCount}`);
   if (afterClear.enemyVisualCount < 1 || afterClear.enemyVisualCount > 3) failures.push(`Expected 1-3 expedition enemies after clear, got ${afterClear.enemyVisualCount}`);

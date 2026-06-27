@@ -275,7 +275,8 @@ async function completeBattlesUntilDecision(page, key) {
   for (let step = 0; step < 60; step += 1) {
     const awaitingDecision = await page.evaluate((storageKey) => JSON.parse(localStorage.getItem(storageKey)).current.awaitingDecision, key);
     if (awaitingDecision) return;
-    await page.locator(".battle-debug-complete").first().click();
+    await page.locator(".battle-debug-complete").first().waitFor({ state: "attached", timeout: 4000 });
+    await page.locator(".battle-debug-complete").first().click({ force: true });
     await page.waitForTimeout(70);
   }
   throw new Error("Fresh save did not reach decision state within debug battle limit");
@@ -367,7 +368,7 @@ try {
   });
   await legacyPage.goto(qaUrl, { waitUntil: "networkidle" });
   await legacyPage.waitForSelector(".phone-frame", { timeout: 15000 });
-  await legacyPage.waitForFunction((key) => JSON.parse(localStorage.getItem(key)).schemaVersion === 4, saveKey, { timeout: 5000 });
+  await legacyPage.waitForFunction((key) => JSON.parse(localStorage.getItem(key)).schemaVersion === 5, saveKey, { timeout: 5000 });
   const legacyBeforeRetake = await legacyPage.evaluate((key) => {
     const state = JSON.parse(localStorage.getItem(key));
     return {
@@ -380,6 +381,7 @@ try {
       hasBattle: Boolean(state.current.battle),
       hasEquipment: Boolean(state.equipment),
       hasCareerAlumni: Array.isArray(state.careerAlumni),
+      hasPendingReward: Boolean(state.expedition?.pendingReward),
       awaitingDecision: state.current.awaitingDecision,
       outcomeGender: state.current.outcome?.avatarGender,
       candidateGender: state.current.outcome?.careerCandidates?.[0]?.avatarGender,
@@ -402,6 +404,7 @@ try {
       schemaVersion: state.schemaVersion,
       gradeId: state.current.gradeId,
       retakeCount: state.current.retakeCount,
+      hasPendingReward: Boolean(state.expedition?.pendingReward),
       awaitingDecision: state.current.awaitingDecision,
       outcomeIsNull: state.current.outcome === null,
       roadMode: state.current.road?.mode,
@@ -445,6 +448,7 @@ try {
       schemaVersion: state.schemaVersion,
       gradeId: state.current.gradeId,
       retakeCount: state.current.retakeCount,
+      hasPendingReward: Boolean(state.expedition?.pendingReward),
       awaitingDecision: state.current.awaitingDecision,
     };
   }, saveKey);
@@ -514,7 +518,8 @@ try {
   if (beforeClick.state.careerAlumni?.length !== 0) failures.push(`Legacy helpers leaked into careerAlumni, got ${beforeClick.state.careerAlumni?.length ?? "missing"}`);
   if (afterClick.state.current.totalStudyPoints <= 678) failures.push("DEBUG click did not persist totalStudyPoints increment");
   if (afterClick.state.current.totalKills <= 9) failures.push("DEBUG click did not persist totalKills increment");
-  if (afterClick.state.schemaVersion !== 4) failures.push(`Injected save did not migrate to schema 4, got ${afterClick.state.schemaVersion}`);
+  if (afterClick.state.schemaVersion !== 5) failures.push(`Injected save did not migrate to schema 5, got ${afterClick.state.schemaVersion}`);
+  if (!afterClick.state.expedition?.pendingReward) failures.push("Injected save did not create expedition pendingReward state");
   if (!afterClick.state.realEstate || typeof afterClick.state.realEstate.cash !== "number") failures.push("Injected save did not create realEstate state");
   if (afterClick.state.current.road.encounterIndex !== 1) failures.push(`DEBUG click did not advance Battle Road encounter, got ${afterClick.state.current.road.encounterIndex}`);
   if (afterClick.state.current.battle?.encounterIndex !== 1) failures.push(`Saved battle did not advance to encounter 1, got ${afterClick.state.current.battle?.encounterIndex}`);
@@ -524,7 +529,8 @@ try {
   if (invalidSave.phoneFrameCount !== 0 || invalidSave.growthPanelCount !== 0) failures.push("Invalid save rendered normal game UI");
   if (!invalidSave.text.includes("세이브를 불러올 수 없습니다")) failures.push("Invalid save failure text missing");
   if (legacyRetake.before.hasLoadFailure !== 0 || legacyRetake.before.hasPhone !== 1) failures.push("Legacy decision save did not render the normal game UI");
-  if (legacyRetake.before.schemaVersion !== 4) failures.push(`Legacy decision save did not migrate to schema 4, got ${legacyRetake.before.schemaVersion}`);
+  if (legacyRetake.before.schemaVersion !== 5) failures.push(`Legacy decision save did not migrate to schema 5, got ${legacyRetake.before.schemaVersion}`);
+  if (!legacyRetake.before.hasPendingReward) failures.push("Legacy decision save did not create expedition pendingReward state");
   if (legacyRetake.before.avatarGender !== "male" || legacyRetake.before.outcomeGender !== "male" || legacyRetake.before.candidateGender !== "male") failures.push("Legacy decision save did not fill missing avatarGender values");
   if (!legacyRetake.before.hasRoad || !legacyRetake.before.hasBattle) failures.push("Legacy decision save did not create road/battle state");
   if (!legacyRetake.before.hasEquipment || !legacyRetake.before.hasCareerAlumni) failures.push("Legacy decision save did not create equipment/careerAlumni state");
@@ -535,7 +541,7 @@ try {
   if (legacyRetake.after.awaitingDecision !== false || legacyRetake.after.outcomeIsNull !== true) failures.push("Legacy retake did not clear decision outcome");
   if (legacyRetake.after.roadMode !== "school" || legacyRetake.after.battleKind !== "grade" || legacyRetake.after.battleEnemyCount !== 3) failures.push("Legacy retake did not create the first retake battle");
   if (freshRetake.afterReset.hasPhone !== 1 || freshRetake.afterReset.renderGuardCount !== 0) failures.push("Fresh reset did not render the normal game UI");
-  if (freshRetake.afterReset.schemaVersion !== 4 || freshRetake.afterReset.gradeId !== "E1" || freshRetake.afterReset.retakeCount !== 0) failures.push(`Fresh reset state mismatch: ${JSON.stringify(freshRetake.afterReset)}`);
+  if (freshRetake.afterReset.schemaVersion !== 5 || freshRetake.afterReset.gradeId !== "E1" || freshRetake.afterReset.retakeCount !== 0 || !freshRetake.afterReset.hasPendingReward) failures.push(`Fresh reset state mismatch: ${JSON.stringify(freshRetake.afterReset)}`);
   if (freshRetake.closed || freshRetake.crashed) failures.push(`Fresh retake page closed=${freshRetake.closed} crashed=${freshRetake.crashed}`);
   if (freshRetake.afterRetake.hasPhone !== 1 || freshRetake.afterRetake.renderGuardCount !== 0 || freshRetake.afterRetake.growthPanelCount !== 1) failures.push("Fresh retake click removed the normal game UI");
   if (freshRetake.afterRetake.bodyTextLength < 500) failures.push(`Fresh retake screen appears blank, text length ${freshRetake.afterRetake.bodyTextLength}`);

@@ -1,13 +1,16 @@
 import careers from "../../../data/careers.json";
+import expeditionCombatBalance from "../../../data/expedition_combat_balance.json";
 import expeditionBalance from "../../../data/expedition_balance.json";
 import expeditionBosses from "../../../data/expedition_bosses.json";
 import expeditionChapters from "../../../data/expedition_chapters.json";
 import expeditionPromotions from "../../../data/expedition_promotions.json";
 import expeditionSegments from "../../../data/expedition_stages.json";
 import expeditionLevels from "../../../data/expedition_unit_levels.json";
-import { grantRealEstateExpeditionStageReward } from "./realEstate.js";
+import { grantRealEstateExpeditionPendingCash, realEstateExpeditionStageReward } from "./realEstate.js";
 
 const subjectIds = ["korean", "english", "math", "social", "science"];
+const expeditionRoleIds = ["tank", "dealer", "healer"];
+const combatStatIds = ["hp", "attack", "defense", "healing", "attackSpeed"];
 const subjectLabels = {
   korean: "국어",
   english: "영어",
@@ -41,6 +44,7 @@ const chapterBossByChapter = new Map(
 );
 
 export const expeditionPartySize = expeditionBalance.partySize;
+export const expeditionAutoTickMs = expeditionCombatBalance.timing.onlineTickMs;
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -78,6 +82,23 @@ function now() {
   return Date.now();
 }
 
+function positiveNumber(value, path) {
+  const number = finiteNumber(value, `${path} 값이 올바르지 않습니다.`);
+  assert(number > 0, `${path} 값은 0보다 커야 합니다.`);
+  return number;
+}
+
+function nonNegativeNumber(value, path) {
+  const number = finiteNumber(value, `${path} 값이 올바르지 않습니다.`);
+  assert(number >= 0, `${path} 값은 0 이상이어야 합니다.`);
+  return number;
+}
+
+function roundTo(value, digits = 2) {
+  const unit = 10 ** digits;
+  return Math.round(value * unit) / unit;
+}
+
 function statMap(source, path) {
   assert(source && typeof source === "object" && !Array.isArray(source), `${path} 데이터가 객체가 아닙니다.`);
   return Object.fromEntries(subjectIds.map((subject) => [subject, finiteNumber(source[subject], `${path}.${subject} 값이 올바르지 않습니다.`)]));
@@ -104,6 +125,122 @@ function pushExpeditionLog(expedition, text, tone = "info") {
   ].slice(0, 40);
 }
 
+function createEmptyPendingReward(createdAt = now(), previousLastBattle = null) {
+  const timestamp = Math.max(0, Math.floor(finiteNumber(createdAt, "원정대 pendingReward createdAt 값이 올바르지 않습니다.")));
+  return {
+    money: 0,
+    trainingExp: 0,
+    diamonds: 0,
+    realEstateCash: 0,
+    battles: 0,
+    wins: 0,
+    losses: 0,
+    startedAt: 0,
+    updatedAt: timestamp,
+    fromStage: null,
+    toStage: null,
+    summaryText: "",
+    lastBattle: previousLastBattle,
+  };
+}
+
+function pendingRewardHasValue(pendingReward) {
+  return Boolean(
+    pendingReward &&
+    (Number(pendingReward.money) > 0 ||
+      Number(pendingReward.trainingExp) > 0 ||
+      Number(pendingReward.diamonds) > 0 ||
+      Number(pendingReward.realEstateCash) > 0)
+  );
+}
+
+function normalizeBattleReport(report) {
+  if (report === null || report === undefined) return null;
+  if (!report || typeof report !== "object" || Array.isArray(report)) return report;
+  const normalized = { ...report };
+  if (typeof normalized.result === "string" && typeof normalized.resultReason !== "string") {
+    normalized.resultReason = battleResultReason(normalized.result);
+  }
+  if (!Array.isArray(normalized.partyHp)) normalized.partyHp = [];
+  if (!Array.isArray(normalized.enemyHp)) normalized.enemyHp = [];
+  return normalized;
+}
+
+function normalizePendingReward(pendingReward, createdAt = now()) {
+  const empty = createEmptyPendingReward(createdAt);
+  if (!pendingReward || typeof pendingReward !== "object" || Array.isArray(pendingReward)) return empty;
+  return {
+    ...empty,
+    ...pendingReward,
+    money: Math.max(0, Math.floor(Number(pendingReward.money) || 0)),
+    trainingExp: Math.max(0, Math.floor(Number(pendingReward.trainingExp) || 0)),
+    diamonds: Math.max(0, Math.floor(Number(pendingReward.diamonds) || 0)),
+    realEstateCash: Math.max(0, Math.floor(Number(pendingReward.realEstateCash) || 0)),
+    battles: Math.max(0, Math.floor(Number(pendingReward.battles) || 0)),
+    wins: Math.max(0, Math.floor(Number(pendingReward.wins) || 0)),
+    losses: Math.max(0, Math.floor(Number(pendingReward.losses) || 0)),
+    startedAt: Math.max(0, Math.floor(Number(pendingReward.startedAt) || 0)),
+    updatedAt: Math.max(0, Math.floor(Number(pendingReward.updatedAt) || Number(createdAt) || 0)),
+    fromStage: pendingReward.fromStage === undefined ? null : pendingReward.fromStage,
+    toStage: pendingReward.toStage === undefined ? null : pendingReward.toStage,
+    summaryText: typeof pendingReward.summaryText === "string" ? pendingReward.summaryText : "",
+    lastBattle: normalizeBattleReport(pendingReward.lastBattle),
+  };
+}
+
+function validateCombatEvent(event, path) {
+  assert(event && typeof event === "object" && !Array.isArray(event), `${path} 데이터가 객체가 아닙니다.`);
+  nonNegativeNumber(event.time, `${path}.time`);
+  assert(typeof event.actor === "string" && event.actor.length > 0, `${path}.actor 값이 없습니다.`);
+  assert(typeof event.target === "string" && event.target.length > 0, `${path}.target 값이 없습니다.`);
+  assert(["damage", "heal"].includes(event.kind), `${path}.kind 값이 올바르지 않습니다: ${event.kind}`);
+  assertNumberInteger(event.value, `${path}.value`, 0);
+  assert(typeof event.text === "string" && event.text.length > 0, `${path}.text 값이 없습니다.`);
+}
+
+function validateCombatantHpSnapshot(snapshot, path) {
+  assert(snapshot && typeof snapshot === "object" && !Array.isArray(snapshot), `${path} 데이터가 객체가 아닙니다.`);
+  assert(typeof snapshot.id === "string" && snapshot.id.length > 0, `${path}.id 값이 없습니다.`);
+  assert(typeof snapshot.name === "string" && snapshot.name.length > 0, `${path}.name 값이 없습니다.`);
+  assertNumberInteger(snapshot.slot, `${path}.slot`, 1);
+  assertNumberInteger(snapshot.maxHp, `${path}.maxHp`, 1);
+  assertNumberInteger(snapshot.remainingHp, `${path}.remainingHp`, 0);
+  assert(snapshot.remainingHp <= snapshot.maxHp, `${path}.remainingHp 값이 maxHp보다 클 수 없습니다.`);
+}
+
+function validateBattleReport(report, path) {
+  if (report === null) return;
+  assert(report && typeof report === "object" && !Array.isArray(report), `${path} 데이터가 객체가 아닙니다.`);
+  assert(typeof report.id === "string" && report.id.length > 0, `${path}.id 값이 없습니다.`);
+  assertNumberInteger(report.stage, `${path}.stage`, 1);
+  assert(typeof report.stageName === "string" && report.stageName.length > 0, `${path}.stageName 값이 없습니다.`);
+  assert(typeof report.enemyName === "string" && report.enemyName.length > 0, `${path}.enemyName 값이 없습니다.`);
+  assert(["win", "loss", "timeout"].includes(report.result), `${path}.result 값이 올바르지 않습니다: ${report.result}`);
+  assert(typeof report.resultReason === "string" && report.resultReason.length > 0, `${path}.resultReason 값이 없습니다.`);
+  nonNegativeNumber(report.durationSeconds, `${path}.durationSeconds`);
+  assertNumberInteger(report.partyRemainingHp, `${path}.partyRemainingHp`, 0);
+  assertNumberInteger(report.enemyRemainingHp, `${path}.enemyRemainingHp`, 0);
+  assert(Array.isArray(report.partyHp), `${path}.partyHp 데이터가 배열이 아닙니다.`);
+  report.partyHp.forEach((snapshot, index) => validateCombatantHpSnapshot(snapshot, `${path}.partyHp[${index}]`));
+  assert(Array.isArray(report.enemyHp), `${path}.enemyHp 데이터가 배열이 아닙니다.`);
+  report.enemyHp.forEach((snapshot, index) => validateCombatantHpSnapshot(snapshot, `${path}.enemyHp[${index}]`));
+  assert(Array.isArray(report.events), `${path}.events 데이터가 배열이 아닙니다.`);
+  report.events.forEach((event, index) => validateCombatEvent(event, `${path}.events[${index}]`));
+}
+
+function validatePendingReward(pendingReward, path) {
+  assert(pendingReward && typeof pendingReward === "object" && !Array.isArray(pendingReward), `${path} 데이터가 객체가 아닙니다.`);
+  for (const key of ["money", "trainingExp", "diamonds", "realEstateCash", "battles", "wins", "losses"]) {
+    assertNumberInteger(pendingReward[key], `${path}.${key}`, 0);
+  }
+  assertNumberInteger(pendingReward.startedAt, `${path}.startedAt`, 0);
+  assertNumberInteger(pendingReward.updatedAt, `${path}.updatedAt`, 0);
+  assert(pendingReward.fromStage === null || Number.isInteger(Number(pendingReward.fromStage)), `${path}.fromStage 값이 올바르지 않습니다.`);
+  assert(pendingReward.toStage === null || Number.isInteger(Number(pendingReward.toStage)), `${path}.toStage 값이 올바르지 않습니다.`);
+  assert(typeof pendingReward.summaryText === "string", `${path}.summaryText 값이 문자열이 아닙니다.`);
+  validateBattleReport(pendingReward.lastBattle, `${path}.lastBattle`);
+}
+
 function createChapterRun(currentStage, tempExp = 0) {
   const stage = stageCoordinates(currentStage);
   const exp = Math.max(0, Math.floor(finiteNumber(tempExp, "원정대 chapterRun.tempExp 값이 올바르지 않습니다.")));
@@ -126,6 +263,7 @@ export function createDefaultExpeditionState(createdAt = now()) {
     trainingExp: 0,
     chapterRun: createChapterRun(1, 0),
     lastResolvedAt: createdAt,
+    pendingReward: createEmptyPendingReward(createdAt),
     log: [],
     stageIndex: 0,
     clearedStageCount: 0,
@@ -196,12 +334,13 @@ export function validateExpeditionState(expedition, path = "save.expedition") {
   assertNumberInteger(expedition.chapterRun.tempExp, `${path}.chapterRun.tempExp`, 0);
   finiteNumber(expedition.chapterRun.boostMultiplier, `${path}.chapterRun.boostMultiplier 값이 올바르지 않습니다.`);
   assertNumberInteger(expedition.lastResolvedAt, `${path}.lastResolvedAt`, 0);
+  validatePendingReward(expedition.pendingReward, `${path}.pendingReward`);
   assert(Array.isArray(expedition.log), `${path}.log 데이터가 배열이 아닙니다.`);
   expedition.log.forEach((entry, index) => validateLogEntry(entry, `${path}.log[${index}]`));
 
   assertNumberInteger(expedition.stageIndex, `${path}.stageIndex`, 0);
   assertNumberInteger(expedition.clearedStageCount, `${path}.clearedStageCount`, 0);
-  assert(Number(expedition.stageIndex) === Number(expedition.currentStage) - 1, `${path}.stageIndex 값이 currentStage와 일치하지 않습니다.`);
+  assert(Number(expedition.stageIndex) === Number(expedition.currentStage) - 1, `${path}.stageIndex 값이 currentStage와 일치하지 않습니다: ${expedition.stageIndex} !== ${Number(expedition.currentStage) - 1}`);
   assert(Number(expedition.clearedStageCount) === Number(expedition.highestStage), `${path}.clearedStageCount 값이 highestStage와 일치하지 않습니다.`);
   assert(expedition.lastStageId === null || typeof expedition.lastStageId === "string", `${path}.lastStageId 값이 올바르지 않습니다.`);
 }
@@ -263,6 +402,16 @@ function withoutSubjects(subjects, remove) {
   return subjects.filter((subject) => !remove.includes(subject));
 }
 
+function combatEnemyConfigForSource(sourceId, isBoss) {
+  assert(typeof sourceId === "string" && sourceId.length > 0, "원정대 enemy sourceId 값이 없습니다.");
+  const root = isBoss ? expeditionCombatBalance.enemyStats?.bosses : expeditionCombatBalance.enemyStats?.segments;
+  assert(root && typeof root === "object" && !Array.isArray(root), "expedition_combat_balance.json enemyStats 데이터가 올바르지 않습니다.");
+  const config = root[sourceId];
+  assert(config && typeof config === "object" && !Array.isArray(config), `expedition_combat_balance.json enemyStats 누락: ${sourceId}`);
+  assert(Array.isArray(config.enemies) && config.enemies.length > 0, `expedition_combat_balance.json enemies가 비어 있습니다: ${sourceId}`);
+  return config;
+}
+
 export function createStageView(currentStage) {
   assert(expeditionSegments.length > 0, "expedition_stages.json이 비어 있어 원정대를 표시할 수 없습니다.");
   assert(expeditionBosses.length > 0, "expedition_bosses.json이 비어 있어 보스 Stage를 표시할 수 없습니다.");
@@ -274,19 +423,24 @@ export function createStageView(currentStage) {
   const boss = coords.isChapterBoss ? chapterBossByChapter.get(coords.chapter) : coords.isMidBoss ? midBossByKey.get(`${coords.chapter}:${coords.segmentInChapter}`) : null;
   if (coords.isBoss) assert(boss, `expedition_bosses.json에서 보스를 찾을 수 없습니다: ${coords.chapter}:${coords.segmentInChapter}`);
   const source = boss || segment;
+  const enemyConfig = combatEnemyConfigForSource(source.id, Boolean(boss));
   const weakSubjects = uniqueSubjects(chapter.weakSubjects, source.weakSubjects);
   const resistSubjects = withoutSubjects(uniqueSubjects(chapter.resistSubjects, source.resistSubjects), weakSubjects);
-  const enemyNames = Array.isArray(segment.normalEnemyNames) && segment.normalEnemyNames.length > 0 ? segment.normalEnemyNames : [segment.enemyName];
-  const enemyCount = boss ? 1 : 1 + ((coords.globalStage + coords.microStep + coords.segmentInChapter) % 3);
+  const enemyNames = enemyConfig.enemies.map((enemy) => {
+    assert(enemy && typeof enemy === "object" && typeof enemy.name === "string" && enemy.name.length > 0, `expedition_combat_balance.json enemy name 누락: ${source.id}`);
+    return enemy.name;
+  });
+  const enemyCount = enemyNames.length;
   const enemyAsset = boss ? boss.bossAsset : segment.enemyAsset;
   assert(enemyAsset, `원정대 적 asset이 비어 있습니다: ${source.id}`);
 
   return {
     ...coords,
     id: `${chapter.id}:${source.id}`,
+    sourceId: source.id,
     name: source.name,
-    enemyName: boss ? boss.enemyName : enemyNames[(coords.stageInSegment + coords.microStep - 2) % enemyNames.length],
-    normalEnemyNames: boss ? [boss.enemyName] : enemyNames,
+    enemyName: enemyNames[0],
+    normalEnemyNames: enemyNames,
     enemyCount,
     enemyAsset,
     enemyVariant: Number(segment.enemyVariant),
@@ -348,6 +502,58 @@ function memberCombatStats(member) {
   return Object.fromEntries(subjectIds.map((subject) => [subject, finiteNumber(member.baseStats[subject], `원정대원 baseStats.${subject} 값이 올바르지 않습니다.`) * tierMultiplier * levelMultiplier]));
 }
 
+function careerCombatConfig(careerId) {
+  const config = expeditionCombatBalance.careerStats?.[careerId];
+  assert(config && typeof config === "object" && !Array.isArray(config), `expedition_combat_balance.json careerStats 누락: ${careerId}`);
+  assert(expeditionRoleIds.includes(config.role), `expedition_combat_balance.json role 값이 올바르지 않습니다: ${careerId}/${config.role}`);
+  for (const key of combatStatIds) {
+    const value = finiteNumber(config[key], `expedition_combat_balance.json ${careerId}.${key} 값이 올바르지 않습니다.`);
+    if (key === "attackSpeed") assert(value > 0, `expedition_combat_balance.json ${careerId}.attackSpeed 값은 0보다 커야 합니다.`);
+    else assert(value >= 0, `expedition_combat_balance.json ${careerId}.${key} 값은 0 이상이어야 합니다.`);
+  }
+  assert(config.levelGrowth && typeof config.levelGrowth === "object", `expedition_combat_balance.json ${careerId}.levelGrowth 값이 없습니다.`);
+  return config;
+}
+
+function roleLabel(role) {
+  const label = expeditionCombatBalance.roleLabels?.[role];
+  assert(typeof label === "string" && label.length > 0, `expedition_combat_balance.json roleLabels 누락: ${role}`);
+  return label;
+}
+
+function combatPromotionMultiplier(promotionId) {
+  const multiplier = finiteNumber(expeditionCombatBalance.promotionMultipliers?.[promotionId], `expedition_combat_balance.json promotionMultipliers 누락: ${promotionId}`);
+  assert(multiplier > 0, `expedition_combat_balance.json promotion multiplier 값은 0보다 커야 합니다: ${promotionId}`);
+  return multiplier;
+}
+
+function memberRawSubjectPower(member) {
+  validateExpeditionMember(member, "원정대원");
+  return subjectIds.reduce((sum, subject) => sum + finiteNumber(member.baseStats[subject], `원정대원 baseStats.${subject} 값이 올바르지 않습니다.`), 0);
+}
+
+function memberRoleCombatStats(member) {
+  const config = careerCombatConfig(member.sourceCareerId);
+  const rawPower = memberRawSubjectPower(member);
+  const aptitudeScale = Math.max(0.05, rawPower / 160);
+  const promotionScale = combatPromotionMultiplier(member.promotionTier);
+  const level = Math.max(1, Number(member.level));
+  const growth = config.levelGrowth;
+  const scaled = {};
+  for (const key of ["hp", "attack", "defense", "healing"]) {
+    const base = nonNegativeNumber(config[key], `expedition_combat_balance.json ${member.sourceCareerId}.${key}`);
+    const growthRate = nonNegativeNumber(growth[key] ?? 0, `expedition_combat_balance.json ${member.sourceCareerId}.levelGrowth.${key}`);
+    scaled[key] = Math.max(key === "defense" || key === "healing" ? 0 : 1, Math.round(base * aptitudeScale * promotionScale * (1 + (level - 1) * growthRate)));
+  }
+  const speedGrowth = nonNegativeNumber(growth.attackSpeed ?? 0, `expedition_combat_balance.json ${member.sourceCareerId}.levelGrowth.attackSpeed`);
+  scaled.attackSpeed = roundTo(positiveNumber(config.attackSpeed, `expedition_combat_balance.json ${member.sourceCareerId}.attackSpeed`) + (level - 1) * speedGrowth, 3);
+  return {
+    role: config.role,
+    roleLabel: roleLabel(config.role),
+    ...scaled,
+  };
+}
+
 function memberPower(member) {
   const stats = memberCombatStats(member);
   return subjectIds.reduce((sum, subject) => sum + stats[subject], 0);
@@ -398,6 +604,204 @@ export function expeditionStageExpReward(currentStage) {
 function expeditionMoneyReward(currentStage) {
   createStageView(currentStage);
   return 0;
+}
+
+function battleDurationSeconds(stageView) {
+  const timing = expeditionCombatBalance.timing;
+  assert(timing && typeof timing === "object", "expedition_combat_balance.json timing 값이 없습니다.");
+  if (stageView.isChapterBoss) return positiveNumber(timing.chapterBossSeconds, "expedition_combat_balance.json timing.chapterBossSeconds");
+  if (stageView.isMidBoss) return positiveNumber(timing.midBossSeconds, "expedition_combat_balance.json timing.midBossSeconds");
+  return positiveNumber(timing.normalSeconds, "expedition_combat_balance.json timing.normalSeconds");
+}
+
+function enemyCombatantsForStage(stageView) {
+  const config = combatEnemyConfigForSource(stageView.sourceId, stageView.isBoss);
+  return config.enemies.map((enemy, index) => {
+    assert(enemy && typeof enemy === "object" && !Array.isArray(enemy), `expedition_combat_balance.json enemy 데이터가 객체가 아닙니다: ${stageView.sourceId}[${index}]`);
+    const hp = Math.round(positiveNumber(enemy.hp, `expedition_combat_balance.json ${stageView.sourceId}.enemies[${index}].hp`));
+    return {
+      id: enemy.id || `${stageView.sourceId}-enemy-${index + 1}`,
+      name: enemy.name,
+      slot: index + 1,
+      maxHp: hp,
+      hp,
+      attack: Math.round(positiveNumber(enemy.attack, `expedition_combat_balance.json ${stageView.sourceId}.enemies[${index}].attack`)),
+      defense: Math.round(nonNegativeNumber(enemy.defense, `expedition_combat_balance.json ${stageView.sourceId}.enemies[${index}].defense`)),
+      attackSpeed: positiveNumber(enemy.attackSpeed, `expedition_combat_balance.json ${stageView.sourceId}.enemies[${index}].attackSpeed`),
+      nextAt: roundTo(1 / positiveNumber(enemy.attackSpeed, `expedition_combat_balance.json ${stageView.sourceId}.enemies[${index}].attackSpeed`), 4),
+    };
+  });
+}
+
+function partyCombatantsForExpedition(expedition, stageView) {
+  return partyMembers(expedition).map((member, index) => {
+    const roleStats = memberRoleCombatStats(member);
+    return {
+      id: member.id,
+      name: member.careerName,
+      slot: index + 1,
+      role: roleStats.role,
+      roleLabel: roleStats.roleLabel,
+      maxHp: roleStats.hp,
+      hp: roleStats.hp,
+      attack: roleStats.attack,
+      defense: roleStats.defense,
+      healing: roleStats.healing,
+      attackSpeed: roleStats.attackSpeed,
+      nextAt: roundTo(1 / roleStats.attackSpeed, 4),
+      stagePower: Math.round(partyPowerForStage({ ...createDefaultExpeditionState(), members: [member], partyMemberIds: [member.id], currentStage: stageView.globalStage, highestStage: 0, claimedBossStages: [], trainingExp: 0, chapterRun: createChapterRun(stageView.globalStage, 0), lastResolvedAt: now(), pendingReward: createEmptyPendingReward(now()), log: [], stageIndex: stageView.globalStage - 1, clearedStageCount: 0, lastStageId: null }, stageView)),
+    };
+  });
+}
+
+function firstAlive(list) {
+  return list.find((item) => item.hp > 0) || null;
+}
+
+function firstInjuredAlly(allies) {
+  return allies.find((ally) => ally.hp > 0 && ally.hp < ally.maxHp) || null;
+}
+
+function remainingHp(list) {
+  return Math.max(0, Math.round(list.reduce((sum, item) => sum + Math.max(0, item.hp), 0)));
+}
+
+function battleResultReason(result) {
+  if (result === "win") return "적 전멸";
+  if (result === "loss") return "전멸";
+  return "시간초과";
+}
+
+function combatantHpSnapshot(combatant) {
+  const snapshot = {
+    id: combatant.id,
+    name: combatant.name,
+    slot: combatant.slot,
+    maxHp: Math.max(1, Math.round(combatant.maxHp)),
+    remainingHp: Math.max(0, Math.round(combatant.hp)),
+  };
+  if (combatant.role) {
+    snapshot.role = combatant.role;
+    snapshot.roleLabel = combatant.roleLabel;
+  }
+  return snapshot;
+}
+
+function actionEvent(time, actor, target, kind, value) {
+  const text = kind === "heal"
+    ? `${actor.name} → ${target.name} 회복 ${value}`
+    : `${actor.name} → ${target.name} 피해 ${value}`;
+  return {
+    time: roundTo(time, 2),
+    actor: actor.name,
+    target: target.name,
+    kind,
+    value,
+    text,
+  };
+}
+
+function buildBattleReport(stageView, result, durationSeconds, party, enemies, events, actionCounts) {
+  const roundedDuration = roundTo(durationSeconds, 2);
+  return {
+    id: `${stageView.globalStage}-${result}-${Math.round(roundedDuration * 1000)}-${events.length}`,
+    stage: stageView.globalStage,
+    stageId: stageView.id,
+    stageName: stageView.name,
+    enemyName: stageView.enemyName,
+    result,
+    resultReason: battleResultReason(result),
+    durationSeconds: roundedDuration,
+    partyRemainingHp: remainingHp(party),
+    enemyRemainingHp: remainingHp(enemies),
+    partyHp: party.map(combatantHpSnapshot),
+    enemyHp: enemies.map(combatantHpSnapshot),
+    events: events.slice(-32),
+    actionCounts,
+  };
+}
+
+export function simulateExpeditionBattle(state, currentStage = null) {
+  const expedition = state?.expedition ? state.expedition : state;
+  validateExpeditionState(expedition, "save.expedition");
+  assert(expedition.partyMemberIds.length > 0, "원정대에 편성된 대원이 없어 전투를 시뮬레이션할 수 없습니다.");
+  const stageView = createStageView(currentStage || expedition.currentStage);
+  const party = partyCombatantsForExpedition(expedition, stageView);
+  const enemies = enemyCombatantsForStage(stageView);
+  const limitSeconds = battleDurationSeconds(stageView);
+  const events = [];
+  const actionCounts = { allies: {}, enemies: {} };
+  let result = "timeout";
+  let clock = 0;
+
+  while (clock <= limitSeconds && firstAlive(party) && firstAlive(enemies)) {
+    const aliveActors = [
+      ...party.filter((actor) => actor.hp > 0).map((actor) => ({ side: "ally", actor })),
+      ...enemies.filter((actor) => actor.hp > 0).map((actor) => ({ side: "enemy", actor })),
+    ];
+    const nextAt = Math.min(...aliveActors.map((item) => item.actor.nextAt));
+    if (!Number.isFinite(nextAt) || nextAt > limitSeconds) break;
+    clock = nextAt;
+    const acting = aliveActors
+      .filter((item) => Math.abs(item.actor.nextAt - nextAt) < 0.0001)
+      .sort((a, b) => (a.side === b.side ? a.actor.slot - b.actor.slot : a.side === "ally" ? -1 : 1));
+
+    for (const item of acting) {
+      const actor = item.actor;
+      if (actor.hp <= 0) continue;
+      if (item.side === "ally") {
+        actionCounts.allies[actor.id] = (actionCounts.allies[actor.id] || 0) + 1;
+        if (actor.role === "healer") {
+          const target = firstInjuredAlly(party);
+          if (target && actor.healing > 0) {
+            const value = Math.min(target.maxHp - target.hp, Math.max(1, Math.round(actor.healing)));
+            target.hp += value;
+            events.push(actionEvent(clock, actor, target, "heal", value));
+          }
+        } else {
+          const target = firstAlive(enemies);
+          if (target) {
+            const value = Math.max(1, Math.round(actor.attack - target.defense * 0.6));
+            target.hp = Math.max(0, target.hp - value);
+            events.push(actionEvent(clock, actor, target, "damage", value));
+          }
+        }
+      } else {
+        actionCounts.enemies[actor.id] = (actionCounts.enemies[actor.id] || 0) + 1;
+        const target = firstAlive(party);
+        if (target) {
+          const value = Math.max(1, Math.round(actor.attack - target.defense * 0.55));
+          target.hp = Math.max(0, target.hp - value);
+          events.push(actionEvent(clock, actor, target, "damage", value));
+        }
+      }
+      actor.nextAt = roundTo(actor.nextAt + 1 / actor.attackSpeed, 4);
+      if (!firstAlive(enemies)) {
+        result = "win";
+        break;
+      }
+      if (!firstAlive(party)) {
+        result = "loss";
+        break;
+      }
+    }
+    if (result === "win" || result === "loss") break;
+  }
+
+  if (result === "timeout" && !firstAlive(enemies)) result = "win";
+  if (result === "timeout" && !firstAlive(party)) result = "loss";
+
+  return {
+    stage: stageView,
+    won: result === "win",
+    result,
+    durationSeconds: result === "timeout" ? limitSeconds : clock,
+    party: party.map(({ nextAt, ...actor }) => actor),
+    enemies: enemies.map(({ nextAt, ...enemy }) => enemy),
+    events,
+    actionCounts,
+    report: buildBattleReport(stageView, result, result === "timeout" ? limitSeconds : clock, party, enemies, events, actionCounts),
+  };
 }
 
 function createBaseStatsFromRawStats(rawStats, careerId, powerMultiplier, path) {
@@ -509,6 +913,7 @@ export function migrateLegacyExpeditionState(expedition, companions = [], create
     trainingExp: Math.max(0, Math.floor(finiteNumber(requireOwn(expedition, "trainingExp", "legacy expedition"), "legacy expedition trainingExp 값이 올바르지 않습니다."))),
     chapterRun: requireOwn(expedition, "chapterRun", "legacy expedition"),
     lastResolvedAt: Math.max(0, Math.floor(finiteNumber(requireOwn(expedition, "lastResolvedAt", "legacy expedition"), "legacy expedition lastResolvedAt 값이 올바르지 않습니다."))),
+    pendingReward: normalizePendingReward(hasOwn(expedition, "pendingReward") ? expedition.pendingReward : null, createdAt),
     log: requireOwn(expedition, "log", "legacy expedition"),
   }, requireOwn(expedition, "lastStageId", "legacy expedition"));
   validateExpeditionState(migrated, "save.expedition");
@@ -520,6 +925,7 @@ export function registerExpeditionMembersFromCompanions(state, companions, { aut
   const next = cloneState(state);
   validateExpeditionState(next.expedition, "save.expedition");
   const existingSourceKeys = new Set(next.expedition.members.map((member) => member.sourceKey));
+  const wasPartyEmpty = next.expedition.partyMemberIds.length === 0;
   const added = [];
   for (const companion of companions) {
     assertObject(companion, "등록할 원정대원 후보");
@@ -531,6 +937,7 @@ export function registerExpeditionMembersFromCompanions(state, companions, { aut
     added.push(member);
     if (autoParty && next.expedition.partyMemberIds.length < expeditionPartySize) next.expedition.partyMemberIds.push(member.id);
   }
+  if (wasPartyEmpty && next.expedition.partyMemberIds.length > 0) next.expedition.lastResolvedAt = now();
   if (added.length > 0) pushExpeditionLog(next.expedition, `원정대원 ${added.length}명이 등록되었다.`, "good");
   next.expedition = expeditionAliases(next.expedition);
   validateExpeditionState(next.expedition, "save.expedition");
@@ -545,6 +952,7 @@ export function addDebugExpeditionMembers(state, count, { autoParty = true } = {
   validateExpeditionState(next.expedition, "save.expedition");
   const existingSourceKeys = new Set(next.expedition.members.map((member) => member.sourceKey));
   const existingDebugCount = next.expedition.members.filter((member) => member.sourceKey.startsWith("debug:")).length;
+  const wasPartyEmpty = next.expedition.partyMemberIds.length === 0;
   const createdAt = now();
   const added = [];
   for (let index = 0; index < additionCount; index += 1) {
@@ -556,6 +964,7 @@ export function addDebugExpeditionMembers(state, count, { autoParty = true } = {
     added.push(member);
     if (autoParty && next.expedition.partyMemberIds.length < expeditionPartySize) next.expedition.partyMemberIds.push(member.id);
   }
+  if (wasPartyEmpty && next.expedition.partyMemberIds.length > 0) next.expedition.lastResolvedAt = now();
   if (added.length > 0) pushExpeditionLog(next.expedition, `디버그 대원 ${added.length}명이 합류했다.`, "good");
   next.expedition = expeditionAliases(next.expedition);
   validateExpeditionState(next.expedition, "save.expedition");
@@ -564,8 +973,202 @@ export function addDebugExpeditionMembers(state, count, { autoParty = true } = {
 
 export function normalizeExpeditionState(state) {
   const next = cloneState(state);
+  if (next.expedition) next.expedition.pendingReward = normalizePendingReward(next.expedition.pendingReward, now());
   validateExpeditionState(next.expedition, "save.expedition");
   next.expedition = expeditionAliases(next.expedition);
+  return next;
+}
+
+function rewardForBattle(stageView, expedition) {
+  const firstBossClear = stageView.isBoss && !expedition.claimedBossStages.includes(stageView.globalStage);
+  const diamonds = firstBossClear
+    ? stageView.isChapterBoss
+      ? Math.round(expeditionBalance.chapterBossFirstClearDiamonds * expeditionBalance.bossDiamondGrowth ** (stageView.chapter - 1))
+      : Math.round(expeditionBalance.midBossFirstClearDiamonds * expeditionBalance.bossDiamondGrowth ** (stageView.chapter - 1))
+    : 0;
+  return {
+    money: expeditionMoneyReward(stageView.globalStage),
+    trainingExp: expeditionStageExpReward(stageView.globalStage),
+    diamonds,
+    realEstateCash: realEstateExpeditionStageReward(stageView),
+  };
+}
+
+function pendingSummary(pending) {
+  const pieces = [`전투 ${pending.battles}회`, `승리 ${pending.wins}회`];
+  if (pending.losses > 0) pieces.push(`실패 ${pending.losses}회`);
+  const rewards = [];
+  if (pending.trainingExp > 0) rewards.push(`EXP ${pending.trainingExp}`);
+  if (pending.money > 0) rewards.push(`돈 ${pending.money}`);
+  if (pending.realEstateCash > 0) rewards.push(`부동산 ${pending.realEstateCash}`);
+  if (pending.diamonds > 0) rewards.push(`다이아 ${pending.diamonds}`);
+  return rewards.length > 0 ? `${pieces.join(" · ")} / ${rewards.join(" · ")}` : pieces.join(" · ");
+}
+
+function emptyExpeditionReward() {
+  return { money: 0, trainingExp: 0, diamonds: 0, realEstateCash: 0 };
+}
+
+function addRewardTotals(total, reward) {
+  total.money += Math.max(0, Math.floor(reward.money));
+  total.trainingExp += Math.max(0, Math.floor(reward.trainingExp));
+  total.diamonds += Math.max(0, Math.floor(reward.diamonds));
+  total.realEstateCash += Math.max(0, Math.floor(reward.realEstateCash));
+}
+
+function rewardDeliveryOption(options) {
+  const delivery = options?.rewardDelivery || "pending";
+  assert(["instant", "pending"].includes(delivery), `원정대 보상 지급 방식이 올바르지 않습니다: ${delivery}`);
+  return delivery;
+}
+
+function instantRewardText(reward) {
+  const pieces = [];
+  if (reward.trainingExp > 0) pieces.push(`EXP +${reward.trainingExp}`);
+  if (reward.realEstateCash > 0) pieces.push(`부동산 +${reward.realEstateCash}`);
+  if (reward.diamonds > 0) pieces.push(`다이아 +${reward.diamonds}`);
+  if (reward.money > 0) pieces.push(`돈 +${reward.money}`);
+  return pieces.join(" · ");
+}
+
+function grantInstantExpeditionReward(state, reward, rewardedAt) {
+  let next = state;
+  next.money = finiteNumber(next.money, "save.money 값이 올바르지 않습니다.") + Math.max(0, Math.floor(reward.money));
+  next.diamonds = finiteNumber(next.diamonds, "save.diamonds 값이 올바르지 않습니다.") + Math.max(0, Math.floor(reward.diamonds));
+  next.expedition.trainingExp += Math.max(0, Math.floor(reward.trainingExp));
+  if (reward.realEstateCash > 0) {
+    next = grantRealEstateExpeditionPendingCash(next, reward.realEstateCash, rewardedAt);
+  }
+  return next;
+}
+
+function recordLastBattleOnly(expedition, battle, resolvedAt) {
+  const previous = expedition.pendingReward || createEmptyPendingReward(resolvedAt);
+  const pending = { ...previous, lastBattle: battle.report };
+  if (!pendingRewardHasValue(previous) && Number(previous.battles) <= 0 && Number(previous.updatedAt) <= 0) {
+    pending.updatedAt = resolvedAt;
+  }
+  expedition.pendingReward = pending;
+}
+
+function addPendingBattleResult(expedition, battle, reward, fromStage, resolvedAt) {
+  const previous = expedition.pendingReward || createEmptyPendingReward(resolvedAt);
+  const pending = pendingRewardHasValue(previous) || Number(previous.battles) > 0
+    ? { ...previous }
+    : createEmptyPendingReward(resolvedAt, previous.lastBattle || null);
+  if (pending.startedAt === 0) pending.startedAt = resolvedAt;
+  if (pending.fromStage === null) pending.fromStage = fromStage;
+  pending.money += Math.max(0, Math.floor(reward.money));
+  pending.trainingExp += Math.max(0, Math.floor(reward.trainingExp));
+  pending.diamonds += Math.max(0, Math.floor(reward.diamonds));
+  pending.realEstateCash += Math.max(0, Math.floor(reward.realEstateCash));
+  pending.battles += 1;
+  if (battle.won) pending.wins += 1;
+  else pending.losses += 1;
+  pending.updatedAt = resolvedAt;
+  pending.toStage = expedition.currentStage;
+  pending.lastBattle = battle.report;
+  pending.summaryText = pendingSummary(pending);
+  expedition.pendingReward = pending;
+}
+
+function applyBattleResultToExpedition(state, battle, resolvedAt, options = {}) {
+  let next = state;
+  let expedition = next.expedition;
+  const rewardDelivery = rewardDeliveryOption(options);
+  const currentStage = expedition.currentStage;
+  const stageView = battle.stage;
+  let reward = emptyExpeditionReward();
+
+  if (battle.won) {
+    reward = rewardForBattle(stageView, expedition);
+    const nextStage = clamp(currentStage + 1, 1, expeditionBalance.maxStage);
+    expedition.chapterRun = createChapterRun(nextStage, stageView.isChapterBoss ? 0 : expedition.chapterRun.tempExp + reward.trainingExp);
+    expedition.currentStage = nextStage;
+    expedition.highestStage = Math.max(expedition.highestStage, currentStage);
+    if (stageView.isBoss && !expedition.claimedBossStages.includes(currentStage)) {
+      expedition.claimedBossStages.push(currentStage);
+    }
+  } else {
+    const retryStage = stageView.isBoss ? stageStartForBoss(currentStage) : currentStage;
+    expedition.currentStage = retryStage;
+    expedition.chapterRun = createChapterRun(retryStage, expedition.chapterRun.tempExp);
+    if (stageView.isBoss) battle.report.resultReason = "보스 실패 롤백";
+  }
+
+  expedition.lastResolvedAt = resolvedAt;
+  if (rewardDelivery === "pending") {
+    addPendingBattleResult(expedition, battle, reward, currentStage, resolvedAt);
+  } else {
+    next = grantInstantExpeditionReward(next, reward, resolvedAt);
+    expedition = next.expedition;
+    recordLastBattleOnly(expedition, battle, resolvedAt);
+  }
+  Object.assign(expedition, expeditionAliases(expedition, stageView.id));
+  next.expedition = expedition;
+  return { state: next, reward };
+}
+
+export function resolveExpeditionAutoCombat(state, resolvedAt = now(), options = {}) {
+  assert(state && typeof state === "object", "원정대 자동 정산 state 데이터가 객체가 아닙니다.");
+  if (!state.expedition || !Array.isArray(state.expedition.partyMemberIds) || state.expedition.partyMemberIds.length === 0) return state;
+
+  let next = normalizeExpeditionState(state);
+  let expedition = next.expedition;
+  const rewardDelivery = rewardDeliveryOption(options);
+  const timestamp = Math.max(0, Math.floor(finiteNumber(resolvedAt, "원정대 자동 정산 시각 값이 올바르지 않습니다.")));
+  const elapsedMs = Math.max(0, timestamp - Number(expedition.lastResolvedAt));
+  const capMs = positiveNumber(expeditionCombatBalance.timing.offlineCapHours, "expedition_combat_balance.json timing.offlineCapHours") * 60 * 60 * 1000;
+  const effectiveMs = Math.min(elapsedMs, capMs);
+  const resolutionStart = timestamp - effectiveMs;
+  let consumedMs = 0;
+  let processed = 0;
+  let wins = 0;
+  let losses = 0;
+  const totalReward = emptyExpeditionReward();
+  const maxBattles = Math.max(1, Math.floor(positiveNumber(expeditionCombatBalance.timing.maxBattlesPerResolution, "expedition_combat_balance.json timing.maxBattlesPerResolution")));
+
+  while (processed < maxBattles) {
+    const stage = createStageView(expedition.currentStage);
+    const durationMs = battleDurationSeconds(stage) * 1000;
+    if (consumedMs + durationMs > effectiveMs) break;
+    const battle = simulateExpeditionBattle({ ...next, expedition });
+    const applied = applyBattleResultToExpedition(next, battle, Math.floor(resolutionStart + consumedMs + durationMs), { rewardDelivery });
+    next = applied.state;
+    expedition = next.expedition;
+    addRewardTotals(totalReward, applied.reward);
+    consumedMs += durationMs;
+    processed += 1;
+    if (battle.won) wins += 1;
+    else losses += 1;
+  }
+
+  if (processed <= 0) return state;
+  expedition.lastResolvedAt = processed >= maxBattles && consumedMs < effectiveMs ? timestamp : Math.floor(resolutionStart + consumedMs);
+  next.expedition = expeditionAliases(expedition, expedition.pendingReward.lastBattle?.stageId || expedition.lastStageId);
+  const rewardText = instantRewardText(totalReward);
+  const logPrefix = rewardDelivery === "instant" ? "자동 원정 보상 지급" : "자동 원정 정산";
+  pushExpeditionLog(next.expedition, `${logPrefix}: 전투 ${processed}회 · 승리 ${wins}회 · 실패 ${losses}회${rewardText ? ` · ${rewardText}` : ""}`, wins > 0 ? "good" : "warn");
+  validateExpeditionState(next.expedition, "save.expedition");
+  return next;
+}
+
+export function claimExpeditionPendingReward(state, option = "base", claimedAt = now()) {
+  assert(option === "base", `아직 지원하지 않는 원정대 보상 수령 방식입니다: ${option}`);
+  let next = normalizeExpeditionState(state);
+  const pending = next.expedition.pendingReward;
+  if (!pendingRewardHasValue(pending)) return next;
+  next.money = finiteNumber(next.money, "save.money 값이 올바르지 않습니다.") + pending.money;
+  next.diamonds = finiteNumber(next.diamonds, "save.diamonds 값이 올바르지 않습니다.") + pending.diamonds;
+  next.expedition.trainingExp += pending.trainingExp;
+  if (pending.realEstateCash > 0) {
+    next = grantRealEstateExpeditionPendingCash(next, pending.realEstateCash, claimedAt);
+  }
+  const lastBattle = pending.lastBattle;
+  pushExpeditionLog(next.expedition, `원정대 보상 수령: EXP ${pending.trainingExp} · 부동산 자금 ${pending.realEstateCash} · 다이아 ${pending.diamonds}`, "good");
+  next.expedition.pendingReward = createEmptyPendingReward(claimedAt, lastBattle);
+  next.expedition = expeditionAliases(next.expedition);
+  validateExpeditionState(next.expedition, "save.expedition");
   return next;
 }
 
@@ -574,6 +1177,7 @@ function memberView(member, stageView, slot = null) {
   assert(career, `careers.json에서 직업을 찾을 수 없습니다: ${member.sourceCareerId}`);
   assert(typeof career.battleProp === "string" && career.battleProp.length > 0, `careers.json battleProp 값이 없습니다: ${career.id}`);
   const stats = memberCombatStats(member);
+  const roleStats = memberRoleCombatStats(member);
   const topSubjects = subjectIds
     .slice()
     .sort((a, b) => stats[b] - stats[a])
@@ -589,6 +1193,9 @@ function memberView(member, stageView, slot = null) {
     levelCost: expeditionLevelCost(member),
     power: Math.round(memberPower(member)),
     stagePower: stageView ? Math.round(partyPowerForStage({ ...createDefaultExpeditionState(), members: [member], partyMemberIds: [member.id], currentStage: stageView.globalStage, highestStage: 0, claimedBossStages: [], trainingExp: 0, chapterRun: createChapterRun(stageView.globalStage, 0), lastResolvedAt: now(), log: [], stageIndex: stageView.globalStage - 1, clearedStageCount: 0, lastStageId: null }, stageView)) : Math.round(memberPower(member)),
+    role: roleStats.role,
+    roleLabel: roleStats.roleLabel,
+    combatStats: roleStats,
     battleProp: career.battleProp,
     topSubjectLabels: topSubjects.map((subject) => subjectLabels[subject]),
     topSubjectShortLabels: topSubjects.map((subject) => subjectShortLabels[subject]),
@@ -599,12 +1206,31 @@ export function createExpeditionViewModel(state) {
   const normalized = normalizeExpeditionState(state);
   const expedition = normalized.expedition;
   const stage = createStageView(expedition.currentStage);
-  const party = partyMembers(expedition).map((member, index) => memberView(member, stage, index + 1));
-  const partyPower = Math.round(partyPowerForStage(expedition, stage));
-  const enemyPower = requiredPowerForStage(expedition.currentStage);
+  const baseParty = partyMembers(expedition).map((member, index) => memberView(member, stage, index + 1));
+  const battlePreview = baseParty.length > 0 ? simulateExpeditionBattle(normalized) : null;
+  const partyHpById = new Map((battlePreview?.report.partyHp || []).map((snapshot) => [snapshot.id, snapshot]));
+  const party = baseParty.map((member) => {
+    const hp = partyHpById.get(member.id);
+    return {
+      ...member,
+      maxHp: hp?.maxHp ?? member.combatStats.hp,
+      remainingHp: hp?.remainingHp ?? member.combatStats.hp,
+    };
+  });
+  const enemyHpById = new Map((battlePreview?.report.enemyHp || []).map((snapshot) => [snapshot.id, snapshot]));
+  const enemies = enemyCombatantsForStage(stage).map(({ nextAt, ...enemy }) => {
+    const hp = enemyHpById.get(enemy.id);
+    return {
+      ...enemy,
+      remainingHp: hp?.remainingHp ?? enemy.hp,
+    };
+  });
+  const partyPower = Math.round(party.reduce((sum, member) => sum + member.combatStats.hp * 0.35 + member.combatStats.attack * 1.4 + member.combatStats.defense * 2 + member.combatStats.healing * 1.15, 0));
+  const enemyPower = Math.round(enemies.reduce((sum, enemy) => sum + enemy.maxHp * 0.3 + enemy.attack * 1.5 + enemy.defense * 2, 0));
   const rewardExp = expeditionStageExpReward(expedition.currentStage);
   const rewardMoney = expeditionMoneyReward(expedition.currentStage);
   const bossReward = stage.isChapterBoss ? Math.round(expeditionBalance.chapterBossFirstClearDiamonds * expeditionBalance.bossDiamondGrowth ** (stage.chapter - 1)) : Math.round(expeditionBalance.midBossFirstClearDiamonds * expeditionBalance.bossDiamondGrowth ** (stage.chapter - 1));
+  const pendingReward = expedition.pendingReward;
 
   return {
     stage,
@@ -615,6 +1241,7 @@ export function createExpeditionViewModel(state) {
     highestStage: expedition.highestStage,
     progressPercent: stage.progressPercent,
     partyMembers: party,
+    enemyMembers: enemies,
     partyPower,
     enemyPower,
     rewardExp,
@@ -622,7 +1249,13 @@ export function createExpeditionViewModel(state) {
     bossReward,
     bossRewardClaimed: expedition.claimedBossStages.includes(expedition.currentStage),
     ready: party.length > 0,
-    canClear: party.length > 0 && partyPower >= enemyPower,
+    canClear: Boolean(battlePreview?.won),
+    battlePreview,
+    battleDurationSeconds: battleDurationSeconds(stage),
+    pendingReward,
+    hasPendingReward: pendingRewardHasValue(pendingReward),
+    recentCombatEvents: pendingReward.lastBattle?.events?.slice(-6) || battlePreview?.events?.slice(-6) || [],
+    lastBattle: pendingReward.lastBattle,
     focusLabels: stage.focusSubjects.map((subject) => subjectLabels[subject]),
     weakLabels: stage.weakSubjects.map((subject) => subjectLabels[subject]),
     resistLabels: stage.resistSubjects.map((subject) => subjectLabels[subject]),
@@ -687,6 +1320,7 @@ export function createExpeditionManagementViewModel(state) {
     upgradeableCount,
     fusionCandidates,
     trainingExp: expedition.trainingExp,
+    pendingReward: expedition.pendingReward,
     log: visibleLog,
     currentStage: expedition.currentStage,
     highestStage: expedition.highestStage,
@@ -707,6 +1341,9 @@ export function createExpeditionSummary(state) {
     partyPower: view.partyPower,
     enemyPower: view.enemyPower,
     trainingExp: expedition.trainingExp,
+    pendingTrainingExp: expedition.pendingReward.trainingExp,
+    pendingRewards: expedition.pendingReward.battles,
+    hasPendingReward: pendingRewardHasValue(expedition.pendingReward),
     diamonds: Number(state.diamonds),
   };
 }
@@ -717,12 +1354,14 @@ export function assignExpeditionMember(state, memberId, slotIndex = expeditionPa
   const member = expedition.members.find((candidate) => candidate.id === memberId);
   assert(member, `원정대원을 찾을 수 없습니다: ${memberId}`);
   if (expedition.partyMemberIds.includes(memberId)) return next;
+  const wasPartyEmpty = expedition.partyMemberIds.length === 0;
   const slot = clamp(Math.floor(finiteNumber(slotIndex, "원정대 편성 슬롯 값이 올바르지 않습니다.")), 0, expeditionPartySize - 1);
   if (slot < expedition.partyMemberIds.length) expedition.partyMemberIds[slot] = memberId;
   else {
     assert(expedition.partyMemberIds.length < expeditionPartySize, "원정대 파티가 가득 찼습니다.");
     expedition.partyMemberIds.push(memberId);
   }
+  if (wasPartyEmpty && expedition.partyMemberIds.length > 0) expedition.lastResolvedAt = now();
   pushExpeditionLog(expedition, `${member.careerName} 대원을 파티에 편성했다.`, "info");
   next.expedition = expeditionAliases(expedition);
   return next;
@@ -739,6 +1378,45 @@ export function removeExpeditionMemberFromParty(state, memberId) {
     pushExpeditionLog(expedition, `${member.careerName}를 파티에서 해제했다.`, "info");
   }
   next.expedition = expeditionAliases(expedition);
+  return next;
+}
+
+function promotionOrder(member) {
+  const promotion = promotionById.get(member.promotionTier);
+  assert(promotion, `지원하지 않는 원정대 승급 단계입니다: ${member.promotionTier}`);
+  return Number(promotion.order);
+}
+
+export function assignRecommendedExpeditionParty(state) {
+  const next = normalizeExpeditionState(state);
+  const expedition = next.expedition;
+  if (expedition.members.length === 0) return next;
+  const stage = createStageView(expedition.currentStage);
+  const recommended = expedition.members
+    .slice()
+    .map((member, index) => ({
+      member,
+      index,
+      stagePower: memberView(member, stage).stagePower,
+      promotionOrder: promotionOrder(member),
+      level: Math.max(1, Math.floor(Number(member.level))),
+      createdAt: Math.max(0, Math.floor(Number(member.createdAt))),
+    }))
+    .sort((left, right) => (
+      right.stagePower - left.stagePower ||
+      right.promotionOrder - left.promotionOrder ||
+      right.level - left.level ||
+      left.createdAt - right.createdAt ||
+      left.index - right.index
+    ))
+    .slice(0, expeditionPartySize)
+    .map((entry) => entry.member.id);
+  const wasPartyEmpty = expedition.partyMemberIds.length === 0;
+  expedition.partyMemberIds = recommended;
+  if (wasPartyEmpty && recommended.length > 0) expedition.lastResolvedAt = now();
+  pushExpeditionLog(expedition, `추천 편성: 전투력순 상위 ${recommended.length}명을 파티에 편성했다.`, "good");
+  next.expedition = expeditionAliases(expedition);
+  validateExpeditionState(next.expedition, "save.expedition");
   return next;
 }
 
@@ -806,38 +1484,22 @@ export function fuseExpeditionMembers(state, careerId, promotionTier) {
 }
 
 export function completeExpeditionStage(state) {
-  const next = normalizeExpeditionState(state);
-  const view = createExpeditionViewModel(next);
-  assert(view.ready, "원정대에 편성된 대원이 없어 Stage를 돌파할 수 없습니다.");
-
-  const expedition = next.expedition;
+  let next = normalizeExpeditionState(state);
+  let expedition = next.expedition;
+  assert(expedition.partyMemberIds.length > 0, "원정대에 편성된 대원이 없어 Stage를 돌파할 수 없습니다.");
+  const battle = simulateExpeditionBattle(next);
+  const stage = battle.stage;
   const currentStage = expedition.currentStage;
-  if (!view.canClear) {
-    const retryStage = view.stage.isBoss ? stageStartForBoss(currentStage) : currentStage;
-    expedition.currentStage = retryStage;
-    expedition.lastResolvedAt = now();
-    expedition.chapterRun = createChapterRun(retryStage, expedition.chapterRun.tempExp);
-    pushExpeditionLog(expedition, `${currentStage} Stage ${view.stage.enemyName} 돌파 실패: 전투력 부족`, "warn");
-    next.expedition = expeditionAliases(expedition, view.stage.id);
-    validateExpeditionState(next.expedition, "save.expedition");
-    return next;
+  const applied = applyBattleResultToExpedition(next, battle, now(), { rewardDelivery: "instant" });
+  next = applied.state;
+  expedition = next.expedition;
+  if (battle.won) {
+    const rewardText = instantRewardText(applied.reward);
+    pushExpeditionLog(expedition, `${currentStage} Stage ${stage.enemyName} 전투 승리${rewardText ? `: ${rewardText}` : ""}`, "good");
+  } else {
+    pushExpeditionLog(expedition, `${currentStage} Stage ${stage.enemyName} 전투 실패: ${stage.isBoss ? "구간 시작으로 회귀" : "현재 Stage 유지"}`, "warn");
   }
-
-  const nextStage = clamp(currentStage + 1, 1, expeditionBalance.maxStage);
-  next.money = finiteNumber(next.money, "save.money 값이 올바르지 않습니다.") + view.rewardMoney;
-  expedition.trainingExp += view.rewardExp;
-  expedition.chapterRun = createChapterRun(nextStage, view.stage.isChapterBoss ? 0 : expedition.chapterRun.tempExp + view.rewardExp);
-  expedition.currentStage = nextStage;
-  expedition.highestStage = Math.max(expedition.highestStage, currentStage);
-  expedition.lastResolvedAt = now();
-  if (view.stage.isBoss && !expedition.claimedBossStages.includes(currentStage)) {
-    expedition.claimedBossStages.push(currentStage);
-    next.diamonds = finiteNumber(next.diamonds, "save.diamonds 값이 올바르지 않습니다.") + view.bossReward;
-  }
-  pushExpeditionLog(expedition, `${currentStage} Stage ${view.stage.enemyName} 돌파: EXP ${view.rewardExp} 획득`, "good");
-  next.expedition = expeditionAliases(expedition, view.stage.id);
-  const funded = grantRealEstateExpeditionStageReward(next, view.stage);
-  pushExpeditionLog(funded.state.expedition, `부동산 자금 ${funded.reward} 획득`, "good");
-  validateExpeditionState(funded.state.expedition, "save.expedition");
-  return funded.state;
+  next.expedition = expeditionAliases(expedition, stage.id);
+  validateExpeditionState(next.expedition, "save.expedition");
+  return next;
 }
