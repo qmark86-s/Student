@@ -1,5 +1,4 @@
 import battleRoadConfig from "../../../data/battle_road_config.json";
-import careerCollectionData from "../../../data/career_collection_effects.json";
 import careers from "../../../data/careers.json";
 import curriculumAttackVfx from "../../../data/curriculum_attack_vfx.json";
 import growthLevels from "../../../data/growth_levels.json";
@@ -7,6 +6,7 @@ import studentProgression from "../../../data/student_progression_balance.json";
 import suneungBalance from "../../../data/suneung_balance.json";
 import universities from "../../../data/universities.json";
 import { educationPointMultiplier } from "./education.js";
+import { collectionBonuses } from "./collection.js";
 import { equippedEquipment, equippedEquipmentPower } from "./equipment.js";
 import { resolveSuneungFromEsd } from "./suneung.js";
 import { registerExpeditionMembersFromCompanions } from "./expedition.js";
@@ -408,31 +408,12 @@ function battleHasNext(battle) {
 
 const lowestUniversity = universities.slice().sort((a, b) => finiteNumber(b.gameRank, `universities.json gameRank 값이 올바르지 않습니다: ${b.id}`) - finiteNumber(a.gameRank, `universities.json gameRank 값이 올바르지 않습니다: ${a.id}`))[0];
 
-const collectionEffectMaxStack = new Map(careerCollectionData.collectionEffects.map((effect) => [effect.id, finiteNumber(effect.maxStack, `career_collection_effects.json maxStack 값이 올바르지 않습니다: ${effect.id}`)]));
-const careerCollectionEffectByCareerId = new Map(careerCollectionData.careerCollectionEffects.map((effect) => [effect.careerId, effect]));
-
-// 도감(발견 직업) 영구 보너스 → ESD. 적성을 대체하는 메타.
-// 발견 = careerAlumni + history + archive(history는 회차를 넘어 영구 보존됨).
+// 도감 exam_focus(시험 집중) → 수능 결과 ESD.
+// study_gain은 학생 전투 공부량(claimEnemyReward 배율)으로 적용되므로 여기서 제외(중복 방지).
 function suneungCollectionEsd(state, mapping) {
-  const discovered = new Set();
-  for (const list of [state.careerAlumni, state.history, state.archive]) {
-    if (!Array.isArray(list)) continue;
-    for (const entry of list) {
-      if (entry && typeof entry.careerId === "string" && entry.careerId.length > 0) discovered.add(entry.careerId);
-    }
-  }
-  let examFocus = 0;
-  let studyGain = 0;
-  for (const careerId of discovered) {
-    const link = careerCollectionEffectByCareerId.get(careerId);
-    if (!link) continue;
-    if (link.effectId === "exam_focus") examFocus += finiteNumber(link.value, `도감 exam_focus 값이 올바르지 않습니다: ${careerId}`);
-    else if (link.effectId === "study_gain") studyGain += finiteNumber(link.value, `도감 study_gain 값이 올바르지 않습니다: ${careerId}`);
-  }
-  examFocus = Math.min(collectionEffectMaxStack.get("exam_focus") || 0, examFocus);
-  studyGain = Math.min(collectionEffectMaxStack.get("study_gain") || 0, studyGain);
-  const raw = examFocus * finiteNumber(mapping.examFocusEsdScale, "esdMapping.examFocusEsdScale 값이 올바르지 않습니다.") + studyGain * finiteNumber(mapping.studyGainEsdScale, "esdMapping.studyGainEsdScale 값이 올바르지 않습니다.");
-  return Math.min(finiteNumber(mapping.collectionEsdCap, "esdMapping.collectionEsdCap 값이 올바르지 않습니다."), raw);
+  const examFocus = collectionBonuses(state).exam_focus;
+  const scale = finiteNumber(mapping.examFocusEsdScale, "esdMapping.examFocusEsdScale 값이 올바르지 않습니다.");
+  return Math.min(finiteNumber(mapping.collectionEsdCap, "esdMapping.collectionEsdCap 값이 올바르지 않습니다."), examFocus * scale);
 }
 
 // 게임 상태 → 유효성장일(ESD) 환산. 공부(누적 스탯)·교육(영구)·장비·도감(영구)·결제를 합산한다.
@@ -551,7 +532,8 @@ function claimEnemyReward(state, enemy) {
   if (enemy.rewardClaimed) return 0;
   const baseReward = finiteNumber(enemy.studyPointReward, `전투 studyPointReward 값이 올바르지 않습니다: ${enemy.id}`);
   const multiplier = educationPointMultiplier(state, enemy.subjects);
-  const reward = Math.max(baseReward, Math.round(baseReward * multiplier));
+  const studyGainBonus = collectionBonuses(state).study_gain; // 도감 학습 효율(공부량 증가)
+  const reward = Math.max(baseReward, Math.round(baseReward * multiplier * (1 + studyGainBonus)));
   state.current.unspentStudyPoints = finiteNumber(state.current.unspentStudyPoints, "current.unspentStudyPoints 값이 올바르지 않습니다.") + reward;
   state.current.totalStudyPoints = finiteNumber(state.current.totalStudyPoints, "current.totalStudyPoints 값이 올바르지 않습니다.") + reward;
   enemy.rewardClaimed = true;

@@ -1,5 +1,8 @@
 // 직장(work) 수입 적립. 졸업생(careerAlumni)의 incomePerMinute를 실시간/오프라인으로 money에 누적한다.
 // 기존에 incomePerMinute는 직장 탭 표시에만 쓰이고 실제 적립 코드가 없었다(미구현). 이를 구현한다.
+// 도감 보너스: work_income(수입 배율), offline_cap(오프라인 한도 +시간) 적용.
+
+import { collectionBonuses } from "./collection.js";
 
 const WORK_OFFLINE_CAP_HOURS = 12;
 
@@ -9,10 +12,17 @@ function cloneState(state) {
   return globalThis.structuredClone ? structuredClone(state) : JSON.parse(JSON.stringify(state));
 }
 
-// 근무 중 졸업생 분당 수입 합계(현재는 모든 졸업생이 수입에 기여 — 직장 탭 표시와 동일).
+// 도감 work_income 보너스가 적용된 분당 수입 합계(직장 탭 표시와 동일).
 export function workIncomePerMinute(state) {
   if (!Array.isArray(state.careerAlumni)) return 0;
-  return state.careerAlumni.reduce((sum, alumni) => sum + Math.max(0, Number(alumni && alumni.incomePerMinute) || 0), 0);
+  const base = state.careerAlumni.reduce((sum, alumni) => sum + Math.max(0, Number(alumni && alumni.incomePerMinute) || 0), 0);
+  const incomeBonus = collectionBonuses(state).work_income; // 도감 직장 수입 보너스
+  return base * (1 + incomeBonus);
+}
+
+// 도감 offline_cap 보너스가 적용된 오프라인 적립 한도(시간).
+export function workOfflineCapHoursFor(state) {
+  return WORK_OFFLINE_CAP_HOURS + collectionBonuses(state).offline_cap;
 }
 
 // 직장 수입을 money에 적립한다. 남은 소수 단위는 lastIncomeAt을 덜 당기는 방식으로 시간 carry한다
@@ -21,7 +31,7 @@ export function accrueWorkIncome(state, now = Date.now()) {
   const next = cloneState(state);
   const last = Number.isFinite(Number(next.lastIncomeAt)) ? Number(next.lastIncomeAt) : now;
   const elapsedMs = Math.max(0, now - last);
-  const capMs = WORK_OFFLINE_CAP_HOURS * 60 * 60 * 1000;
+  const capMs = workOfflineCapHoursFor(next) * 60 * 60 * 1000;
   const effectiveMs = Math.min(elapsedMs, capMs);
   const perMinute = workIncomePerMinute(next);
   if (perMinute <= 0 || effectiveMs <= 0) {

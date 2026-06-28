@@ -22,7 +22,6 @@
     "equipEsdPerPower": 0.04,
     "equipmentCapEsd": 3.0,
     "examFocusEsdScale": 20.0,
-    "studyGainEsdScale": 4.0,
     "collectionEsdCap": 5.0,
     "purchaseStateField": "suneungPurchaseEsd"
   },

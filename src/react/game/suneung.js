@@ -44,7 +44,7 @@ export function validateSuneungBalance(balance) {
 
   const mapping = balance.esdMapping;
   assert(mapping && typeof mapping === "object", "suneung_balance.json esdMapping 데이터가 없습니다.");
-  for (const key of ["studyEsdCap", "studyStatHalf", "eduEsdPerLevel", "eduEsdCap", "equipEsdPerPower", "equipmentCapEsd", "examFocusEsdScale", "studyGainEsdScale", "collectionEsdCap"]) {
+  for (const key of ["studyEsdCap", "studyStatHalf", "eduEsdPerLevel", "eduEsdCap", "equipEsdPerPower", "equipmentCapEsd", "examFocusEsdScale", "collectionEsdCap"]) {
     assert(finiteNumber(mapping[key], `esdMapping.${key} 값이 올바르지 않습니다.`) >= 0, `esdMapping.${key} 값은 0 이상이어야 합니다.`);
   }
   assert(finiteNumber(mapping.studyStatHalf, "esdMapping.studyStatHalf 값이 올바르지 않습니다.") > 0, "esdMapping.studyStatHalf 값은 0보다 커야 합니다.");
