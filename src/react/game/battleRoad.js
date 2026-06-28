@@ -1,4 +1,5 @@
 import battleRoadConfig from "../../../data/battle_road_config.json";
+import careerCollectionData from "../../../data/career_collection_effects.json";
 import careers from "../../../data/careers.json";
 import curriculumAttackVfx from "../../../data/curriculum_attack_vfx.json";
 import growthLevels from "../../../data/growth_levels.json";
@@ -407,7 +408,34 @@ function battleHasNext(battle) {
 
 const lowestUniversity = universities.slice().sort((a, b) => finiteNumber(b.gameRank, `universities.json gameRank 값이 올바르지 않습니다: ${b.id}`) - finiteNumber(a.gameRank, `universities.json gameRank 값이 올바르지 않습니다: ${a.id}`))[0];
 
-// 게임 상태 → 유효성장일(ESD) 환산. 공부(누적 스탯)·교육·장비·적성·결제를 합산한다.
+const collectionEffectMaxStack = new Map(careerCollectionData.collectionEffects.map((effect) => [effect.id, finiteNumber(effect.maxStack, `career_collection_effects.json maxStack 값이 올바르지 않습니다: ${effect.id}`)]));
+const careerCollectionEffectByCareerId = new Map(careerCollectionData.careerCollectionEffects.map((effect) => [effect.careerId, effect]));
+
+// 도감(발견 직업) 영구 보너스 → ESD. 적성을 대체하는 메타.
+// 발견 = careerAlumni + history + archive(history는 회차를 넘어 영구 보존됨).
+function suneungCollectionEsd(state, mapping) {
+  const discovered = new Set();
+  for (const list of [state.careerAlumni, state.history, state.archive]) {
+    if (!Array.isArray(list)) continue;
+    for (const entry of list) {
+      if (entry && typeof entry.careerId === "string" && entry.careerId.length > 0) discovered.add(entry.careerId);
+    }
+  }
+  let examFocus = 0;
+  let studyGain = 0;
+  for (const careerId of discovered) {
+    const link = careerCollectionEffectByCareerId.get(careerId);
+    if (!link) continue;
+    if (link.effectId === "exam_focus") examFocus += finiteNumber(link.value, `도감 exam_focus 값이 올바르지 않습니다: ${careerId}`);
+    else if (link.effectId === "study_gain") studyGain += finiteNumber(link.value, `도감 study_gain 값이 올바르지 않습니다: ${careerId}`);
+  }
+  examFocus = Math.min(collectionEffectMaxStack.get("exam_focus") || 0, examFocus);
+  studyGain = Math.min(collectionEffectMaxStack.get("study_gain") || 0, studyGain);
+  const raw = examFocus * finiteNumber(mapping.examFocusEsdScale, "esdMapping.examFocusEsdScale 값이 올바르지 않습니다.") + studyGain * finiteNumber(mapping.studyGainEsdScale, "esdMapping.studyGainEsdScale 값이 올바르지 않습니다.");
+  return Math.min(finiteNumber(mapping.collectionEsdCap, "esdMapping.collectionEsdCap 값이 올바르지 않습니다."), raw);
+}
+
+// 게임 상태 → 유효성장일(ESD) 환산. 공부(누적 스탯)·교육(영구)·장비·도감(영구)·결제를 합산한다.
 // studyStatHalf 등 상수는 data/suneung_balance.json esdMapping에서 조절(농사 속도 보정 대상).
 function suneungEsdComponents(state) {
   const m = suneungBalance.esdMapping;
@@ -417,16 +445,15 @@ function suneungEsdComponents(state) {
   const eduLevels = Object.values(current.educationLevels || {}).reduce((sum, value) => sum + Math.max(0, Number(value) || 0), 0);
   const eduEsd = Math.min(finiteNumber(m.eduEsdCap, "esdMapping.eduEsdCap 값이 올바르지 않습니다."), eduLevels * finiteNumber(m.eduEsdPerLevel, "esdMapping.eduEsdPerLevel 값이 올바르지 않습니다."));
   const equipEsd = Math.min(finiteNumber(m.equipmentCapEsd, "esdMapping.equipmentCapEsd 값이 올바르지 않습니다."), equippedEquipmentPower(state) * finiteNumber(m.equipEsdPerPower, "esdMapping.equipEsdPerPower 값이 올바르지 않습니다."));
-  const aptitudeSum = subjectIds.reduce((sum, subject) => sum + Math.max(0, Number(current.aptitude[subject]) || 0), 0);
-  const aptitudeEsd = aptitudeSum * finiteNumber(m.aptitudeEsdPerPoint, "esdMapping.aptitudeEsdPerPoint 값이 올바르지 않습니다.");
+  const collectionEsd = suneungCollectionEsd(state, m);
   const purchaseEsd = Math.max(0, Number(state[m.purchaseStateField]) || 0);
-  const total = studyEsd + eduEsd + equipEsd + aptitudeEsd + purchaseEsd;
+  const total = studyEsd + eduEsd + equipEsd + collectionEsd + purchaseEsd;
   const round2 = (value) => Math.round(value * 100) / 100;
   return {
     studyEsd: round2(studyEsd),
     eduEsd: round2(eduEsd),
     equipEsd: round2(equipEsd),
-    aptitudeEsd: round2(aptitudeEsd),
+    collectionEsd: round2(collectionEsd),
     purchaseEsd: round2(purchaseEsd),
     total: round2(total),
   };
@@ -642,6 +669,8 @@ function nextRunCurrent(previousCurrent) {
       ...defaultCurrent.studyAllocationWeights,
       ...previousCurrent.studyAllocationWeights,
     },
+    // 교육은 회차를 넘어 영구 누적되는 메타 → 졸업 후에도 보존한다.
+    educationLevels: { ...(previousCurrent.educationLevels || {}) },
     road: createRoadState("school", 0, null),
     battle: undefined,
   });

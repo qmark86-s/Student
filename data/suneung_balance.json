@@ -18,10 +18,12 @@
     "studyEsdCap": 26.0,
     "studyStatHalf": 100000.0,
     "eduEsdPerLevel": 0.15,
-    "eduEsdCap": 6.0,
+    "eduEsdCap": 8.0,
     "equipEsdPerPower": 0.04,
     "equipmentCapEsd": 3.0,
-    "aptitudeEsdPerPoint": 0.002,
+    "examFocusEsdScale": 20.0,
+    "studyGainEsdScale": 4.0,
+    "collectionEsdCap": 5.0,
     "purchaseStateField": "suneungPurchaseEsd"
   },
   "resultVariance": {
@@ -55,6 +57,8 @@
     "esdSources.aptitudePerRun": "회차(N수/졸업) 1회 누적 적성이 주는 ESD입니다.",
     "esdSources.purchasePackEsd": "결제팩 1회가 주는 ESD입니다. esdMax/만점결제수 = 30/10 = 3.",
     "esdSources.purchasePackPriceKrw": "결제팩 1회 가격(원). 시간=돈 환산 기준.",
+    "esdMapping": "라이브 게임 상태 → ESD 환산 상수. 교육은 회차를 넘어 영구 누적(메타), 도감(exam_focus·study_gain)은 적성을 대체하는 발견 기반 영구 보너스.",
+    "esdMapping.collectionEsdCap": "도감 발견 직업 보너스(exam_focus·study_gain)가 주는 ESD 최대치.",
     "resultVariance.skewPower": "하락 분산 분포를 예상쪽으로 치우치는 지수(≥1). 클수록 대부분 예상에 근접.",
     "resultVariance.retakeVarianceMultiplier": "N수 1회당 최대 하락폭에 곱해지는 축소율. 현재 0.5.",
     "resultVariance.minMaxPenalty": "N수로도 0이 되지 않는 최대 하락폭 하한(항상 약간의 불확실성 유지).",

@@ -114,6 +114,7 @@ import {
   realEstateAutoTickMs,
 } from "./game/realEstate.js";
 
+import { accrueWorkIncome } from "./game/work.js";
 import { CONTENT_REVISION, createDefaultGameState, loadGameState, normalizeGameState, saveGameState, summarizeGameState } from "./game/save.js";
 import { resolveGradeVisual } from "./game/grades.js";
 import elementaryBackdrop from "../snapshot/assets/visual-battle-road-backdrop-elementary.png";
@@ -1488,7 +1489,7 @@ function ResultPanel({ gameState, onAcceptCareer, onRetake }) {
           {outcome.suneungEsd && qaToolsEnabled() && (
             <div className="result-row">
               <span>ESD(캘리브레이션)</span>
-              <strong>합계 {outcome.suneungEsd.total} · 공부 {outcome.suneungEsd.studyEsd} · 교육 {outcome.suneungEsd.eduEsd} · 장비 {outcome.suneungEsd.equipEsd} · 적성 {outcome.suneungEsd.aptitudeEsd}</strong>
+              <strong>합계 {outcome.suneungEsd.total} · 공부 {outcome.suneungEsd.studyEsd} · 교육 {outcome.suneungEsd.eduEsd} · 장비 {outcome.suneungEsd.equipEsd} · 도감 {outcome.suneungEsd.collectionEsd}</strong>
             </div>
           )}
           <div className="decision-careers">
@@ -3665,6 +3666,14 @@ function GameApp({ loaded }) {
         return owned ? accrueRealEstateIncome(state) : state;
       });
     }, tickMs);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    // 직장 수입 적립(항상 작동: 결과 화면·일시정지 중에도 졸업생 수입이 money에 누적).
+    const timer = window.setInterval(() => {
+      setGameState((state) => accrueWorkIncome(state, Date.now()));
+    }, 1000);
     return () => window.clearInterval(timer);
   }, []);
 
