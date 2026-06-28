@@ -16,9 +16,9 @@
   },
   "esdMapping": {
     "studyEsdCap": 26.0,
-    "studyStatHalf": 100000.0,
+    "studyStatHalf": 600000.0,
     "eduEsdPerLevel": 0.15,
-    "eduEsdCap": 8.0,
+    "eduEsdCap": 16.0,
     "equipEsdPerPower": 0.04,
     "equipmentCapEsd": 3.0,
     "examFocusEsdScale": 20.0,
