@@ -8,9 +8,10 @@
 - 원정대가 몬스터를 만나 멈추기 전에는 다음 자동 전투가 시작되지 않게 한다.
 
 ## 배경 후속 작업
-- `visual-expedition-backdrops.png` 생성 로직에서 내부 seam뿐 아니라 좌우 루프 seam도 블렌딩한다.
-- 현재 PNG도 같은 seam 처리 결과로 갱신한다.
-- Stage 배경 offset은 챕터별 시작 구간과 Stage별 누적 이동량을 합산한다.
+- 최신 배경 생성은 `visual-expedition-backdrop-{theme}-{00..09}.png` route tile 100개 구조를 기준으로 한다.
+- 챕터 1개는 10개 tile로 1000 Stage 길이를 가지며, 각 tile은 같은 도로 폭과 `5016x540` 크기를 유지한다.
+- 기존 호환용 `visual-expedition-backdrops.png`는 챕터 1 기본 배경으로 유지한다.
+- Stage 배경 offset은 tile 내부 Stage 기준으로 계산하고, 100 Stage마다 다음 tile 시작 구간에서 다시 출발한다.
 - 시작 구도는 중앙 기준을 유지하고, Stage 클리어 이동은 왼쪽 방향으로 유지한다.
 - 루프 품질은 smoke에서 배경 레이어 존재, 왼쪽 이동, 전환 후 위치 유지로 검증한다.
 

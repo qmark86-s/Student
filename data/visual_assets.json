@@ -6949,51 +6949,851 @@
         {
           "id": "expedition-backdrop-shelter",
           "backdrop": "shelter",
+          "file": "assets/visual-expedition-backdrop-shelter-00.png",
+          "compatibilityFile": "assets/visual-expedition-backdrop-shelter.png",
+          "tiles": [
+            {
+              "index": 0,
+              "file": "assets/visual-expedition-backdrop-shelter-00.png",
+              "source": "assets/visual-source/expedition-backdrops/shelter/source-00.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 1,
+              "file": "assets/visual-expedition-backdrop-shelter-01.png",
+              "source": "assets/visual-source/expedition-backdrops/shelter/source-01.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 2,
+              "file": "assets/visual-expedition-backdrop-shelter-02.png",
+              "source": "assets/visual-source/expedition-backdrops/shelter/source-02.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 3,
+              "file": "assets/visual-expedition-backdrop-shelter-03.png",
+              "source": "assets/visual-source/expedition-backdrops/shelter/source-03.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 4,
+              "file": "assets/visual-expedition-backdrop-shelter-04.png",
+              "source": "assets/visual-source/expedition-backdrops/shelter/source-04.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 5,
+              "file": "assets/visual-expedition-backdrop-shelter-05.png",
+              "source": "assets/visual-source/expedition-backdrops/shelter/source-05.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 6,
+              "file": "assets/visual-expedition-backdrop-shelter-06.png",
+              "source": "assets/visual-source/expedition-backdrops/shelter/source-06.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 7,
+              "file": "assets/visual-expedition-backdrop-shelter-07.png",
+              "source": "assets/visual-source/expedition-backdrops/shelter/source-07.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 8,
+              "file": "assets/visual-expedition-backdrop-shelter-08.png",
+              "source": "assets/visual-source/expedition-backdrops/shelter/source-08.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 9,
+              "file": "assets/visual-expedition-backdrop-shelter-09.png",
+              "source": "assets/visual-source/expedition-backdrops/shelter/source-09.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            }
+          ],
+          "sourceMode": "chapter-panorama",
+          "tileCount": 10,
+          "stagesPerTile": 100,
+          "timeOfDay": "dawn",
+          "landmark": "temporary-shelter-alley",
+          "roadProfile": "fixed-road-v2",
           "row": 0
         },
         {
           "id": "expedition-backdrop-studio",
           "backdrop": "studio",
+          "file": "assets/visual-expedition-backdrop-studio-00.png",
+          "compatibilityFile": "assets/visual-expedition-backdrop-studio.png",
+          "tiles": [
+            {
+              "index": 0,
+              "file": "assets/visual-expedition-backdrop-studio-00.png",
+              "source": "assets/visual-source/expedition-backdrops/studio/source-00.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 1,
+              "file": "assets/visual-expedition-backdrop-studio-01.png",
+              "source": "assets/visual-source/expedition-backdrops/studio/source-01.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 2,
+              "file": "assets/visual-expedition-backdrop-studio-02.png",
+              "source": "assets/visual-source/expedition-backdrops/studio/source-02.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 3,
+              "file": "assets/visual-expedition-backdrop-studio-03.png",
+              "source": "assets/visual-source/expedition-backdrops/studio/source-03.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 4,
+              "file": "assets/visual-expedition-backdrop-studio-04.png",
+              "source": "assets/visual-source/expedition-backdrops/studio/source-04.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 5,
+              "file": "assets/visual-expedition-backdrop-studio-05.png",
+              "source": "assets/visual-source/expedition-backdrops/studio/source-05.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 6,
+              "file": "assets/visual-expedition-backdrop-studio-06.png",
+              "source": "assets/visual-source/expedition-backdrops/studio/source-06.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 7,
+              "file": "assets/visual-expedition-backdrop-studio-07.png",
+              "source": "assets/visual-source/expedition-backdrops/studio/source-07.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 8,
+              "file": "assets/visual-expedition-backdrop-studio-08.png",
+              "source": "assets/visual-source/expedition-backdrops/studio/source-08.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 9,
+              "file": "assets/visual-expedition-backdrop-studio-09.png",
+              "source": "assets/visual-source/expedition-backdrops/studio/source-09.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            }
+          ],
+          "sourceMode": "chapter-panorama",
+          "tileCount": 10,
+          "stagesPerTile": 100,
+          "timeOfDay": "deep-night",
+          "landmark": "studio-laundry-neon",
+          "roadProfile": "fixed-road-v2",
           "row": 0
         },
         {
           "id": "expedition-backdrop-neighborhood",
           "backdrop": "neighborhood",
+          "file": "assets/visual-expedition-backdrop-neighborhood-00.png",
+          "compatibilityFile": "assets/visual-expedition-backdrop-neighborhood.png",
+          "tiles": [
+            {
+              "index": 0,
+              "file": "assets/visual-expedition-backdrop-neighborhood-00.png",
+              "source": "assets/visual-source/expedition-backdrops/neighborhood/source-00.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 1,
+              "file": "assets/visual-expedition-backdrop-neighborhood-01.png",
+              "source": "assets/visual-source/expedition-backdrops/neighborhood/source-01.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 2,
+              "file": "assets/visual-expedition-backdrop-neighborhood-02.png",
+              "source": "assets/visual-source/expedition-backdrops/neighborhood/source-02.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 3,
+              "file": "assets/visual-expedition-backdrop-neighborhood-03.png",
+              "source": "assets/visual-source/expedition-backdrops/neighborhood/source-03.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 4,
+              "file": "assets/visual-expedition-backdrop-neighborhood-04.png",
+              "source": "assets/visual-source/expedition-backdrops/neighborhood/source-04.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 5,
+              "file": "assets/visual-expedition-backdrop-neighborhood-05.png",
+              "source": "assets/visual-source/expedition-backdrops/neighborhood/source-05.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 6,
+              "file": "assets/visual-expedition-backdrop-neighborhood-06.png",
+              "source": "assets/visual-source/expedition-backdrops/neighborhood/source-06.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 7,
+              "file": "assets/visual-expedition-backdrop-neighborhood-07.png",
+              "source": "assets/visual-source/expedition-backdrops/neighborhood/source-07.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 8,
+              "file": "assets/visual-expedition-backdrop-neighborhood-08.png",
+              "source": "assets/visual-source/expedition-backdrops/neighborhood/source-08.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 9,
+              "file": "assets/visual-expedition-backdrop-neighborhood-09.png",
+              "source": "assets/visual-source/expedition-backdrops/neighborhood/source-09.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            }
+          ],
+          "sourceMode": "chapter-panorama",
+          "tileCount": 10,
+          "stagesPerTile": 100,
+          "timeOfDay": "clear-noon",
+          "landmark": "local-market-street",
+          "roadProfile": "fixed-road-v2",
           "row": 0
         },
         {
           "id": "expedition-backdrop-company",
           "backdrop": "company",
+          "file": "assets/visual-expedition-backdrop-company-00.png",
+          "compatibilityFile": "assets/visual-expedition-backdrop-company.png",
+          "tiles": [
+            {
+              "index": 0,
+              "file": "assets/visual-expedition-backdrop-company-00.png",
+              "source": "assets/visual-source/expedition-backdrops/company/source-00.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 1,
+              "file": "assets/visual-expedition-backdrop-company-01.png",
+              "source": "assets/visual-source/expedition-backdrops/company/source-01.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 2,
+              "file": "assets/visual-expedition-backdrop-company-02.png",
+              "source": "assets/visual-source/expedition-backdrops/company/source-02.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 3,
+              "file": "assets/visual-expedition-backdrop-company-03.png",
+              "source": "assets/visual-source/expedition-backdrops/company/source-03.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 4,
+              "file": "assets/visual-expedition-backdrop-company-04.png",
+              "source": "assets/visual-source/expedition-backdrops/company/source-04.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 5,
+              "file": "assets/visual-expedition-backdrop-company-05.png",
+              "source": "assets/visual-source/expedition-backdrops/company/source-05.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 6,
+              "file": "assets/visual-expedition-backdrop-company-06.png",
+              "source": "assets/visual-source/expedition-backdrops/company/source-06.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 7,
+              "file": "assets/visual-expedition-backdrop-company-07.png",
+              "source": "assets/visual-source/expedition-backdrops/company/source-07.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 8,
+              "file": "assets/visual-expedition-backdrop-company-08.png",
+              "source": "assets/visual-source/expedition-backdrops/company/source-08.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 9,
+              "file": "assets/visual-expedition-backdrop-company-09.png",
+              "source": "assets/visual-source/expedition-backdrops/company/source-09.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            }
+          ],
+          "sourceMode": "chapter-panorama",
+          "tileCount": 10,
+          "stagesPerTile": 100,
+          "timeOfDay": "commute-morning",
+          "landmark": "newtown-glass-company",
+          "roadProfile": "fixed-road-v2",
           "row": 0
         },
         {
           "id": "expedition-backdrop-office",
           "backdrop": "office",
+          "file": "assets/visual-expedition-backdrop-office-00.png",
+          "compatibilityFile": "assets/visual-expedition-backdrop-office.png",
+          "tiles": [
+            {
+              "index": 0,
+              "file": "assets/visual-expedition-backdrop-office-00.png",
+              "source": "assets/visual-source/expedition-backdrops/office/source-00.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 1,
+              "file": "assets/visual-expedition-backdrop-office-01.png",
+              "source": "assets/visual-source/expedition-backdrops/office/source-01.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 2,
+              "file": "assets/visual-expedition-backdrop-office-02.png",
+              "source": "assets/visual-source/expedition-backdrops/office/source-02.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 3,
+              "file": "assets/visual-expedition-backdrop-office-03.png",
+              "source": "assets/visual-source/expedition-backdrops/office/source-03.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 4,
+              "file": "assets/visual-expedition-backdrop-office-04.png",
+              "source": "assets/visual-source/expedition-backdrops/office/source-04.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 5,
+              "file": "assets/visual-expedition-backdrop-office-05.png",
+              "source": "assets/visual-source/expedition-backdrops/office/source-05.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 6,
+              "file": "assets/visual-expedition-backdrop-office-06.png",
+              "source": "assets/visual-source/expedition-backdrops/office/source-06.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 7,
+              "file": "assets/visual-expedition-backdrop-office-07.png",
+              "source": "assets/visual-source/expedition-backdrops/office/source-07.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 8,
+              "file": "assets/visual-expedition-backdrop-office-08.png",
+              "source": "assets/visual-source/expedition-backdrops/office/source-08.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 9,
+              "file": "assets/visual-expedition-backdrop-office-09.png",
+              "source": "assets/visual-source/expedition-backdrops/office/source-09.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            }
+          ],
+          "sourceMode": "chapter-panorama",
+          "tileCount": 10,
+          "stagesPerTile": 100,
+          "timeOfDay": "rainy-evening",
+          "landmark": "professional-office-towers",
+          "roadProfile": "fixed-road-v2",
           "row": 0
         },
         {
           "id": "expedition-backdrop-asset",
           "backdrop": "asset",
+          "file": "assets/visual-expedition-backdrop-asset-00.png",
+          "compatibilityFile": "assets/visual-expedition-backdrop-asset.png",
+          "tiles": [
+            {
+              "index": 0,
+              "file": "assets/visual-expedition-backdrop-asset-00.png",
+              "source": "assets/visual-source/expedition-backdrops/asset/source-00.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 1,
+              "file": "assets/visual-expedition-backdrop-asset-01.png",
+              "source": "assets/visual-source/expedition-backdrops/asset/source-01.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 2,
+              "file": "assets/visual-expedition-backdrop-asset-02.png",
+              "source": "assets/visual-source/expedition-backdrops/asset/source-02.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 3,
+              "file": "assets/visual-expedition-backdrop-asset-03.png",
+              "source": "assets/visual-source/expedition-backdrops/asset/source-03.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 4,
+              "file": "assets/visual-expedition-backdrop-asset-04.png",
+              "source": "assets/visual-source/expedition-backdrops/asset/source-04.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 5,
+              "file": "assets/visual-expedition-backdrop-asset-05.png",
+              "source": "assets/visual-source/expedition-backdrops/asset/source-05.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 6,
+              "file": "assets/visual-expedition-backdrop-asset-06.png",
+              "source": "assets/visual-source/expedition-backdrops/asset/source-06.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 7,
+              "file": "assets/visual-expedition-backdrop-asset-07.png",
+              "source": "assets/visual-source/expedition-backdrops/asset/source-07.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 8,
+              "file": "assets/visual-expedition-backdrop-asset-08.png",
+              "source": "assets/visual-source/expedition-backdrops/asset/source-08.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 9,
+              "file": "assets/visual-expedition-backdrop-asset-09.png",
+              "source": "assets/visual-source/expedition-backdrops/asset/source-09.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            }
+          ],
+          "sourceMode": "chapter-panorama",
+          "tileCount": 10,
+          "stagesPerTile": 100,
+          "timeOfDay": "golden-sunset",
+          "landmark": "asset-lounge-market-board",
+          "roadProfile": "fixed-road-v2",
           "row": 0
         },
         {
           "id": "expedition-backdrop-national",
           "backdrop": "national",
+          "file": "assets/visual-expedition-backdrop-national-00.png",
+          "compatibilityFile": "assets/visual-expedition-backdrop-national.png",
+          "tiles": [
+            {
+              "index": 0,
+              "file": "assets/visual-expedition-backdrop-national-00.png",
+              "source": "assets/visual-source/expedition-backdrops/national/source-00.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 1,
+              "file": "assets/visual-expedition-backdrop-national-01.png",
+              "source": "assets/visual-source/expedition-backdrops/national/source-01.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 2,
+              "file": "assets/visual-expedition-backdrop-national-02.png",
+              "source": "assets/visual-source/expedition-backdrops/national/source-02.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 3,
+              "file": "assets/visual-expedition-backdrop-national-03.png",
+              "source": "assets/visual-source/expedition-backdrops/national/source-03.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 4,
+              "file": "assets/visual-expedition-backdrop-national-04.png",
+              "source": "assets/visual-source/expedition-backdrops/national/source-04.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 5,
+              "file": "assets/visual-expedition-backdrop-national-05.png",
+              "source": "assets/visual-source/expedition-backdrops/national/source-05.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 6,
+              "file": "assets/visual-expedition-backdrop-national-06.png",
+              "source": "assets/visual-source/expedition-backdrops/national/source-06.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 7,
+              "file": "assets/visual-expedition-backdrop-national-07.png",
+              "source": "assets/visual-source/expedition-backdrops/national/source-07.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 8,
+              "file": "assets/visual-expedition-backdrop-national-08.png",
+              "source": "assets/visual-source/expedition-backdrops/national/source-08.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 9,
+              "file": "assets/visual-expedition-backdrop-national-09.png",
+              "source": "assets/visual-source/expedition-backdrops/national/source-09.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            }
+          ],
+          "sourceMode": "chapter-panorama",
+          "tileCount": 10,
+          "stagesPerTile": 100,
+          "timeOfDay": "overcast-day",
+          "landmark": "national-project-construction",
+          "roadProfile": "fixed-road-v2",
           "row": 0
         },
         {
           "id": "expedition-backdrop-global",
           "backdrop": "global",
+          "file": "assets/visual-expedition-backdrop-global-00.png",
+          "compatibilityFile": "assets/visual-expedition-backdrop-global.png",
+          "tiles": [
+            {
+              "index": 0,
+              "file": "assets/visual-expedition-backdrop-global-00.png",
+              "source": "assets/visual-source/expedition-backdrops/global/source-00.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 1,
+              "file": "assets/visual-expedition-backdrop-global-01.png",
+              "source": "assets/visual-source/expedition-backdrops/global/source-01.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 2,
+              "file": "assets/visual-expedition-backdrop-global-02.png",
+              "source": "assets/visual-source/expedition-backdrops/global/source-02.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 3,
+              "file": "assets/visual-expedition-backdrop-global-03.png",
+              "source": "assets/visual-source/expedition-backdrops/global/source-03.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 4,
+              "file": "assets/visual-expedition-backdrop-global-04.png",
+              "source": "assets/visual-source/expedition-backdrops/global/source-04.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 5,
+              "file": "assets/visual-expedition-backdrop-global-05.png",
+              "source": "assets/visual-source/expedition-backdrops/global/source-05.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 6,
+              "file": "assets/visual-expedition-backdrop-global-06.png",
+              "source": "assets/visual-source/expedition-backdrops/global/source-06.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 7,
+              "file": "assets/visual-expedition-backdrop-global-07.png",
+              "source": "assets/visual-source/expedition-backdrops/global/source-07.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 8,
+              "file": "assets/visual-expedition-backdrop-global-08.png",
+              "source": "assets/visual-source/expedition-backdrops/global/source-08.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 9,
+              "file": "assets/visual-expedition-backdrop-global-09.png",
+              "source": "assets/visual-source/expedition-backdrops/global/source-09.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            }
+          ],
+          "sourceMode": "chapter-panorama",
+          "tileCount": 10,
+          "stagesPerTile": 100,
+          "timeOfDay": "harbor-sunrise",
+          "landmark": "airport-harbor-hub",
+          "roadProfile": "fixed-road-v2",
           "row": 0
         },
         {
           "id": "expedition-backdrop-future",
           "backdrop": "future",
+          "file": "assets/visual-expedition-backdrop-future-00.png",
+          "compatibilityFile": "assets/visual-expedition-backdrop-future.png",
+          "tiles": [
+            {
+              "index": 0,
+              "file": "assets/visual-expedition-backdrop-future-00.png",
+              "source": "assets/visual-source/expedition-backdrops/future/source-00.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 1,
+              "file": "assets/visual-expedition-backdrop-future-01.png",
+              "source": "assets/visual-source/expedition-backdrops/future/source-01.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 2,
+              "file": "assets/visual-expedition-backdrop-future-02.png",
+              "source": "assets/visual-source/expedition-backdrops/future/source-02.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 3,
+              "file": "assets/visual-expedition-backdrop-future-03.png",
+              "source": "assets/visual-source/expedition-backdrops/future/source-03.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 4,
+              "file": "assets/visual-expedition-backdrop-future-04.png",
+              "source": "assets/visual-source/expedition-backdrops/future/source-04.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 5,
+              "file": "assets/visual-expedition-backdrop-future-05.png",
+              "source": "assets/visual-source/expedition-backdrops/future/source-05.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 6,
+              "file": "assets/visual-expedition-backdrop-future-06.png",
+              "source": "assets/visual-source/expedition-backdrops/future/source-06.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 7,
+              "file": "assets/visual-expedition-backdrop-future-07.png",
+              "source": "assets/visual-source/expedition-backdrops/future/source-07.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 8,
+              "file": "assets/visual-expedition-backdrop-future-08.png",
+              "source": "assets/visual-source/expedition-backdrops/future/source-08.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 9,
+              "file": "assets/visual-expedition-backdrop-future-09.png",
+              "source": "assets/visual-source/expedition-backdrops/future/source-09.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            }
+          ],
+          "sourceMode": "chapter-panorama",
+          "tileCount": 10,
+          "stagesPerTile": 100,
+          "timeOfDay": "midnight-cyber",
+          "landmark": "future-research-city",
+          "roadProfile": "fixed-road-v2",
           "row": 0
         },
         {
           "id": "expedition-backdrop-summit",
           "backdrop": "summit",
+          "file": "assets/visual-expedition-backdrop-summit-00.png",
+          "compatibilityFile": "assets/visual-expedition-backdrop-summit.png",
+          "tiles": [
+            {
+              "index": 0,
+              "file": "assets/visual-expedition-backdrop-summit-00.png",
+              "source": "assets/visual-source/expedition-backdrops/summit/source-00.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 1,
+              "file": "assets/visual-expedition-backdrop-summit-01.png",
+              "source": "assets/visual-source/expedition-backdrops/summit/source-01.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 2,
+              "file": "assets/visual-expedition-backdrop-summit-02.png",
+              "source": "assets/visual-source/expedition-backdrops/summit/source-02.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 3,
+              "file": "assets/visual-expedition-backdrop-summit-03.png",
+              "source": "assets/visual-source/expedition-backdrops/summit/source-03.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 4,
+              "file": "assets/visual-expedition-backdrop-summit-04.png",
+              "source": "assets/visual-source/expedition-backdrops/summit/source-04.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 5,
+              "file": "assets/visual-expedition-backdrop-summit-05.png",
+              "source": "assets/visual-source/expedition-backdrops/summit/source-05.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 6,
+              "file": "assets/visual-expedition-backdrop-summit-06.png",
+              "source": "assets/visual-source/expedition-backdrops/summit/source-06.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 7,
+              "file": "assets/visual-expedition-backdrop-summit-07.png",
+              "source": "assets/visual-source/expedition-backdrops/summit/source-07.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 8,
+              "file": "assets/visual-expedition-backdrop-summit-08.png",
+              "source": "assets/visual-source/expedition-backdrops/summit/source-08.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            },
+            {
+              "index": 9,
+              "file": "assets/visual-expedition-backdrop-summit-09.png",
+              "source": "assets/visual-source/expedition-backdrops/summit/source-09.png",
+              "derived": false,
+              "sourceMode": "chapter-panorama"
+            }
+          ],
+          "sourceMode": "chapter-panorama",
+          "tileCount": 10,
+          "stagesPerTile": 100,
+          "timeOfDay": "golden-summit",
+          "landmark": "world-influence-summit",
+          "roadProfile": "fixed-road-v2",
           "row": 0
         }
       ]

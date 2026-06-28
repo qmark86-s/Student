@@ -14,7 +14,7 @@
 
 ## 현재 구조 분석
 
-- 원정대는 `visual-expedition-backdrops.png`를 3구간 파노라마로 만든 뒤 `.expedition-arena::before`에서 60초 동안 왼쪽으로 이동시킨다.
+- 최신 원정대는 `visual-expedition-backdrop-{theme}-{00..09}.png` 100개 route tile을 챕터별로 사용한다. `visual-expedition-backdrops.png`는 호환용 기본 배경으로 남아 있다.
 - 학생 전투는 `asset-004.png`를 `<img class="arena-background-sheet">`로 깔고 `arenaTreadmill`로 24px 정도만 움직인다.
 - 원정대 동료와 학습도우미는 `visual-companions.png` 13개 helper 아틀라스를 공유한다.
 - 직업별 개성은 데이터에 있지만, 원정대 전투 유닛은 `helperSprite` 단위라 직업별 차이가 부족하다.
@@ -28,6 +28,11 @@
    - 결과는 행별 `visual-battle-road-backdrop-*.png` 4개로 저장하고 `__STUDENT_ASSET_011__`~`__STUDENT_ASSET_014__`에 등록한다.
    - 단일 초대형 data URL은 미리보기/브라우저에서 누락될 수 있으므로 사용하지 않는다.
    - `.pixel-arena::before`가 scene class별 배경을 사용하고, `battleRoadBackdropPan` transform 애니메이션으로 이동시킨다.
+
+1-1. 원정대 챕터별 배경
+   - 원정대는 챕터별 `backdropClass`와 Stage별 `tileIndex`에 맞춰 100개 PNG route tile을 바인딩한다.
+   - 모든 원정대 배경은 같은 도로 폭과 바닥 구도를 유지한다.
+   - Stage 이동 offset은 tile 내부 Stage 기준으로 계산한다.
 
 2. 직업동료/학습도우미 아틀라스 확장
    - `visual-companions.png`를 직업 62종 + helper 13종 구조로 확장한다.

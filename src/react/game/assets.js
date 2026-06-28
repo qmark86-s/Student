@@ -13,6 +13,11 @@ const expeditionEnemyFrameUrls = import.meta.glob("../../snapshot/assets/individ
   import: "default",
 });
 
+const expeditionBackdropUrls = import.meta.glob("../../snapshot/assets/visual-expedition-backdrop-*-*.png", {
+  eager: true,
+  import: "default",
+});
+
 function requireAsset(modules, key, label) {
   const url = modules[key];
   if (!url) throw new Error(`${label} 자산 누락: ${key}`);
@@ -74,5 +79,15 @@ export function getExpeditionEnemyFrameUrls(assetId) {
       `../../snapshot/assets/individual/expedition-enemies/${assetId}/move_${frame}.png`,
       "원정대 적 스프라이트",
     ),
+  );
+}
+
+export function getExpeditionBackdropUrl(backdropClass, tileIndex = 0) {
+  const safeBackdrop = String(backdropClass || "shelter").replace(/[^a-z0-9_-]/gi, "");
+  const safeTile = Math.max(0, Math.min(9, Math.floor(Number(tileIndex) || 0)));
+  return requireAsset(
+    expeditionBackdropUrls,
+    `../../snapshot/assets/visual-expedition-backdrop-${safeBackdrop}-${String(safeTile).padStart(2, "0")}.png`,
+    "원정대 배경",
   );
 }

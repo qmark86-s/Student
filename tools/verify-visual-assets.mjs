@@ -167,6 +167,71 @@ else {
   if (expeditionBackdrops.token !== "__STUDENT_ASSET_010__") failures.push("expedition backdrop token mismatch");
   if ((expeditionBackdrops.items?.length ?? 0) !== 10) failures.push("expedition backdrop row count mismatch");
   if (expeditionBackdrops.rowHeight < 160) failures.push("expedition backdrop row height is too small");
+  const files = new Set();
+  const sourceFiles = new Set();
+  const timesOfDay = new Set();
+  const landmarks = new Set();
+  for (const item of expeditionBackdrops.items ?? []) {
+    if (!item.backdrop) failures.push("expedition backdrop item backdrop id is missing");
+    if (!item.timeOfDay) failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} timeOfDay is missing`);
+    else timesOfDay.add(item.timeOfDay);
+    if (!item.landmark) failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} landmark is missing`);
+    else landmarks.add(item.landmark);
+    if (item.roadProfile !== "fixed-road-v2") failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} roadProfile mismatch`);
+    if (item.tileCount !== 10) failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} tileCount mismatch`);
+    if (item.stagesPerTile !== 100) failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} stagesPerTile mismatch`);
+    if (item.sourceMode !== "chapter-panorama") failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} must be built from chapter-panorama source mode`);
+    if (!Array.isArray(item.tiles) || item.tiles.length !== 10) failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} tiles must contain 10 PNGs`);
+    if (!item.file) failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} file is missing`);
+    else {
+      files.add(item.file);
+      const itemPath = resolve("src/snapshot", item.file);
+      if (!existsSync(itemPath)) failures.push(`expedition backdrop file does not exist: ${item.file}`);
+      else {
+        const info = pngInfo(readFileSync(itemPath));
+        if (info.width !== expeditionBackdrops.width) failures.push(`expedition backdrop ${item.file} width mismatch ${info.width}/${expeditionBackdrops.width}`);
+        if (info.height !== expeditionBackdrops.rowHeight) failures.push(`expedition backdrop ${item.file} height mismatch ${info.height}/${expeditionBackdrops.rowHeight}`);
+      }
+    }
+    for (const tile of item.tiles ?? []) {
+      if (!Number.isInteger(tile.index) || tile.index < 0 || tile.index > 9) failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} tile index invalid`);
+      if (tile.derived !== false) failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} tile ${tile.index} must use an independent source, not a derived fallback`);
+      if (tile.sourceMode !== "chapter-panorama") failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} tile ${tile.index} must be cut from a blended chapter panorama`);
+      if (!tile.source) {
+        failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} tile ${tile.index} source is missing`);
+      } else {
+        sourceFiles.add(tile.source);
+        const sourcePath = resolve(tile.source);
+        if (!existsSync(sourcePath)) failures.push(`expedition backdrop source does not exist: ${tile.source}`);
+        else {
+          const sourceInfo = pngInfo(readFileSync(sourcePath));
+          if (sourceInfo.width < 1600) failures.push(`expedition backdrop source ${tile.source} width is too small: ${sourceInfo.width}`);
+          if (sourceInfo.height < 650) failures.push(`expedition backdrop source ${tile.source} height is too small for a generation original: ${sourceInfo.height}`);
+          const sourceAspect = sourceInfo.width / Math.max(1, sourceInfo.height);
+          if (sourceAspect < 2.2 || sourceAspect > 3.4) failures.push(`expedition backdrop source ${tile.source} aspect ratio must be a raw route source, got ${sourceAspect.toFixed(2)}`);
+          if (sourceInfo.width === expeditionBackdrops.width && sourceInfo.height === expeditionBackdrops.rowHeight) {
+            failures.push(`expedition backdrop source ${tile.source} looks like a built runtime tile, not an independent generation original`);
+          }
+        }
+      }
+      if (!tile.file) {
+        failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} tile file is missing`);
+        continue;
+      }
+      files.add(tile.file);
+      const tilePath = resolve("src/snapshot", tile.file);
+      if (!existsSync(tilePath)) failures.push(`expedition backdrop tile file does not exist: ${tile.file}`);
+      else {
+        const info = pngInfo(readFileSync(tilePath));
+        if (info.width !== expeditionBackdrops.width) failures.push(`expedition backdrop tile ${tile.file} width mismatch ${info.width}/${expeditionBackdrops.width}`);
+        if (info.height !== expeditionBackdrops.rowHeight) failures.push(`expedition backdrop tile ${tile.file} height mismatch ${info.height}/${expeditionBackdrops.rowHeight}`);
+      }
+    }
+  }
+  if (files.size < 100) failures.push(`expedition backdrop files must include 100 long-route tiles, got ${files.size}`);
+  if (sourceFiles.size !== 100) failures.push(`expedition backdrop source files must include 100 independent PNGs, got ${sourceFiles.size}`);
+  if (timesOfDay.size < 8) failures.push(`expedition backdrop timeOfDay should be diverse, got ${timesOfDay.size}`);
+  if (landmarks.size !== 10) failures.push(`expedition backdrop landmarks must be unique per chapter, got ${landmarks.size}`);
 }
 const battleRoadBackdrops = visual.backgrounds?.find((background) => background.id === "battleRoadBackdrops");
 if (!battleRoadBackdrops) failures.push("battle road backdrop metadata is missing");

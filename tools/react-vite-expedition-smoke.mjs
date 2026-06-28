@@ -257,6 +257,8 @@ async function collectSnapshot(page) {
     const actionButton = document.querySelector(".expedition-action-button");
     const arena = document.querySelector(".expedition-arena");
     const backdropStyle = arena ? getComputedStyle(arena, "::before") : null;
+    const backdropLayers = [...document.querySelectorAll(".expedition-backdrop-layer")];
+    const backdropLayerStyles = backdropLayers.map((layer) => getComputedStyle(layer));
     const combatFloats = [...document.querySelectorAll(".expedition-float")];
     const currentEnemies = [...document.querySelectorAll(".expedition-enemy-group .expedition-enemy-visual")];
     const defeatedEnemies = [...document.querySelectorAll(".expedition-enemy-group .expedition-enemy-visual.defeated")];
@@ -330,6 +332,14 @@ async function collectSnapshot(page) {
       expeditionEncounterIntro: document.querySelector(".expedition-scene")?.getAttribute("data-encounter-intro") || "",
       expeditionTransitionFromStage: document.querySelector(".expedition-scene")?.getAttribute("data-transition-from-stage") || "",
       expeditionTransitionToStage: document.querySelector(".expedition-scene")?.getAttribute("data-transition-to-stage") || "",
+      expeditionTransitionFromTile: document.querySelector(".expedition-scene")?.getAttribute("data-transition-from-tile") || "",
+      expeditionTransitionToTile: document.querySelector(".expedition-scene")?.getAttribute("data-transition-to-tile") || "",
+      expeditionBackdropCrossfade: document.querySelector(".expedition-scene")?.getAttribute("data-backdrop-crossfade") || "",
+      expeditionBackdropLayers: backdropLayers.length,
+      expeditionBackdropLayerImages: backdropLayerStyles.filter((style) => style.backgroundImage.includes("url(")).length,
+      expeditionBackdropLayerAnimations: new Set(backdropLayerStyles.map((style) => style.animationName).filter(Boolean)).size,
+      expeditionBackdropTile: Number(arena?.getAttribute("data-bg-tile") || 0),
+      expeditionBackdropFromTile: Number(arena?.getAttribute("data-bg-from-tile") || 0),
       expeditionBackdropFromX: Number(arena?.getAttribute("data-bg-from-x") || 0),
       expeditionBackdropToX: Number(arena?.getAttribute("data-bg-to-x") || 0),
       expeditionBackdropImage: backdropStyle?.backgroundImage || "",
@@ -439,6 +449,29 @@ try {
   });
   const afterAccept = await collectSnapshot(page);
 
+  const stage101State = await page.evaluate((key) => {
+    const state = JSON.parse(localStorage.getItem(key));
+    state.expedition.currentStage = 101;
+    state.expedition.highestStage = 100;
+    state.expedition.stageIndex = 100;
+    state.expedition.clearedStageCount = 100;
+    state.expedition.lastResolvedAt = Date.now();
+    return state;
+  }, saveKey);
+  const stage101Page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+  await stage101Page.addInitScript(({ key, state }) => localStorage.setItem(key, JSON.stringify(state)), {
+    key: saveKey,
+    state: stage101State,
+  });
+  await stage101Page.goto(baseUrl, { waitUntil: "networkidle" });
+  await stage101Page.getByRole("button", { name: "원정대" }).click();
+  await stage101Page.waitForSelector(".expedition-scene .expedition-unit-frame", { timeout: 6000 });
+  await stage101Page.waitForFunction(() => [...document.querySelectorAll(".expedition-unit-frame, .expedition-enemy-frame")].every((image) => image.complete && image.naturalWidth > 0), null, {
+    timeout: 6000,
+  });
+  const stage101Backdrop = await collectSnapshot(stage101Page);
+  await stage101Page.close();
+
   await page.locator(".expedition-tab", { hasText: "파티" }).click();
   await page.waitForSelector(".expedition-party-slot", { timeout: 6000 });
   const partyTab = await collectSnapshot(page);
@@ -480,10 +513,15 @@ try {
     saveKey,
     { timeout: 6000 },
   );
-  await page.waitForFunction(() => document.querySelector(".expedition-scene")?.getAttribute("data-stage-transition") === "idle", null, { timeout: 7000 });
-  await page.waitForFunction(() => document.querySelector(".expedition-scene")?.getAttribute("data-encounter-intro") === "approaching", null, { timeout: 2000 });
+  await page.waitForFunction(() => {
+    const scene = document.querySelector(".expedition-scene");
+    return scene?.getAttribute("data-stage-transition") === "moving" && scene?.getAttribute("data-encounter-intro") === "approaching";
+  }, null, { timeout: 5000 });
   const duringEncounterIntro = await collectSnapshot(page);
-  await page.waitForFunction(() => document.querySelector(".expedition-scene")?.getAttribute("data-encounter-intro") === "idle", null, { timeout: 6000 });
+  await page.waitForFunction(() => {
+    const scene = document.querySelector(".expedition-scene");
+    return scene?.getAttribute("data-stage-transition") === "idle" && scene?.getAttribute("data-encounter-intro") === "idle";
+  }, null, { timeout: 4000 });
   await page.waitForFunction(() => [...document.querySelectorAll(".expedition-unit-frame, .expedition-enemy-frame")].every((image) => image.complete && image.naturalWidth > 0), null, {
     timeout: 6000,
   });
@@ -598,6 +636,10 @@ try {
   if (!logTab.text.includes("원정 기록")) failures.push("Expedition log tab did not render 원정 기록");
   if (afterAccept.expeditionScene !== 1 || afterAccept.expeditionArena !== 1) failures.push(`Expected expedition scene/arena, got ${afterAccept.expeditionScene}/${afterAccept.expeditionArena}`);
   if (!afterAccept.expeditionBackdropImage || afterAccept.expeditionBackdropImage === "none") failures.push("Expected expedition backdrop image on arena ::before");
+  if (afterAccept.expeditionBackdropTile !== 0) failures.push(`Expected stage 1 backdrop tile 0, got ${afterAccept.expeditionBackdropTile}`);
+  if (stage101Backdrop.expeditionBackdropTile !== 1) failures.push(`Expected stage 101 backdrop tile 1, got ${stage101Backdrop.expeditionBackdropTile}`);
+  if (stage101Backdrop.expeditionBackdropToX !== 0) failures.push(`Expected stage 101 backdrop offset 0 inside tile 1, got ${stage101Backdrop.expeditionBackdropToX}`);
+  if (stage101Backdrop.expeditionBackdropImage === afterAccept.expeditionBackdropImage) failures.push("Expected stage 101 backdrop image to use a different route tile from stage 1");
   if (afterAccept.unitFrameCount !== 4 || afterAccept.unitFramesLoaded !== 4) failures.push(`Expected 4 loaded unit frames, got ${afterAccept.unitFramesLoaded}/${afterAccept.unitFrameCount}`);
   if (afterAccept.enemyVisualCount < 1 || afterAccept.enemyVisualCount > 3) failures.push(`Expected 1-3 expedition enemies, got ${afterAccept.enemyVisualCount}`);
   if (afterAccept.enemyFrameCount !== afterAccept.enemyVisualCount * 4 || afterAccept.enemyFramesLoaded !== afterAccept.enemyFrameCount) failures.push(`Expected loaded enemy frames to match enemies, got ${afterAccept.enemyFramesLoaded}/${afterAccept.enemyFrameCount} for ${afterAccept.enemyVisualCount} enemies`);
@@ -633,29 +675,34 @@ try {
   if (moveStartedAfterMs < 2000) failures.push(`Expected travel to start after defeated enemies finish, got ${moveStartedAfterMs}ms`);
   if (duringStageTransition.expeditionStageTransition !== "moving") failures.push(`Expected moving stage transition after clear, got ${duringStageTransition.expeditionStageTransition}`);
   if (duringStageTransition.expeditionTransitionFromStage !== "1" || duringStageTransition.expeditionTransitionToStage !== "2") failures.push(`Expected transition 1 -> 2, got ${duringStageTransition.expeditionTransitionFromStage} -> ${duringStageTransition.expeditionTransitionToStage}`);
+  if (duringStageTransition.expeditionBackdropLayers !== 2) failures.push(`Expected two backdrop blend layers during travel, got ${duringStageTransition.expeditionBackdropLayers}`);
+  if (duringStageTransition.expeditionBackdropLayerImages !== 2) failures.push(`Expected both backdrop blend layers to have images, got ${duringStageTransition.expeditionBackdropLayerImages}`);
+  if (duringStageTransition.expeditionBackdropLayerAnimations < 2) failures.push(`Expected backdrop blend layers to animate independently, got ${duringStageTransition.expeditionBackdropLayerAnimations}`);
+  if (duringStageTransition.expeditionBackdropFromTile !== 0 || duringStageTransition.expeditionBackdropTile !== 0) failures.push(`Expected stage 1 -> 2 to stay within tile 0 while blending, got ${duringStageTransition.expeditionBackdropFromTile} -> ${duringStageTransition.expeditionBackdropTile}`);
   if (!(duringStageTransition.expeditionBackdropToX < duringStageTransition.expeditionBackdropFromX)) failures.push(`Expected expedition backdrop to move left, got ${duringStageTransition.expeditionBackdropFromX} -> ${duringStageTransition.expeditionBackdropToX}`);
-  if (duringStageTransition.expeditionBackdropFromX !== 0 || duringStageTransition.expeditionBackdropToX !== -88) failures.push(`Expected stage 1 -> 2 backdrop offset 0 -> -88, got ${duringStageTransition.expeditionBackdropFromX} -> ${duringStageTransition.expeditionBackdropToX}`);
+  if (duringStageTransition.expeditionBackdropFromX !== 0 || duringStageTransition.expeditionBackdropToX !== -300) failures.push(`Expected stage 1 -> 2 backdrop offset 0 -> -300, got ${duringStageTransition.expeditionBackdropFromX} -> ${duringStageTransition.expeditionBackdropToX}`);
   if (duringStageTransition.enemyVisualCount !== 0 || duringStageTransition.enemyFrameCount !== 0) failures.push(`Expected previous enemies to be absent during travel, got enemies=${duringStageTransition.enemyVisualCount} frames=${duringStageTransition.enemyFrameCount}`);
-  if (duringStageTransition.expeditionEncounterIntro !== "idle") failures.push(`Expected encounter intro to wait until travel ends, got ${duringStageTransition.expeditionEncounterIntro}`);
-  if (duringStageTransition.expeditionEnemyGroupApproaching !== 0) failures.push(`Expected no approaching enemy group during travel, got ${duringStageTransition.expeditionEnemyGroupApproaching}`);
+  if (duringStageTransition.expeditionEncounterIntro !== "idle") failures.push(`Expected encounter intro to wait until late travel, got ${duringStageTransition.expeditionEncounterIntro}`);
+  if (duringStageTransition.expeditionEnemyGroupApproaching !== 0) failures.push(`Expected no approaching enemy group during early travel, got ${duringStageTransition.expeditionEnemyGroupApproaching}`);
   if (duringStageTransition.expeditionCombatFloats !== 0) failures.push(`Expected combat floats to finish before travel, got ${duringStageTransition.expeditionCombatFloats}`);
   if (duringStageTransition.expeditionCombatReady !== "false") failures.push(`Expected combat ready false while traveling, got ${duringStageTransition.expeditionCombatReady}`);
   if (!duringStageTransition.actionDisabled || duringStageTransition.actionText !== "이동중") failures.push(`Expected expedition action disabled 이동중 during transition, got disabled=${duringStageTransition.actionDisabled} text=${duringStageTransition.actionText}`);
   if (!duringStageTransition.expeditionPartyRunning || duringStageTransition.expeditionPartyMotion !== "running") failures.push(`Expected party to run only during travel, got running=${duringStageTransition.expeditionPartyRunning} motion=${duringStageTransition.expeditionPartyMotion}`);
-  if (duringEncounterIntro.expeditionStageTransition !== "idle" || duringEncounterIntro.expeditionEncounterIntro !== "approaching") failures.push(`Expected enemy encounter after travel, got transition=${duringEncounterIntro.expeditionStageTransition} intro=${duringEncounterIntro.expeditionEncounterIntro}`);
-  if (duringEncounterIntro.expeditionEnemyGroupApproaching < 1) failures.push(`Expected current enemy group to approach after travel, got ${duringEncounterIntro.expeditionEnemyGroupApproaching}`);
-  if (Math.abs(duringEncounterIntro.expeditionEnemyApproachDurationMs - 2950) > 80) failures.push(`Expected encounter approach duration about 2950ms, got ${duringEncounterIntro.expeditionEnemyApproachDurationMs}`);
+  if (duringEncounterIntro.expeditionStageTransition !== "moving" || duringEncounterIntro.expeditionEncounterIntro !== "approaching") failures.push(`Expected enemy encounter during late travel, got transition=${duringEncounterIntro.expeditionStageTransition} intro=${duringEncounterIntro.expeditionEncounterIntro}`);
+  if (duringEncounterIntro.expeditionEnemyGroupApproaching < 1) failures.push(`Expected current enemy group to approach during late travel, got ${duringEncounterIntro.expeditionEnemyGroupApproaching}`);
+  if (Math.abs(duringEncounterIntro.expeditionEnemyApproachDurationMs - 1000) > 80) failures.push(`Expected encounter approach duration about 1000ms, got ${duringEncounterIntro.expeditionEnemyApproachDurationMs}`);
   if (duringEncounterIntro.enemyVisualCount > 1 && duringEncounterIntro.expeditionEnemyAssetKinds <= 1) failures.push(`Expected encountered enemies to use varied assets, got ${duringEncounterIntro.expeditionEnemyAssetKinds}`);
   if (duringEncounterIntro.expeditionEnemyVisibleFrameMin !== 1 || duringEncounterIntro.expeditionEnemyVisibleFrameMax !== 1) failures.push(`Expected exactly 1 visible sprite frame per enemy during encounter, got min/max ${duringEncounterIntro.expeditionEnemyVisibleFrameMin}/${duringEncounterIntro.expeditionEnemyVisibleFrameMax}`);
   if (duringEncounterIntro.expeditionCombatReady !== "false") failures.push(`Expected combat ready false while encounter is approaching, got ${duringEncounterIntro.expeditionCombatReady}`);
-  if (!duringEncounterIntro.actionDisabled || duringEncounterIntro.actionText !== "조우중") failures.push(`Expected expedition action disabled 조우중 during encounter intro, got disabled=${duringEncounterIntro.actionDisabled} text=${duringEncounterIntro.actionText}`);
-  if (duringEncounterIntro.expeditionPartyRunning || duringEncounterIntro.expeditionPartyCombat || duringEncounterIntro.expeditionPartyMotion !== "standing") failures.push(`Expected party to stop when enemies appear, got running=${duringEncounterIntro.expeditionPartyRunning} combat=${duringEncounterIntro.expeditionPartyCombat} motion=${duringEncounterIntro.expeditionPartyMotion}`);
+  if (!duringEncounterIntro.actionDisabled || duringEncounterIntro.actionText !== "이동중") failures.push(`Expected expedition action disabled 이동중 during overlap encounter, got disabled=${duringEncounterIntro.actionDisabled} text=${duringEncounterIntro.actionText}`);
+  if (!duringEncounterIntro.expeditionPartyRunning || duringEncounterIntro.expeditionPartyCombat || duringEncounterIntro.expeditionPartyMotion !== "running") failures.push(`Expected party to keep running while enemies approach during late travel, got running=${duringEncounterIntro.expeditionPartyRunning} combat=${duringEncounterIntro.expeditionPartyCombat} motion=${duringEncounterIntro.expeditionPartyMotion}`);
   if (afterClear.clearedStageCount !== 1) failures.push(`Expected clearedStageCount 1 after clear, got ${afterClear.clearedStageCount}`);
   if (afterClear.expeditionStageTransition !== "idle") failures.push(`Expected idle stage transition after 4s, got ${afterClear.expeditionStageTransition}`);
-  if (afterClear.expeditionEncounterIntro !== "idle") failures.push(`Expected encounter intro idle after approach, got ${afterClear.expeditionEncounterIntro}`);
+  if (afterClear.expeditionBackdropLayers !== 0) failures.push(`Expected backdrop blend layers to unmount after travel, got ${afterClear.expeditionBackdropLayers}`);
+  if (afterClear.expeditionEncounterIntro !== "idle") failures.push(`Expected encounter intro idle immediately after travel, got ${afterClear.expeditionEncounterIntro}`);
   if (afterClear.expeditionPartyRunning || !afterClear.expeditionPartyCombat || afterClear.expeditionPartyMotion !== "combat") failures.push(`Expected party to return to in-place combat motion after encounter, got running=${afterClear.expeditionPartyRunning} combat=${afterClear.expeditionPartyCombat} motion=${afterClear.expeditionPartyMotion}`);
   if (afterClear.expeditionBackdropToX !== duringStageTransition.expeditionBackdropToX) failures.push(`Expected expedition backdrop to persist at ${duringStageTransition.expeditionBackdropToX}, got ${afterClear.expeditionBackdropToX}`);
-  if (afterClear.expeditionBackdropToX !== -88) failures.push(`Expected stage 2 backdrop offset -88 after clear, got ${afterClear.expeditionBackdropToX}`);
+  if (afterClear.expeditionBackdropToX !== -300) failures.push(`Expected stage 2 backdrop offset -300 after clear, got ${afterClear.expeditionBackdropToX}`);
   if (afterClear.expeditionEnemyVisibleFrameMin !== 1 || afterClear.expeditionEnemyVisibleFrameMax !== 1) failures.push(`Expected exactly 1 visible sprite frame per enemy after clear, got min/max ${afterClear.expeditionEnemyVisibleFrameMin}/${afterClear.expeditionEnemyVisibleFrameMax}`);
   if (afterClear.expeditionCombatReady !== "true") failures.push(`Expected combat ready true after encounter completes, got ${afterClear.expeditionCombatReady}`);
   if (afterClear.lastBattleEvents < 1) failures.push(`Expected last battle events after expedition action, got ${afterClear.lastBattleEvents}`);
@@ -666,7 +713,7 @@ try {
   if (afterClear.expeditionRewardDialogs !== 0) failures.push(`Expected no reward modal after manual clear, got ${afterClear.expeditionRewardDialogs}`);
   if (afterClear.expeditionRewardToasts < 1 && !afterClear.expeditionLogText.includes("전투 승리")) failures.push("Expected compact expedition reward toast or reward log after manual clear");
   if (afterClear.expeditionHpBars < 2) failures.push(`Expected expedition HP bars, got ${afterClear.expeditionHpBars}`);
-  if (afterClear.money !== afterAccept.money) failures.push(`Expected money to stay unchanged after clear, before ${afterAccept.money}, after ${afterClear.money}`);
+  if (afterClear.money < afterAccept.money) failures.push(`Expected money not to decrease after clear while passive work income may accrue, before ${afterAccept.money}, after ${afterClear.money}`);
   if (afterClear.unitFrameCount !== 4 || afterClear.unitFramesLoaded !== 4) failures.push(`Expected 4 loaded unit frames after clear, got ${afterClear.unitFramesLoaded}/${afterClear.unitFrameCount}`);
   if (afterClear.enemyVisualCount < 1 || afterClear.enemyVisualCount > 3) failures.push(`Expected 1-3 expedition enemies after clear, got ${afterClear.enemyVisualCount}`);
   if (afterClear.enemyFrameCount !== afterClear.enemyVisualCount * 4 || afterClear.enemyFramesLoaded !== afterClear.enemyFrameCount) failures.push(`Expected loaded enemy frames after clear to match enemies, got ${afterClear.enemyFramesLoaded}/${afterClear.enemyFrameCount} for ${afterClear.enemyVisualCount} enemies`);
@@ -688,7 +735,7 @@ try {
   if (consoleErrors.length > 0) failures.push(`Console errors: ${consoleErrors.slice(0, 3).join(" | ")}`);
   if (pageErrors.length > 0) failures.push(`Page errors: ${pageErrors.slice(0, 3).join(" | ")}`);
 
-  console.log(JSON.stringify({ baseUrl, beforeAccept, afterAccept, duringDefeatReplay, afterEnemyDespawn, duringStageTransition, duringEncounterIntro, afterClear, autoGateInitial, autoGateBusyStart, autoGateBusyMid, autoGateReadyAgain, autoGateAfterResume, debugAutoInitial, debugAutoAfterFirst, debugAutoAfterSecond, moveStartedAfterMs, failures }, null, 2));
+  console.log(JSON.stringify({ baseUrl, beforeAccept, afterAccept, stage101Backdrop, duringDefeatReplay, afterEnemyDespawn, duringStageTransition, duringEncounterIntro, afterClear, autoGateInitial, autoGateBusyStart, autoGateBusyMid, autoGateReadyAgain, autoGateAfterResume, debugAutoInitial, debugAutoAfterFirst, debugAutoAfterSecond, moveStartedAfterMs, failures }, null, 2));
 
   if (failures.length > 0) {
     console.error(`REACT_VITE_EXPEDITION_SMOKE_FAILED failures=${failures.length}`);

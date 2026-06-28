@@ -27,16 +27,16 @@
 .expedition-enemy-group .expedition-enemy-visual:first-child::after,.expedition-enemy-visual.boss::after{content:"";pointer-events:none;position:absolute;left:50%;top:50%;z-index:3;width:78%;height:76%;border:1px solid #fff8;border-radius:24px;opacity:0;transform:translate(-50%,-50%) scale(.96);box-shadow:inset 0 0 0 1px #fff5,0 0 8px #9fd4c980;animation:.88s steps(4,end) infinite expeditionEnemyShock}
 .expedition-impact{z-index:7;opacity:.55;background:linear-gradient(90deg,transparent,#fff 22%,#9fd4c9 62%,transparent);width:42px;height:14px;top:42%;left:55%;clip-path:polygon(0 45%,74% 0,100% 50%,74% 100%,0 58%);filter:drop-shadow(0 0 4px #fff5);animation:.88s steps(4,end) infinite expeditionImpactSlash}
 .expedition-impact.ready{opacity:.72;background:linear-gradient(90deg,transparent,#fff 16%,#bfdbfe 46%,#9fd4c9 74%,transparent)}
-.expedition-scene.backdrop-shelter{--expedition-bg-y:0%}
-.expedition-scene.backdrop-studio{--expedition-bg-y:0%}
-.expedition-scene.backdrop-neighborhood{--expedition-bg-y:0%}
-.expedition-scene.backdrop-company{--expedition-bg-y:0%}
-.expedition-scene.backdrop-office{--expedition-bg-y:0%}
-.expedition-scene.backdrop-asset{--expedition-bg-y:0%}
-.expedition-scene.backdrop-national{--expedition-bg-y:0%}
-.expedition-scene.backdrop-global{--expedition-bg-y:0%}
-.expedition-scene.backdrop-future{--expedition-bg-y:0%}
-.expedition-scene.backdrop-summit{--expedition-bg-y:0%}
+.expedition-scene.backdrop-shelter .expedition-arena::before{background-image:url(__STUDENT_ASSET_010__)}
+.expedition-scene.backdrop-studio .expedition-arena::before{background-image:url(assets/visual-expedition-backdrop-studio-00.png)}
+.expedition-scene.backdrop-neighborhood .expedition-arena::before{background-image:url(assets/visual-expedition-backdrop-neighborhood-00.png)}
+.expedition-scene.backdrop-company .expedition-arena::before{background-image:url(assets/visual-expedition-backdrop-company-00.png)}
+.expedition-scene.backdrop-office .expedition-arena::before{background-image:url(assets/visual-expedition-backdrop-office-00.png)}
+.expedition-scene.backdrop-asset .expedition-arena::before{background-image:url(assets/visual-expedition-backdrop-asset-00.png)}
+.expedition-scene.backdrop-national .expedition-arena::before{background-image:url(assets/visual-expedition-backdrop-national-00.png)}
+.expedition-scene.backdrop-global .expedition-arena::before{background-image:url(assets/visual-expedition-backdrop-global-00.png)}
+.expedition-scene.backdrop-future .expedition-arena::before{background-image:url(assets/visual-expedition-backdrop-future-00.png)}
+.expedition-scene.backdrop-summit .expedition-arena::before{background-image:url(assets/visual-expedition-backdrop-summit-00.png)}
 .stage-scene.scene-elementary{--battle-road-bg-y:50%}
 .stage-scene.scene-elementary .pixel-arena::before{background-image:url(__STUDENT_ASSET_011__);background-repeat:no-repeat!important;background-size:100% 100%!important;background-position:center bottom!important}
 .stage-scene.scene-middle{--battle-road-bg-y:50%}

@@ -517,7 +517,7 @@ function makeCareerCandidates(state, university) {
 function makeOutcome(state, examResult, resolution) {
   assert(universities.length > 0, "universities.json이 비어 있어 수능 결과를 만들 수 없습니다.");
   assert(resolution && typeof resolution === "object", "수능 resolution 데이터가 없어 결과를 만들 수 없습니다.");
-  // 최종 점수로 합격한 대학(낙방권이면 최하위 대학으로 graceful fallback).
+  // 최종 점수로 합격한 대학. 낙방권이면 최하위 대학으로 처리한다.
   const university = resolution.finalUniversity || lowestUniversity;
   const careerCandidates = makeCareerCandidates(state, university);
   return {

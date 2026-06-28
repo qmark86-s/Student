@@ -2066,7 +2066,7 @@ def raster_sheet_path_for(tone_id: str) -> Path:
     if not path.exists():
         raise FileNotFoundError(
             f"원정대 몬스터 래스터 PNG 원본 누락: {project_path(path)}. "
-            "CSS/절차형 fallback 없이 assets/visual-source/expedition-enemy-raster-sheets/<tone>.png를 먼저 준비해야 합니다."
+            "CSS/절차형 대체 경로 없이 assets/visual-source/expedition-enemy-raster-sheets/<tone>.png를 먼저 준비해야 합니다."
         )
     return path
 

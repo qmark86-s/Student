@@ -23,6 +23,7 @@
   - 원정대 몬스터는 tone별 일반 3종과 보스 1종을 왼쪽 방향으로 생성한다.
   - 학생 전투 파노라마 배경을 초등/중등/고등/N수 4개 PNG로 생성하고 `__STUDENT_ASSET_011__`~`__STUDENT_ASSET_014__`에 연결한다.
   - `.pixel-arena::before`가 `battleRoadBackdropPan` transform 애니메이션으로 긴 배경을 이동시킨다.
+  - 원정대 배경은 최신 기준에서 챕터별 route tile `visual-expedition-backdrop-{theme}-{00..09}.png` 100개로 분리 생성한다. `visual-expedition-backdrops.png`와 `__STUDENT_ASSET_010__`은 호환용 기본 배경으로 유지한다.
 
 - `tools/apply-visual-asset-patch.mjs`
   - 원정대 유닛 렌더링에서 직업 데이터가 있으면 helper sprite 대신 `career-unit-*` 클래스를 우선 반환하게 했다.
@@ -48,13 +49,14 @@
 
 - `__STUDENT_ASSET_007__`: `assets/visual-companions.png`
 - `__STUDENT_ASSET_008__`: `assets/visual-enemies.png`
-- `__STUDENT_ASSET_010__`: `assets/visual-expedition-backdrops.png`
+- `__STUDENT_ASSET_010__`: `assets/visual-expedition-backdrops.png` 호환용 기본 배경
 - `__STUDENT_ASSET_011__`: `assets/visual-battle-road-backdrop-elementary.png`
 - `__STUDENT_ASSET_012__`: `assets/visual-battle-road-backdrop-middle.png`
 - `__STUDENT_ASSET_013__`: `assets/visual-battle-road-backdrop-high.png`
 - `__STUDENT_ASSET_014__`: `assets/visual-battle-road-backdrop-repeater.png`
 
 학생 전투 배경은 처음에는 단일 합본 PNG로 검토했지만, data URL이 너무 커져 브라우저 미리보기에서 누락될 수 있어 행별 파일로 분리했다.
+원정대 배경도 최신 기준에서는 1~10챕터가 같은 파노라마를 공유하지 않고, `backdropClass`와 Stage tile index에 맞는 PNG 파일을 React에서 `--expedition-bg-image`로 바인딩한다.
 
 ## 검증 결과
 

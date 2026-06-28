@@ -15,6 +15,7 @@ const characterAnimationManifestPath = resolve("data/character_animation_manifes
 const professionalSpriteManifestPath = resolve("data/professional_sprite_manifest.json");
 const characterAxisReportPath = resolve("artifacts/visual-asset-samples/character-axis-report.json");
 const professionalAxisReportPath = resolve("artifacts/visual-asset-samples/professional-axis-report.json");
+const expeditionBackdropSourceRoot = resolve("assets/visual-source/expedition-backdrops");
 const stagesPath = resolve("data/expedition_stages.json");
 const bossesPath = resolve("data/expedition_bosses.json");
 const mainMonsterSourcePath = resolve("assets/visual-source/main-monsters/main-monsters-green.png");
@@ -50,17 +51,20 @@ const enemyTones = [
   { id: "summit", color: "#a855f7", accent: "#f0b84c", prop: "teacher", motif: "summit" },
 ];
 
+const expeditionBackdropRoadProfile = "fixed-road-v2";
+const expeditionBackdropTileCount = 10;
+const expeditionBackdropStagesPerTile = 100;
 const expeditionBackdropThemes = [
-  { id: "shelter", sky: "#52647f", horizon: "#38485e", far: "#223049", mid: "#2d3a54", floor: "#28313f", accent: "#facc15" },
-  { id: "studio", sky: "#5b4968", horizon: "#393552", far: "#2b2741", mid: "#45304b", floor: "#272637", accent: "#fb923c" },
-  { id: "neighborhood", sky: "#426c60", horizon: "#30534c", far: "#1f3c39", mid: "#284d45", floor: "#203536", accent: "#84cc16" },
-  { id: "company", sky: "#2f6684", horizon: "#274b68", far: "#1d3650", mid: "#29435c", floor: "#1f2f42", accent: "#60a5fa" },
-  { id: "office", sky: "#596078", horizon: "#3d425c", far: "#292e43", mid: "#373a52", floor: "#242939", accent: "#c4b5fd" },
-  { id: "asset", sky: "#23665b", horizon: "#24483f", far: "#19352f", mid: "#255145", floor: "#1d322f", accent: "#34d399" },
-  { id: "national", sky: "#405d7b", horizon: "#30445e", far: "#1f3047", mid: "#35455b", floor: "#202d3d", accent: "#f97316" },
-  { id: "global", sky: "#2c6488", horizon: "#29466f", far: "#1f3153", mid: "#263f66", floor: "#1e2b4b", accent: "#38bdf8" },
-  { id: "future", sky: "#3d4d81", horizon: "#2b3866", far: "#20294d", mid: "#2f3d70", floor: "#1b2543", accent: "#a78bfa" },
-  { id: "summit", sky: "#614571", horizon: "#313d6f", far: "#20294e", mid: "#3a3464", floor: "#202642", accent: "#f0b84c" },
+  { id: "shelter", timeOfDay: "dawn", landmark: "temporary-shelter-alley", skyTop: "#24384e", sky: "#52647f", horizon: "#c08a58", far: "#33455f", mid: "#52413d", floor: "#30313a", road: "#34343c", roadDark: "#171b24", accent: "#facc15", accent2: "#ef4444", light: "#ffd58a" },
+  { id: "studio", timeOfDay: "deep-night", landmark: "studio-laundry-neon", skyTop: "#160f2f", sky: "#342052", horizon: "#6b315e", far: "#2b2741", mid: "#4b324f", floor: "#272637", road: "#262337", roadDark: "#11111f", accent: "#fb923c", accent2: "#f9a8d4", light: "#fef3c7" },
+  { id: "neighborhood", timeOfDay: "clear-noon", landmark: "local-market-street", skyTop: "#7bbbe1", sky: "#9ed7ea", horizon: "#d8f2da", far: "#76a58d", mid: "#5f8f67", floor: "#314239", road: "#3c473f", roadDark: "#1d2926", accent: "#84cc16", accent2: "#f59e0b", light: "#fff7c2" },
+  { id: "company", timeOfDay: "commute-morning", landmark: "newtown-glass-company", skyTop: "#8bd3ff", sky: "#bfe8ff", horizon: "#f5d39b", far: "#7ca7bd", mid: "#527d97", floor: "#293746", road: "#334456", roadDark: "#172434", accent: "#60a5fa", accent2: "#f97316", light: "#f8fafc" },
+  { id: "office", timeOfDay: "rainy-evening", landmark: "professional-office-towers", skyTop: "#2d344c", sky: "#596078", horizon: "#798099", far: "#3b4056", mid: "#36374c", floor: "#252936", road: "#2a2d39", roadDark: "#111827", accent: "#c4b5fd", accent2: "#f0b84c", light: "#f5e7b2" },
+  { id: "asset", timeOfDay: "golden-sunset", landmark: "asset-lounge-market-board", skyTop: "#194b4d", sky: "#23665b", horizon: "#f3a75f", far: "#335844", mid: "#255145", floor: "#20352e", road: "#243a32", roadDark: "#10211d", accent: "#34d399", accent2: "#facc15", light: "#fde68a" },
+  { id: "national", timeOfDay: "overcast-day", landmark: "national-project-construction", skyTop: "#6d7d8f", sky: "#96a6b5", horizon: "#c6c7bf", far: "#66717f", mid: "#4a5565", floor: "#30343a", road: "#373a40", roadDark: "#1c2026", accent: "#f97316", accent2: "#ef4444", light: "#fef3c7" },
+  { id: "global", timeOfDay: "harbor-sunrise", landmark: "airport-harbor-hub", skyTop: "#24547d", sky: "#5fb2d9", horizon: "#ffc27a", far: "#4b7891", mid: "#355f7c", floor: "#233548", road: "#273c4e", roadDark: "#101b29", accent: "#38bdf8", accent2: "#fde047", light: "#fff7ad" },
+  { id: "future", timeOfDay: "midnight-cyber", landmark: "future-research-city", skyTop: "#0d1539", sky: "#24346f", horizon: "#4b3a88", far: "#1e2858", mid: "#2f3d70", floor: "#1b2543", road: "#20284a", roadDark: "#0c122b", accent: "#a78bfa", accent2: "#67e8f9", light: "#d9f99d" },
+  { id: "summit", timeOfDay: "golden-summit", landmark: "world-influence-summit", skyTop: "#493169", sky: "#7960a3", horizon: "#f2b866", far: "#4b4475", mid: "#3a3464", floor: "#292641", road: "#302b48", roadDark: "#161427", accent: "#f0b84c", accent2: "#f5d76e", light: "#fff1a8" },
 ];
 
 const battleRoadBackdropRows = [
@@ -2075,6 +2079,37 @@ function drawSourceScaled(target, source, dx, dy, dw, dh, options = {}) {
   }
 }
 
+function drawSourceCover(target, source, dx, dy, dw, dh, options = {}) {
+  const baseOffsetX = options.sourceOffsetX ?? 0;
+  const baseOffsetY = options.sourceOffsetY ?? 0;
+  const baseWidth = Math.max(1, Math.min(source.width, options.sourceWidth ?? source.width));
+  const baseHeight = Math.max(1, Math.min(source.height, options.sourceHeight ?? source.height));
+  const targetRatio = dw / Math.max(1, dh);
+  const sourceRatio = baseWidth / Math.max(1, baseHeight);
+  let cropW = baseWidth;
+  let cropH = baseHeight;
+  let cropOffsetX = 0;
+  let cropOffsetY = 0;
+  if (sourceRatio > targetRatio) {
+    cropW = Math.max(1, Math.round(baseHeight * targetRatio));
+    const availableX = Math.max(0, baseWidth - cropW);
+    const focusX = Math.max(0, Math.min(1, options.focusX ?? 0.5));
+    cropOffsetX = Math.round(availableX * focusX);
+  } else {
+    cropH = Math.max(1, Math.round(baseWidth / targetRatio));
+    const availableY = Math.max(0, baseHeight - cropH);
+    const focusY = Math.max(0, Math.min(1, options.focusY ?? 0.58));
+    cropOffsetY = Math.round(availableY * focusY);
+  }
+  drawSourceScaled(target, source, dx, dy, dw, dh, {
+    mirrorX: options.mirrorX,
+    sourceOffsetX: baseOffsetX + cropOffsetX,
+    sourceOffsetY: baseOffsetY + cropOffsetY,
+    sourceWidth: cropW,
+    sourceHeight: cropH,
+  });
+}
+
 function readRgbaAt(image, x, y) {
   const sx = Math.max(0, Math.min(image.width - 1, Math.floor(x)));
   const sy = Math.max(0, Math.min(image.height - 1, Math.floor(y)));
@@ -2202,40 +2237,6 @@ function writePixel(target, x, y, color) {
   target.pixels[i + 1] = color.g;
   target.pixels[i + 2] = color.b;
   target.pixels[i + 3] = color.a;
-}
-
-function blendVerticalSeam(target, startX, width) {
-  for (let x = 0; x < width; x += 1) {
-    const ratio = x / Math.max(1, width - 1);
-    const leftX = Math.max(0, startX - 1);
-    const rightX = Math.min(target.width - 1, startX + width);
-    const targetX = startX + x;
-    for (let y = 0; y < target.height; y += 1) {
-      writePixel(target, targetX, y, mix(samplePixel(target, leftX, y), samplePixel(target, rightX, y), ratio));
-    }
-  }
-}
-
-function blendHorizontalLoopSeam(target, width) {
-  const band = Math.max(1, Math.min(Math.floor(width), Math.floor(target.width / 2)));
-  const leftPixels = [];
-  const rightPixels = [];
-  for (let d = 0; d < band; d += 1) {
-    leftPixels[d] = [];
-    rightPixels[d] = [];
-    for (let y = 0; y < target.height; y += 1) {
-      leftPixels[d][y] = samplePixel(target, d, y);
-      rightPixels[d][y] = samplePixel(target, target.width - 1 - d, y);
-    }
-  }
-  for (let d = 0; d < band; d += 1) {
-    const keepOriginal = d / Math.max(1, band - 1);
-    for (let y = 0; y < target.height; y += 1) {
-      const seam = mix(leftPixels[d][y], rightPixels[d][y], 0.5);
-      writePixel(target, d, y, mix(seam, leftPixels[d][y], keepOriginal));
-      writePixel(target, target.width - 1 - d, y, mix(seam, rightPixels[d][y], keepOriginal));
-    }
-  }
 }
 
 function u32(value) {
@@ -2531,26 +2532,792 @@ function drawBackdropRow(target, yOffset, theme, rowIndex, width, height) {
   }
 }
 
+function drawExpeditionNeonPanel(target, x, y, w, h, accent, seed) {
+  const ink = hexToRgb("#0f172a");
+  const white = hexToRgb("#f8fafc");
+  fillRect(target, x, y, w, h, alpha(ink, 215));
+  strokeRect(target, x, y, w, h, alpha(accent, 230), 3);
+  fillRect(target, x + 8, y + 8, Math.max(8, w - 16), 4, alpha(mix(accent, white, 0.34), 220));
+  for (let i = 0; i < 3; i += 1) {
+    const barW = Math.round(deterministicRange(seed + i * 13, w * 0.28, w * 0.78));
+    fillRect(target, x + 9, y + 18 + i * 12, barW, 4, alpha(i % 2 === 0 ? accent : mix(accent, white, 0.42), 210));
+  }
+  fillEllipse(target, x + Math.round(w * 0.5), y + Math.round(h * 0.5), Math.round(w * 0.64), Math.round(h * 0.42), alpha(accent, 28));
+}
+
+function drawExpeditionAwning(target, x, y, w, accent, seed) {
+  const ink = hexToRgb("#17212e");
+  const white = hexToRgb("#f8fafc");
+  fillRect(target, x, y, w, 24, alpha(ink, 220));
+  for (let i = 0; i < 6; i += 1) {
+    const stripeX = x + Math.round((w / 6) * i);
+    const stripeW = Math.ceil(w / 6);
+    fillRect(target, stripeX, y, stripeW, 18, alpha(i % 2 === 0 ? accent : mix(accent, white, 0.55), 230));
+    fillPolygon(target, [[stripeX, y + 18], [stripeX + stripeW, y + 18], [stripeX + stripeW - 4, y + 26], [stripeX + 4, y + 26]], alpha(i % 2 === 0 ? mix(accent, ink, 0.08) : white, 210));
+  }
+  if (deterministicRange(seed, 0, 1) > 0.45) drawExpeditionNeonPanel(target, x + Math.round(w * 0.16), y - 35, Math.round(w * 0.5), 24, accent, seed + 41);
+}
+
+function drawExpeditionTree(target, x, y, accent, seed) {
+  const trunk = hexToRgb("#3f2f26");
+  const leaf = mix(accent, hexToRgb("#14532d"), 0.52);
+  fillRect(target, x - 4, y - 34, 8, 42, alpha(trunk, 235));
+  for (let i = 0; i < 5; i += 1) {
+    const cx = x + Math.round(deterministicRange(seed + i * 7, -22, 22));
+    const cy = y - Math.round(deterministicRange(seed + i * 11, 40, 70));
+    fillEllipse(target, cx, cy, Math.round(deterministicRange(seed + i * 17, 17, 29)), Math.round(deterministicRange(seed + i * 19, 14, 24)), alpha(leaf, 210));
+  }
+}
+
+function drawExpeditionCrane(target, x, y, accent) {
+  const ink = hexToRgb("#111827");
+  const light = mix(accent, hexToRgb("#ffffff"), 0.24);
+  drawLine(target, x, y, x, y - 118, alpha(ink, 230), 5);
+  drawLine(target, x - 62, y - 114, x + 138, y - 114, alpha(light, 220), 5);
+  drawLine(target, x, y - 118, x + 82, y - 64, alpha(light, 190), 3);
+  drawLine(target, x, y - 118, x - 42, y - 68, alpha(light, 190), 3);
+  drawLine(target, x + 104, y - 114, x + 104, y - 72, alpha(ink, 210), 2);
+  fillRect(target, x + 95, y - 71, 18, 14, alpha(accent, 220));
+}
+
+function drawExpeditionFlagLine(target, x, y, count, accent, seed) {
+  const ink = hexToRgb("#0f172a");
+  drawLine(target, x, y, x + count * 34, y - 18, alpha(ink, 180), 2);
+  for (let i = 0; i < count; i += 1) {
+    const px = x + i * 34;
+    const py = y - Math.round((18 / Math.max(1, count - 1)) * i);
+    const color = deterministicRange(seed + i * 9, 0, 1) > 0.48 ? accent : mix(accent, hexToRgb("#ffffff"), 0.55);
+    fillPolygon(target, [[px, py], [px + 20, py + 4], [px + 2, py + 16]], alpha(color, 220));
+  }
+}
+
+function drawExpeditionHologram(target, x, y, accent, seed) {
+  const cyan = mix(accent, hexToRgb("#67e8f9"), 0.45);
+  for (let i = 0; i < 4; i += 1) {
+    const rx = 34 + i * 13;
+    const ry = 12 + i * 5;
+    fillEllipse(target, x, y - i * 16, rx, ry, alpha(cyan, 34));
+    drawLine(target, x - rx, y - i * 16, x + rx, y - i * 16, alpha(cyan, 110), 2);
+  }
+  fillRect(target, x - 8, y - 85, 16, 72, alpha(cyan, 72));
+  for (let i = 0; i < 5; i += 1) {
+    fillRect(target, x - 42 + i * 21, y - Math.round(deterministicRange(seed + i, 34, 78)), 11, 6, alpha(cyan, 170));
+  }
+}
+
+function drawExpeditionSummitTower(target, x, y, accent) {
+  const ink = hexToRgb("#111827");
+  const gold = mix(accent, hexToRgb("#fde68a"), 0.32);
+  fillPolygon(target, [[x, y - 176], [x + 34, y], [x - 34, y]], alpha(ink, 225));
+  fillPolygon(target, [[x, y - 164], [x + 18, y - 18], [x - 18, y - 18]], alpha(mix(gold, ink, 0.18), 230));
+  fillRect(target, x - 5, y - 210, 10, 54, alpha(gold, 225));
+  fillEllipse(target, x, y - 214, 36, 12, alpha(gold, 82));
+  for (let i = 0; i < 5; i += 1) {
+    fillRect(target, x - 11, y - 130 + i * 20, 22, 4, alpha(gold, 190));
+  }
+}
+
+function drawExpeditionPixelCloud(target, x, y, w, color, seed) {
+  const cloud = alpha(color, 62);
+  fillRect(target, x - Math.round(w * 0.36), y - 5, Math.round(w * 0.72), 10, cloud);
+  for (let i = 0; i < 5; i += 1) {
+    const cx = x + Math.round(deterministicRange(seed + i * 17, -w * 0.42, w * 0.42));
+    const cy = y + Math.round(deterministicRange(seed + i * 19, -7, 7));
+    fillEllipse(target, cx, cy, Math.round(deterministicRange(seed + i * 23, w * 0.12, w * 0.24)), Math.round(deterministicRange(seed + i * 29, 5, 13)), cloud);
+  }
+}
+
+function drawExpeditionVoxelBuilding(target, x, groundY, w, h, base, accent, seed, options = {}) {
+  const ink = hexToRgb("#0f172a");
+  const white = hexToRgb("#f8fafc");
+  const roofH = Math.max(7, Math.round(h * 0.08));
+  const sideW = Math.max(8, Math.round(w * 0.16));
+  fillRect(target, x, groundY - h, w, h, alpha(mix(base, ink, options.darkness ?? 0.12), options.opacity ?? 238));
+  fillRect(target, x + 4, groundY - h + 5, Math.max(2, w - sideW - 8), Math.max(2, h - 10), alpha(base, options.opacity ?? 235));
+  fillRect(target, x + w - sideW, groundY - h + 6, sideW - 3, h - 11, alpha(mix(base, ink, 0.28), options.opacity ?? 230));
+  fillPolygon(target, [[x - 4, groundY - h + roofH], [x + Math.round(w * 0.5), groundY - h - roofH], [x + w + 4, groundY - h + roofH], [x + w - sideW, groundY - h + roofH + 8], [x + sideW, groundY - h + roofH + 8]], alpha(mix(base, white, 0.18), options.opacity ?? 230));
+  if (options.roof === "spire") {
+    fillPolygon(target, [[x + Math.round(w * 0.5), groundY - h - 46], [x + Math.round(w * 0.72), groundY - h + 4], [x + Math.round(w * 0.28), groundY - h + 4]], alpha(mix(base, accent, 0.18), options.opacity ?? 230));
+    fillRect(target, x + Math.round(w * 0.5) - 3, groundY - h - 70, 6, 31, alpha(accent, 220));
+  }
+  if (options.roof === "antenna") {
+    drawLine(target, x + Math.round(w * 0.58), groundY - h - 44, x + Math.round(w * 0.58), groundY - h - 3, alpha(accent, 180), 2);
+    fillRect(target, x + Math.round(w * 0.58) - 4, groundY - h - 47, 8, 8, alpha(accent, 210));
+  }
+  if (options.roof === "slope") {
+    fillPolygon(target, [[x - 4, groundY - h + 12], [x + Math.round(w * 0.45), groundY - h - 28], [x + w + 5, groundY - h + 12]], alpha(mix(accent, ink, 0.18), options.opacity ?? 230));
+  }
+  if (options.windows !== false) {
+    const windowW = Math.max(4, Math.round(w / 12));
+    const gapX = Math.max(11, Math.round(w / 6));
+    const gapY = Math.max(13, Math.round(h / 9));
+    for (let yy = groundY - h + 24; yy < groundY - 14; yy += gapY) {
+      for (let xx = x + 12; xx < x + w - sideW - 8; xx += gapX) {
+        const on = deterministicRange(seed + xx * 0.11 + yy * 0.23, 0, 1) < (options.lit ?? 0.45);
+        const color = on ? mix(accent, white, deterministicRange(seed + xx, 0.05, 0.35)) : mix(base, ink, 0.34);
+        fillRect(target, xx, yy, windowW, 5, alpha(color, on ? 218 : 150));
+      }
+    }
+  }
+}
+
+function drawExpeditionLowShop(target, x, groundY, w, h, body, accent, seed, options = {}) {
+  const ink = hexToRgb("#17212e");
+  const white = hexToRgb("#f8fafc");
+  fillRect(target, x, groundY - h, w, h, alpha(body, 228));
+  fillRect(target, x + 8, groundY - h + 12, w - 16, h - 18, alpha(mix(body, white, 0.06), 228));
+  if (options.awning !== false) drawExpeditionAwning(target, x + 6, groundY - h + 8, w - 12, accent, seed);
+  fillRect(target, x + 18, groundY - 42, Math.round(w * 0.34), 31, alpha(mix(ink, body, 0.18), 220));
+  fillRect(target, x + Math.round(w * 0.58), groundY - 45, Math.round(w * 0.3), 28, alpha(mix(accent, white, 0.1), 190));
+  strokeRect(target, x, groundY - h, w, h, alpha(ink, 180), 2);
+}
+
+function drawExpeditionMarketStall(target, x, groundY, w, accent, seed) {
+  const ink = hexToRgb("#17212e");
+  const wood = hexToRgb("#8b5a31");
+  drawExpeditionAwning(target, x, groundY - 68, w, accent, seed);
+  fillRect(target, x + 12, groundY - 45, w - 24, 38, alpha(wood, 226));
+  for (let i = 0; i < 5; i += 1) {
+    const px = x + 22 + i * Math.round((w - 44) / 5);
+    fillEllipse(target, px, groundY - 30, 13, 8, alpha(i % 2 ? accent : mix(accent, hexToRgb("#f97316"), 0.45), 225));
+  }
+  fillRect(target, x + 10, groundY - 8, w - 20, 8, alpha(ink, 160));
+}
+
+function drawExpeditionBusStop(target, x, groundY, accent) {
+  const ink = hexToRgb("#17212e");
+  fillRect(target, x, groundY - 72, 118, 72, alpha(ink, 178));
+  strokeRect(target, x, groundY - 72, 118, 72, alpha(accent, 220), 3);
+  fillRect(target, x + 8, groundY - 60, 72, 42, alpha(hexToRgb("#e0f2fe"), 68));
+  fillRect(target, x + 86, groundY - 62, 21, 45, alpha(accent, 205));
+  fillRect(target, x + 8, groundY - 8, 96, 6, alpha(ink, 210));
+}
+
+function drawExpeditionSkyBridge(target, x, y, w, accent) {
+  const ink = hexToRgb("#17212e");
+  fillRect(target, x, y, w, 24, alpha(ink, 192));
+  strokeRect(target, x, y, w, 24, alpha(accent, 190), 2);
+  for (let px = x + 14; px < x + w - 12; px += 28) fillRect(target, px, y + 8, 14, 6, alpha(mix(accent, hexToRgb("#ffffff"), 0.34), 178));
+}
+
+function drawExpeditionHarborCrane(target, x, y, accent) {
+  const ink = hexToRgb("#17212e");
+  drawLine(target, x, y, x + 32, y - 108, alpha(ink, 230), 5);
+  drawLine(target, x + 32, y - 108, x + 176, y - 102, alpha(accent, 220), 5);
+  drawLine(target, x + 32, y - 108, x - 42, y - 76, alpha(accent, 195), 4);
+  drawLine(target, x + 138, y - 104, x + 138, y - 45, alpha(ink, 200), 2);
+  fillRect(target, x + 126, y - 45, 26, 18, alpha(accent, 215));
+}
+
+function drawExpeditionAircraft(target, x, y, accent) {
+  const white = hexToRgb("#f8fafc");
+  fillRect(target, x, y, 74, 8, alpha(white, 190));
+  fillPolygon(target, [[x + 40, y + 3], [x + 16, y + 21], [x + 56, y + 9]], alpha(mix(accent, white, 0.28), 180));
+  fillPolygon(target, [[x + 56, y + 2], [x + 80, y - 12], [x + 69, y + 8]], alpha(mix(accent, white, 0.18), 180));
+}
+
+function drawExpeditionMaglevRail(target, x, y, w, accent) {
+  const ink = hexToRgb("#0f172a");
+  drawLine(target, x, y, x + w, y - 26, alpha(mix(accent, ink, 0.08), 180), 7);
+  drawLine(target, x, y + 12, x + w, y - 14, alpha(ink, 165), 4);
+  fillRect(target, x + Math.round(w * 0.38), y - 38, 188, 28, alpha(mix(accent, hexToRgb("#67e8f9"), 0.36), 160));
+  strokeRect(target, x + Math.round(w * 0.38), y - 38, 188, 28, alpha(accent, 220), 2);
+}
+
+function drawExpeditionSummitHall(target, x, groundY, w, accent) {
+  const ink = hexToRgb("#17212e");
+  const gold = mix(accent, hexToRgb("#fde68a"), 0.24);
+  fillPolygon(target, [[x, groundY - 74], [x + Math.round(w * 0.5), groundY - 128], [x + w, groundY - 74]], alpha(gold, 230));
+  fillRect(target, x + 16, groundY - 74, w - 32, 70, alpha(mix(gold, ink, 0.22), 235));
+  for (let i = 0; i < 6; i += 1) fillRect(target, x + 38 + i * Math.round((w - 80) / 6), groundY - 64, 12, 58, alpha(mix(gold, hexToRgb("#fff7ad"), 0.2), 220));
+  strokeRect(target, x + 16, groundY - 74, w - 32, 70, alpha(ink, 170), 2);
+}
+
+function drawExpeditionSky(target, theme, index, width, height) {
+  const skyTop = hexToRgb(theme.skyTop ?? theme.sky);
+  const sky = hexToRgb(theme.sky);
+  const horizon = hexToRgb(theme.horizon);
+  const accent = hexToRgb(theme.accent);
+  const accent2 = hexToRgb(theme.accent2 ?? theme.accent);
+  const white = hexToRgb("#f8fafc");
+  const roadTop = Math.round(height * 0.54);
+  gradientRect(target, 0, 0, width, roadTop + 8, skyTop, horizon);
+
+  const night = theme.timeOfDay.includes("night") || theme.timeOfDay.includes("midnight");
+  if (night) {
+    for (let i = 0; i < 120; i += 1) {
+      const x = Math.round(deterministicRange(index * 1301 + i * 17, 0, width - 1));
+      const y = Math.round(deterministicRange(index * 1559 + i * 19, 8, 145));
+      const size = deterministicRange(index * 1709 + i, 0, 1) > 0.86 ? 2 : 1;
+      fillRect(target, x, y, size, size, alpha(mix(white, accent2, 0.16), 120));
+    }
+    fillEllipse(target, Math.round(width * 0.82), 58, 42, 42, alpha(mix(accent2, white, 0.45), 145));
+    fillEllipse(target, Math.round(width * 0.82) - 12, 50, 36, 36, alpha(skyTop, 180));
+  } else {
+    const sunX = theme.timeOfDay.includes("sunset") || theme.timeOfDay.includes("summit") ? Math.round(width * 0.72) : Math.round(width * 0.2);
+    const sunY = theme.timeOfDay.includes("noon") ? 58 : 96;
+    fillEllipse(target, sunX, sunY, 52, 52, alpha(mix(accent2, white, 0.22), 150));
+    fillEllipse(target, sunX, sunY, 31, 31, alpha(mix(accent2, white, 0.45), 210));
+  }
+
+  for (let i = 0; i < 10; i += 1) {
+    const x = Math.round(deterministicRange(index * 701 + i * 31, 70, width - 70));
+    const y = Math.round(deterministicRange(index * 811 + i * 37, 34, 136));
+    const w = Math.round(deterministicRange(index * 929 + i * 41, 96, 210));
+    drawExpeditionPixelCloud(target, x, y, w, mix(white, sky, night ? 0.52 : 0.2), index * 37 + i);
+  }
+
+  if (theme.timeOfDay === "rainy-evening") {
+    for (let x = -20; x < width + 40; x += 42) drawLine(target, x, 18, x - 28, roadTop - 12, alpha(mix(white, sky, 0.3), 62), 1);
+  }
+}
+
+function drawExpeditionFarLayer(target, theme, index, width, height) {
+  const far = hexToRgb(theme.far);
+  const mid = hexToRgb(theme.mid);
+  const accent = hexToRgb(theme.accent);
+  const accent2 = hexToRgb(theme.accent2 ?? theme.accent);
+  const roadTop = Math.round(height * 0.54);
+  const farGround = roadTop - 118;
+  const midGround = roadTop - 72;
+
+  if (theme.id === "neighborhood") {
+    for (let x = -80; x < width + 120; x += 190) {
+      fillEllipse(target, x + 82, farGround + 28, 180, 64, alpha(mix(far, hexToRgb("#84cc16"), 0.22), 210));
+    }
+  } else if (theme.id === "summit") {
+    for (let x = -160; x < width + 220; x += 300) {
+      fillPolygon(target, [[x, farGround + 90], [x + 150, farGround - 72], [x + 330, farGround + 90]], alpha(mix(far, accent, 0.08), 218));
+      fillPolygon(target, [[x + 116, farGround - 36], [x + 150, farGround - 72], [x + 188, farGround - 33]], alpha(mix(accent2, hexToRgb("#ffffff"), 0.38), 185));
+    }
+  } else {
+    for (let x = -60; x < width + 90; x += Math.round(deterministicRange(index * 97 + x * 0.019, 126, 220))) {
+      const w = Math.round(deterministicRange(index * 31 + x, theme.id === "studio" ? 54 : 70, theme.id === "office" || theme.id === "company" ? 150 : 118));
+      const h = Math.round(deterministicRange(index * 47 + x, 48, theme.id === "office" || theme.id === "company" || theme.id === "future" ? 176 : 118));
+      const roof = theme.id === "future" ? "spire" : theme.id === "studio" ? "antenna" : "flat";
+      drawExpeditionVoxelBuilding(target, x, farGround + 44, w, h, alpha(mix(far, hexToRgb(theme.sky), 0.08), 210), alpha(accent, 170), index * 991 + x, { lit: theme.timeOfDay.includes("night") ? 0.6 : 0.2, roof, opacity: 190 });
+    }
+  }
+
+  for (let x = -120; x < width + 170; x += Math.round(deterministicRange(index * 177 + x * 0.023, 230, 390))) {
+    const w = Math.round(deterministicRange(index * 211 + x, theme.id === "neighborhood" ? 150 : 96, theme.id === "company" || theme.id === "office" ? 236 : 178));
+    const h = Math.round(deterministicRange(index * 223 + x, theme.id === "neighborhood" ? 46 : 78, theme.id === "office" || theme.id === "future" ? 230 : 160));
+    const roof = theme.id === "national" ? "antenna" : theme.id === "neighborhood" || theme.id === "shelter" ? "slope" : theme.id === "future" ? "spire" : "flat";
+    drawExpeditionVoxelBuilding(target, x, midGround + 34, w, h, alpha(mid, 226), alpha(accent, 205), index * 1223 + x, { lit: theme.timeOfDay.includes("night") || theme.timeOfDay.includes("evening") ? 0.62 : 0.34, roof, opacity: 222 });
+  }
+
+  if (theme.id === "national") {
+    for (let x = 260; x < width; x += 680) drawExpeditionCrane(target, x, midGround + 12, accent);
+  }
+  if (theme.id === "global") {
+    for (let x = 180; x < width; x += 760) drawExpeditionHarborCrane(target, x, midGround + 36, accent2);
+    drawExpeditionAircraft(target, Math.round(width * 0.66), 72, accent);
+  }
+  if (theme.id === "future") {
+    for (let x = 240; x < width; x += 790) drawExpeditionMaglevRail(target, x, midGround + 10, 460, accent2);
+  }
+}
+
+function drawExpeditionRoad(target, theme, width, height) {
+  const roadTop = Math.round(height * 0.54);
+  const road = hexToRgb(theme.road ?? theme.floor);
+  const roadDark = hexToRgb(theme.roadDark ?? "#111827");
+  const floor = hexToRgb(theme.floor);
+  const accent = hexToRgb(theme.accent);
+  const white = hexToRgb("#f8fafc");
+  const ink = hexToRgb("#0f172a");
+  fillRect(target, 0, roadTop - 12, width, 10, alpha(mix(floor, ink, 0.2), 220));
+  fillRect(target, 0, roadTop - 3, width, 3, alpha(mix(accent, white, 0.12), 165));
+  gradientRect(target, 0, roadTop, width, height - roadTop, mix(road, white, 0.06), mix(roadDark, road, 0.12));
+  fillRect(target, 0, roadTop + 24, width, 4, alpha(mix(accent, white, 0.15), 115));
+  fillRect(target, 0, roadTop + 58, width, 7, alpha(ink, 74));
+  fillRect(target, 0, height - 32, width, 32, alpha(roadDark, 96));
+  for (let x = -48; x < width + 96; x += 88) {
+    const shade = x % 176 === 0 ? mix(road, white, 0.1) : mix(road, ink, 0.06);
+    fillPolygon(target, [[x, roadTop + 40], [x + 68, roadTop + 35], [x + 114, height], [x - 34, height]], alpha(shade, 135));
+    fillRect(target, x + 18, roadTop + 58, 42, 3, alpha(mix(white, accent, 0.24), 62));
+  }
+  for (let x = 12; x < width; x += 176) {
+    fillRect(target, x, roadTop + 6, 82, 2, alpha(mix(white, road, 0.28), 52));
+    fillRect(target, x + 28, roadTop + 92, 118, 2, alpha(mix(ink, road, 0.2), 44));
+  }
+  for (let i = 0; i < 180; i += 1) {
+    const x = Math.round(deterministicRange(theme.id.length * 809 + i * 31, 0, width - 24));
+    const y = Math.round(deterministicRange(theme.id.length * 907 + i * 37, roadTop + 10, height - 16));
+    const w = Math.round(deterministicRange(theme.id.length * 1013 + i, 8, 44));
+    const h = Math.round(deterministicRange(theme.id.length * 1151 + i, 1, 4));
+    const color = deterministicRange(theme.id.length * 1223 + i, 0, 1) > 0.55 ? mix(road, white, 0.12) : mix(roadDark, road, 0.22);
+    fillRect(target, x, y, w, h, alpha(color, 34));
+  }
+  for (let i = 0; i < 48; i += 1) {
+    const x = Math.round(deterministicRange(theme.id.length * 1373 + i * 17, 0, width - 80));
+    const y = Math.round(deterministicRange(theme.id.length * 1459 + i * 19, roadTop + 44, height - 34));
+    fillEllipse(target, x, y, Math.round(deterministicRange(i + 11, 18, 46)), Math.round(deterministicRange(i + 23, 3, 8)), alpha(mix(roadDark, hexToRgb(theme.sky), 0.2), theme.timeOfDay.includes("rain") ? 72 : 36));
+  }
+}
+
+function drawExpeditionNearStrip(target, theme, index, width, height) {
+  const roadTop = Math.round(height * 0.54);
+  const segmentWidth = Math.round(width / 3);
+  const accent = hexToRgb(theme.accent);
+  const accent2 = hexToRgb(theme.accent2 ?? theme.accent);
+  const mid = hexToRgb(theme.mid);
+  const floor = hexToRgb(theme.floor);
+  const ink = hexToRgb("#0f172a");
+  const white = hexToRgb("#f8fafc");
+  const baseY = roadTop - 4;
+
+  fillRect(target, 0, roadTop - 82, width, 70, alpha(mix(floor, ink, 0.08), 180));
+  fillRect(target, 0, roadTop - 19, width, 7, alpha(mix(accent, white, 0.12), 150));
+
+  for (let segment = 0; segment < 3; segment += 1) {
+    const offset = segment * segmentWidth;
+    const seed = 2100 + index * 173 + segment * 47;
+    switch (theme.id) {
+      case "shelter":
+        fillRect(target, offset + 70, baseY - 82, 420, 76, alpha(mix(mid, ink, 0.08), 230));
+        for (let x = offset + 88; x < offset + 470; x += 42) {
+          fillRect(target, x, baseY - 74, 24, 10, alpha(mix(mid, white, 0.09), 170));
+          fillRect(target, x + 8, baseY - 41, 28, 8, alpha(mix(mid, ink, 0.16), 160));
+        }
+        fillPolygon(target, [[offset + 560, baseY - 4], [offset + 710, baseY - 72], [offset + 870, baseY - 4]], alpha(mix(accent2, ink, 0.15), 230));
+        fillRect(target, offset + 612, baseY - 34, 205, 30, alpha(mix(accent2, white, 0.06), 190));
+        for (let x = offset + 970; x < offset + 1490; x += 34) {
+          drawLine(target, x, baseY - 76, x + 30, baseY - 8, alpha(mix(white, ink, 0.52), 92), 2);
+          drawLine(target, x + 30, baseY - 76, x, baseY - 8, alpha(mix(white, ink, 0.52), 92), 2);
+        }
+        break;
+      case "studio":
+        for (let i = 0; i < 5; i += 1) {
+          const x = offset + 80 + i * 250;
+          fillRect(target, x, baseY - 106, 190, 102, alpha(mix(mid, ink, 0.08), 230));
+          strokeRect(target, x, baseY - 106, 190, 102, alpha(mix(accent, white, 0.08), 190), 2);
+          fillRect(target, x + 24, baseY - 78, 46, 46, alpha(hexToRgb("#dbeafe"), 76));
+          fillEllipse(target, x + 47, baseY - 55, 18, 18, alpha(accent2, 160));
+          drawExpeditionNeonPanel(target, x + 92, baseY - 88, 80, 26, i % 2 ? accent : accent2, seed + i);
+        }
+        for (let x = offset + 120; x < offset + 1510; x += 180) drawLine(target, x, baseY - 138, x + 150, baseY - 122, alpha(accent, 134), 2);
+        break;
+      case "neighborhood":
+        for (let i = 0; i < 4; i += 1) drawExpeditionMarketStall(target, offset + 120 + i * 350, baseY - 2, 240, i % 2 ? accent : accent2, seed + i);
+        for (let x = offset + 260; x < offset + 1530; x += 310) drawExpeditionTree(target, x, baseY + 2, accent, seed + x);
+        fillRect(target, offset + 1040, baseY - 102, 270, 94, alpha(mix(mid, white, 0.05), 218));
+        drawExpeditionAwning(target, offset + 1060, baseY - 84, 230, accent2, seed);
+        break;
+      case "company":
+        fillRect(target, offset + 80, baseY - 108, 510, 103, alpha(mix(mid, hexToRgb("#dbeafe"), 0.08), 220));
+        strokeRect(target, offset + 80, baseY - 108, 510, 103, alpha(accent, 190), 3);
+        for (let x = offset + 110; x < offset + 560; x += 64) fillRect(target, x, baseY - 82, 34, 54, alpha(hexToRgb("#e0f2fe"), 80));
+        drawExpeditionBusStop(target, offset + 700, baseY - 2, accent2);
+        drawExpeditionSkyBridge(target, offset + 870, baseY - 128, 540, accent);
+        fillRect(target, offset + 1180, baseY - 64, 250, 58, alpha(mix(accent, ink, 0.16), 160));
+        break;
+      case "office":
+        fillRect(target, offset + 110, baseY - 118, 520, 112, alpha(mix(mid, ink, 0.04), 230));
+        for (let i = 0; i < 8; i += 1) fillRect(target, offset + 140 + i * 58, baseY - 104, 18, 98, alpha(mix(accent2, white, 0.18), 190));
+        drawExpeditionNeonPanel(target, offset + 720, baseY - 112, 260, 54, accent2, seed);
+        fillRect(target, offset + 1090, baseY - 88, 320, 82, alpha(mix(accent, ink, 0.16), 196));
+        strokeRect(target, offset + 1090, baseY - 88, 320, 82, alpha(accent2, 205), 4);
+        break;
+      case "asset":
+        fillRect(target, offset + 100, baseY - 122, 450, 116, alpha(mix(mid, ink, 0.04), 226));
+        drawExpeditionNeonPanel(target, offset + 132, baseY - 106, 380, 76, accent, seed);
+        fillRect(target, offset + 670, baseY - 98, 330, 92, alpha(mix(accent2, ink, 0.26), 206));
+        strokeRect(target, offset + 670, baseY - 98, 330, 92, alpha(accent2, 210), 4);
+        for (let i = 0; i < 6; i += 1) fillRect(target, offset + 1120 + i * 42, baseY - 18 - i * 12, 26, 18 + i * 12, alpha(i % 2 ? accent : accent2, 218));
+        break;
+      case "national":
+        for (let x = offset + 80; x < offset + 1580; x += 78) {
+          fillPolygon(target, [[x, baseY - 2], [x + 58, baseY - 2], [x + 70, baseY + 32], [x - 12, baseY + 32]], alpha((x / 78) % 2 ? accent : accent2, 225));
+          drawLine(target, x + 6, baseY + 24, x + 54, baseY + 2, alpha(ink, 95), 3);
+        }
+        fillRect(target, offset + 260, baseY - 126, 430, 46, alpha(mix(mid, ink, 0.12), 216));
+        drawLine(target, offset + 200, baseY - 96, offset + 820, baseY - 132, alpha(mix(mid, white, 0.06), 230), 7);
+        drawExpeditionCrane(target, offset + 1110, baseY - 4, accent);
+        break;
+      case "global":
+        for (let i = 0; i < 7; i += 1) drawIsoBlock(target, offset + 80 + i * 116, baseY - 62 + (i % 2) * 18, 104, 58, i % 2 ? accent : accent2);
+        drawExpeditionHarborCrane(target, offset + 960, baseY - 6, accent);
+        fillRect(target, offset + 1230, baseY - 72, 300, 66, alpha(mix(mid, ink, 0.1), 200));
+        drawExpeditionFlagLine(target, offset + 1240, baseY - 128, 8, accent2, seed);
+        break;
+      case "future":
+        fillRect(target, offset + 80, baseY - 112, 430, 106, alpha(mix(mid, ink, 0.05), 210));
+        strokeRect(target, offset + 80, baseY - 112, 430, 106, alpha(accent2, 180), 3);
+        for (let i = 0; i < 7; i += 1) {
+          const x = offset + 130 + i * 52;
+          drawLine(target, x, baseY - 88, x + 34, baseY - 52, alpha(accent2, 150), 3);
+          fillRect(target, x + 30, baseY - 56, 9, 9, alpha(accent, 220));
+        }
+        drawExpeditionMaglevRail(target, offset + 650, baseY - 58, 620, accent2);
+        drawExpeditionHologram(target, offset + 1390, baseY - 6, accent, seed);
+        break;
+      case "summit":
+        drawExpeditionSummitHall(target, offset + 120, baseY - 2, 520, accent2);
+        drawExpeditionSummitTower(target, offset + 770, baseY - 2, accent);
+        drawExpeditionFlagLine(target, offset + 1020, baseY - 136, 12, accent2, seed);
+        fillRect(target, offset + 1210, baseY - 78, 280, 72, alpha(mix(accent, ink, 0.22), 190));
+        strokeRect(target, offset + 1210, baseY - 78, 280, 72, alpha(accent2, 220), 3);
+        break;
+      default:
+        drawExpeditionNeonPanel(target, offset + 320, baseY - 112, 180, 48, accent, seed);
+        break;
+    }
+  }
+}
+
+function drawExpeditionMidStructures(target, theme, index, width, height) {
+  const accent = hexToRgb(theme.accent);
+  const accent2 = hexToRgb(theme.accent2 ?? theme.accent);
+  const mid = hexToRgb(theme.mid);
+  const ink = hexToRgb("#0f172a");
+  const baseY = Math.round(height * 0.54) + 8;
+  const seed = 900 + index * 173;
+  const segmentWidth = Math.round(width / 3);
+
+  for (let segment = 0; segment < 3; segment += 1) {
+    const offset = segment * segmentWidth;
+    const repeatSeed = seed + segment * 131;
+    switch (theme.id) {
+      case "shelter":
+        drawExpeditionLowShop(target, offset + 250, baseY - 16, 250, 118, mix(mid, hexToRgb("#7c2d12"), 0.18), accent, repeatSeed, { awning: false });
+        fillPolygon(target, [[offset + 600, baseY - 12], [offset + 740, baseY - 70], [offset + 880, baseY - 12]], alpha(mix(accent2, ink, 0.38), 220));
+        fillRect(target, offset + 650, baseY - 50, 178, 48, alpha(mix(mid, accent, 0.1), 220));
+        for (let x = offset + 980; x < offset + 1240; x += 46) fillRect(target, x, baseY - 42, 34, 30, alpha(mix(accent, ink, 0.28), 205));
+        drawExpeditionNeonPanel(target, offset + 1220, baseY - 156, 180, 54, accent, repeatSeed);
+        break;
+      case "studio":
+        for (let i = 0; i < 4; i += 1) drawExpeditionVoxelBuilding(target, offset + 230 + i * 142, baseY - 10, 96, 142 + i * 14, mix(mid, accent2, 0.08), accent, repeatSeed + i, { roof: "antenna", lit: 0.72 });
+        drawExpeditionLowShop(target, offset + 830, baseY - 12, 275, 118, mid, accent, repeatSeed);
+        drawExpeditionNeonPanel(target, offset + 1170, baseY - 164, 172, 58, accent2, repeatSeed);
+        drawLine(target, offset + 1330, baseY - 42, offset + 1450, baseY - 42, alpha(accent, 220), 5);
+        break;
+      case "neighborhood":
+        drawExpeditionMarketStall(target, offset + 210, baseY - 4, 250, accent2, repeatSeed);
+        drawExpeditionLowShop(target, offset + 530, baseY - 12, 260, 105, mid, accent, repeatSeed + 1);
+        drawExpeditionTree(target, offset + 930, baseY + 1, accent, repeatSeed + 2);
+        drawExpeditionMarketStall(target, offset + 1120, baseY - 2, 270, accent, repeatSeed + 3);
+        break;
+      case "company":
+        for (let i = 0; i < 4; i += 1) drawExpeditionVoxelBuilding(target, offset + 210 + i * 166, baseY - 10, 122, 210 + (i % 2) * 38, mix(mid, accent, 0.1), accent, repeatSeed + i, { lit: 0.54 });
+        drawExpeditionSkyBridge(target, offset + 520, baseY - 192, 470, accent);
+        drawExpeditionBusStop(target, offset + 1160, baseY - 6, accent2);
+        drawExpeditionNeonPanel(target, offset + 1340, baseY - 128, 190, 42, accent, repeatSeed);
+        break;
+      case "office":
+        for (let i = 0; i < 5; i += 1) drawExpeditionVoxelBuilding(target, offset + 180 + i * 130, baseY - 10, 92, 245 - i * 9, mix(mid, accent, 0.06), accent, repeatSeed + i, { lit: 0.66 });
+        drawExpeditionNeonPanel(target, offset + 870, baseY - 124, 190, 48, accent2, repeatSeed);
+        fillRect(target, offset + 1130, baseY - 88, 280, 76, alpha(mix(accent2, ink, 0.24), 204));
+        strokeRect(target, offset + 1130, baseY - 88, 280, 76, alpha(accent2, 230), 3);
+        break;
+      case "asset":
+        drawExpeditionNeonPanel(target, offset + 210, baseY - 148, 310, 86, accent, repeatSeed);
+        for (let i = 0; i < 8; i += 1) {
+          const x = offset + 670 + i * 42;
+          const h = 20 + i * 10;
+          fillRect(target, x, baseY - h, 28, h, alpha(i % 2 ? accent2 : accent, 214));
+        }
+        drawLine(target, offset + 650, baseY - 20, offset + 1010, baseY - 112, alpha(accent2, 235), 4);
+        fillEllipse(target, offset + 1250, baseY - 56, 84, 42, alpha(mix(accent2, ink, 0.2), 205));
+        strokeRect(target, offset + 1188, baseY - 98, 126, 92, alpha(accent2, 220), 4);
+        break;
+      case "national":
+        drawExpeditionCrane(target, offset + 320, baseY - 4, accent);
+        drawExpeditionCrane(target, offset + 1010, baseY - 6, accent2);
+        for (let x = offset + 560; x < offset + 1460; x += 72) fillPolygon(target, [[x, baseY + 4], [x + 54, baseY + 4], [x + 64, baseY + 36], [x - 10, baseY + 36]], alpha((x / 72) % 2 ? accent : accent2, 218));
+        drawLine(target, offset + 660, baseY - 82, offset + 1250, baseY - 104, alpha(mix(mid, ink, 0.08), 230), 8);
+        break;
+      case "global":
+        drawExpeditionFlagLine(target, offset + 180, baseY - 130, 12, accent2, repeatSeed);
+        drawExpeditionHarborCrane(target, offset + 620, baseY - 6, accent);
+        for (let i = 0; i < 5; i += 1) drawIsoBlock(target, offset + 940 + i * 76, baseY - 44 + (i % 2) * 9, 70, 44, i % 2 ? accent : mix(accent2, hexToRgb("#ef4444"), 0.18));
+        drawExpeditionNeonPanel(target, offset + 1290, baseY - 142, 210, 58, accent, repeatSeed);
+        break;
+      case "future":
+        drawExpeditionHologram(target, offset + 310, baseY - 8, accent, repeatSeed);
+        drawExpeditionMaglevRail(target, offset + 610, baseY - 98, 620, accent2);
+        drawExpeditionHologram(target, offset + 1290, baseY - 14, accent2, repeatSeed + 4);
+        for (let x = offset + 500; x < offset + 1050; x += 54) {
+          drawLine(target, x, baseY - 70, x + 36, baseY - 112, alpha(accent2, 150), 3);
+          fillRect(target, x + 33, baseY - 116, 9, 9, alpha(accent2, 210));
+        }
+        break;
+      case "summit":
+        drawExpeditionSummitTower(target, offset + 300, baseY + 2, accent);
+        drawExpeditionSummitHall(target, offset + 660, baseY - 8, 420, accent2);
+        drawExpeditionSummitTower(target, offset + 1240, baseY, accent2);
+        drawExpeditionFlagLine(target, offset + 690, baseY - 152, 10, accent2, repeatSeed);
+        fillEllipse(target, offset + 990, baseY - 86, 190, 38, alpha(mix(accent, hexToRgb("#ffffff"), 0.18), 46));
+        break;
+      default:
+        drawExpeditionNeonPanel(target, offset + 320, baseY - 112, 180, 48, accent, repeatSeed);
+        break;
+    }
+  }
+}
+
+function drawExpeditionForegroundProps(target, theme, index, width, height) {
+  const roadTop = Math.round(height * 0.54);
+  const accent = hexToRgb(theme.accent);
+  const accent2 = hexToRgb(theme.accent2 ?? theme.accent);
+  const ink = hexToRgb("#0f172a");
+  for (let x = 128; x < width; x += 420) {
+    fillRect(target, x, roadTop - 142, 5, 138, alpha(ink, 190));
+    fillRect(target, x - 7, roadTop - 150, 19, 11, alpha(accent, 220));
+    fillEllipse(target, x + 2, roadTop - 128, 42, 16, alpha(accent, 38));
+  }
+  for (let i = 0; i < 72; i += 1) {
+    const x = Math.round(deterministicRange(index * 401 + i * 17, 8, width - 60));
+    const y = Math.round(deterministicRange(index * 509 + i * 19, roadTop + 24, height - 44));
+    const w = Math.round(deterministicRange(index * 607 + i, 18, 48));
+    const h = Math.round(deterministicRange(index * 701 + i, 8, 22));
+    const color = deterministicRange(index * 809 + i, 0, 1) > 0.5 ? accent : accent2;
+    drawIsoBlock(target, x, y, w, h, mix(color, hexToRgb(theme.floor), 0.34));
+  }
+  if (theme.id === "office") {
+    for (let x = 220; x < width; x += 520) drawLine(target, x, 20, x - 38, height - 10, alpha(hexToRgb("#f8fafc"), 48), 1);
+  }
+}
+
+function drawExpeditionChapterBackdrop(target, theme, index, width, height) {
+  drawExpeditionSky(target, theme, index, width, height);
+  drawExpeditionFarLayer(target, theme, index, width, height);
+  drawExpeditionMidStructures(target, theme, index, width, height);
+  drawExpeditionNearStrip(target, theme, index, width, height);
+  drawExpeditionRoad(target, theme, width, height);
+  drawExpeditionForegroundProps(target, theme, index, width, height);
+}
+
+function expeditionBackdropSourcePath(theme, tileIndex) {
+  return resolve(expeditionBackdropSourceRoot, theme.id, `source-${String(tileIndex).padStart(2, "0")}.png`);
+}
+
+function isExpeditionBackdropRawSource(image) {
+  const aspect = image.width / Math.max(1, image.height);
+  const isRuntimeTile = image.width === 5016 && image.height === 540;
+  return image.width >= 1600 && image.height >= 650 && aspect >= 2.2 && aspect <= 3.4 && !isRuntimeTile;
+}
+
+function readExpeditionBackdropSourceInfo(path) {
+  if (!existsSync(path)) return null;
+  const image = readPngRgba(path);
+  return {
+    image,
+    valid: isExpeditionBackdropRawSource(image),
+  };
+}
+
+function generateExpeditionBackdropRawSource(theme, themeIndex, tileIndex, width, height) {
+  const target = canvas(width, height);
+  drawExpeditionChapterBackdrop(target, theme, themeIndex * 997 + tileIndex * 101 + 29, width, height);
+  writePng(expeditionBackdropSourcePath(theme, tileIndex), target);
+  return target;
+}
+
+function ensureExpeditionBackdropSourceSet() {
+  const defaultWidth = 2138;
+  const defaultHeight = 736;
+  expeditionBackdropThemes.forEach((theme, themeIndex) => {
+    mkdirSync(dirname(expeditionBackdropSourcePath(theme, 0)), { recursive: true });
+    const basePath = expeditionBackdropSourcePath(theme, 0);
+    const baseInfo = readExpeditionBackdropSourceInfo(basePath);
+    const baseImage = baseInfo?.valid ? baseInfo.image : generateExpeditionBackdropRawSource(theme, themeIndex, 0, defaultWidth, defaultHeight);
+    const sourceWidth = baseImage.width;
+    const sourceHeight = baseImage.height;
+    for (let tileIndex = 0; tileIndex < expeditionBackdropTileCount; tileIndex += 1) {
+      const path = expeditionBackdropSourcePath(theme, tileIndex);
+      const sourceInfo = tileIndex === 0 && baseInfo?.valid ? baseInfo : readExpeditionBackdropSourceInfo(path);
+      if (sourceInfo?.valid) continue;
+      generateExpeditionBackdropRawSource(theme, themeIndex, tileIndex, sourceWidth, sourceHeight);
+    }
+  });
+}
+
+function loadExpeditionBackdropSource(theme, tileIndex) {
+  const exact = expeditionBackdropSourcePath(theme, tileIndex);
+  if (existsSync(exact)) return { image: readPngRgba(exact), sourceIndex: tileIndex, derived: false };
+  const base = expeditionBackdropSourcePath(theme, 0);
+  if (!existsSync(base)) throw new Error(`원정대 생성형 배경 원본 누락: ${relative(process.cwd(), base)}`);
+  return { image: readPngRgba(base), sourceIndex: 0, derived: tileIndex !== 0 };
+}
+
+function loadExpeditionBackdropSourceSet(theme) {
+  const sources = [];
+  for (let index = 0; index < expeditionBackdropTileCount; index += 1) {
+    const path = expeditionBackdropSourcePath(theme, index);
+    if (!existsSync(path)) return null;
+    sources.push({
+      index,
+      path,
+      image: readPngRgba(path),
+    });
+  }
+  return sources;
+}
+
+function drawImageFitHeight(target, source, dx, dy, dh) {
+  const dw = Math.max(1, Math.round((source.width / Math.max(1, source.height)) * dh));
+  drawSourceScaled(target, source, dx, dy, dw, dh);
+  return dw;
+}
+
+function buildExpeditionChapterPanorama(sources, rowHeight) {
+  const sectionWidths = sources.map(({ image }) => Math.max(1, Math.round((image.width / Math.max(1, image.height)) * rowHeight)));
+  const overlap = Math.max(180, Math.min(280, Math.round(Math.min(...sectionWidths) * 0.16)));
+  const width = sectionWidths.reduce((sum, sectionWidth) => sum + sectionWidth, 0) - overlap * Math.max(0, sources.length - 1);
+  const panorama = canvas(width, rowHeight);
+  let cursorX = 0;
+  sources.forEach(({ image }, sectionIndex) => {
+    const section = canvas(sectionWidths[sectionIndex], rowHeight);
+    drawImageFitHeight(section, image, 0, 0, rowHeight);
+    for (let y = 0; y < rowHeight; y += 1) {
+      for (let x = 0; x < section.width; x += 1) {
+        const targetX = cursorX + x;
+        if (targetX < 0 || targetX >= panorama.width) continue;
+        const incoming = samplePixel(section, x, y);
+        if (sectionIndex > 0 && x < overlap) {
+          const t = x / Math.max(1, overlap - 1);
+          const eased = t * t * (3 - 2 * t);
+          const existing = samplePixel(panorama, targetX, y);
+          writePixel(panorama, targetX, y, mix(existing, incoming, eased));
+        } else {
+          writePixel(panorama, targetX, y, incoming);
+        }
+      }
+    }
+    cursorX += section.width - overlap;
+  });
+  return panorama;
+}
+
+function drawExpeditionBackdropPanoramaTile(target, panorama, tileIndex) {
+  const maxOffset = Math.max(0, panorama.width - target.width);
+  const offsetX = expeditionBackdropTileCount <= 1 ? 0 : Math.round(maxOffset * (tileIndex / (expeditionBackdropTileCount - 1)));
+  for (let y = 0; y < target.height; y += 1) {
+    const sourceY = Math.max(0, Math.min(panorama.height - 1, y));
+    for (let x = 0; x < target.width; x += 1) {
+      const sourceX = Math.max(0, Math.min(panorama.width - 1, offsetX + x));
+      writePixel(target, x, y, samplePixel(panorama, sourceX, sourceY));
+    }
+  }
+}
+
+function applyExpeditionBackdropTileGrade(target, theme, tileIndex) {
+  const accent = hexToRgb(theme.accent);
+  const accent2 = hexToRgb(theme.accent2 ?? theme.accent);
+  const cool = hexToRgb(theme.skyTop ?? theme.sky);
+  const warm = hexToRgb(theme.horizon);
+  const shiftColor = tileIndex % 3 === 0 ? accent : tileIndex % 3 === 1 ? accent2 : warm;
+  const shiftRatio = tileIndex === 0 ? 0 : 0.035 + (tileIndex % 4) * 0.008;
+  const shadowRatio = 0.025 + (tileIndex % 5) * 0.004;
+  for (let y = 0; y < target.height; y += 1) {
+    const vertical = y / Math.max(1, target.height - 1);
+    for (let x = 0; x < target.width; x += 1) {
+      const i = (y * target.width + x) * 4;
+      const edge = Math.abs((x / Math.max(1, target.width - 1)) - 0.5) * 2;
+      let color = {
+        r: target.pixels[i],
+        g: target.pixels[i + 1],
+        b: target.pixels[i + 2],
+        a: target.pixels[i + 3],
+      };
+      color = mix(color, shiftColor, shiftRatio * (0.35 + vertical * 0.65));
+      color = mix(color, cool, shadowRatio * Math.max(0, edge - 0.25));
+      target.pixels[i] = color.r;
+      target.pixels[i + 1] = color.g;
+      target.pixels[i + 2] = color.b;
+      target.pixels[i + 3] = color.a;
+    }
+  }
+}
+
+function drawGeneratedExpeditionBackdropTile(target, source, theme, tileIndex) {
+  const segmentWidth = Math.round(target.width / 3);
+  const cropScalePattern = [1, 0.94, 0.9, 0.96, 0.88, 0.92, 0.86, 0.91, 0.89, 0.97];
+  const cropScale = cropScalePattern[tileIndex % cropScalePattern.length];
+  const sourceWidth = Math.max(1, Math.round(source.width * cropScale));
+  const availableX = Math.max(0, source.width - sourceWidth);
+  const focusSeed = tileIndex * 211 + theme.id.length * 19;
+  const focusX = tileIndex === 0 ? 0.5 : deterministicRange(focusSeed, 0.08, 0.92);
+  const sourceOffsetX = Math.round(availableX * focusX);
+  for (let segmentIndex = 0; segmentIndex < 3; segmentIndex += 1) {
+    const dx = segmentIndex * segmentWidth;
+    const dw = segmentIndex === 2 ? target.width - dx : segmentWidth;
+    drawSourceCover(target, source, dx, 0, dw, target.height, {
+      mirrorX: (tileIndex + segmentIndex) % 2 === 1,
+      sourceOffsetX,
+      sourceOffsetY: 0,
+      sourceWidth,
+      sourceHeight: source.height,
+      focusX,
+      focusY: 0.62,
+    });
+  }
+  applyExpeditionBackdropTileGrade(target, theme, tileIndex);
+}
+
 function buildExpeditionBackdropAtlas() {
-  const source = readPngRgba(resolve(outDir, "asset-005.png"));
   const segmentWidth = 1672;
   const width = segmentWidth * 3;
   const rowHeight = 540;
-  const target = canvas(width, rowHeight);
-  drawSourceScaled(target, source, 0, 0, segmentWidth, rowHeight, { mirrorX: false });
-  drawSourceScaled(target, source, segmentWidth, 0, segmentWidth, rowHeight, { mirrorX: true });
-  drawSourceScaled(target, source, segmentWidth * 2, 0, segmentWidth, rowHeight, { mirrorX: false, sourceOffsetX: Math.round(source.width * 0.18) });
-  blendVerticalSeam(target, segmentWidth - 36, 72);
-  blendVerticalSeam(target, segmentWidth * 2 - 36, 72);
-  blendHorizontalLoopSeam(target, 96);
   const path = resolve(outDir, "visual-expedition-backdrops.png");
-  writePng(path, target);
+  const items = [];
+  expeditionBackdropThemes.forEach((theme, index) => {
+    const independentSources = loadExpeditionBackdropSourceSet(theme);
+    const chapterPanorama = independentSources ? buildExpeditionChapterPanorama(independentSources, rowHeight) : null;
+    const tiles = [];
+    for (let tileIndex = 0; tileIndex < expeditionBackdropTileCount; tileIndex += 1) {
+      const target = canvas(width, rowHeight);
+      const sourceEntry = independentSources?.[tileIndex] ?? null;
+      let sourceIndex = tileIndex;
+      let derived = false;
+      let sourceMode = "chapter-panorama";
+      if (chapterPanorama && sourceEntry) {
+        drawExpeditionBackdropPanoramaTile(target, chapterPanorama, tileIndex);
+      } else {
+        const { image: source, sourceIndex: fallbackSourceIndex, derived: fallbackDerived } = loadExpeditionBackdropSource(theme, tileIndex);
+        sourceIndex = fallbackSourceIndex;
+        derived = fallbackDerived;
+        sourceMode = "single-source-fallback";
+        drawGeneratedExpeditionBackdropTile(target, source, theme, tileIndex);
+      }
+      const fileName = `visual-expedition-backdrop-${theme.id}-${String(tileIndex).padStart(2, "0")}.png`;
+      const itemPath = resolve(outDir, fileName);
+      writePng(itemPath, target);
+      if (tileIndex === 0) {
+        const compatibilityFileName = `visual-expedition-backdrop-${theme.id}.png`;
+        writePng(resolve(outDir, compatibilityFileName), target);
+        if (index === 0) writePng(path, target);
+      }
+      tiles.push({
+        index: tileIndex,
+        file: `assets/${fileName}`,
+        source: `assets/visual-source/expedition-backdrops/${theme.id}/source-${String(sourceIndex).padStart(2, "0")}.png`,
+        derived,
+        sourceMode,
+      });
+    }
+    items.push({
+      id: `expedition-backdrop-${theme.id}`,
+      backdrop: theme.id,
+      file: tiles[0]?.file ?? `assets/visual-expedition-backdrop-${theme.id}-00.png`,
+      compatibilityFile: `assets/visual-expedition-backdrop-${theme.id}.png`,
+      tiles,
+      sourceMode: chapterPanorama ? "chapter-panorama" : "single-source-fallback",
+      tileCount: expeditionBackdropTileCount,
+      stagesPerTile: expeditionBackdropStagesPerTile,
+      timeOfDay: theme.timeOfDay,
+      landmark: theme.landmark,
+      roadProfile: expeditionBackdropRoadProfile,
+      row: 0,
+    });
+  });
   return {
     path,
-    width: target.width,
-    height: target.height,
+    width,
+    height: rowHeight,
     rowHeight,
-    items: expeditionBackdropThemes.map((theme) => ({ id: `expedition-backdrop-${theme.id}`, backdrop: theme.id, row: 0 })),
+    items,
   };
 }
 
@@ -2748,7 +3515,8 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
     ".expedition-impact.ready{opacity:.72;background:linear-gradient(90deg,transparent,#fff 16%,#bfdbfe 46%,#9fd4c9 74%,transparent)}",
   ];
   expeditionBackdrops.items.forEach((item) => {
-    lines.push(`.expedition-scene.backdrop-${item.backdrop}{--expedition-bg-y:${positionPercent(item.row, expeditionBackdrops.items.length)}}`);
+    const imageUrl = item.backdrop === "shelter" ? "__STUDENT_ASSET_010__" : item.file;
+    lines.push(`.expedition-scene.backdrop-${item.backdrop} .expedition-arena::before{background-image:url(${imageUrl})}`);
   });
   battleRoadBackdrops.items.forEach((item) => {
     lines.push(`.stage-scene.${item.sceneClass}{--battle-road-bg-y:50%}`);
@@ -3063,6 +3831,7 @@ const mainMonsterAtlas = buildMainMonsterAtlas(gradeVisuals);
 const companionAtlas = buildCompanionAtlas(careers);
 const enemyAtlas = buildEnemyAtlas(expeditionEnemyItems);
 const careerAtlas = buildCareerAtlas(careers);
+ensureExpeditionBackdropSourceSet();
 const expeditionBackdropAtlas = buildExpeditionBackdropAtlas();
 const battleRoadBackdropAtlas = buildBattleRoadBackdropAtlas(battleRoadConfig);
 

@@ -137,8 +137,9 @@
 
 - 완료일: 2026-06-20
 - 원정대 배경을 낮은 밀도의 절차형 파노라마에서 원화급 PNG 기반 파노라마로 교체했다.
-- 기존 도시 원화 배경을 3구간 긴 배경으로 재조립하고 이음새를 블렌딩해 `visual-expedition-backdrops.png`를 생성한다.
-- 원정대 배경은 60초 pan으로 움직이며, 기존 배경 `<img>`와 품질을 낮추는 격자/CSS 배경은 숨긴다.
+- 기존 도시 원화 배경을 3구간 긴 배경 기반으로 재조립하고 이음새를 블렌딩한다.
+- 최신 기준에서는 1~10챕터용 `visual-expedition-backdrop-{theme}-{00..09}.png` route tile 100개를 생성하고, `visual-expedition-backdrops.png`는 호환용 기본 배경으로 유지한다.
+- 원정대 배경은 현재 Stage가 속한 tile PNG를 React에서 `--expedition-bg-image`로 바인딩해 움직이며, 기존 배경 `<img>`와 품질을 낮추는 격자/CSS 배경은 숨긴다.
 - 원정대 동료 melee, 적 idle/피격, shock ring, slash, dust burst VFX를 추가했다.
 - 컨택트시트와 smoke 검증에서 원정대 파노라마도 확인한다.
 

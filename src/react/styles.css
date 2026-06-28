@@ -1073,16 +1073,47 @@ button:disabled {
   z-index: 0;
   inset: 0;
   content: "";
-  background-image: url("../snapshot/assets/visual-expedition-backdrops.png");
+  background-image: var(--expedition-bg-image);
   background-repeat: repeat-x;
   background-size: auto 100%;
-  background-position: calc(50% + var(--expedition-bg-x, 0px)) center;
+  background-position: var(--expedition-bg-x, 0px) center;
   filter: saturate(1.08) contrast(1.04);
   will-change: background-position;
 }
 
 .expedition-scene.stage-transitioning .expedition-arena::before {
-  animation: expeditionStageTravel 4s cubic-bezier(.22, .72, .22, 1) both;
+  opacity: 0;
+}
+
+.expedition-backdrop-stack {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: #111827;
+}
+
+.expedition-backdrop-layer {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  background-position: var(--expedition-bg-x, 0px) center;
+  filter: saturate(1.08) contrast(1.04);
+  will-change: background-position, opacity;
+}
+
+.expedition-backdrop-layer.from {
+  background-image: var(--expedition-bg-from-image, var(--expedition-bg-image));
+  background-position: var(--expedition-bg-from-x, 0px) center;
+  animation: expeditionStageTravelFrom var(--expedition-stage-transition-ms, 4000ms) linear both;
+}
+
+.expedition-backdrop-layer.to {
+  background-image: var(--expedition-bg-to-image, var(--expedition-bg-image));
+  background-position: var(--expedition-bg-new-from-x, 0px) center;
+  animation: expeditionStageTravelTo var(--expedition-stage-transition-ms, 4000ms) linear both;
 }
 
 .expedition-arena::after {
@@ -1606,10 +1637,10 @@ button:disabled {
 
 .expedition-scene.encounter-approaching .expedition-enemy-group.approaching {
   pointer-events: none;
-  animation: expeditionEnemyEncounterApproach 2.95s cubic-bezier(.16, .84, .32, 1) both;
+  animation: expeditionEnemyEncounterApproach var(--expedition-encounter-approach-ms, 1000ms) cubic-bezier(.2, .74, .18, 1) both;
 }
 
-.expedition-scene.stage-transitioning .expedition-enemy-group {
+.expedition-scene.stage-transitioning .expedition-enemy-group:not(.approaching) {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -3957,19 +3988,50 @@ button:disabled {
 
 @keyframes expeditionStageTravel {
   0% {
-    background-position: calc(50% + var(--expedition-bg-from-x, 0px)) center;
+    background-position: var(--expedition-bg-from-x, 0px) center;
   }
   100% {
-    background-position: calc(50% + var(--expedition-bg-to-x, -88px)) center;
+    background-position: var(--expedition-bg-to-x, -300px) center;
+  }
+}
+
+@keyframes expeditionStageTravelFrom {
+  0% {
+    opacity: 1;
+    background-position: var(--expedition-bg-from-x, 0px) center;
+  }
+  48% {
+    opacity: .96;
+  }
+  100% {
+    opacity: 0;
+    background-position: var(--expedition-bg-old-to-x, -300px) center;
+  }
+}
+
+@keyframes expeditionStageTravelTo {
+  0% {
+    opacity: 0;
+    background-position: var(--expedition-bg-new-from-x, 0px) center;
+  }
+  24% {
+    opacity: 0;
+  }
+  72% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    background-position: var(--expedition-bg-to-x, -300px) center;
   }
 }
 
 @keyframes expeditionEnemyEncounterApproach {
   0% {
     opacity: 0;
-    transform: translateX(132px) scale(.96);
+    transform: translateX(116px) scale(.96);
   }
-  42% {
+  35% {
     opacity: .92;
   }
   100% {
