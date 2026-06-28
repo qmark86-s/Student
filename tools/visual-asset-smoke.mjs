@@ -566,9 +566,11 @@ try {
     const animationName = (element, pseudo) => (element ? getComputedStyle(element, pseudo).animationName : "");
     const arena = document.querySelector(".expedition-arena");
     const arenaStyle = arena ? getComputedStyle(arena) : null;
+    const arenaBefore = arena ? getComputedStyle(arena, "::before") : null;
     const arenaDustBackground = arena ? getComputedStyle(arena, "::after").backgroundImage : "";
     const enemy = document.querySelector(".expedition-enemy-visual");
-    const party = document.querySelector(".expedition-party-visual.running");
+    const party = document.querySelector(".expedition-party-visual.running, .expedition-party-visual.combat");
+    const partyMotionState = document.querySelector(".expedition-party-visual")?.getAttribute("data-party-motion") ?? "";
     const unitProbe = document.querySelector(".expedition-unit-avatar.large");
     const enemyRect = enemy?.getBoundingClientRect();
     const allyMotionReady = animationName(unitProbe).includes("expeditionUnitRhythm");
@@ -579,7 +581,7 @@ try {
     const careerUnitImage = unitFrames.length > 0 && unitFrames.every(loadedImage);
     const enemyFrameImage = enemyFrames.length > 0 && enemyFrames.every(loadedImage);
     const arenaRect = arena?.getBoundingClientRect();
-    const unitRects = Array.from(document.querySelectorAll(".expedition-party-visual.running .expedition-unit-avatar")).map((unit) => unit.getBoundingClientRect());
+    const unitRects = Array.from(document.querySelectorAll(".expedition-party-visual.running .expedition-unit-avatar, .expedition-party-visual.combat .expedition-unit-avatar")).map((unit) => unit.getBoundingClientRect());
     const unitSizes = unitRects.map((rect) => ({ width: rect.width, height: rect.height }));
     const unitClipCount = arenaRect
       ? unitRects.filter(
@@ -642,13 +644,15 @@ try {
       enemyFrameCount: enemyFrames.length,
       enemyFrameLoadedCount: enemyFrames.filter(loadedImage).length,
       arenaDustBackground,
-      backdropImage: arenaStyle?.backgroundImage.includes("url(") ?? false,
-      partyMotion: animationName(party).includes("expeditionPartyAdvance"),
+      backdropImage: arenaBefore?.backgroundImage.includes("url(") ?? false,
+      partyMotionState,
+      partyMotion: allyMotionReady,
       partyTravelPx: Number(range("partyX").toFixed(2)),
       oldBackgroundHidden: !document.querySelector(".expedition-background-sheet"),
       enemyFrameMotion: animationName(enemy).includes("expeditionEnemyIdle") || enemyFrames.some((frame) =>
-        ["expeditionEnemyHurtSprite", "expeditionEnemySpriteIdle"].some((name) => animationName(frame).includes(name)),
+        ["expeditionEnemyFrame", "expeditionEnemyHurtSprite"].some((name) => animationName(frame).includes(name)),
       ),
+      impactElementCount: document.querySelectorAll(".expedition-impact").length,
       enemyShockVfx: animationName(document.querySelector(".expedition-impact")).includes("expeditionImpactPulse"),
       enemySpriteTravelPx: Number(range("enemyY").toFixed(2)),
       careerUnitImage,
@@ -790,11 +794,15 @@ try {
   if (expeditionMetrics.enemyCount < 1) failures.push("Expedition enemy is missing");
   if (!expeditionMetrics.enemyFrameImage) failures.push(`Expedition enemy frame images are missing: ${expeditionMetrics.enemyFrameLoadedCount}/${expeditionMetrics.enemyFrameCount}`);
   if (!expeditionMetrics.backdropImage) failures.push("Expedition backdrop image is missing");
-  if (!expeditionMetrics.partyMotion) failures.push("Expedition party advance motion is missing");
-  if (expeditionMetrics.partyTravelPx < 4) failures.push(`Expedition party travel is too small: ${expeditionMetrics.partyTravelPx}px`);
+  if (!["combat", "running", "standing"].includes(expeditionMetrics.partyMotionState)) {
+    failures.push(`Expedition party motion state is invalid: ${expeditionMetrics.partyMotionState}`);
+  }
+  if (["combat", "running"].includes(expeditionMetrics.partyMotionState) && !expeditionMetrics.partyMotion) {
+    failures.push("Expedition party in-place motion is missing");
+  }
   if (!expeditionMetrics.oldBackgroundHidden) failures.push("Expedition old background image should be hidden");
   if (!expeditionMetrics.enemyFrameMotion) failures.push("Expedition enemy sprite motion is missing");
-  if (!expeditionMetrics.enemyShockVfx) failures.push("Expedition impact VFX is missing");
+  if (expeditionMetrics.impactElementCount > 0 && !expeditionMetrics.enemyShockVfx) failures.push("Expedition impact VFX is missing");
   if (fireLikeSlashColors.some((color) => expeditionMetrics.arenaDustBackground.includes(color))) {
     failures.push(`Expedition arena dust still uses fire-like warm colors: ${expeditionMetrics.arenaDustBackground}`);
   }
@@ -803,7 +811,7 @@ try {
   if (expeditionMetrics.enemySpriteTravelPx > 4) failures.push(`Expedition enemy sprite reaction is too large: ${expeditionMetrics.enemySpriteTravelPx}px`);
   if (!expeditionMetrics.careerUnitImage) failures.push(`Expedition career unit frame images are missing: ${expeditionMetrics.unitFrameLoadedCount}/${expeditionMetrics.unitFrameCount}`);
   if (!expeditionMetrics.allyMotionReady) failures.push("Expedition ally melee motion is missing");
-  if (!expeditionMetrics.allySparkReady) failures.push("Expedition ally spark VFX is missing");
+  if (!expeditionMetrics.allySparkReady && expeditionMetrics.partyMotionState === "running") failures.push("Expedition ally spark VFX is missing while travel motion is active");
   if (expeditionMetrics.unitRenderedCount < 5) failures.push(`Expedition companion probe expected 5 units, got ${expeditionMetrics.unitRenderedCount}`);
   if (expeditionMetrics.unitFrameAnimatedCount < 4) failures.push(`Expedition companion frame animations are missing: ${expeditionMetrics.unitFrameAnimatedCount}`);
   if (expeditionMetrics.enemyFrameAnimatedCount < 1) failures.push(`Expedition enemy frame animations are missing: ${expeditionMetrics.enemyFrameAnimatedCount}`);

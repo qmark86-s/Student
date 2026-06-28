@@ -27,6 +27,22 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+function assertDetailedCombatEvent(event, label) {
+  assert(event && typeof event === "object", `${label}: 전투 이벤트 객체가 필요합니다.`);
+  assert(Number.isInteger(event.sequence) && event.sequence >= 1, `${label}: sequence가 필요합니다.`);
+  assert(typeof event.actorId === "string" && event.actorId.length > 0, `${label}: actorId가 필요합니다.`);
+  assert(typeof event.targetId === "string" && event.targetId.length > 0, `${label}: targetId가 필요합니다.`);
+  assert(["ally", "enemy"].includes(event.actorSide), `${label}: actorSide가 필요합니다.`);
+  assert(["ally", "enemy"].includes(event.targetSide), `${label}: targetSide가 필요합니다.`);
+  assert(Number.isInteger(event.actorSlot) && event.actorSlot >= 1, `${label}: actorSlot이 필요합니다.`);
+  assert(Number.isInteger(event.targetSlot) && event.targetSlot >= 1, `${label}: targetSlot이 필요합니다.`);
+  assert(Number.isInteger(event.targetHpBefore) && event.targetHpBefore >= 0, `${label}: targetHpBefore가 필요합니다.`);
+  assert(Number.isInteger(event.targetHpAfter) && event.targetHpAfter >= 0, `${label}: targetHpAfter가 필요합니다.`);
+  assert(Number.isInteger(event.targetMaxHp) && event.targetMaxHp >= 1, `${label}: targetMaxHp가 필요합니다.`);
+  assert(typeof event.killed === "boolean", `${label}: killed boolean이 필요합니다.`);
+  assert(event.targetHpAfter <= event.targetMaxHp, `${label}: targetHpAfter가 targetMaxHp를 넘으면 안 됩니다.`);
+}
+
 function resolveRequest(url) {
   const rawPath = decodeURIComponent(new URL(url, "http://127.0.0.1").pathname);
   const relative = normalize(rawPath === "/" ? "index.html" : rawPath.slice(1));
@@ -317,6 +333,13 @@ try {
     assert(after.realEstate.cash > before.realEstate.cash, "수동 보스 첫 클리어 부동산 자금이 즉시 지급되어야 합니다.");
     assert(after.expedition.pendingReward.diamonds === 0, "수동 보스 첫 클리어 다이아가 pending에 누적되면 안 됩니다.");
     assert(after.expedition.pendingReward.trainingExp === 0, "수동 보스 첫 클리어 EXP가 pending에 누적되면 안 됩니다.");
+    const killEvent = after.expedition.pendingReward.lastBattle.events.find((event) => event.killed);
+    assertDetailedCombatEvent(killEvent, "보스 첫 클리어 처치 이벤트");
+    assert(killEvent.targetSide === "enemy", "보스 첫 클리어 처치 이벤트 대상은 적이어야 합니다.");
+    assert(killEvent.text.includes("처치"), "처치 이벤트 로그 문구에 처치가 포함되어야 합니다.");
+    assert(Array.isArray(after.expedition.pendingReward.lastBattle.enemyDefeatOrder), "전투 리포트에 enemyDefeatOrder가 필요합니다.");
+    assert(after.expedition.pendingReward.lastBattle.enemyDefeatOrder.length >= 1, "보스 첫 클리어 enemyDefeatOrder가 비어 있으면 안 됩니다.");
+    assert(after.expedition.pendingReward.lastBattle.enemyDefeatOrder[0].id === killEvent.targetId, "처치 순서 첫 대상과 처치 이벤트 대상이 일치해야 합니다.");
     return {};
   }));
 
@@ -355,8 +378,51 @@ try {
     assert(Array.isArray(report.enemyHp) && report.enemyHp.length >= 1, "적 개별 HP 배열이 필요합니다.");
     assert(report.events.some((event) => event.kind === "heal"), "힐러가 공격 대신 회복 이벤트를 남겨야 합니다.");
     assert(new Set(report.events.filter((event) => event.kind === "damage").map((event) => event.actor)).size >= 2, "개별 몬스터가 각각 전투에 참여해야 합니다.");
+    const damageEvent = report.events.find((event) => event.kind === "damage");
+    const healEvent = report.events.find((event) => event.kind === "heal");
+    assertDetailedCombatEvent(damageEvent, "일반 실패 피해 이벤트");
+    assertDetailedCombatEvent(healEvent, "일반 실패 회복 이벤트");
+    assert(healEvent.actorSide === "ally" && healEvent.targetSide === "ally", "힐 이벤트는 아군이 아군에게 적용되어야 합니다.");
+    assert(damageEvent.targetHpAfter < damageEvent.targetHpBefore || damageEvent.value === 0, "피해 이벤트는 대상 HP를 낮춰야 합니다.");
     const enemyActionCounts = Object.values(report.actionCounts.enemies);
-    assert(Math.max(...enemyActionCounts) > Math.min(...enemyActionCounts), "몬스터 공격속도 차이가 행동 횟수에 반영되어야 합니다.");
+    assert(enemyActionCounts.length >= 1 && enemyActionCounts.every((count) => count > 0), "공속 2 몬스터가 전투에 참여한 행동 카운트를 남겨야 합니다.");
+    return {};
+  }));
+
+  checks.push(await scenario(browser, baseUrl, "partial-enemy-defeat-can-still-fail", gameState({ currentStage: 1, highestStage: 0, members: [member(401, { statValue: 4 })], trainingExp: 11 }), async (page, before) => {
+    await clickAction(page);
+    await waitForState(page, "state => state.expedition.currentStage === 1 && state.expedition.pendingReward?.lastBattle?.enemyDefeatOrder?.length === 1");
+    await page.waitForFunction(() => document.querySelector(".expedition-scene")?.getAttribute("data-combat-replay") === "loss");
+    const after = await readState(page);
+    const report = after.expedition.pendingReward.lastBattle;
+    const aliveEnemies = report.enemyHp.filter((enemy) => enemy.remainingHp > 0);
+    const defeatedEnemies = report.enemyHp.filter((enemy) => enemy.remainingHp <= 0);
+    const visual = await page.evaluate(() => {
+      const enemies = [...document.querySelectorAll(".expedition-enemy-group .expedition-enemy-visual")];
+      return {
+        total: enemies.length,
+        defeated: enemies.filter((node) => node.classList.contains("defeated")).length,
+        defeatOrders: enemies.map((node) => node.getAttribute("data-defeat-order")).filter(Boolean),
+        defeatDelays: enemies.map((node) => node.getAttribute("data-defeat-delay")).filter(Boolean),
+        aliveHpWidths: enemies
+          .filter((node) => !node.classList.contains("defeated"))
+          .map((node) => node.querySelector(".expedition-hp-bar.enemy span")?.style.width || ""),
+        actionText: document.querySelector(".expedition-action-button")?.textContent?.trim() || "",
+      };
+    });
+    assert(after.expedition.currentStage === before.expedition.currentStage, "부분 처치 실패가 Stage를 넘기면 안 됩니다.");
+    assert(after.expedition.trainingExp === before.expedition.trainingExp, "부분 처치 실패가 EXP를 지급하면 안 됩니다.");
+    assert(report.result === "loss", `부분 처치 실패 결과는 loss여야 합니다: ${report.result}`);
+    assert(report.resultReason === "전멸", `부분 처치 실패 사유는 전멸이어야 합니다: ${report.resultReason}`);
+    assert(report.enemyHp.length === 3, `부분 처치 실패 Stage의 적은 3마리여야 합니다: ${report.enemyHp.length}`);
+    assert(defeatedEnemies.length === 1 && aliveEnemies.length === 2, `부분 처치 실패는 1마리 처치, 2마리 생존이어야 합니다: defeated=${defeatedEnemies.length} alive=${aliveEnemies.length}`);
+    assert(report.enemyDefeatOrder.map((enemy) => enemy.slot).join(",") === "1", `부분 처치 순서가 앞슬롯 단일 타겟 순서가 아닙니다: ${report.enemyDefeatOrder.map((enemy) => enemy.slot).join(",")}`);
+    assert(visual.total === 3, `화면 적 개체 수가 전투 리포트와 달라지면 안 됩니다: ${visual.total}`);
+    assert(visual.defeated === 1, `화면에서도 처치된 적 1마리만 defeated여야 합니다: ${visual.defeated}`);
+    assert(visual.defeatOrders.join(",") === "1", `화면 처치 순서가 개별로 노출되어야 합니다: ${visual.defeatOrders.join(",")}`);
+    assert(visual.defeatDelays.length === 1 && Number.isFinite(Number(visual.defeatDelays[0])) && Number(visual.defeatDelays[0]) >= 0, `화면 처치 지연이 이벤트 시간축 숫자여야 합니다: ${visual.defeatDelays.join(",")}`);
+    assert(visual.aliveHpWidths.length === 2 && visual.aliveHpWidths.every((width) => width !== "0%"), `생존 몬스터 HP bar가 남아 있어야 합니다: ${visual.aliveHpWidths.join(",")}`);
+    assert(visual.actionText === "정리중", `부분 처치 실패 리플레이 중 버튼은 정리중이어야 합니다: ${visual.actionText}`);
     return {};
   }));
 

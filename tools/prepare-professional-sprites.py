@@ -48,27 +48,44 @@ def remove_green_key(image: Image.Image) -> Image.Image:
             is_neon_matte = green_bias > 92
             is_hard_key = g >= 210 and r < 80 and b < 80
             if is_key_pixel or is_neon_matte or is_hard_key:
-                pixels[x, y] = (r, g, b, 0)
+                pixels[x, y] = (0, 0, 0, 0)
             elif green_bias > 42:
                 new_alpha = max(0, min(a, int((green_bias - 42) * 2.4)))
-                pixels[x, y] = (r, g, b, 255 - new_alpha)
+                pixels[x, y] = (r, min(g, max(r, b) + 16), b, 255 - new_alpha)
     return rgba
 
 
 def scrub_neon_green_matte(image: Image.Image) -> Image.Image:
     rgba = image.convert("RGBA")
     pixels = rgba.load()
-    for y in range(rgba.height):
-        for x in range(rgba.width):
-            r, g, b, a = pixels[x, y]
-            green_bias = g - max(r, b)
-            is_neon_key = g >= 235 and r <= 80 and b <= 80 and green_bias >= 130
-            is_tiny_alpha_key_shadow = a <= 10 and g >= 50 and green_bias >= 20
-            is_low_alpha_green_edge = a <= 32 and g >= 180 and green_bias >= 80
-            is_low_alpha_key_shadow = a <= 64 and r <= 50 and b <= 50 and g >= 110 and green_bias >= 70
-            is_dark_key_shadow = a <= 80 and r <= 35 and b <= 35 and 90 <= g <= 150 and green_bias >= 75
-            if a > 0 and (is_neon_key or is_tiny_alpha_key_shadow or is_low_alpha_green_edge or is_low_alpha_key_shadow or is_dark_key_shadow):
-                pixels[x, y] = (r, g, b, 0)
+
+    def has_clear_neighbor(x: int, y: int) -> bool:
+        for yy in range(max(0, y - 1), min(rgba.height, y + 2)):
+            for xx in range(max(0, x - 1), min(rgba.width, x + 2)):
+                if xx == x and yy == y:
+                    continue
+                if pixels[xx, yy][3] <= 4:
+                    return True
+        return False
+
+    for _pass in range(2):
+        to_clear: list[tuple[int, int]] = []
+        for y in range(rgba.height):
+            for x in range(rgba.width):
+                r, g, b, a = pixels[x, y]
+                green_bias = g - max(r, b)
+                is_neon_key = g >= 235 and r <= 80 and b <= 80 and green_bias >= 130
+                is_tiny_alpha_key_shadow = a <= 10 and g >= 50 and green_bias >= 20
+                is_low_alpha_green_edge = a <= 48 and g >= 150 and green_bias >= 52
+                is_low_alpha_key_shadow = a <= 96 and r <= 70 and b <= 70 and g >= 78 and green_bias >= 42
+                is_dark_key_shadow = a <= 184 and r <= 42 and b <= 42 and 70 <= g <= 156 and green_bias >= 46
+                is_edge_fringe = a > 0 and g >= 76 and r <= 118 and b <= 118 and green_bias >= 18 and (a < 252 or has_clear_neighbor(x, y))
+                if a <= 2 or (a > 0 and (is_neon_key or is_tiny_alpha_key_shadow or is_low_alpha_green_edge or is_low_alpha_key_shadow or is_dark_key_shadow or is_edge_fringe)):
+                    to_clear.append((x, y))
+                elif a < 248 and green_bias > 28:
+                    pixels[x, y] = (r, min(g, max(r, b) + 14), b, a)
+        for x, y in to_clear:
+            pixels[x, y] = (0, 0, 0, 0)
     return rgba
 
 

@@ -10,7 +10,7 @@
    - 직업: `data/careers.json`의 `portraitAsset`, `spriteAsset`, `iconAsset`
    - 학년 전투: `data/grade_visuals.json`의 `studentAsset`, `normalMonsterAssets`, `examMonsterAssets`
    - Battle Road 조우: `data/battle_road_config.json`의 `schoolYear.encounters`, `suneung.encounters`
-   - 원정대: `data/expedition_stages.json`의 `enemyAsset`, `enemyVariant`
+   - 원정대: `data/expedition_stages.json`의 `enemyAsset`, `enemyAssets`, `enemyVariant`
    - 보스: `data/expedition_bosses.json`의 `bossAsset`
 
 2. 생성 스크립트에 레시피를 추가한다.
@@ -142,7 +142,9 @@
 
 - 직업동료, 학습도우미, 원정대 몬스터는 학생 캐릭터처럼 PNG 원본 시트와 정규화 프레임을 거쳐야 한다.
 - 직업동료/학습도우미 원본은 `assets/visual-source/companions/<id>-move.png`에 저장한다.
-- 원정대 몬스터 원본은 `assets/visual-source/expedition-enemies/<id>-move.png`에 저장한다.
+- 원정대 몬스터의 canonical 원본은 tone별 4x2 래스터 PNG 시트 `assets/visual-source/expedition-enemy-raster-sheets/<tone>.png`다. 현재 기준 크기는 `1772x886`이며, 셀은 `443x443`이다.
+- 원정대 몬스터의 `assets/visual-source/expedition-enemies/<id>-move.png`는 canonical 원본에서 생성되는 4프레임 중간 산출물이다. 원본 tone 시트가 없으면 생성기가 실패해야 하며, CSS 도형이나 공용 fallback으로 대체하지 않는다.
+- tone 시트를 새로 교체할 때는 전체 크기가 4와 2로 정확히 나누어떨어져야 한다. 셀 경계에 실루엣이 붙으면 최종 정규화가 통과하더라도 후속 편집 난도가 올라가므로 비초록 실루엣은 가능한 10px 이상 안쪽에 둔다.
 - 원본 배경은 형광 초록이고, 전처리 결과는 완전 투명 PNG여야 한다.
 - 직업동료/학습도우미 원본은 `4 columns x 2 rows` 구조다. 0행은 남성, 1행은 여성이다.
 - 원정대 몬스터 원본은 `4 columns x 1 row` 구조다.
@@ -155,7 +157,7 @@
 - `data/professional_sprite_manifest.json`은 id, 한글 이름, 직업 id, 보조 역할, 전투 소품, 방향, 성별 행을 담는 기준 테이블이다.
 - `artifacts/visual-asset-samples/professional-axis-report.json`과 `professional-axis-review-page-*.png`를 보고 축/포즈/방향을 눈검수한다.
 - `professional-zoom-review-page-*.png`는 원본 4프레임과 정규화 4프레임을 2배 확대해 보여준다. 직업동료/몬스터 수정 후에는 이 시트에서 상하 잘림, 누끼 잔여, 한 프레임만 커지는 문제를 확인해야 한다.
-- 원정대 런타임에서는 `visual-companions.png`, `visual-enemies.png`의 실제 4프레임을 `background-position`으로 순환한다.
+- 원정대 런타임에서는 동료는 `visual-companions.png` atlas mapping을 사용하고, 몬스터는 `src/snapshot/assets/individual/expedition-enemies/<id>/move_*.png`를 `SpriteFrames`로 직접 순환한다. `.expedition-enemy-visual::before` atlas 본체는 표시하지 않으며, `visual-enemies.png`와 생성 CSS의 `enemy-asset-*` 규칙은 스냅샷/메타데이터 검증용 산출물로 함께 유지한다.
 - 직업동료 성별은 `avatarGender`와 `unit-gender-male`/`unit-gender-female` 클래스로 선택한다. 한 해나 한 직업군 안에서 성별이 바뀌면 실패로 본다.
 - `npm run asset:factory:review`는 학생 리포트와 전문 스프라이트 리포트를 모두 요약하고 리뷰 시트를 만든다.
 - 직업 결과 초상 `visual-careers.png`는 별도 카드 도형을 그리지 않고, 준비된 `career-unit-*` PNG 프레임을 64px SD 초상으로 크롭해 사용한다.
@@ -191,17 +193,21 @@
 - 직업동료 메타에는 한글 직업명, 지원 역할, 전투 소품, 티어를 남겨 컨택트시트에서 검수 가능해야 한다.
 - 직업동료는 작은 아이콘처럼 보이면 실패다. 감사 기준은 `data/visual_asset_quality_gates.json`에서 `minBoundsWidth >= 110`, `minBoundsHeight >= 120`, `minDistinctColors >= 18` 이상으로 관리한다.
 - 원정대 화면의 `.expedition-unit-avatar.large`는 정사각형 셀로 표시해야 한다. 현재 smoke 기준은 최소 58x58px, 정사각 왜곡 6px 이하, arena 클리핑 0건이다.
-- 원정대 몬스터 `::before`도 정사각형 pseudo element로 표시하고, 오른쪽 경계에서 잘리지 않게 부모 중심보다 살짝 왼쪽으로 당긴다. smoke는 enemy sprite의 L/R/T/B 클리핑을 모두 0으로 검사한다.
+- 원정대 몬스터는 `.expedition-enemy-frame` 안의 `SpriteFrames`를 정사각형 셀로 표시하고, 오른쪽 경계에서 잘리지 않게 부모/프레임 크기를 함께 관리한다. smoke는 enemy sprite의 L/R/T/B 클리핑을 모두 0으로 검사한다.
 - 학습 도우미의 기존 `helper-*` 클래스는 유지해 기존 학생 전투와 호환한다.
-- `visual-enemies.png`는 원정대 tone별 일반 3종과 보스 1종을 담으며, 아이템당 4프레임을 가진다. 모든 원정대 몬스터 메타는 `direction: "left"`여야 한다.
+- `visual-enemies.png`는 원정대 tone별 일반 6종과 보스 2종, 총 80종을 담으며, 아이템당 4프레임을 가진다. 모든 원정대 몬스터 메타는 `direction: "left"`여야 한다.
 - 원정대 몬스터는 귀엽고 피규어 같은 학습/생활 오브젝트형 SD 몬스터가 기준이다. 낮고 넓어도 괜찮지만 `solidHeight`가 작아져 실제 화면에서 아이콘처럼 보이면 실패다.
-- 원정대 몬스터는 기존 레거시 도형/텍스트 조합을 쓰지 않는다. shelter/studio/neighborhood/company/office/asset/national/global/future/summit 각 지역은 일반 3종과 보스 1종을 서로 다른 몸통 오브젝트로 가진다.
-- 지역별 핵심 motif는 shelter 월세/대기표/이력서/자립 게이트, studio 세탁/야간컵/타이머/보증금 금고, neighborhood 가격표/병원 예약/학원책/대출 폴더, company 출입증/인박스/모니터/오피스 빌딩, office 회의 보드/클립보드/발표대/회의록 더미, asset 코인/차트/금고/시장 금고, national 민원서류/도장/관공서/국가 과제탑, global 여권/무역상자/글로브/컨퍼런스, future 칩/데이터 큐브/바이오 플라스크/AI 코어, summit 산봉우리/기후 행성/협상 테이블/의사결정망이다.
+- 원정대 몬스터는 기존 레거시 도형/텍스트 조합을 쓰지 않는다. shelter/studio/neighborhood/company/office/asset/national/global/future/summit 각 지역은 일반 6종과 보스 2종을 서로 다른 몸통 오브젝트로 가진다.
+- 지역별 핵심 motif는 shelter 우편함/계량기/고지서/택배/세탁기/차단기/안전 금고, studio 세탁 바구니/야간컵/타이머/계약서/스케줄러/보증금 금고, neighborhood 가격표/일정표/주소록/게시판/지도/폴더/게이트, company 출입증/인박스/모니터/브라우저/프린터/오피스 빌딩/서버, office 회의 보드/폴더/발표대/안건 보드/클립보드/분석 노트/회의록 더미, asset 코인/차트/금고/계산기/보드/시장 경보, national 민원서류/도장/관공서/파일 박스/국가 과제탑/미로, global 여권/무역상자/글로브/헤드셋/컨퍼런스/게이트, future 칩/데이터 큐브/바이오 플라스크/로봇팔/AI 코어/서버, summit 산봉우리/기후 행성/협상 테이블/의제 문서/캡슐/의장석/조약 금고/정상 계단이다.
+- tone은 색감만 맞추고, 컨셉은 이름과 기능에 맞는 `form`이 결정한다. 새 원정대 몬스터를 만들 때는 같은 사각 몸통에 아이콘만 바꾸지 말고, 외곽선과 내부 구조가 먼저 읽히게 한다.
+- 모든 몬스터에 같은 상단 하이라이트를 넣는 방식은 레거시 문서형 인상을 만들기 쉬우므로 사용하지 않는다. 종이류는 접힘/절취선/도장, 생활 오브젝트는 손잡이/원단선, 전자류는 화면/회로, 건축류는 문/창/첨탑으로 명암과 디테일을 나눈다.
+- 얼굴도 form에 맞춰 달라야 한다. 전자장치류는 바이저, 건축/탑류는 좁은 경계 눈, 코어/행성/코인류는 둥근 눈처럼 최소한의 표정 차이를 둔다.
 - 원정대 몬스터는 눈동자, 손소품, 공격 방향이 모두 파티 쪽인 `<-`를 향해야 한다. 우향처럼 보이는 경우에는 최종 PNG를 단순 mirror하는 것보다 생성 레시피의 눈/소품 배치를 고쳐 다시 만든다.
 - 원정대 몬스터 그래픽 위에는 이름, WAVE, 숫자 같은 텍스트 레이어를 표시하지 않는다. `.expedition-enemy-visual` 내부 레거시 텍스트는 CSS에서 숨기고, `npm run visual:smoke`의 `enemyTextVisibleCount` 0건으로 확인한다.
 - 원정대 몬스터는 `data/sprite_style_profiles.json`의 `monsters.heightOnlyEqualize` 기준으로 4프레임 높이를 맞춘다. 한 프레임만 작아지거나 커지면 실패다.
 - 원정대 몬스터는 노트, 폴더, 타이머, 모니터, 차트, 여권, 회로, 산봉우리 같은 motif를 몸통 자체에 통합한다. 외부 소품은 작게 보조하고, 긴 막대 팔다리나 큰 외부 prop 때문에 전체가 축소되면 실패다.
 - 원정대 몬스터는 손발이 없어도 되지만 큰 눈, 볼 터치, 짧은 장갑/발판, 스티커/탭 디테일로 전투 가능한 캐릭터처럼 읽혀야 한다.
+- 원정대 몬스터에는 아기, 유아, 사람, 사람 얼굴/몸, 착용자, 탑승자, 침낭/상자/기계 안의 사람을 절대 쓰지 않는다. 사람으로 오해될 수 있는 피부색 얼굴, 머리카락, 귀, 코, 사람 손발 비율, 포대기/아기 침낭 실루엣은 후보 단계에서 폐기한다.
 - 학생 전투 몬스터는 `assets/reference/character-ref-cute-sd.png` 우측 몬스터를 개별 crop/GrabCut cutout으로 분리한 뒤 `assets/visual-source/main-monsters/main-monsters-green.png` 형광 녹색 소스 시트로 재생성한다.
 - 메인 학생전투 몬스터 crop은 한 몬스터씩만 잡는다. 줄 전체나 주변 오브젝트를 함께 crop하면 반쪽 소품, 배경 잔여, 몸통 내부 투명화가 생기므로 실패로 본다.
 - `tools/generate-main-monster-sources.py`는 OpenCV GrabCut으로 흰 종이/스티커/OMR 몸통을 보존하고, 작은 분리 조각을 제거한 뒤 레퍼런스 방향을 유지한다. 이전 출력 대비 좌우대칭된 현재 기준이 학생 쪽(`<-`)을 향하는 방향이다.

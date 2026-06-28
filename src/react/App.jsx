@@ -1,4 +1,4 @@
-import { Component, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Component, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   BarChart3,
   BookOpen,
@@ -125,16 +125,133 @@ import studentAtlas from "../snapshot/assets/asset-002.png";
 import mainMonsterAtlas from "../snapshot/assets/asset-003.png";
 
 const LOCKED_CAREER_LABEL = "\u003f\u003f\u003f";
-const EXPEDITION_STAGE_TRANSITION_MS = 2000;
-const EXPEDITION_STAGE_BACKDROP_STEP_PX = 180;
+const EXPEDITION_STAGE_TRANSITION_MS = 4000;
+const EXPEDITION_ENCOUNTER_INTRO_MS = 2950;
+const EXPEDITION_STAGE_BACKDROP_STEP_PX = 88;
+const EXPEDITION_CHAPTER_BACKDROP_STEP_PX = 640;
+const EXPEDITION_COMBAT_FLOAT_REPLAY_MS = 1900;
+const EXPEDITION_BATTLE_REPLAY_MS = 3600;
+const EXPEDITION_BATTLE_EVENT_REPLAY_MS = 2200;
+const EXPEDITION_COMBAT_FLOAT_ANIMATION_MS = 920;
+const EXPEDITION_COMBAT_FLOAT_MAX_COUNT = 8;
+const EXPEDITION_ENEMY_DEATH_ANIMATION_MS = 720;
+const EXPEDITION_ENEMY_DEFEAT_STAGGER_MS = 650;
+const EXPEDITION_POST_DEFEAT_MOVE_DELAY_MS = 260;
 
 function requireConfig(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-function expeditionStageBackdropOffset(stageNumber) {
+function expeditionStageBackdropOffset(stageNumber, chapterNumber = 1) {
   const stage = Math.max(1, Math.floor(Number(stageNumber) || 1));
-  return -((stage - 1) * EXPEDITION_STAGE_BACKDROP_STEP_PX);
+  const chapter = Math.max(1, Math.floor(Number(chapterNumber) || 1));
+  return -((stage - 1) * EXPEDITION_STAGE_BACKDROP_STEP_PX + (chapter - 1) * EXPEDITION_CHAPTER_BACKDROP_STEP_PX);
+}
+
+function expeditionEnemyDefeatMap(report, stageNumber, enemies) {
+  const defeatMap = new Map();
+  if (!report || Number(report.stage) !== Number(stageNumber)) return defeatMap;
+  const append = (entry) => {
+    const id = entry?.id;
+    if (!id || defeatMap.has(id)) return;
+    const order = defeatMap.size + 1;
+    defeatMap.set(id, {
+      order,
+      delayMs: Number.isFinite(Number(entry.delayMs)) ? Math.max(0, Math.round(Number(entry.delayMs))) : (order - 1) * EXPEDITION_ENEMY_DEFEAT_STAGGER_MS,
+      sequence: Number(entry.sequence) || order,
+    });
+  };
+  (Array.isArray(report.enemyDefeatOrder) ? report.enemyDefeatOrder : []).forEach((entry) => {
+    append({ ...entry, delayMs: expeditionReportEventDelayMs(report, { time: entry.time, sequence: entry.sequence }) });
+  });
+  (Array.isArray(report.enemyHp) ? report.enemyHp : [])
+    .filter((enemy) => Number(enemy.remainingHp) <= 0)
+    .sort((a, b) => Number(a.slot) - Number(b.slot))
+    .forEach((enemy) => append({ id: enemy.id, sequence: Number(enemy.slot) || 1 }));
+  enemies
+    .filter((enemy) => Number(enemy.remainingHp) <= 0)
+    .sort((a, b) => Number(a.slot) - Number(b.slot))
+    .forEach((enemy) => append({ id: enemy.id, sequence: Number(enemy.slot) || 1 }));
+  return defeatMap;
+}
+
+function expeditionEnemyHpMap(report, stageNumber) {
+  const hpMap = new Map();
+  if (!report || Number(report.stage) !== Number(stageNumber)) return hpMap;
+  (Array.isArray(report.enemyHp) ? report.enemyHp : []).forEach((enemy) => {
+    if (!enemy?.id) return;
+    hpMap.set(enemy.id, {
+      remainingHp: Math.max(0, Number(enemy.remainingHp) || 0),
+      maxHp: Math.max(1, Number(enemy.maxHp) || 1),
+    });
+  });
+  return hpMap;
+}
+
+function expeditionDefeatedEnemyCount(report) {
+  const defeatOrderCount = Array.isArray(report?.enemyDefeatOrder) ? report.enemyDefeatOrder.length : 0;
+  const defeatedHpCount = (Array.isArray(report?.enemyHp) ? report.enemyHp : []).filter((enemy) => Number(enemy.remainingHp) <= 0).length;
+  return Math.max(defeatOrderCount, defeatedHpCount);
+}
+
+function expeditionReportDurationSeconds(report) {
+  const eventTimes = (Array.isArray(report?.events) ? report.events : []).map((event) => Number(event.time)).filter(Number.isFinite);
+  const maxEventTime = eventTimes.length ? Math.max(...eventTimes) : 0;
+  return Math.max(0.1, Number(report?.durationSeconds) || 0, maxEventTime);
+}
+
+function expeditionReportEventDelayMs(report, event) {
+  const time = Number(event?.time);
+  if (Number.isFinite(time)) {
+    return Math.round(140 + (Math.max(0, time) / expeditionReportDurationSeconds(report)) * EXPEDITION_BATTLE_EVENT_REPLAY_MS);
+  }
+  const sequence = Math.max(1, Math.floor(Number(event?.sequence) || 1));
+  return Math.round(140 + (sequence - 1) * 120);
+}
+
+function expeditionLastKillDelayMs(report) {
+  const killEvents = Array.isArray(report?.enemyDefeatOrder) ? report.enemyDefeatOrder : [];
+  if (killEvents.length === 0) return 0;
+  return Math.max(...killEvents.map((event, index) => {
+    const eventDelay = expeditionReportEventDelayMs(report, event);
+    const staggerFallback = 140 + index * EXPEDITION_ENEMY_DEFEAT_STAGGER_MS;
+    return Math.max(eventDelay, staggerFallback);
+  }));
+}
+
+function expeditionVictoryMoveDelayMs(report) {
+  if (report?.result !== "win") return 0;
+  const defeatedCount = expeditionDefeatedEnemyCount(report);
+  if (defeatedCount <= 0) return 0;
+  const fallbackDelay = (defeatedCount - 1) * EXPEDITION_ENEMY_DEFEAT_STAGGER_MS;
+  return Math.max(fallbackDelay, expeditionLastKillDelayMs(report)) + EXPEDITION_ENEMY_DEATH_ANIMATION_MS + EXPEDITION_POST_DEFEAT_MOVE_DELAY_MS;
+}
+
+function expeditionBattleReplayHoldMs(report) {
+  if (report?.result !== "win") return EXPEDITION_BATTLE_REPLAY_MS;
+  return expeditionVictoryMoveDelayMs(report) + EXPEDITION_STAGE_TRANSITION_MS + 120;
+}
+
+function expeditionReplayHpMaps(report, stageNumber, playheadMs) {
+  const party = new Map();
+  const enemies = new Map();
+  if (!report || Number(report.stage) !== Number(stageNumber)) return { party, enemies };
+  const events = Array.isArray(report.events) ? report.events : [];
+  events
+    .slice()
+    .sort((a, b) => (Number(a.time) || 0) - (Number(b.time) || 0) || (Number(a.sequence) || 0) - (Number(b.sequence) || 0))
+    .forEach((event) => {
+      if (expeditionReportEventDelayMs(report, event) > playheadMs) return;
+      const targetId = event.targetId || event.target;
+      if (!targetId) return;
+      const snapshot = {
+        remainingHp: Math.max(0, Math.round(Number(event.targetHpAfter) || 0)),
+        maxHp: Math.max(1, Math.round(Number(event.targetMaxHp) || 1)),
+      };
+      if (event.targetSide === "ally") party.set(targetId, snapshot);
+      if (event.targetSide === "enemy") enemies.set(targetId, snapshot);
+    });
+  return { party, enemies };
 }
 
 const firstGrowth = growthLevels[0];
@@ -353,6 +470,97 @@ function expeditionRewardToastText(before, after) {
   if (diamonds > 0) pieces.push(`다이아 +${formatCompactNumber(diamonds)}`);
   if (money > 0) pieces.push(`돈 +${formatCompactNumber(money)}`);
   return pieces.join(" · ");
+}
+
+function expeditionVisualReadyForAutoCombat() {
+  if (typeof document === "undefined") return true;
+  const scene = document.querySelector(".expedition-scene");
+  if (!scene) return true;
+  return scene.getAttribute("data-combat-ready") === "true";
+}
+
+function compactCombatName(value) {
+  const text = String(value || "").replace(/\s+/g, "");
+  if (text.length <= 5) return text;
+  return `${text.slice(0, 5)}…`;
+}
+
+const expeditionFloatPositions = {
+  ally: {
+    1: { x: 31, y: 43 },
+    2: { x: 17, y: 36 },
+    3: { x: 27, y: 39 },
+    4: { x: 39, y: 36 },
+    5: { x: 20, y: 42 },
+  },
+  enemy: {
+    1: { x: 67, y: 39 },
+    2: { x: 78, y: 36 },
+    3: { x: 88, y: 40 },
+    4: { x: 73, y: 34 },
+    5: { x: 84, y: 35 },
+  },
+};
+
+function expeditionFloatPosition(side, slot) {
+  const sideKey = side === "ally" ? "ally" : "enemy";
+  const slots = expeditionFloatPositions[sideKey];
+  return slots[Math.max(1, Math.min(5, Math.floor(Number(slot) || 1)))] || slots[1];
+}
+
+function normalizeCombatFloatEvent(event, index, timing) {
+  const actorSide = event.actorSide === "enemy" ? "enemy" : "ally";
+  const targetSide = event.targetSide === "ally" ? "ally" : "enemy";
+  const targetSlot = Math.max(1, Math.floor(Number(event.targetSlot) || 1));
+  const position = expeditionFloatPosition(targetSide, targetSlot);
+  const kind = event.kind === "heal" ? "heal" : event.killed ? "kill" : targetSide === "ally" ? "hit" : "damage";
+  const actorLabel = event.actorLabel || event.actor || "행동자";
+  const targetLabel = event.targetLabel || event.target || "대상";
+  const delayMs = Math.round(timing.baseDelayMs + timing.stepMs * index);
+  const valuePrefix = event.kind === "heal" ? "+" : "-";
+  const valueText = event.killed ? targetSide === "ally" ? "전투불능" : "처치" : `${valuePrefix}${formatCompactNumber(event.value)}`;
+  const hpAfter = Number.isFinite(Number(event.targetHpAfter)) && Number.isFinite(Number(event.targetMaxHp))
+    ? `${formatCompactNumber(event.targetHpAfter)}/${formatCompactNumber(event.targetMaxHp)}`
+    : "";
+  return {
+    ...event,
+    id: `${event.sequence || index + 1}-${event.time}-${event.actorId || event.actor}-${event.targetId || event.target}`,
+    actorSide,
+    targetSide,
+    targetSlot,
+    visualKind: kind,
+    actorLabel,
+    targetLabel,
+    actorShort: compactCombatName(actorLabel),
+    targetShort: compactCombatName(targetLabel),
+    valueText,
+    hpAfter,
+    delayMs,
+    style: {
+      "--float-x": `${position.x}%`,
+      "--float-y": `${position.y}%`,
+      "--float-delay": `${delayMs}ms`,
+      "--float-duration": `${EXPEDITION_COMBAT_FLOAT_ANIMATION_MS}ms`,
+    },
+  };
+}
+
+function expeditionCombatFloatEvents(report) {
+  const events = Array.isArray(report?.events) ? report.events : [];
+  if (events.length === 0) return [];
+  const blockedTargets = new Set();
+  const timeline = [];
+  for (const event of events) {
+    const targetKey = event.targetId || event.target;
+    if (blockedTargets.has(targetKey)) continue;
+    timeline.push(event);
+    if (event.killed) blockedTargets.add(targetKey);
+  }
+  const visible = timeline.slice(-EXPEDITION_COMBAT_FLOAT_MAX_COUNT);
+  const maxDelay = Math.max(0, EXPEDITION_COMBAT_FLOAT_REPLAY_MS - EXPEDITION_COMBAT_FLOAT_ANIMATION_MS - 80);
+  const stepMs = visible.length <= 1 ? 0 : Math.min(150, Math.floor(maxDelay / (visible.length - 1)));
+  const baseDelayMs = visible.length <= 1 ? 120 : 40;
+  return visible.map((event, index) => normalizeCombatFloatEvent(event, index, { baseDelayMs, stepMs }));
 }
 
 function formatShopCost(value) {
@@ -806,17 +1014,32 @@ function SpriteFrames({ className, frames }) {
   );
 }
 
-function ExpeditionScene({ gameState, onExpeditionComplete, onOpenPendingReward, rewardToast }) {
+function ExpeditionScene({ gameState, onCombatReadyChange, onExpeditionComplete, onOpenPendingReward, rewardToast }) {
   const [displayGameState, setDisplayGameState] = useState(gameState);
   const [stageTransition, setStageTransition] = useState(null);
+  const [combatReplay, setCombatReplay] = useState(null);
+  const [battleReplay, setBattleReplay] = useState(null);
+  const [battleReplayNow, setBattleReplayNow] = useState(0);
+  const [encounterIntro, setEncounterIntro] = useState(null);
   const latestGameStateRef = useRef(gameState);
   const previousGameStateRef = useRef(gameState);
   const stageTransitionRef = useRef(null);
+  const transitionStartTimerRef = useRef(0);
   const transitionTimerRef = useRef(0);
+  const combatReplayTimerRef = useRef(0);
+  const battleReplayTimerRef = useRef(0);
+  const battleReplayIntervalRef = useRef(0);
+  const encounterIntroTimerRef = useRef(0);
+  const seenBattleIdRef = useRef(gameState?.expedition?.pendingReward?.lastBattle?.id || "");
 
   useEffect(() => {
     return () => {
+      if (transitionStartTimerRef.current) window.clearTimeout(transitionStartTimerRef.current);
       if (transitionTimerRef.current) window.clearTimeout(transitionTimerRef.current);
+      if (combatReplayTimerRef.current) window.clearTimeout(combatReplayTimerRef.current);
+      if (battleReplayTimerRef.current) window.clearTimeout(battleReplayTimerRef.current);
+      if (battleReplayIntervalRef.current) window.clearInterval(battleReplayIntervalRef.current);
+      if (encounterIntroTimerRef.current) window.clearTimeout(encounterIntroTimerRef.current);
     };
   }, []);
 
@@ -832,56 +1055,135 @@ function ExpeditionScene({ gameState, onExpeditionComplete, onOpenPendingReward,
     const stageAdvanced = nextStage > previousStage && Number(gameState?.expedition?.highestStage || 0) >= previousStage;
 
     if (stageAdvanced) {
+      if (transitionStartTimerRef.current) window.clearTimeout(transitionStartTimerRef.current);
       if (transitionTimerRef.current) window.clearTimeout(transitionTimerRef.current);
+      if (encounterIntroTimerRef.current) window.clearTimeout(encounterIntroTimerRef.current);
+      setEncounterIntro(null);
       const transition = {
         id: `${previousStage}-${nextStage}-${Date.now()}`,
         fromStage: previousStage,
         toStage: nextStage,
       };
       setDisplayGameState(previousGameState);
-      setStageTransition(transition);
-      stageTransitionRef.current = transition;
-      transitionTimerRef.current = window.setTimeout(() => {
-        setDisplayGameState(latestGameStateRef.current);
-        setStageTransition(null);
-        stageTransitionRef.current = null;
-        transitionTimerRef.current = 0;
-      }, EXPEDITION_STAGE_TRANSITION_MS);
-    } else if (!stageTransitionRef.current) {
+      setStageTransition(null);
+      stageTransitionRef.current = null;
+
+      const startStageTravel = () => {
+        setStageTransition(transition);
+        stageTransitionRef.current = transition;
+        transitionStartTimerRef.current = 0;
+        transitionTimerRef.current = window.setTimeout(() => {
+          const latestState = latestGameStateRef.current;
+          const arrivedStage = Number(latestState?.expedition?.currentStage || nextStage);
+          setDisplayGameState(latestState);
+          setStageTransition(null);
+          stageTransitionRef.current = null;
+          transitionTimerRef.current = 0;
+          setEncounterIntro({ id: `${transition.id}-encounter`, stage: arrivedStage });
+          encounterIntroTimerRef.current = window.setTimeout(() => {
+            setEncounterIntro(null);
+            encounterIntroTimerRef.current = 0;
+          }, EXPEDITION_ENCOUNTER_INTRO_MS);
+        }, EXPEDITION_STAGE_TRANSITION_MS);
+      };
+      const moveDelayMs = expeditionVictoryMoveDelayMs(gameState?.expedition?.pendingReward?.lastBattle);
+      if (moveDelayMs > 0) {
+        transitionStartTimerRef.current = window.setTimeout(startStageTravel, moveDelayMs);
+      } else {
+        startStageTravel();
+      }
+    } else if (!stageTransitionRef.current && !transitionStartTimerRef.current) {
       setDisplayGameState(gameState);
     }
 
     previousGameStateRef.current = gameState;
   }, [gameState]);
 
+  useEffect(() => {
+    const report = gameState?.expedition?.pendingReward?.lastBattle;
+    if (!report?.id || report.id === seenBattleIdRef.current) return;
+    seenBattleIdRef.current = report.id;
+    const events = expeditionCombatFloatEvents(report);
+    if (combatReplayTimerRef.current) window.clearTimeout(combatReplayTimerRef.current);
+    if (battleReplayTimerRef.current) window.clearTimeout(battleReplayTimerRef.current);
+    if (battleReplayIntervalRef.current) window.clearInterval(battleReplayIntervalRef.current);
+    const startedAt = Date.now();
+    setBattleReplayNow(startedAt);
+    setBattleReplay({ id: report.id, report, startedAt });
+    battleReplayIntervalRef.current = window.setInterval(() => setBattleReplayNow(Date.now()), 90);
+    battleReplayTimerRef.current = window.setTimeout(() => {
+      setBattleReplay(null);
+      if (battleReplayIntervalRef.current) {
+        window.clearInterval(battleReplayIntervalRef.current);
+        battleReplayIntervalRef.current = 0;
+      }
+      battleReplayTimerRef.current = 0;
+    }, expeditionBattleReplayHoldMs(report));
+    if (events.length === 0) {
+      setCombatReplay(null);
+      combatReplayTimerRef.current = 0;
+      return;
+    }
+    setCombatReplay({ id: report.id, result: report.result, events });
+    combatReplayTimerRef.current = window.setTimeout(() => {
+      setCombatReplay(null);
+      combatReplayTimerRef.current = 0;
+    }, EXPEDITION_COMBAT_FLOAT_REPLAY_MS);
+  }, [gameState]);
+
   const expedition = createExpeditionViewModel(displayGameState);
   const latestExpedition = stageTransition ? createExpeditionViewModel(gameState) : expedition;
   const stage = expedition.stage;
-  const enemyFrames = getExpeditionEnemyFrameUrls(stage.enemyAsset);
   assert(Array.isArray(stage.normalEnemyNames) && stage.normalEnemyNames.length > 0, `원정대 stage normalEnemyNames 누락: ${stage.id}`);
+  assert(Array.isArray(stage.enemyAssets) && stage.enemyAssets.length === stage.enemyCount, `원정대 stage enemyAssets 누락: ${stage.id}`);
   assert(Number.isFinite(Number(stage.enemyVariant)), `원정대 stage enemyVariant 누락: ${stage.id}`);
   const enemyVisuals = expedition.enemyMembers.slice(0, stage.enemyCount);
   const powerPercent = Math.max(0, Math.min(100, Math.round((expedition.partyPower / Math.max(1, expedition.enemyPower)) * 100)));
   const routeProgressPercent = Math.max(0, Math.min(100, (stage.stageInChapter / 1000) * 100));
   const battleResultLabel = !expedition.ready ? "편성 필요" : expedition.canClear ? "자동 승리 예상" : stage.isBoss ? "보스 재도전 위험" : "성장 필요";
   const isStageTransitioning = Boolean(stageTransition);
-  const floatEvents = (isStageTransitioning ? latestExpedition.lastBattle?.events || [] : expedition.recentCombatEvents).slice(-5);
+  const isEncounterIntro = Boolean(encounterIntro && Number(encounterIntro.stage) === Number(expedition.currentStage) && !isStageTransitioning);
+  const floatEvents = combatReplay?.events || [];
+  const hasDamageReplay = floatEvents.some((event) => event.visualKind === "damage" || event.visualKind === "hit" || event.visualKind === "kill");
   const backdropStage = isStageTransitioning ? stageTransition.toStage : expedition.currentStage || 1;
   const backdropFromStage = isStageTransitioning ? stageTransition.fromStage : backdropStage;
-  const backdropFromX = expeditionStageBackdropOffset(backdropFromStage);
-  const backdropToX = expeditionStageBackdropOffset(backdropStage);
+  const backdropFromChapter = isStageTransitioning ? stage.chapter : expedition.stage.chapter;
+  const backdropToChapter = isStageTransitioning ? latestExpedition.stage.chapter : expedition.stage.chapter;
+  const backdropFromX = expeditionStageBackdropOffset(backdropFromStage, backdropFromChapter);
+  const backdropToX = expeditionStageBackdropOffset(backdropStage, backdropToChapter);
   const backdropStyle = {
     "--expedition-bg-x": `${backdropToX}px`,
     "--expedition-bg-from-x": `${backdropFromX}px`,
     "--expedition-bg-to-x": `${backdropToX}px`,
   };
+  const activeBattleReport = !isStageTransitioning && battleReplay?.report && Number(battleReplay.report.stage) === Number(stage.globalStage) ? battleReplay.report : null;
+  const isBattleReplaying = Boolean(activeBattleReport);
+  const battleReplayPlayheadMs = activeBattleReport ? Math.max(0, battleReplayNow - Number(battleReplay?.startedAt || battleReplayNow)) : 0;
+  const replayHpMaps = expeditionReplayHpMaps(activeBattleReport, stage.globalStage, battleReplayPlayheadMs);
+  const enemyHpMap = isBattleReplaying ? replayHpMaps.enemies : expeditionEnemyHpMap(activeBattleReport, stage.globalStage);
+  const partyHpMap = isBattleReplaying ? replayHpMaps.party : new Map();
+  const defeatMap = activeBattleReport
+    ? expeditionEnemyDefeatMap(activeBattleReport, stage.globalStage, enemyVisuals)
+    : new Map();
+  const partyMotionClass = !expedition.ready ? "standing" : isStageTransitioning ? "running" : isEncounterIntro ? "standing" : "combat";
+  const combatReady = expedition.ready && !isStageTransitioning && !isBattleReplaying && !isEncounterIntro;
+  const shouldRenderEnemies = !isStageTransitioning;
+
+  useEffect(() => {
+    onCombatReadyChange?.(combatReady);
+  }, [combatReady, onCombatReadyChange]);
+
+  useEffect(() => () => onCombatReadyChange?.(true), [onCombatReadyChange]);
 
   return (
     <section
-      className={`expedition-scene chapter-${stage.chapter} backdrop-${stage.backdropClass}${stage.isBoss ? " boss" : ""}${isStageTransitioning ? " stage-transitioning" : ""}`}
-      aria-busy={isStageTransitioning ? "true" : "false"}
+      className={`expedition-scene chapter-${stage.chapter} backdrop-${stage.backdropClass}${stage.isBoss ? " boss" : ""}${isStageTransitioning ? " stage-transitioning" : ""}${isBattleReplaying ? " combat-replaying" : ""}${isEncounterIntro ? " encounter-approaching" : ""}`}
+      aria-busy={isStageTransitioning || isBattleReplaying || isEncounterIntro ? "true" : "false"}
       aria-label="원정대 전투장"
       data-stage-transition={isStageTransitioning ? "moving" : "idle"}
+      data-combat-replay={isBattleReplaying ? activeBattleReport.result : "idle"}
+      data-combat-ready={combatReady ? "true" : "false"}
+      data-encounter-intro={isEncounterIntro ? "approaching" : "idle"}
       data-transition-from-stage={stageTransition?.fromStage || ""}
       data-transition-to-stage={stageTransition?.toStage || ""}
     >
@@ -899,16 +1201,16 @@ function ExpeditionScene({ gameState, onExpeditionComplete, onOpenPendingReward,
           <div className="expedition-arena-rail" aria-hidden="true">
             <i style={{ width: `${routeProgressPercent}%` }} />
           </div>
-          <em>{isStageTransitioning ? `Stage ${stageTransition.toStage} 이동중` : stage.isBoss ? "보스 게이트" : `다음 보스 ${stage.nextBossStageCount} Stage`}</em>
+          <em>{isStageTransitioning ? `Stage ${stageTransition.toStage} 이동중` : isBattleReplaying ? "전투 정리중" : isEncounterIntro ? "몬스터 조우" : stage.isBoss ? "보스 게이트" : `다음 보스 ${stage.nextBossStageCount} Stage`}</em>
         </div>
-        <div className={expedition.ready ? "expedition-party-visual running" : "expedition-party-visual empty"}>
+        <div className={expedition.ready ? `expedition-party-visual ${partyMotionClass}` : "expedition-party-visual empty"} data-party-motion={partyMotionClass}>
           {expedition.ready ? (
             expedition.partyMembers.map((member) => (
               <div className={`expedition-unit-avatar large unit-${member.slot} role-${member.role}`} key={member.id} title={`${member.careerName} · ${member.roleLabel} · HP ${formatCompactNumber(member.combatStats.hp)} · 공격 ${formatCompactNumber(member.combatStats.attack)}`}>
                 <SpriteFrames className="expedition-unit-frame" frames={getCompanionFrameUrls(member.career, member.avatarGender)} />
                 <span className="expedition-role-badge">{member.roleLabel}</span>
                 <i className="expedition-hp-bar ally" aria-label={`${member.careerName} HP`}>
-                  <span style={{ width: `${Math.max(0, Math.min(100, Math.round((member.remainingHp / Math.max(1, member.maxHp)) * 100)))}%` }} />
+                  <span style={{ width: `${Math.max(0, Math.min(100, Math.round(((partyHpMap.get(member.id)?.remainingHp ?? member.remainingHp) / Math.max(1, partyHpMap.get(member.id)?.maxHp ?? member.maxHp)) * 100)))}%` }} />
                 </i>
               </div>
             ))
@@ -916,11 +1218,27 @@ function ExpeditionScene({ gameState, onExpeditionComplete, onOpenPendingReward,
             <span className="expedition-empty-party">대원 없음</span>
           )}
         </div>
-        <span className="expedition-impact" aria-hidden="true" />
-        <div className="expedition-float-layer" aria-hidden="true">
-          {floatEvents.map((event, index) => (
-            <span className={`expedition-float ${event.kind} float-${index + 1}`} key={`${event.time}-${event.actor}-${event.target}-${index}`}>
-              {event.kind === "heal" ? "+" : "-"}{formatCompactNumber(event.value)}
+        {hasDamageReplay && <span className="expedition-impact active" aria-hidden="true" />}
+        <div className="expedition-float-layer" aria-label="원정대 전투 피해와 회복 표시">
+          {floatEvents.map((event) => (
+            <span
+              className={`expedition-float ${event.visualKind} from-${event.actorSide} target-${event.targetSide}`}
+              data-actor={event.actorLabel}
+              data-target={event.targetLabel}
+              data-target-side={event.targetSide}
+              data-target-slot={event.targetSlot}
+              data-killed={event.killed ? "true" : "false"}
+              key={`${combatReplay?.id}-${event.id}`}
+              style={event.style}
+              aria-label={event.text}
+            >
+              <span className="expedition-float-route">
+                <b>{event.actorShort}</b>
+                <i>→</i>
+                <b>{event.targetShort}</b>
+              </span>
+              <strong>{event.valueText}</strong>
+              {event.hpAfter && <small>HP {event.hpAfter}</small>}
             </span>
           ))}
         </div>
@@ -930,17 +1248,37 @@ function ExpeditionScene({ gameState, onExpeditionComplete, onOpenPendingReward,
             <span>{rewardToast.text}</span>
           </div>
         )}
-        <div className="expedition-enemy-group" aria-label={stage.enemyName}>
-          {enemyVisuals.map((enemy, index) => (
-            <div className={`expedition-enemy-visual mob-${stage.enemyVariant} enemy-${index + 1}${isStageTransitioning ? " defeated" : ""}`} key={`${stage.id}-${enemy.id}`} title={enemy.name}>
-              <SpriteFrames className="expedition-enemy-frame" frames={enemyFrames} />
-              <i className="expedition-hp-bar enemy" aria-label={`${enemy.name} HP`}>
-                <span style={{ width: `${isStageTransitioning ? 0 : Math.max(0, Math.min(100, Math.round((enemy.remainingHp / Math.max(1, enemy.maxHp)) * 100)))}%` }} />
-              </i>
-              <span className="enemy-shadow" aria-hidden="true" />
-            </div>
-          ))}
-        </div>
+        {shouldRenderEnemies && (
+          <div className={`expedition-enemy-group${isEncounterIntro ? " approaching" : ""}`} aria-label={stage.enemyName}>
+            {enemyVisuals.map((enemy, index) => {
+              const enemyAsset = stage.enemyAssets[index];
+              requireConfig(typeof enemyAsset === "string" && enemyAsset.length > 0, `원정대 enemyAssets 누락: ${stage.id}[${index}]`);
+              const enemyTypeClass = stage.isBoss ? `boss boss-${stage.enemyVariant}` : `mob-${stage.enemyVariant}`;
+              const defeat = defeatMap.get(enemy.id);
+              const hpSnapshot = enemyHpMap.get(enemy.id);
+              const remainingHp = hpSnapshot ? hpSnapshot.remainingHp : enemy.remainingHp;
+              const maxHp = hpSnapshot ? hpSnapshot.maxHp : enemy.maxHp;
+              return (
+                <div
+                  className={`expedition-enemy-visual ${enemyTypeClass} enemy-${index + 1} enemy-asset-${enemyAsset}${defeat ? " defeated" : ""}`}
+                  data-enemy-id={enemy.id}
+                  data-enemy-asset={enemyAsset}
+                  data-defeat-order={defeat?.order || ""}
+                  data-defeat-delay={defeat ? String(defeat.delayMs) : ""}
+                  key={`${stage.id}-${enemy.id}`}
+                  style={{ "--enemy-defeat-delay": `${defeat?.delayMs || 0}ms` }}
+                  title={enemy.name}
+                >
+                  <SpriteFrames className="expedition-enemy-frame" frames={getExpeditionEnemyFrameUrls(enemyAsset)} />
+                  <i className="expedition-hp-bar enemy" aria-label={`${enemy.name} HP`}>
+                    <span style={{ width: `${Math.max(0, Math.min(100, Math.round((remainingHp / Math.max(1, maxHp)) * 100)))}%` }} />
+                  </i>
+                  <span className="enemy-shadow" aria-hidden="true" />
+                </div>
+              );
+            })}
+          </div>
+        )}
         <div className="expedition-scene-footer">
           <div className="expedition-scene-run">
             <span>{battleResultLabel} · {expedition.battleDurationSeconds}초 전투</span>
@@ -949,8 +1287,8 @@ function ExpeditionScene({ gameState, onExpeditionComplete, onOpenPendingReward,
               <span style={{ width: `${powerPercent}%` }} />
             </i>
           </div>
-          <button className="expedition-action-button" disabled={!expedition.ready || isStageTransitioning} type="button" onClick={onExpeditionComplete}>
-            {isStageTransitioning ? "이동중" : expedition.ready ? "돌파" : "편성 필요"}
+          <button className="expedition-action-button" disabled={!expedition.ready || isStageTransitioning || isBattleReplaying || isEncounterIntro} type="button" onClick={onExpeditionComplete}>
+            {isStageTransitioning ? "이동중" : isEncounterIntro ? "조우중" : isBattleReplaying ? "정리중" : expedition.ready ? "돌파" : "편성 필요"}
           </button>
           {expedition.hasPendingReward && (
             <button className="expedition-pending-reward-button" type="button" onClick={onOpenPendingReward}>
@@ -3256,6 +3594,7 @@ function GameApp({ loaded }) {
   const [dismissedExpeditionRewardAt, setDismissedExpeditionRewardAt] = useState(0);
   const [expeditionRewardModalOpen, setExpeditionRewardModalOpen] = useState(false);
   const [expeditionRewardToast, setExpeditionRewardToast] = useState(null);
+  const expeditionCombatReadyRef = useRef(true);
   const [settings, setSettings] = useState({
     autosave: true,
     offlineAlerts: true,
@@ -3287,6 +3626,10 @@ function GameApp({ loaded }) {
     if (!text) return;
     setExpeditionRewardToast({ id: Date.now(), text });
   };
+
+  const handleExpeditionCombatReadyChange = useCallback((ready) => {
+    expeditionCombatReadyRef.current = Boolean(ready);
+  }, []);
 
   useEffect(() => {
     if (!saveError) saveGameState(gameState);
@@ -3329,9 +3672,14 @@ function GameApp({ loaded }) {
     };
     document.addEventListener("visibilitychange", handleVisible);
     const timer = window.setInterval(() => {
+      if (!expeditionVisualReadyForAutoCombat()) return;
       let toastText = "";
       setGameState((state) => {
-        const next = resolveExpeditionAutoCombat(state, Date.now(), { rewardDelivery: "instant" });
+        if (!expeditionVisualReadyForAutoCombat()) return state;
+        const previousBattleId = state.expedition.pendingReward?.lastBattle?.id || "";
+        const next = resolveExpeditionAutoCombat(state, Date.now(), { rewardDelivery: "instant", maxBattles: 1 });
+        const nextBattleId = next.expedition.pendingReward?.lastBattle?.id || "";
+        if (nextBattleId && nextBattleId !== previousBattleId) expeditionCombatReadyRef.current = false;
         toastText = expeditionRewardToastText(state, next);
         return next;
       });
@@ -3387,6 +3735,8 @@ function GameApp({ loaded }) {
   };
 
   const handleExpeditionComplete = () => {
+    if (!expeditionCombatReadyRef.current) return;
+    expeditionCombatReadyRef.current = false;
     let toastText = "";
     setGameState((state) => {
       const next = completeExpeditionStage(state);
@@ -3525,6 +3875,7 @@ function GameApp({ loaded }) {
         ) : mode === "expedition" ? (
           <ExpeditionScene
             gameState={gameState}
+            onCombatReadyChange={handleExpeditionCombatReadyChange}
             onExpeditionComplete={handleExpeditionComplete}
             onOpenPendingReward={handleOpenExpeditionReward}
             rewardToast={expeditionRewardToast}

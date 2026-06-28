@@ -1,8 +1,10 @@
 # 원정대 몬스터 퀄리티 재제작 구현서
 
+> 최신 기준: 이 문서는 이전 절차형 SD 오브젝트 생성 차수의 기록이다. 현재 원정대 몬스터 기준은 `implementations/expedition-monster-raster-png-redraw/implementation.md`이며, 80종 모두 tone별 래스터 PNG 원본 시트에서 파생되고 런타임은 개별 `SpriteFrames` PNG만 표시한다.
+
 ## 목적
 
-원정대에 등장하는 몬스터만 대상으로 기존 반복 도형/텍스트형 표현을 버리고, 지역과 위치 특색이 읽히는 고품질 SD 오브젝트형 몬스터 40종으로 교체했다. 학생/동료 스프라이트와 같은 Asset Sprite Factory 파이프라인을 사용해 원본 생성, 정규화, 아틀라스 패킹, 화면 검증까지 한 흐름으로 묶었다.
+원정대에 등장하는 몬스터만 대상으로 기존 반복 도형/텍스트형 표현을 버리고, 지역과 위치 특색이 읽히는 고품질 SD 오브젝트형 몬스터로 교체한 과거 차수의 기록이다. 이후 래스터 PNG 재제작 차수에서 80종 전체가 tone별 원본 PNG 시트 기반으로 대체되었다.
 
 ## 변경 범위
 
@@ -38,7 +40,7 @@
 1. `tools/generate-professional-sprite-sources.py`가 형광 녹색 배경의 4프레임 원정대 몬스터 시트를 생성한다.
 2. `tools/prepare-professional-sprites.py`가 chroma key 제거, 160x160 정규화, 중심축/발 기준선 고정을 수행한다.
 3. `tools/build-visual-assets.mjs`가 `visual-enemies.png` 아틀라스와 런타임 CSS를 만든다.
-4. 원정대 화면에서는 `.expedition-enemy-visual::before`만 실제 몬스터 스프라이트를 표시하고, 레거시 CSS body/text 레이어는 숨긴다.
+4. 현재 원정대 화면에서는 `.expedition-enemy-visual::before` atlas 본체를 숨기고, `src/snapshot/assets/individual/expedition-enemies/<id>/move_*.png`의 개별 PNG `SpriteFrames`만 실제 몬스터 스프라이트로 표시한다.
 
 ## 검증 결과
 

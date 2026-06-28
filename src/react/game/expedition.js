@@ -163,6 +163,7 @@ function normalizeBattleReport(report) {
   }
   if (!Array.isArray(normalized.partyHp)) normalized.partyHp = [];
   if (!Array.isArray(normalized.enemyHp)) normalized.enemyHp = [];
+  if (!Array.isArray(normalized.enemyDefeatOrder)) normalized.enemyDefeatOrder = [];
   return normalized;
 }
 
@@ -196,6 +197,24 @@ function validateCombatEvent(event, path) {
   assert(["damage", "heal"].includes(event.kind), `${path}.kind 값이 올바르지 않습니다: ${event.kind}`);
   assertNumberInteger(event.value, `${path}.value`, 0);
   assert(typeof event.text === "string" && event.text.length > 0, `${path}.text 값이 없습니다.`);
+  if (event.sequence !== undefined) assertNumberInteger(event.sequence, `${path}.sequence`, 1);
+  for (const key of ["actorId", "actorLabel", "targetId", "targetLabel"]) {
+    if (event[key] !== undefined) assert(typeof event[key] === "string" && event[key].length > 0, `${path}.${key} 값이 올바르지 않습니다.`);
+  }
+  for (const key of ["actorSide", "targetSide"]) {
+    if (event[key] !== undefined) assert(["ally", "enemy"].includes(event[key]), `${path}.${key} 값이 올바르지 않습니다: ${event[key]}`);
+  }
+  for (const key of ["actorSlot", "targetSlot"]) {
+    if (event[key] !== undefined) assertNumberInteger(event[key], `${path}.${key}`, 1);
+  }
+  for (const key of ["actorRole", "targetRole"]) {
+    if (event[key] !== undefined && event[key] !== null) assert(expeditionRoleIds.includes(event[key]), `${path}.${key} 값이 올바르지 않습니다: ${event[key]}`);
+  }
+  for (const key of ["targetHpBefore", "targetHpAfter"]) {
+    if (event[key] !== undefined) assertNumberInteger(event[key], `${path}.${key}`, 0);
+  }
+  if (event.targetMaxHp !== undefined) assertNumberInteger(event.targetMaxHp, `${path}.targetMaxHp`, 1);
+  if (event.killed !== undefined) assert(typeof event.killed === "boolean", `${path}.killed 값이 boolean이 아닙니다.`);
 }
 
 function validateCombatantHpSnapshot(snapshot, path) {
@@ -206,6 +225,15 @@ function validateCombatantHpSnapshot(snapshot, path) {
   assertNumberInteger(snapshot.maxHp, `${path}.maxHp`, 1);
   assertNumberInteger(snapshot.remainingHp, `${path}.remainingHp`, 0);
   assert(snapshot.remainingHp <= snapshot.maxHp, `${path}.remainingHp 값이 maxHp보다 클 수 없습니다.`);
+}
+
+function validateEnemyDefeatEntry(entry, path) {
+  assert(entry && typeof entry === "object" && !Array.isArray(entry), `${path} 데이터가 객체가 아닙니다.`);
+  assert(typeof entry.id === "string" && entry.id.length > 0, `${path}.id 값이 없습니다.`);
+  assert(typeof entry.name === "string" && entry.name.length > 0, `${path}.name 값이 없습니다.`);
+  assertNumberInteger(entry.slot, `${path}.slot`, 1);
+  assertNumberInteger(entry.sequence, `${path}.sequence`, 1);
+  nonNegativeNumber(entry.time, `${path}.time`);
 }
 
 function validateBattleReport(report, path) {
@@ -224,6 +252,8 @@ function validateBattleReport(report, path) {
   report.partyHp.forEach((snapshot, index) => validateCombatantHpSnapshot(snapshot, `${path}.partyHp[${index}]`));
   assert(Array.isArray(report.enemyHp), `${path}.enemyHp 데이터가 배열이 아닙니다.`);
   report.enemyHp.forEach((snapshot, index) => validateCombatantHpSnapshot(snapshot, `${path}.enemyHp[${index}]`));
+  assert(Array.isArray(report.enemyDefeatOrder), `${path}.enemyDefeatOrder 데이터가 배열이 아닙니다.`);
+  report.enemyDefeatOrder.forEach((entry, index) => validateEnemyDefeatEntry(entry, `${path}.enemyDefeatOrder[${index}]`));
   assert(Array.isArray(report.events), `${path}.events 데이터가 배열이 아닙니다.`);
   report.events.forEach((event, index) => validateCombatEvent(event, `${path}.events[${index}]`));
 }
@@ -433,6 +463,14 @@ export function createStageView(currentStage) {
   const enemyCount = enemyNames.length;
   const enemyAsset = boss ? boss.bossAsset : segment.enemyAsset;
   assert(enemyAsset, `원정대 적 asset이 비어 있습니다: ${source.id}`);
+  const enemyAssets = boss ? [enemyAsset] : segment.enemyAssets;
+  assert(Array.isArray(enemyAssets), `원정대 stage enemyAssets 누락: ${source.id}`);
+  assert(enemyAssets.length === enemyCount, `원정대 stage enemyAssets 수가 전투 몬스터 수와 다릅니다: ${source.id}`);
+  enemyAssets.forEach((asset, index) => {
+    assert(typeof asset === "string" && asset.length > 0, `원정대 stage enemyAssets[${index}] 값이 비어 있습니다: ${source.id}`);
+  });
+  const variantMatch = String(enemyAsset).match(/-(?:mob|boss)-(\d+)$/);
+  const enemyVariant = Number(variantMatch?.[1] ?? segment.enemyVariant);
 
   return {
     ...coords,
@@ -443,7 +481,8 @@ export function createStageView(currentStage) {
     normalEnemyNames: enemyNames,
     enemyCount,
     enemyAsset,
-    enemyVariant: Number(segment.enemyVariant),
+    enemyAssets,
+    enemyVariant,
     chapterName: chapter.name,
     chapterSubtitle: chapter.subtitle,
     backdropClass: chapter.backdropClass,
@@ -622,6 +661,7 @@ function enemyCombatantsForStage(stageView) {
     return {
       id: enemy.id || `${stageView.sourceId}-enemy-${index + 1}`,
       name: enemy.name,
+      side: "enemy",
       slot: index + 1,
       maxHp: hp,
       hp,
@@ -639,6 +679,7 @@ function partyCombatantsForExpedition(expedition, stageView) {
     return {
       id: member.id,
       name: member.careerName,
+      side: "ally",
       slot: index + 1,
       role: roleStats.role,
       roleLabel: roleStats.roleLabel,
@@ -687,22 +728,48 @@ function combatantHpSnapshot(combatant) {
   return snapshot;
 }
 
-function actionEvent(time, actor, target, kind, value) {
+function actionEvent(time, actor, target, kind, value, hpBefore, hpAfter, sequence) {
+  const killed = kind === "damage" && hpBefore > 0 && hpAfter <= 0;
+  const finishLabel = killed ? target.side === "ally" ? "전투불능" : "처치" : "";
   const text = kind === "heal"
     ? `${actor.name} → ${target.name} 회복 ${value}`
-    : `${actor.name} → ${target.name} 피해 ${value}`;
+    : `${actor.name} → ${target.name} 피해 ${value}${finishLabel ? ` · ${finishLabel}` : ""}`;
   return {
+    sequence,
     time: roundTo(time, 2),
+    actorId: actor.id,
     actor: actor.name,
+    actorLabel: actor.name,
+    actorSide: actor.side,
+    actorSlot: actor.slot,
+    actorRole: actor.role || null,
+    targetId: target.id,
     target: target.name,
+    targetLabel: target.name,
+    targetSide: target.side,
+    targetSlot: target.slot,
+    targetRole: target.role || null,
+    targetHpBefore: Math.max(0, Math.round(hpBefore)),
+    targetHpAfter: Math.max(0, Math.round(hpAfter)),
+    targetMaxHp: Math.max(1, Math.round(target.maxHp)),
     kind,
     value,
+    killed,
     text,
   };
 }
 
 function buildBattleReport(stageView, result, durationSeconds, party, enemies, events, actionCounts) {
   const roundedDuration = roundTo(durationSeconds, 2);
+  const defeatOrder = events
+    .filter((event) => event.killed && event.targetSide === "enemy")
+    .map((event) => ({
+      id: event.targetId,
+      name: event.targetLabel || event.target,
+      slot: event.targetSlot,
+      sequence: event.sequence,
+      time: event.time,
+    }));
   return {
     id: `${stageView.globalStage}-${result}-${Math.round(roundedDuration * 1000)}-${events.length}`,
     stage: stageView.globalStage,
@@ -716,7 +783,8 @@ function buildBattleReport(stageView, result, durationSeconds, party, enemies, e
     enemyRemainingHp: remainingHp(enemies),
     partyHp: party.map(combatantHpSnapshot),
     enemyHp: enemies.map(combatantHpSnapshot),
-    events: events.slice(-32),
+    enemyDefeatOrder: defeatOrder,
+    events: events.slice(-160),
     actionCounts,
   };
 }
@@ -754,25 +822,28 @@ export function simulateExpeditionBattle(state, currentStage = null) {
         if (actor.role === "healer") {
           const target = firstInjuredAlly(party);
           if (target && actor.healing > 0) {
+            const hpBefore = target.hp;
             const value = Math.min(target.maxHp - target.hp, Math.max(1, Math.round(actor.healing)));
             target.hp += value;
-            events.push(actionEvent(clock, actor, target, "heal", value));
+            events.push(actionEvent(clock, actor, target, "heal", value, hpBefore, target.hp, events.length + 1));
           }
         } else {
           const target = firstAlive(enemies);
           if (target) {
+            const hpBefore = target.hp;
             const value = Math.max(1, Math.round(actor.attack - target.defense * 0.6));
             target.hp = Math.max(0, target.hp - value);
-            events.push(actionEvent(clock, actor, target, "damage", value));
+            events.push(actionEvent(clock, actor, target, "damage", value, hpBefore, target.hp, events.length + 1));
           }
         }
       } else {
         actionCounts.enemies[actor.id] = (actionCounts.enemies[actor.id] || 0) + 1;
         const target = firstAlive(party);
         if (target) {
+          const hpBefore = target.hp;
           const value = Math.max(1, Math.round(actor.attack - target.defense * 0.55));
           target.hp = Math.max(0, target.hp - value);
-          events.push(actionEvent(clock, actor, target, "damage", value));
+          events.push(actionEvent(clock, actor, target, "damage", value, hpBefore, target.hp, events.length + 1));
         }
       }
       actor.nextAt = roundTo(actor.nextAt + 1 / actor.attackSpeed, 4);
@@ -1022,6 +1093,14 @@ function rewardDeliveryOption(options) {
   return delivery;
 }
 
+function maxBattlesPerResolutionOption(options) {
+  const configured = Math.max(1, Math.floor(positiveNumber(expeditionCombatBalance.timing.maxBattlesPerResolution, "expedition_combat_balance.json timing.maxBattlesPerResolution")));
+  if (!hasOwn(options || {}, "maxBattles")) return configured;
+  const requested = Math.floor(finiteNumber(options.maxBattles, "원정대 자동 정산 maxBattles 옵션 값이 올바르지 않습니다."));
+  assert(requested > 0, `원정대 자동 정산 maxBattles 옵션은 1 이상이어야 합니다: ${options.maxBattles}`);
+  return Math.min(configured, requested);
+}
+
 function instantRewardText(reward) {
   const pieces = [];
   if (reward.trainingExp > 0) pieces.push(`EXP +${reward.trainingExp}`);
@@ -1126,7 +1205,7 @@ export function resolveExpeditionAutoCombat(state, resolvedAt = now(), options =
   let wins = 0;
   let losses = 0;
   const totalReward = emptyExpeditionReward();
-  const maxBattles = Math.max(1, Math.floor(positiveNumber(expeditionCombatBalance.timing.maxBattlesPerResolution, "expedition_combat_balance.json timing.maxBattlesPerResolution")));
+  const maxBattles = maxBattlesPerResolutionOption(options);
 
   while (processed < maxBattles) {
     const stage = createStageView(expedition.currentStage);
@@ -1208,21 +1287,15 @@ export function createExpeditionViewModel(state) {
   const stage = createStageView(expedition.currentStage);
   const baseParty = partyMembers(expedition).map((member, index) => memberView(member, stage, index + 1));
   const battlePreview = baseParty.length > 0 ? simulateExpeditionBattle(normalized) : null;
-  const partyHpById = new Map((battlePreview?.report.partyHp || []).map((snapshot) => [snapshot.id, snapshot]));
-  const party = baseParty.map((member) => {
-    const hp = partyHpById.get(member.id);
-    return {
-      ...member,
-      maxHp: hp?.maxHp ?? member.combatStats.hp,
-      remainingHp: hp?.remainingHp ?? member.combatStats.hp,
-    };
-  });
-  const enemyHpById = new Map((battlePreview?.report.enemyHp || []).map((snapshot) => [snapshot.id, snapshot]));
+  const party = baseParty.map((member) => ({
+    ...member,
+    maxHp: member.combatStats.hp,
+    remainingHp: member.combatStats.hp,
+  }));
   const enemies = enemyCombatantsForStage(stage).map(({ nextAt, ...enemy }) => {
-    const hp = enemyHpById.get(enemy.id);
     return {
       ...enemy,
-      remainingHp: hp?.remainingHp ?? enemy.hp,
+      remainingHp: enemy.hp,
     };
   });
   const partyPower = Math.round(party.reduce((sum, member) => sum + member.combatStats.hp * 0.35 + member.combatStats.attack * 1.4 + member.combatStats.defense * 2 + member.combatStats.healing * 1.15, 0));
@@ -1254,7 +1327,7 @@ export function createExpeditionViewModel(state) {
     battleDurationSeconds: battleDurationSeconds(stage),
     pendingReward,
     hasPendingReward: pendingRewardHasValue(pendingReward),
-    recentCombatEvents: pendingReward.lastBattle?.events?.slice(-6) || battlePreview?.events?.slice(-6) || [],
+    recentCombatEvents: pendingReward.lastBattle?.events?.slice(-6) || [],
     lastBattle: pendingReward.lastBattle,
     focusLabels: stage.focusSubjects.map((subject) => subjectLabels[subject]),
     weakLabels: stage.weakSubjects.map((subject) => subjectLabels[subject]),

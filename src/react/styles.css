@@ -1082,7 +1082,7 @@ button:disabled {
 }
 
 .expedition-scene.stage-transitioning .expedition-arena::before {
-  animation: expeditionStageTravel 2s ease-in-out both;
+  animation: expeditionStageTravel 4s cubic-bezier(.22, .72, .22, 1) both;
 }
 
 .expedition-arena::after {
@@ -1154,11 +1154,12 @@ button:disabled {
 }
 
 .expedition-party-visual.running {
-  animation: expeditionPartyAdvance 3.2s ease-in-out infinite;
+  animation: none;
 }
 
 .expedition-scene.stage-transitioning .expedition-party-visual.running {
-  animation: expeditionPartyStageRun .42s steps(4, end) infinite;
+  animation: none;
+  transform: translateX(5px);
 }
 
 .expedition-party-visual.empty {
@@ -1203,7 +1204,8 @@ button:disabled {
   will-change: translate;
 }
 
-.expedition-party-visual.running .expedition-unit-avatar.large {
+.expedition-party-visual.running .expedition-unit-avatar.large,
+.expedition-party-visual.combat .expedition-unit-avatar.large {
   animation-name: expeditionUnitRhythm;
   animation-duration: var(--unit-motion-duration);
   animation-timing-function: steps(4, end);
@@ -1316,7 +1318,8 @@ button:disabled {
   opacity: 1;
 }
 
-.expedition-party-visual.running .expedition-unit-frame {
+.expedition-party-visual.running .expedition-unit-frame,
+.expedition-party-visual.combat .expedition-unit-frame {
   animation-duration: var(--unit-frame-duration);
   animation-timing-function: step-end;
   animation-iteration-count: infinite;
@@ -1324,19 +1327,23 @@ button:disabled {
   animation-fill-mode: both;
 }
 
-.expedition-party-visual.running .expedition-unit-frame.frame-0 {
+.expedition-party-visual.running .expedition-unit-frame.frame-0,
+.expedition-party-visual.combat .expedition-unit-frame.frame-0 {
   animation-name: expeditionCompanionFrameA;
 }
 
-.expedition-party-visual.running .expedition-unit-frame.frame-1 {
+.expedition-party-visual.running .expedition-unit-frame.frame-1,
+.expedition-party-visual.combat .expedition-unit-frame.frame-1 {
   animation-name: expeditionCompanionFrameB;
 }
 
-.expedition-party-visual.running .expedition-unit-frame.frame-2 {
+.expedition-party-visual.running .expedition-unit-frame.frame-2,
+.expedition-party-visual.combat .expedition-unit-frame.frame-2 {
   animation-name: expeditionCompanionFrameC;
 }
 
-.expedition-party-visual.running .expedition-unit-frame.frame-3 {
+.expedition-party-visual.running .expedition-unit-frame.frame-3,
+.expedition-party-visual.combat .expedition-unit-frame.frame-3 {
   animation-name: expeditionCompanionFrameD;
 }
 
@@ -1351,6 +1358,9 @@ button:disabled {
   background: linear-gradient(90deg, transparent, #fff, #9fd4c9, transparent);
   clip-path: polygon(0 45%, 76% 0, 100% 50%, 76% 100%, 0 58%);
   filter: drop-shadow(0 0 5px #fff7);
+}
+
+.expedition-party-visual.running .expedition-unit-avatar.large::after {
   animation-name: expeditionAllySpark;
   animation-duration: var(--unit-spark-duration);
   animation-timing-function: steps(4, end);
@@ -1406,9 +1416,9 @@ button:disabled {
 .expedition-hp-bar span {
   display: block;
   height: 100%;
-  min-width: 2px;
   border-radius: inherit;
   background: linear-gradient(90deg, #22c55e, #bef264);
+  transition: width .16s linear;
 }
 
 .expedition-hp-bar.enemy {
@@ -1436,41 +1446,127 @@ button:disabled {
   width: 58px;
   height: 58px;
   border-radius: 999px;
-  opacity: .85;
+  opacity: 0;
   background: radial-gradient(circle, #fff 0 12%, #9fd4c9aa 13% 38%, transparent 58%);
-  animation: expeditionImpactPulse .9s ease-out infinite;
+}
+
+.expedition-impact.active {
+  animation: expeditionImpactPulse .92s ease-out both;
 }
 
 .expedition-float-layer {
   position: absolute;
-  z-index: 10;
-  inset: 74px 78px 70px 132px;
+  z-index: 6;
+  inset: 0;
   pointer-events: none;
 }
 
 .expedition-float {
   position: absolute;
-  min-width: 34px;
-  padding: 3px 7px;
-  border-radius: 999px;
-  background: #111827dd;
+  left: var(--float-x, 70%);
+  top: var(--float-y, 50%);
+  min-width: 52px;
+  max-width: 88px;
+  min-height: 28px;
+  padding: 3px 5px;
+  display: grid;
+  place-items: center;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #ffffff5c;
+  border-radius: 6px;
+  background: #111827e8;
   color: #fee2e2;
-  font-size: .72rem;
-  font-weight: 1000;
+  font-size: .48rem;
+  font-weight: 950;
+  line-height: 1;
   text-align: center;
   filter: drop-shadow(0 2px 0 #0008);
-  animation: expeditionFloatRise 1.2s ease-out infinite;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  animation: expeditionCombatFloat var(--float-duration, 920ms) cubic-bezier(.16, .82, .26, 1) var(--float-delay, 0ms) both;
+}
+
+.expedition-float-route {
+  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  overflow: hidden;
+  color: #cbd5e1;
+  white-space: nowrap;
+}
+
+.expedition-float-route b {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.expedition-float-route i {
+  color: #93c5fd;
+  font-style: normal;
+}
+
+.expedition-float strong {
+  max-width: 100%;
+  overflow: hidden;
+  color: #fef3c7;
+  font-size: .62rem;
+  font-weight: 1000;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.expedition-float small {
+  max-width: 100%;
+  overflow: hidden;
+  color: #cbd5e1;
+  font-size: .42rem;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.expedition-float.damage {
+  border-color: #fde68a99;
+  background: linear-gradient(180deg, #422006ee, #111827ec);
+}
+
+.expedition-float.hit {
+  border-color: #fecaca99;
+  background: linear-gradient(180deg, #450a0aee, #111827ec);
 }
 
 .expedition-float.heal {
+  border-color: #bbf7d099;
+  background: linear-gradient(180deg, #064e3bee, #111827ec);
   color: #bbf7d0;
 }
 
-.expedition-float.float-1 { right: 16%; top: 42%; animation-delay: -.1s; }
-.expedition-float.float-2 { right: 30%; top: 24%; animation-delay: -.32s; }
-.expedition-float.float-3 { right: 7%; top: 18%; animation-delay: -.54s; }
-.expedition-float.float-4 { left: 12%; top: 34%; animation-delay: -.76s; }
-.expedition-float.float-5 { left: 28%; top: 18%; animation-delay: -.98s; }
+.expedition-float.heal strong {
+  color: #bbf7d0;
+}
+
+.expedition-float.kill {
+  min-width: 60px;
+  border-color: #f0b84ccc;
+  background: linear-gradient(180deg, #7c2d12f2, #111827ec);
+  box-shadow: 0 0 0 2px #f0b84c30;
+}
+
+.expedition-float.kill strong {
+  color: #ffe082;
+}
+
+.expedition-float.target-ally {
+  box-shadow: inset 3px 0 #60a5fa99;
+}
+
+.expedition-float.target-enemy {
+  box-shadow: inset -3px 0 #f0b84c99;
+}
 
 .expedition-reward-toast {
   position: absolute;
@@ -1508,6 +1604,17 @@ button:disabled {
   overflow: visible;
 }
 
+.expedition-scene.encounter-approaching .expedition-enemy-group.approaching {
+  pointer-events: none;
+  animation: expeditionEnemyEncounterApproach 2.95s cubic-bezier(.16, .84, .32, 1) both;
+}
+
+.expedition-scene.stage-transitioning .expedition-enemy-group {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .expedition-enemy-visual {
   position: relative;
   width: 56px;
@@ -1518,8 +1625,9 @@ button:disabled {
   filter: drop-shadow(4px 5px 0 #00000052);
 }
 
-.expedition-scene.stage-transitioning .expedition-enemy-visual.defeated {
+.expedition-scene.combat-replaying:not(.stage-transitioning) .expedition-enemy-visual.defeated {
   animation: expeditionEnemyDeath .72s ease-in forwards;
+  animation-delay: var(--enemy-defeat-delay, 0ms);
 }
 
 .expedition-enemy-frame {
@@ -1529,16 +1637,60 @@ button:disabled {
   width: 82px;
   height: 82px;
   margin-left: -43px;
-  animation: expeditionEnemySpriteIdle 1.18s step-end infinite;
+  animation-duration: 1.18s;
+  animation-timing-function: step-end;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
   transform-origin: 50% 100%;
 }
 
-.expedition-scene.stage-transitioning .expedition-enemy-visual.defeated .expedition-enemy-frame {
-  animation: expeditionEnemyDeathFrame .72s step-end forwards;
+.expedition-scene.boss .expedition-enemy-visual {
+  width: 82px;
+  min-height: 112px;
+  flex-basis: 82px;
 }
 
-.expedition-scene.stage-transitioning .expedition-enemy-visual.defeated .enemy-shadow {
+.expedition-scene.boss .expedition-enemy-frame {
+  bottom: -7px;
+  width: 102px;
+  height: 102px;
+  margin-left: -52px;
+}
+
+.expedition-scene.boss .enemy-shadow {
+  bottom: -5px;
+  width: 78px;
+  height: 18px;
+}
+
+.expedition-enemy-frame.frame-0 {
+  animation-name: expeditionEnemyFrameA;
+}
+
+.expedition-enemy-frame.frame-1 {
+  animation-name: expeditionEnemyFrameB;
+}
+
+.expedition-enemy-frame.frame-2 {
+  animation-name: expeditionEnemyFrameC;
+}
+
+.expedition-enemy-frame.frame-3 {
+  animation-name: expeditionEnemyFrameD;
+}
+
+.expedition-scene.combat-replaying:not(.stage-transitioning) .expedition-enemy-visual.defeated .expedition-enemy-frame {
+  animation-name: expeditionEnemyDeathFrame;
+  animation-duration: .72s;
+  animation-timing-function: step-end;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-delay: var(--enemy-defeat-delay, 0ms);
+}
+
+.expedition-scene.combat-replaying:not(.stage-transitioning) .expedition-enemy-visual.defeated .enemy-shadow {
   animation: expeditionEnemyShadowDeath .72s ease-in forwards;
+  animation-delay: var(--enemy-defeat-delay, 0ms);
 }
 
 .expedition-enemy-visual:first-child {
@@ -1546,7 +1698,15 @@ button:disabled {
 }
 
 .expedition-enemy-visual:first-child .expedition-enemy-frame {
-  animation: expeditionEnemyHurtSprite .88s step-end infinite;
+  filter: brightness(1.08);
+}
+
+.expedition-scene.encounter-approaching .expedition-enemy-visual:first-child {
+  animation: expeditionEnemyIdle 1.2s steps(4, end) infinite;
+}
+
+.expedition-scene.encounter-approaching .expedition-enemy-visual:first-child .expedition-enemy-frame {
+  filter: none;
 }
 
 .enemy-shadow {
@@ -3621,10 +3781,10 @@ button:disabled {
     transform: translateX(-50%) translate(0, 0) scale(var(--student-motion-scale));
   }
   25% {
-    transform: translateX(-50%) translate(-3px, -4px) scale(var(--student-motion-scale));
+    transform: translateX(-50%) translate(-4px, -4px) scale(var(--student-motion-scale));
   }
   50% {
-    transform: translateX(-50%) translate(6px, 1px) scale(var(--student-motion-scale));
+    transform: translateX(-50%) translate(8px, 1px) scale(var(--student-motion-scale));
   }
   75% {
     transform: translateX(-50%) translate(2px, -2px) scale(var(--student-motion-scale));
@@ -3669,29 +3829,13 @@ button:disabled {
   }
 }
 
-@keyframes expeditionPartyAdvance {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(10px);
-  }
-}
-
 @keyframes expeditionUnitRhythm {
   0%,
   100% {
     translate: 0 0;
   }
-  25% {
-    translate: var(--unit-step-a-x) var(--unit-step-a-y);
-  }
   50% {
-    translate: var(--unit-step-b-x) var(--unit-step-b-y);
-  }
-  75% {
-    translate: var(--unit-step-c-x) var(--unit-step-c-y);
+    translate: 0 -2px;
   }
 }
 
@@ -3776,18 +3920,22 @@ button:disabled {
   }
 }
 
-@keyframes expeditionFloatRise {
+@keyframes expeditionCombatFloat {
   0% {
     opacity: 0;
-    translate: 0 10px;
+    transform: translate(-50%, -48%) scale(.84);
   }
-  18%,
-  72% {
+  16% {
     opacity: 1;
+    transform: translate(-50%, -66%) scale(1.04);
+  }
+  66% {
+    opacity: 1;
+    transform: translate(-50%, -84%) scale(1);
   }
   100% {
     opacity: 0;
-    translate: 0 -18px;
+    transform: translate(-50%, -104%) scale(.92);
   }
 }
 
@@ -3812,28 +3960,47 @@ button:disabled {
     background-position: calc(50% + var(--expedition-bg-from-x, 0px)) center;
   }
   100% {
-    background-position: calc(50% + var(--expedition-bg-to-x, -180px)) center;
+    background-position: calc(50% + var(--expedition-bg-to-x, -88px)) center;
   }
 }
 
-@keyframes expeditionPartyStageRun {
-  0%,
+@keyframes expeditionEnemyEncounterApproach {
+  0% {
+    opacity: 0;
+    transform: translateX(132px) scale(.96);
+  }
+  42% {
+    opacity: .92;
+  }
   100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(18px);
+    opacity: 1;
+    transform: translateX(0) scale(1);
   }
 }
 
-@keyframes expeditionEnemyDeath {
+@keyframes expeditionEnemyDefeatedHold {
   0% {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
   55% {
-    opacity: 1;
-    transform: translateY(-8px) scale(1.06);
+    opacity: .86;
+    transform: translateY(-5px) scale(1.03);
+  }
+  100% {
+    opacity: .64;
+    transform: translateY(9px) scale(.94);
+  }
+}
+
+@keyframes expeditionEnemyDeath {
+  0% {
+    opacity: .64;
+    transform: translateY(9px) scale(.94);
+  }
+  55% {
+    opacity: .52;
+    transform: translateY(2px) scale(.98);
   }
   100% {
     opacity: 0;
@@ -3841,10 +4008,21 @@ button:disabled {
   }
 }
 
+@keyframes expeditionEnemyDefeatedFrame {
+  0%,
+  30% {
+    filter: brightness(1.2) saturate(1.08);
+  }
+  31%,
+  100% {
+    filter: grayscale(.65) brightness(.88) saturate(.72);
+  }
+}
+
 @keyframes expeditionEnemyDeathFrame {
   0%,
   30% {
-    filter: brightness(1.25) saturate(1.15);
+    filter: grayscale(.65) brightness(.88) saturate(.72);
   }
   31%,
   60% {
@@ -3856,10 +4034,21 @@ button:disabled {
   }
 }
 
-@keyframes expeditionEnemyShadowDeath {
+@keyframes expeditionEnemyDefeatedShadow {
   0% {
     opacity: 1;
     transform: translateX(-50%) scale(1);
+  }
+  100% {
+    opacity: .5;
+    transform: translateX(-50%) scale(.86);
+  }
+}
+
+@keyframes expeditionEnemyShadowDeath {
+  0% {
+    opacity: .5;
+    transform: translateX(-50%) scale(.86);
   }
   100% {
     opacity: 0;
@@ -3877,21 +4066,51 @@ button:disabled {
   }
 }
 
-@keyframes expeditionEnemySpriteIdle {
+@keyframes expeditionEnemyFrameA {
   0%,
   24% {
     opacity: 1;
   }
   25%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes expeditionEnemyFrameB {
+  0%,
+  24%,
+  50%,
+  100% {
+    opacity: 0;
+  }
+  25%,
   49% {
     opacity: 1;
+  }
+}
+
+@keyframes expeditionEnemyFrameC {
+  0%,
+  49%,
+  75%,
+  100% {
+    opacity: 0;
   }
   50%,
   74% {
     opacity: 1;
   }
-  75%,
+}
+
+@keyframes expeditionEnemyFrameD {
+  0%,
+  74%,
   100% {
+    opacity: 0;
+  }
+  75%,
+  99.99% {
     opacity: 1;
   }
 }
@@ -4132,6 +4351,18 @@ button:disabled {
     width: 74px;
     height: 74px;
     margin-left: -38px;
+  }
+
+  .expedition-scene.boss .expedition-enemy-visual {
+    width: 72px;
+    min-height: 104px;
+    flex-basis: 72px;
+  }
+
+  .expedition-scene.boss .expedition-enemy-frame {
+    width: 94px;
+    height: 94px;
+    margin-left: -48px;
   }
 
   .expedition-scene-footer {

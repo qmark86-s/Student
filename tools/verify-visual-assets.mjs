@@ -9,6 +9,7 @@ const gradeVisuals = JSON.parse(readFileSync(resolve("data/grade_visuals.json"),
 const stages = JSON.parse(readFileSync(resolve("data/expedition_stages.json"), "utf8"));
 const bosses = JSON.parse(readFileSync(resolve("data/expedition_bosses.json"), "utf8"));
 const battleRoadConfig = JSON.parse(readFileSync(resolve("data/battle_road_config.json"), "utf8"));
+const professionalSpriteManifest = JSON.parse(readFileSync(resolve("data/professional_sprite_manifest.json"), "utf8"));
 const css = readFileSync(resolve("src/snapshot/visual-assets.css"), "utf8");
 const baseCss = readFileSync(resolve("src/snapshot/styles.css"), "utf8");
 const combinedCss = `${baseCss}\n${css}`;
@@ -20,6 +21,23 @@ const spriteReferenceLockPath = resolve("data/sprite_reference_lock.json");
 const mainMonsterGreenSourcePath = resolve("assets/visual-source/main-monsters/main-monsters-green.png");
 
 const failures = [];
+
+function professionalFamily(id) {
+  const family = (professionalSpriteManifest.families ?? []).find((entry) => entry?.id === id);
+  if (!family) failures.push(`professional sprite manifest missing family ${id}`);
+  return family;
+}
+
+function professionalReportEntryCount() {
+  return (professionalSpriteManifest.families ?? []).reduce((sum, family) => {
+    return sum + (family.items ?? []).reduce((itemSum, item) => {
+      const variants = Array.isArray(item.genders) && item.genders.length > 0 ? item.genders.length : 1;
+      return itemSum + variants;
+    }, 0);
+  }, 0);
+}
+
+const expeditionEnemyManifestItems = professionalFamily("expeditionEnemies")?.items ?? [];
 
 function cssRule(selector) {
   const start = css.indexOf(selector);
@@ -61,7 +79,7 @@ for (const token of managedTokens) {
   if (info.width !== asset.width || info.height !== asset.height) failures.push(`${token} dimension mismatch`);
   if (bytes.length !== asset.bytes) failures.push(`${token} byte size mismatch`);
   if (sha256(bytes) !== asset.sha256) failures.push(`${token} sha mismatch`);
-  if (token >= "__STUDENT_ASSET_007__" && !css.includes(token)) failures.push(`visual css does not reference ${token}`);
+  if (token >= "__STUDENT_ASSET_007__" && token !== "__STUDENT_ASSET_008__" && !css.includes(token)) failures.push(`visual css does not reference ${token}`);
 }
 if (!css.includes(".battle-scene-enemy")) failures.push("battle scene enemy css is missing");
 if (!css.includes(".battle-scene-hp")) failures.push("battle scene boss hp css is missing");
@@ -129,12 +147,19 @@ const expeditionEnemyLegacyHideRule = ".expedition-enemy-visual .enemy-body,.exp
 if (!combinedCss.includes(expeditionEnemyLegacyHideRule)) {
   failures.push("expedition enemy legacy body/text layers must be hidden");
 }
+const expeditionEnemySpriteFrameOnlyRule = ".expedition-enemy-visual::before{content:none!important;display:none!important;background-image:none!important}";
+if (!combinedCss.includes(expeditionEnemySpriteFrameOnlyRule)) {
+  failures.push("expedition enemy css pseudo-element body must be disabled; runtime must use individual PNG SpriteFrames");
+}
+if (css.includes("__STUDENT_ASSET_008__")) {
+  failures.push("expedition enemy atlas token must not be referenced by visual css; runtime must use individual PNG SpriteFrames");
+}
 
 const atlasById = new Map(visual.atlases.map((atlas) => [atlas.id, atlas]));
 if ((atlasById.get("mainStudents")?.items.length ?? 0) !== 32) failures.push("main student gender frame count mismatch");
 if ((atlasById.get("mainMonsters")?.items.length ?? 0) !== 192) failures.push("main monster frame count mismatch");
 if ((atlasById.get("companions")?.items.length ?? 0) !== careers.length + 13) failures.push("companion atlas should include career units plus helper sprites");
-if ((atlasById.get("enemies")?.items.length ?? 0) < 40) failures.push("not enough enemy sprites");
+if ((atlasById.get("enemies")?.items.length ?? 0) !== expeditionEnemyManifestItems.length) failures.push(`enemy atlas should include ${expeditionEnemyManifestItems.length} manifest sprites`);
 if ((atlasById.get("careers")?.items.length ?? 0) !== careers.length * 2) failures.push("career gender portrait count mismatch");
 const expeditionBackdrops = visual.backgrounds?.find((background) => background.id === "expeditionBackdrops");
 if (!expeditionBackdrops) failures.push("expedition backdrop metadata is missing");
@@ -258,7 +283,7 @@ if (existsSync(characterManifestPath) && existsSync(characterAxisReportPath)) {
 if (existsSync(professionalAxisReportPath)) {
   const professionalReport = JSON.parse(readFileSync(professionalAxisReportPath, "utf8"));
   const entries = professionalReport.items ?? [];
-  const expectedProfessionalEntries = (careers.length + 13) * 2 + 40;
+  const expectedProfessionalEntries = professionalReportEntryCount();
   if (entries.length !== expectedProfessionalEntries) failures.push(`professional sprite report expected ${expectedProfessionalEntries} entries, got ${entries.length}`);
   for (const entry of entries) {
     if (entry.status !== "ok") failures.push(`${entry.family}/${entry.id}/${entry.variant} status is ${entry.status}`);
@@ -288,11 +313,22 @@ for (const visualGrade of gradeVisuals) {
 
 for (const stage of stages) {
   if (!stage.enemyAsset || !enemyIds.has(stage.enemyAsset)) failures.push(`${stage.id} missing valid enemyAsset`);
-  if (![1, 2, 3].includes(stage.enemyVariant)) failures.push(`${stage.id} missing valid enemyVariant`);
+  const expectedCount = Array.isArray(stage.normalEnemyNames) && stage.normalEnemyNames.length > 0 ? stage.normalEnemyNames.length : 1;
+  if (!Array.isArray(stage.enemyAssets)) failures.push(`${stage.id} missing enemyAssets`);
+  else {
+    if (stage.enemyAssets.length !== expectedCount) failures.push(`${stage.id} enemyAssets count mismatch`);
+    if (stage.enemyAssets[0] !== stage.enemyAsset) failures.push(`${stage.id} enemyAsset must equal enemyAssets[0]`);
+    for (const asset of stage.enemyAssets) {
+      if (!enemyIds.has(asset)) failures.push(`${stage.id} has invalid enemy asset ${asset}`);
+      if (!css.includes(`.expedition-enemy-visual.enemy-asset-${asset}`)) failures.push(`${stage.id} missing css mapping for ${asset}`);
+    }
+  }
+  if (!Number.isInteger(Number(stage.enemyVariant)) || Number(stage.enemyVariant) < 1 || Number(stage.enemyVariant) > 6) failures.push(`${stage.id} missing valid enemyVariant`);
 }
 
 for (const boss of bosses) {
   if (!boss.bossAsset || !enemyIds.has(boss.bossAsset)) failures.push(`${boss.id} missing valid bossAsset`);
+  if (boss.bossAsset && !css.includes(`.expedition-enemy-visual.enemy-asset-${boss.bossAsset}`)) failures.push(`${boss.id} missing css mapping for ${boss.bossAsset}`);
 }
 
 if (failures.length > 0) {

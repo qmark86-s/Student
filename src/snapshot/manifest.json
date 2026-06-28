@@ -24,8 +24,8 @@
       "token": "__STUDENT_ASSET_007__",
       "file": "assets/visual-companions.png",
       "mime": "image/png",
-      "bytes": 17270777,
-      "sha256": "ad5fb0296667799b36ea77a9c66f7cdb18f3f9fc7613914914874049769a1a6f",
+      "bytes": 17020392,
+      "sha256": "e1bb06e9c2f33181acc4a638e803fb690febc4c26b3309915944afc4f50750fb",
       "width": 10240,
       "height": 1600
     },
@@ -33,17 +33,17 @@
       "token": "__STUDENT_ASSET_008__",
       "file": "assets/visual-enemies.png",
       "mime": "image/png",
-      "bytes": 3667246,
-      "sha256": "2324e6a7715a9ff7c127f01d4e0ce83cceb8d31384477f113a65ea0d310337ab",
+      "bytes": 13820174,
+      "sha256": "532983d8f074d2a49f2b38f2d5a72f767774c56102539eff79d003ce710bf2f5",
       "width": 10240,
-      "height": 480
+      "height": 800
     },
     {
       "token": "__STUDENT_ASSET_009__",
       "file": "assets/visual-careers.png",
       "mime": "image/png",
-      "bytes": 760694,
-      "sha256": "8547c61ab2831d2a0d982c6a48c3a50044c020824d93023db7aba275f614e0db",
+      "bytes": 759679,
+      "sha256": "b2fbd841ccfa66cd61eb00126a78637ce7c7db5f708ab585e5d57cf66cad8e1b",
       "width": 7936,
       "height": 64
     },
@@ -51,8 +51,8 @@
       "token": "__STUDENT_ASSET_010__",
       "file": "assets/visual-expedition-backdrops.png",
       "mime": "image/png",
-      "bytes": 3949894,
-      "sha256": "55cc3ea49830b9c2c3fd4fa64094b96b4e4525c801f4d6023d96817e8d2e8afc",
+      "bytes": 4146975,
+      "sha256": "b8f7429f1470f588cb6adc36ea25924e1bf85bd17173f2bca4cf1cca083524d7",
       "width": 5016,
       "height": 540
     },

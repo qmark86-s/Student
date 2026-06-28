@@ -352,6 +352,7 @@ async function readExpeditionBattleUnitLayout(page) {
   return await page.evaluate(async () => {
     await document.fonts?.ready;
     const units = Array.from(document.querySelectorAll(".expedition-unit-avatar.large"));
+    const partyVisual = document.querySelector(".expedition-party-visual");
     const arena = document.querySelector(".expedition-arena");
     const arenaRect = arena ? arena.getBoundingClientRect() : null;
     const unitRects = units.map((element, index) => {
@@ -405,6 +406,8 @@ async function readExpeditionBattleUnitLayout(page) {
     const minFootPercent = footPercents.length > 0 ? Math.min(...footPercents) : 0;
     return {
       unitCount: unitRects.length,
+      partyMotion: partyVisual?.getAttribute("data-party-motion") || "",
+      partyRunning: partyVisual?.classList.contains("running") || false,
       rowCounts: verticalBands.map((band) => band.items.length),
       verticalBandCounts: verticalBands.map((band) => band.items.length),
       frontBandCount: verticalBands.length > 0 ? verticalBands[verticalBands.length - 1].items.length : 0,
@@ -607,20 +610,25 @@ function collectExpeditionBattleUnitLayoutFailures(layout) {
   }
   const motionNames = layout.motionSignatures.map((signature) => signature.motionName);
   const frameNames = layout.motionSignatures.map((signature) => signature.frameName);
-  if (!motionNames.every((name) => name.includes("expeditionUnitRhythm"))) {
-    failures.push(`expedition battle unit rhythm animation missing: ${motionNames.join(",")}`);
+  if (!["standing", "running", "combat"].includes(layout.partyMotion)) {
+    failures.push(`expedition party motion state missing: ${layout.partyMotion || "(empty)"}`);
   }
-  if (!frameNames.every((name) => name.includes("expeditionCompanionFrame"))) {
-    failures.push(`expedition companion frame cycling missing: ${frameNames.join(",")}`);
-  }
-  if (layout.uniqueMotionDurationCount < 4) {
-    failures.push(`expedition battle unit rhythms too similar: ${layout.uniqueMotionDurationCount}/4 durations`);
-  }
-  if (layout.uniqueFrameDelayCount < 4) {
-    failures.push(`expedition companion frame delays too similar: ${layout.uniqueFrameDelayCount}/4 delays`);
-  }
-  if (layout.uniqueSparkDelayCount < 4) {
-    failures.push(`expedition ally spark delays too similar: ${layout.uniqueSparkDelayCount}/4 delays`);
+  if (layout.partyMotion === "running" || layout.partyMotion === "combat" || layout.partyRunning) {
+    if (!motionNames.every((name) => name.includes("expeditionUnitRhythm"))) {
+      failures.push(`expedition battle unit rhythm animation missing while ${layout.partyMotion}: ${motionNames.join(",")}`);
+    }
+    if (!frameNames.every((name) => name.includes("expeditionCompanionFrame"))) {
+      failures.push(`expedition companion frame cycling missing while ${layout.partyMotion}: ${frameNames.join(",")}`);
+    }
+    if (layout.uniqueMotionDurationCount < 4) {
+      failures.push(`expedition battle unit rhythms too similar while ${layout.partyMotion}: ${layout.uniqueMotionDurationCount}/4 durations`);
+    }
+    if (layout.uniqueFrameDelayCount < 4) {
+      failures.push(`expedition companion frame delays too similar while ${layout.partyMotion}: ${layout.uniqueFrameDelayCount}/4 delays`);
+    }
+    if ((layout.partyMotion === "running" || layout.partyRunning) && layout.uniqueSparkDelayCount < 4) {
+      failures.push(`expedition ally spark delays too similar while running: ${layout.uniqueSparkDelayCount}/4 delays`);
+    }
   }
   return failures;
 }

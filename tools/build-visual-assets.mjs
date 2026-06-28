@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, utimesSync, writeFileSync } from "node:fs";
 import { dirname, relative, resolve, sep } from "node:path";
 import { deflateSync, inflateSync } from "node:zlib";
 
@@ -7,10 +7,12 @@ const outDir = resolve("src/snapshot/assets");
 const cssPath = resolve("src/snapshot/visual-assets.css");
 const manifestPath = resolve("src/snapshot/manifest.json");
 const visualDataPath = resolve("data/visual_assets.json");
+const reactAssetLoaderPath = resolve("src/react/game/assets.js");
 const careersPath = resolve("data/careers.json");
 const gradeVisualsPath = resolve("data/grade_visuals.json");
 const battleRoadConfigPath = resolve("data/battle_road_config.json");
 const characterAnimationManifestPath = resolve("data/character_animation_manifest.json");
+const professionalSpriteManifestPath = resolve("data/professional_sprite_manifest.json");
 const characterAxisReportPath = resolve("artifacts/visual-asset-samples/character-axis-report.json");
 const professionalAxisReportPath = resolve("artifacts/visual-asset-samples/professional-axis-report.json");
 const stagesPath = resolve("data/expedition_stages.json");
@@ -202,6 +204,69 @@ function sha256(buffer) {
 
 function sanitizeClass(value) {
   return String(value).replace(/[^a-z0-9_-]/gi, "");
+}
+
+function readProfessionalSpriteManifest() {
+  if (!existsSync(professionalSpriteManifestPath)) throw new Error(`professional sprite manifest 파일이 없습니다: ${professionalSpriteManifestPath}`);
+  return JSON.parse(readFileSync(professionalSpriteManifestPath, "utf8"));
+}
+
+function professionalFamilyItems(manifest, familyId) {
+  const families = configArray(manifest.families, "professional_sprite_manifest.families");
+  const family = families.find((entry) => entry?.id === familyId);
+  if (!family) throw new Error(`professional sprite manifest family 누락: ${familyId}`);
+  const items = configArray(family.items, `professional_sprite_manifest.${familyId}.items`);
+  const seen = new Set();
+  return items.map((item, index) => {
+    const id = configString(item.id, `professional_sprite_manifest.${familyId}.items[${index}].id`);
+    if (seen.has(id)) throw new Error(`professional sprite manifest id 중복: ${id}`);
+    seen.add(id);
+    return {
+      ...item,
+      id,
+      index,
+      familyId,
+      name: configString(item.name, `professional_sprite_manifest.${familyId}.${id}.name`),
+      tone: configString(item.tone, `professional_sprite_manifest.${familyId}.${id}.tone`),
+      motif: configString(item.motif, `professional_sprite_manifest.${familyId}.${id}.motif`),
+      form: configString(item.form, `professional_sprite_manifest.${familyId}.${id}.form`),
+      icon: configString(item.icon, `professional_sprite_manifest.${familyId}.${id}.icon`),
+      variant: configNumber(item.variant, `professional_sprite_manifest.${familyId}.${id}.variant`, 1),
+      boss: Boolean(item.boss),
+      type: item.type ?? (item.boss ? "boss" : "mob"),
+      direction: item.direction ?? family.direction ?? "left",
+    };
+  });
+}
+
+function expeditionEnemyCatalog(manifest) {
+  const items = professionalFamilyItems(manifest, "expeditionEnemies");
+  const mobs = items.filter((item) => !item.boss);
+  const bosses = items.filter((item) => item.boss);
+  if (mobs.length === 0) throw new Error("professional sprite manifest expeditionEnemies 일반 몬스터가 비어 있습니다.");
+  if (bosses.length === 0) throw new Error("professional sprite manifest expeditionEnemies 보스 몬스터가 비어 있습니다.");
+  const tones = toneIdsFromEnemies(items);
+  for (const tone of tones) {
+    if (mobItemsForTone(items, tone).length === 0) throw new Error(`expeditionEnemies ${tone} 일반 몬스터가 없습니다.`);
+    if (bossItemsForTone(items, tone).length === 0) throw new Error(`expeditionEnemies ${tone} 보스 몬스터가 없습니다.`);
+  }
+  return items;
+}
+
+function toneIdsFromEnemies(enemyItems) {
+  return Array.from(new Set(enemyItems.map((item) => item.tone)));
+}
+
+function mobItemsForTone(enemyItems, tone) {
+  return enemyItems
+    .filter((item) => item.tone === tone && !item.boss)
+    .sort((a, b) => Number(a.variant) - Number(b.variant) || a.id.localeCompare(b.id));
+}
+
+function bossItemsForTone(enemyItems, tone) {
+  return enemyItems
+    .filter((item) => item.tone === tone && item.boss)
+    .sort((a, b) => Number(a.variant) - Number(b.variant) || a.id.localeCompare(b.id));
 }
 
 function assetRelativePath(path) {
@@ -2151,6 +2216,28 @@ function blendVerticalSeam(target, startX, width) {
   }
 }
 
+function blendHorizontalLoopSeam(target, width) {
+  const band = Math.max(1, Math.min(Math.floor(width), Math.floor(target.width / 2)));
+  const leftPixels = [];
+  const rightPixels = [];
+  for (let d = 0; d < band; d += 1) {
+    leftPixels[d] = [];
+    rightPixels[d] = [];
+    for (let y = 0; y < target.height; y += 1) {
+      leftPixels[d][y] = samplePixel(target, d, y);
+      rightPixels[d][y] = samplePixel(target, target.width - 1 - d, y);
+    }
+  }
+  for (let d = 0; d < band; d += 1) {
+    const keepOriginal = d / Math.max(1, band - 1);
+    for (let y = 0; y < target.height; y += 1) {
+      const seam = mix(leftPixels[d][y], rightPixels[d][y], 0.5);
+      writePixel(target, d, y, mix(seam, leftPixels[d][y], keepOriginal));
+      writePixel(target, target.width - 1 - d, y, mix(seam, rightPixels[d][y], keepOriginal));
+    }
+  }
+}
+
 function u32(value) {
   const buffer = Buffer.alloc(4);
   buffer.writeUInt32BE(value >>> 0);
@@ -2244,15 +2331,11 @@ function buildCompanionAtlas(careers) {
   };
 }
 
-function buildEnemyAtlas() {
+function buildEnemyAtlas(enemyItems) {
   const cell = 160;
   const framesPerItem = 4;
   const columns = 64;
-  const items = [];
-  for (const tone of enemyTones) {
-    for (let variant = 0; variant < 3; variant += 1) items.push({ id: `${tone.id}-mob-${variant + 1}`, tone, variant, boss: false });
-    items.push({ id: `${tone.id}-boss`, tone, variant: 0, boss: true });
-  }
+  const items = configArray(enemyItems, "expedition enemy catalog");
   const prepared = loadPreparedProfessionalAnimations("expeditionEnemies", framesPerItem);
   const totalFrames = items.length * framesPerItem;
   const rows = Math.ceil(totalFrames / columns);
@@ -2278,15 +2361,20 @@ function buildEnemyAtlas() {
     framesPerItem,
     items: items.map((item, index) => ({
       id: item.id,
-      name: item.boss ? `${item.tone.id} 보스` : `${item.tone.id} 몬스터 ${item.variant + 1}`,
+      name: item.name,
+      title: item.name,
       index: atlasFrameSlot(index * framesPerItem, columns).index,
       row: atlasFrameSlot(index * framesPerItem, columns).row,
       frameBase: index * framesPerItem,
       animationFrames: Array.from({ length: framesPerItem }, (_unused, frameOffset) => index * framesPerItem + frameOffset),
-      tone: item.tone.id,
-      motif: item.tone.motif,
+      tone: item.tone,
+      motif: item.motif,
+      form: item.form,
+      icon: item.icon,
+      variant: item.variant,
       boss: item.boss,
-      direction: "left",
+      type: item.type,
+      direction: item.direction,
     })),
   };
 }
@@ -2454,6 +2542,7 @@ function buildExpeditionBackdropAtlas() {
   drawSourceScaled(target, source, segmentWidth * 2, 0, segmentWidth, rowHeight, { mirrorX: false, sourceOffsetX: Math.round(source.width * 0.18) });
   blendVerticalSeam(target, segmentWidth - 36, 72);
   blendVerticalSeam(target, segmentWidth * 2 - 36, 72);
+  blendHorizontalLoopSeam(target, 96);
   const path = resolve(outDir, "visual-expedition-backdrops.png");
   writePng(path, target);
   return {
@@ -2681,18 +2770,21 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
   });
 
   lines.push(
-    `.expedition-enemy-visual::before{content:"";z-index:1;pointer-events:none;background-image:url(__STUDENT_ASSET_008__);background-repeat:no-repeat;background-size:${enemyBackgroundSize};background-position:var(--visual-enemy-frame-a,var(--visual-enemy-x,0%)) var(--visual-enemy-frame-a-y,var(--visual-enemy-y,0%));image-rendering:auto;position:absolute;left:50%;right:auto;top:auto;bottom:-4px;width:86px;height:86px;margin-left:-46px}`,
+    ".expedition-enemy-visual::before{content:none!important;display:none!important;background-image:none!important}",
     ".expedition-enemy-visual .enemy-body,.expedition-enemy-visual .enemy-eye,.expedition-enemy-visual .enemy-mouth,.expedition-enemy-visual .enemy-mark,.expedition-enemy-visual .enemy-horn,.expedition-enemy-visual .enemy-name,.expedition-enemy-visual>strong,.expedition-enemy-visual>small,.expedition-enemy-visual strong,.expedition-enemy-visual small{display:none!important}",
     ".expedition-enemy-visual .enemy-shadow{z-index:0}",
     ".expedition-boss-health{z-index:2}",
     ".expedition-enemy-group .expedition-enemy-visual{flex-basis:56px;width:56px;min-height:86px}",
-    ".expedition-enemy-group .expedition-enemy-visual::before{left:50%;right:auto;top:auto;bottom:-3px;width:82px;height:82px;margin-left:-43px}",
-    ".expedition-enemy-visual.boss{right:10%;bottom:19%;width:136px;min-height:126px}",
-    ".expedition-enemy-visual.boss::before{left:50%;right:auto;top:auto;bottom:-7px;width:102px;height:102px;margin-left:-52px}",
+    ".expedition-enemy-visual.boss{width:82px;flex-basis:82px;min-height:112px}",
   );
   enemies.items.forEach((item) => {
     const vars = framePositionVars("visual-enemy", item.frameBase ?? 0, enemyFrames, enemyColumns, enemyRows);
-    if (item.boss) lines.push(`.expedition-enemy-visual.boss.enemy-tone-${item.tone}{${vars}}`);
+    const assetClass = `.expedition-enemy-visual.enemy-asset-${sanitizeClass(item.id)}`;
+    lines.push(`${assetClass}{${vars}}`);
+    if (item.boss) {
+      lines.push(`.expedition-enemy-visual.boss-${item.variant}.enemy-tone-${item.tone}{${vars}}`);
+      if (Number(item.variant) === 1) lines.push(`.expedition-enemy-visual.boss.enemy-tone-${item.tone}{${vars}}`);
+    }
     else {
       const mob = item.id.split("-").at(-1);
       lines.push(`.expedition-enemy-visual.mob-${mob}.enemy-tone-${item.tone}{${vars}}`);
@@ -2813,7 +2905,7 @@ function buildCss(companions, enemies, careers, mainStudents, mainMonsters, expe
     "@keyframes floorTreadmill{0%{transform:translateX(0)}100%{transform:translateX(-28px)}}",
     "@keyframes encounterPackTravel{0%{transform:translateX(var(--road-parallax-px,180px));opacity:.72}62%{opacity:1}100%{transform:translateX(0);opacity:1}}",
     "@keyframes encounterPackApproach{0%{transform:translateX(58px)}100%{transform:translateX(0)}}",
-    "@keyframes studentRoadRunLoop{0%,100%{transform:translateX(-50%) translate(0,0) scale(var(--student-motion-scale))}25%{transform:translateX(-50%) translate(-3px,-4px) scale(var(--student-motion-scale))}50%{transform:translateX(-50%) translate(6px,1px) scale(var(--student-motion-scale))}75%{transform:translateX(-50%) translate(2px,-2px) scale(var(--student-motion-scale))}}",
+    "@keyframes studentRoadRunLoop{0%,100%{transform:translateX(-50%) translate(0,0) scale(var(--student-motion-scale))}25%{transform:translateX(-50%) translate(-4px,-4px) scale(var(--student-motion-scale))}50%{transform:translateX(-50%) translate(8px,1px) scale(var(--student-motion-scale))}75%{transform:translateX(-50%) translate(2px,-2px) scale(var(--student-motion-scale))}}",
     "@keyframes studentRoadBrakeLoop{0%,100%{transform:translateX(-50%) translate(0,0) scale(var(--student-motion-scale))}36%{transform:translateX(-50%) translate(9px,-3px) scale(var(--student-motion-scale))}62%{transform:translateX(-50%) translate(4px,1px) scale(var(--student-motion-scale))}}",
     `@keyframes studentCombatLoop{0%,18%,72%,100%{transform:translateX(-50%) translate(0,0) scale(var(--student-motion-scale))}26%{transform:translateX(-50%) translate(${cssNumber(studentAttack.windupPx)}px,-3px) scale(var(--student-motion-scale))}38%,48%{transform:translateX(-50%) translate(${cssNumber(studentAttack.dashPx)}px,-6px) scale(var(--student-motion-scale))}60%{transform:translateX(-50%) translate(${cssNumber(studentAttack.recoverPx)}px,2px) scale(var(--student-motion-scale))}}`,
     "@keyframes studentMoveFrames{0%,24.99%{background-position:var(--student-frame-a,var(--student-frame-x,0%)) var(--student-frame-y,0%)}25%,49.99%{background-position:var(--student-frame-b,var(--student-frame-a,var(--student-frame-x,0%))) var(--student-frame-y,0%)}50%,74.99%{background-position:var(--student-frame-c,var(--student-frame-a,var(--student-frame-x,0%))) var(--student-frame-y,0%)}75%,100%{background-position:var(--student-frame-d,var(--student-frame-a,var(--student-frame-x,0%))) var(--student-frame-y,0%)}}",
@@ -2876,6 +2968,12 @@ function upsertManifestAsset(manifest, token, file, atlas) {
   return info;
 }
 
+function refreshReactAssetLoaderMtime() {
+  if (!existsSync(reactAssetLoaderPath)) throw new Error("React 자산 로더 파일이 없습니다: src/react/game/assets.js");
+  const now = new Date();
+  utimesSync(reactAssetLoaderPath, now, now);
+}
+
 function enrichCareers(careers, careerAtlas) {
   const byId = new Map(careerAtlas.items.filter((item) => item.gender !== "female").map((item) => [item.careerId, item]));
   return careers.map((career) => {
@@ -2890,28 +2988,54 @@ function enrichCareers(careers, careerAtlas) {
   });
 }
 
-function toneForChapter(chapter) {
-  return enemyTones[Math.max(0, chapter - 1) % enemyTones.length].id;
+function toneForChapter(chapter, enemyItems) {
+  const tones = toneIdsFromEnemies(enemyItems);
+  if (tones.length === 0) throw new Error("원정대 몬스터 tone 목록이 비어 있습니다.");
+  return tones[Math.max(0, Number(chapter) - 1) % tones.length];
 }
 
-function enrichStages(stages) {
+function stageEnemyAssetsForSegment(stage, enemyItems) {
+  const tone = toneForChapter(stage.chapter, enemyItems);
+  const mobs = mobItemsForTone(enemyItems, tone);
+  const enemyCount = Array.isArray(stage.normalEnemyNames) && stage.normalEnemyNames.length > 0 ? stage.normalEnemyNames.length : 1;
+  if (mobs.length < enemyCount) throw new Error(`원정대 ${stage.id} ${tone} 몬스터 수가 부족합니다: ${mobs.length} < ${enemyCount}`);
+  const start = Math.max(0, Number(stage.segment || 1) - 1) % mobs.length;
+  const step = mobs.length >= enemyCount * 2 ? 2 : 1;
+  const assets = Array.from({ length: enemyCount }, (_unused, index) => mobs[(start + index * step) % mobs.length]);
+  return {
+    tone,
+    enemyAsset: assets[0].id,
+    enemyAssets: assets.map((item) => item.id),
+    enemyVariant: Number(assets[0].variant),
+  };
+}
+
+function bossAssetForBoss(boss, enemyItems) {
+  const tone = toneForChapter(boss.chapter, enemyItems);
+  const bosses = bossItemsForTone(enemyItems, tone);
+  if (bosses.length === 0) throw new Error(`원정대 ${boss.id} ${tone} 보스 몬스터가 없습니다.`);
+  if (boss.bossType === "chapter") return bosses[bosses.length - 1].id;
+  const index = Math.max(0, Number(boss.segment || 1) - 1) % bosses.length;
+  return bosses[index].id;
+}
+
+function enrichStages(stages, enemyItems) {
   return stages.map((stage) => {
-    const tone = toneForChapter(stage.chapter);
-    const variant = ((stage.segment - 1) % 3) + 1;
+    const enemyAssets = stageEnemyAssetsForSegment(stage, enemyItems);
     return {
       ...stage,
-      enemyAsset: stage.enemyAsset ?? `${tone}-mob-${variant}`,
-      enemyVariant: stage.enemyVariant ?? variant,
+      enemyAsset: enemyAssets.enemyAsset,
+      enemyAssets: enemyAssets.enemyAssets,
+      enemyVariant: enemyAssets.enemyVariant,
     };
   });
 }
 
-function enrichBosses(bosses) {
+function enrichBosses(bosses, enemyItems) {
   return bosses.map((boss) => {
-    const tone = toneForChapter(boss.chapter);
     return {
       ...boss,
-      bossAsset: boss.bossAsset ?? `${tone}-boss`,
+      bossAsset: bossAssetForBoss(boss, enemyItems),
     };
   });
 }
@@ -2931,11 +3055,13 @@ const careers = JSON.parse(readFileSync(careersPath, "utf8"));
 const gradeVisuals = JSON.parse(readFileSync(gradeVisualsPath, "utf8"));
 const stages = JSON.parse(readFileSync(stagesPath, "utf8"));
 const bosses = JSON.parse(readFileSync(bossesPath, "utf8"));
+const professionalSpriteManifest = readProfessionalSpriteManifest();
+const expeditionEnemyItems = expeditionEnemyCatalog(professionalSpriteManifest);
 const battleRoadConfig = readBattleRoadConfig();
 const mainStudentAtlas = buildMainStudentAtlas(gradeVisuals);
 const mainMonsterAtlas = buildMainMonsterAtlas(gradeVisuals);
 const companionAtlas = buildCompanionAtlas(careers);
-const enemyAtlas = buildEnemyAtlas();
+const enemyAtlas = buildEnemyAtlas(expeditionEnemyItems);
 const careerAtlas = buildCareerAtlas(careers);
 const expeditionBackdropAtlas = buildExpeditionBackdropAtlas();
 const battleRoadBackdropAtlas = buildBattleRoadBackdropAtlas(battleRoadConfig);
@@ -2943,8 +3069,8 @@ const battleRoadBackdropAtlas = buildBattleRoadBackdropAtlas(battleRoadConfig);
 writeFileSync(cssPath, buildCss(companionAtlas, enemyAtlas, careerAtlas, mainStudentAtlas, mainMonsterAtlas, expeditionBackdropAtlas, battleRoadBackdropAtlas, battleRoadConfig), "utf8");
 writeFileSync(careersPath, `${JSON.stringify(enrichCareers(careers, careerAtlas), null, 2)}\n`, "utf8");
 writeFileSync(gradeVisualsPath, `${JSON.stringify(enrichGradeVisuals(gradeVisuals), null, 2)}\n`, "utf8");
-writeFileSync(stagesPath, `${JSON.stringify(enrichStages(stages), null, 2)}\n`, "utf8");
-writeFileSync(bossesPath, `${JSON.stringify(enrichBosses(bosses), null, 2)}\n`, "utf8");
+writeFileSync(stagesPath, `${JSON.stringify(enrichStages(stages, expeditionEnemyItems), null, 2)}\n`, "utf8");
+writeFileSync(bossesPath, `${JSON.stringify(enrichBosses(bosses, expeditionEnemyItems), null, 2)}\n`, "utf8");
 
 const previousManifest = JSON.parse(readFileSync(manifestPath, "utf8"));
 const manifest = {
@@ -2997,8 +3123,10 @@ const visualData = {
 };
 mkdirSync(dirname(visualDataPath), { recursive: true });
 writeFileSync(visualDataPath, `${JSON.stringify(visualData, null, 2)}\n`, "utf8");
+refreshReactAssetLoaderMtime();
 
 console.log(`VISUAL_ASSETS_BUILT students=${mainStudentAtlas.items.length} mainMonsters=${mainMonsterAtlas.items.length} companions=${companionAtlas.items.length} enemies=${enemyAtlas.items.length} careers=${careerAtlas.items.length} expeditionBackdrops=${expeditionBackdropAtlas.items.length} battleRoadBackdrops=${battleRoadBackdropAtlas.items.length}`);
+console.log("REACT_ASSET_LOADER_REFRESHED src/react/game/assets.js");
 for (const asset of manifestAssets) {
   console.log(`${asset.token} ${asset.file} ${asset.width}x${asset.height} bytes=${asset.bytes}`);
 }

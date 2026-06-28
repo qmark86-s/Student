@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "score": {
+    "floor": 600,
+    "max": 1000,
+    "esdMax": 30,
+    "gamma": 2.0
+  },
+  "esdSources": {
+    "studyPerDayTarget": 1.0,
+    "eduPerLevel": 0.15,
+    "equipmentCapEsd": 3.0,
+    "aptitudePerRun": 1.0,
+    "purchasePackEsd": 3.0,
+    "purchasePackPriceKrw": 30000
+  },
+  "resultVariance": {
+    "skewPower": 3.0,
+    "retakeVarianceMultiplier": 0.5,
+    "minMaxPenalty": 0.005,
+    "bands": [
+      { "id": "high", "maxPredictedRank": 10, "maxPenaltyPct": 0.02 },
+      { "id": "mid", "maxPredictedRank": 30, "maxPenaltyPct": 0.10 },
+      { "id": "low", "maxPredictedRank": 9999, "maxPenaltyPct": 0.20 }
+    ],
+    "conditionLabels": [
+      { "maxRatio": 0.10, "text": "평소보다 잘 풀렸다" },
+      { "maxRatio": 0.45, "text": "무난하게 치렀다" },
+      { "maxRatio": 0.75, "text": "조금 긴장했다" },
+      { "maxRatio": 1.01, "text": "실수가 나왔다" }
+    ]
+  },
+  "graduation": {
+    "retakeEsdGainHint": "N수는 재플레이로 ESD가 자연 재성장되므로 별도 가산은 두지 않는다.",
+    "headcountNote": "수락=빠른 졸업생 수급(원정대 머릿수), N수=품질·안정성"
+  },
+  "help": {
+    "score.floor": "ESD 0일 때의 최저 수능 점수입니다(대학 최하위 minScore 근처).",
+    "score.max": "이론상 최고 수능 점수입니다.",
+    "score.esdMax": "무과금 기준 만점에 필요한 유효성장일(ESD)입니다. 현재 30일.",
+    "score.gamma": "점수 곡선 형태입니다. 클수록 초반이 빠르고 막판이 완만해집니다.",
+    "esdSources.studyPerDayTarget": "무과금 정상 플레이 하루가 주는 ESD(단위 기준선).",
+    "esdSources.eduPerLevel": "교육 1레벨이 주는 ESD입니다.",
+    "esdSources.equipmentCapEsd": "장비 풀세팅이 줄 수 있는 ESD 최대치(천장, P2W 방지).",
+    "esdSources.aptitudePerRun": "회차(N수/졸업) 1회 누적 적성이 주는 ESD입니다.",
+    "esdSources.purchasePackEsd": "결제팩 1회가 주는 ESD입니다. esdMax/만점결제수 = 30/10 = 3.",
+    "esdSources.purchasePackPriceKrw": "결제팩 1회 가격(원). 시간=돈 환산 기준.",
+    "resultVariance.skewPower": "하락 분산 분포를 예상쪽으로 치우치는 지수(≥1). 클수록 대부분 예상에 근접.",
+    "resultVariance.retakeVarianceMultiplier": "N수 1회당 최대 하락폭에 곱해지는 축소율. 현재 0.5.",
+    "resultVariance.minMaxPenalty": "N수로도 0이 되지 않는 최대 하락폭 하한(항상 약간의 불확실성 유지).",
+    "resultVariance.bands": "예상 등급(rank)별 최대 하락폭. 상위일수록 작아집니다(상2% 중10% 하20%).",
+    "resultVariance.conditionLabels": "플레이어에게 보이는 '수능 당일 컨디션' 플레이버(수치 비공개, 거칠게 4단계).",
+    "graduation": "졸업(수락) vs N수 트레이드오프 기준입니다."
+  }
+}

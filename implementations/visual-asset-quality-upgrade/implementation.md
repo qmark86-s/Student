@@ -1,5 +1,7 @@
 # 비주얼 자산 퀄리티 개선 구현
 
+> 최신 기준: 이 문서는 2026-06-20 초기 비주얼 자산 개선 기록이다. 원정대 몬스터 수량과 제작 방식은 이후 변경되었으며, 현재 기준은 `implementations/expedition-monster-raster-png-redraw/implementation.md`의 80종 래스터 PNG 원본 시트 방식이다.
+
 ## 적용 일자
 
 - 2026-06-20
