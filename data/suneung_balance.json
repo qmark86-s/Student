@@ -14,6 +14,16 @@
     "purchasePackEsd": 3.0,
     "purchasePackPriceKrw": 30000
   },
+  "esdMapping": {
+    "studyEsdCap": 26.0,
+    "studyStatHalf": 100000.0,
+    "eduEsdPerLevel": 0.15,
+    "eduEsdCap": 6.0,
+    "equipEsdPerPower": 0.04,
+    "equipmentCapEsd": 3.0,
+    "aptitudeEsdPerPoint": 0.002,
+    "purchaseStateField": "suneungPurchaseEsd"
+  },
   "resultVariance": {
     "skewPower": 3.0,
     "retakeVarianceMultiplier": 0.5,

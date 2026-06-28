@@ -3,9 +3,11 @@ import careers from "../../../data/careers.json";
 import curriculumAttackVfx from "../../../data/curriculum_attack_vfx.json";
 import growthLevels from "../../../data/growth_levels.json";
 import studentProgression from "../../../data/student_progression_balance.json";
+import suneungBalance from "../../../data/suneung_balance.json";
 import universities from "../../../data/universities.json";
 import { educationPointMultiplier } from "./education.js";
-import { equippedEquipment } from "./equipment.js";
+import { equippedEquipment, equippedEquipmentPower } from "./equipment.js";
+import { resolveSuneungFromEsd } from "./suneung.js";
 import { registerExpeditionMembersFromCompanions } from "./expedition.js";
 import { createDefaultGameState } from "./save.js";
 import { isRepeaterCurrent, nextSchoolGradeId, resolveGradeOrder, resolveGradeVisual } from "./grades.js";
@@ -403,15 +405,50 @@ function battleHasNext(battle) {
   return battle.encounterIndex + 1 < battle.encounterTotal;
 }
 
-function makeExamResult(state, battle) {
+const lowestUniversity = universities.slice().sort((a, b) => finiteNumber(b.gameRank, `universities.json gameRank 값이 올바르지 않습니다: ${b.id}`) - finiteNumber(a.gameRank, `universities.json gameRank 값이 올바르지 않습니다: ${a.id}`))[0];
+
+// 게임 상태 → 유효성장일(ESD) 환산. 공부(누적 스탯)·교육·장비·적성·결제를 합산한다.
+// studyStatHalf 등 상수는 data/suneung_balance.json esdMapping에서 조절(농사 속도 보정 대상).
+function suneungEsdComponents(state) {
+  const m = suneungBalance.esdMapping;
+  const current = state.current;
+  const sumStats = subjectIds.reduce((sum, subject) => sum + Math.max(0, finiteNumber(current.stats[subject], `current.stats.${subject} 값이 올바르지 않습니다.`)), 0);
+  const studyEsd = (finiteNumber(m.studyEsdCap, "esdMapping.studyEsdCap 값이 올바르지 않습니다.") * sumStats) / (sumStats + finiteNumber(m.studyStatHalf, "esdMapping.studyStatHalf 값이 올바르지 않습니다."));
+  const eduLevels = Object.values(current.educationLevels || {}).reduce((sum, value) => sum + Math.max(0, Number(value) || 0), 0);
+  const eduEsd = Math.min(finiteNumber(m.eduEsdCap, "esdMapping.eduEsdCap 값이 올바르지 않습니다."), eduLevels * finiteNumber(m.eduEsdPerLevel, "esdMapping.eduEsdPerLevel 값이 올바르지 않습니다."));
+  const equipEsd = Math.min(finiteNumber(m.equipmentCapEsd, "esdMapping.equipmentCapEsd 값이 올바르지 않습니다."), equippedEquipmentPower(state) * finiteNumber(m.equipEsdPerPower, "esdMapping.equipEsdPerPower 값이 올바르지 않습니다."));
+  const aptitudeSum = subjectIds.reduce((sum, subject) => sum + Math.max(0, Number(current.aptitude[subject]) || 0), 0);
+  const aptitudeEsd = aptitudeSum * finiteNumber(m.aptitudeEsdPerPoint, "esdMapping.aptitudeEsdPerPoint 값이 올바르지 않습니다.");
+  const purchaseEsd = Math.max(0, Number(state[m.purchaseStateField]) || 0);
+  const total = studyEsd + eduEsd + equipEsd + aptitudeEsd + purchaseEsd;
+  const round2 = (value) => Math.round(value * 100) / 100;
+  return {
+    studyEsd: round2(studyEsd),
+    eduEsd: round2(eduEsd),
+    equipEsd: round2(equipEsd),
+    aptitudeEsd: round2(aptitudeEsd),
+    purchaseEsd: round2(purchaseEsd),
+    total: round2(total),
+  };
+}
+
+function makeSuneungResolution(state, rng = Math.random) {
+  const esd = suneungEsdComponents(state);
+  const retakeCount = finiteNumber(state.current.retakeCount, "current.retakeCount 값이 올바르지 않습니다.");
+  const resolution = resolveSuneungFromEsd(esd.total, { retakeCount }, { balance: suneungBalance, universities }, rng);
+  return { ...resolution, esd };
+}
+
+function makeExamResult(state, battle, resolution = null) {
+  const isSuneung = battle.kind === "suneung";
   return {
     gradeId: state.current.gradeId,
     retakeCount: finiteNumber(state.current.retakeCount, "current.retakeCount 값이 올바르지 않습니다."),
     month: 12,
-    examId: battle.kind === "suneung" ? "suneung" : "year_boss",
-    examName: battle.kind === "suneung" ? "수능시험" : `${resolveGradeVisual(state.current).studentTitle} 학년 평가`,
-    score: battle.kind === "suneung" ? 995 : 930,
-    rank: battle.kind === "suneung" ? 500 : 1200,
+    examId: isSuneung ? "suneung" : "year_boss",
+    examName: isSuneung ? "수능시험" : `${resolveGradeVisual(state.current).studentTitle} 학년 평가`,
+    score: isSuneung ? (resolution ? resolution.finalScore : 995) : 930,
+    rank: isSuneung ? (resolution ? resolution.finalNationalRank : 500) : 1200,
     studyPointReward: battle.enemies.length,
     createdAt: Date.now(),
   };
@@ -450,20 +487,24 @@ function makeCareerCandidates(state, university) {
     });
 }
 
-function makeOutcome(state, examResult) {
+function makeOutcome(state, examResult, resolution) {
   assert(universities.length > 0, "universities.json이 비어 있어 수능 결과를 만들 수 없습니다.");
-  const university = universities.slice().sort((a, b) => finiteNumber(a.gameRank, `universities.json gameRank 값이 올바르지 않습니다: ${a.id}`) - finiteNumber(b.gameRank, `universities.json gameRank 값이 올바르지 않습니다: ${b.id}`))[0];
+  assert(resolution && typeof resolution === "object", "수능 resolution 데이터가 없어 결과를 만들 수 없습니다.");
+  // 최종 점수로 합격한 대학(낙방권이면 최하위 대학으로 graceful fallback).
+  const university = resolution.finalUniversity || lowestUniversity;
   const careerCandidates = makeCareerCandidates(state, university);
   return {
     avatarGender: state.current.avatarGender === "female" ? "female" : "male",
     suneungScore: examResult.score,
     suneungRank: examResult.rank,
-    suneungReport: { topPercent: 0.17, subjects: [] },
+    suneungCondition: resolution.conditionText,
+    suneungEsd: resolution.esd,
+    suneungReport: { topPercent: Math.round((examResult.rank / 300000) * 1000) / 1000, subjects: [] },
     admissions: [
       {
         universityId: university.id,
         name: university.name,
-        gameRank: university.gameRank,
+        gameRank: finiteNumber(university.gameRank, `universities.json gameRank 값이 올바르지 않습니다: ${university.id}`),
         adjustedScore: examResult.score,
         adjustedRank: examResult.rank,
         minScore: university.minScore,
@@ -508,7 +549,8 @@ function finishBattleProgress(state, battle) {
     return state;
   }
 
-  const examResult = makeExamResult(state, battle);
+  const resolution = battle.kind === "suneung" ? makeSuneungResolution(state) : null;
+  const examResult = makeExamResult(state, battle, resolution);
   assert(Array.isArray(state.current.examResults), "current.examResults 데이터가 배열이 아닙니다.");
   state.current.examResults = [...state.current.examResults, examResult];
   state.current.monthIndex = 12;
@@ -517,7 +559,7 @@ function finishBattleProgress(state, battle) {
   if (battle.kind === "suneung") {
     state.current.battle = battle;
     state.current.awaitingDecision = true;
-    state.current.outcome = makeOutcome(state, examResult);
+    state.current.outcome = makeOutcome(state, examResult, resolution);
     state.current.pausedAtGate = false;
     return state;
   }

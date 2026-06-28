@@ -42,6 +42,14 @@ export function validateSuneungBalance(balance) {
     assert(finiteNumber(sources[key], `esdSources.${key} 값이 올바르지 않습니다.`) >= 0, `esdSources.${key} 값은 0 이상이어야 합니다.`);
   }
 
+  const mapping = balance.esdMapping;
+  assert(mapping && typeof mapping === "object", "suneung_balance.json esdMapping 데이터가 없습니다.");
+  for (const key of ["studyEsdCap", "studyStatHalf", "eduEsdPerLevel", "eduEsdCap", "equipEsdPerPower", "equipmentCapEsd", "aptitudeEsdPerPoint"]) {
+    assert(finiteNumber(mapping[key], `esdMapping.${key} 값이 올바르지 않습니다.`) >= 0, `esdMapping.${key} 값은 0 이상이어야 합니다.`);
+  }
+  assert(finiteNumber(mapping.studyStatHalf, "esdMapping.studyStatHalf 값이 올바르지 않습니다.") > 0, "esdMapping.studyStatHalf 값은 0보다 커야 합니다.");
+  assert(typeof mapping.purchaseStateField === "string" && mapping.purchaseStateField.length > 0, "esdMapping.purchaseStateField 값이 없습니다.");
+
   const variance = balance.resultVariance;
   assert(variance && typeof variance === "object", "suneung_balance.json resultVariance 데이터가 없습니다.");
   assert(finiteNumber(variance.skewPower, "resultVariance.skewPower 값이 올바르지 않습니다.") >= 1, "resultVariance.skewPower 값은 1 이상이어야 합니다.");
@@ -122,23 +130,33 @@ export function admitUniversity(score, universities) {
   return admitted;
 }
 
-// 점수 → 연속 등수(밴드 선택·표시용). 사다리 (minScore, gameRank)를 선형 보간.
-export function rankForScore(score, universities) {
+// 점수 → 사다리 보간(minScore 기준으로 key 값을 선형 보간). key: gameRank | minNationalRank
+function interpolateLadder(score, universities, key) {
   const list = sortedUniversitiesByMinScore(universities); // 오름차순 minScore
   const value = finiteNumber(score, "수능 점수 값이 올바르지 않습니다.");
-  const top = list[list.length - 1]; // 최고 minScore = gameRank 1
-  const bottom = list[0]; // 최저 minScore = 최하위 gameRank
-  if (value >= top.minScore) return 1;
-  if (value < bottom.minScore) return bottom.gameRank; // 낙방권은 최하위 등수로 취급
+  const top = list[list.length - 1]; // 최고 minScore (gameRank 1)
+  const bottom = list[0]; // 최저 minScore (최하위)
+  if (value >= top.minScore) return top[key];
+  if (value < bottom.minScore) return bottom[key];
   for (let i = list.length - 1; i > 0; i -= 1) {
     const hi = list[i];
     const lo = list[i - 1];
     if (value < hi.minScore && value >= lo.minScore) {
       const t = (value - lo.minScore) / Math.max(1e-9, hi.minScore - lo.minScore);
-      return clamp(lo.gameRank + (hi.gameRank - lo.gameRank) * t, 1, bottom.gameRank);
+      return lo[key] + (hi[key] - lo[key]) * t;
     }
   }
-  return bottom.gameRank;
+  return bottom[key];
+}
+
+// 점수 → 연속 등수(밴드 선택·표시용).
+export function rankForScore(score, universities) {
+  return clamp(interpolateLadder(score, universities, "gameRank"), 1, universities.length);
+}
+
+// 점수 → 전국 석차(표시용, minNationalRank 사다리 보간).
+export function nationalRankForScore(score, universities) {
+  return Math.max(1, Math.round(interpolateLadder(score, universities, "minNationalRank")));
 }
 
 // ── [2] 컨디션(하락 분산) ────────────────────────────────────────────────────────
@@ -179,36 +197,43 @@ export function conditionLabel(penalty, effMaxPenalty, balance) {
 
 // ── 통합 파이프라인 ────────────────────────────────────────────────────────────
 
-// profile: { days, packs, eduLevels, equipEsd, aptitudeRuns, retakeCount }
-export function resolveSuneung(profile, { balance, universities }, rng = Math.random) {
+// 라이브 진입점: 게임에서 이미 산출한 총 ESD를 직접 받아 결과를 만든다.
+// options: { retakeCount }
+export function resolveSuneungFromEsd(esdTotal, options, { balance, universities }, rng = Math.random) {
   validateSuneungBalance(balance);
-  const esd = computeEsd(profile, balance);
-  const predictedScore = predictedScoreFromEsd(esd.total, balance);
+  const retakeCount = Math.max(0, Math.floor(finiteNumber(options?.retakeCount ?? 0, "retakeCount 값이 올바르지 않습니다.")));
+  const predictedScore = predictedScoreFromEsd(esdTotal, balance);
   const predictedUniversity = admitUniversity(predictedScore, universities);
   const predictedRank = rankForScore(predictedScore, universities);
 
   const maxPenalty = bandMaxPenalty(predictedRank, balance);
-  const effMax = effectiveMaxPenalty(maxPenalty, profile.retakeCount, balance);
+  const effMax = effectiveMaxPenalty(maxPenalty, retakeCount, balance);
   const penalty = rollPenalty(effMax, balance, rng);
   const finalScore = round(predictedScore * (1 - penalty));
 
   const finalUniversity = admitUniversity(finalScore, universities);
-  const finalRank = rankForScore(finalScore, universities);
-
   return {
-    esd,
+    retakeCount,
     predictedScore,
     predictedRank,
     predictedUniversity,
+    predictedNationalRank: nationalRankForScore(predictedScore, universities),
     maxPenalty,
     effMaxPenalty: effMax,
     penalty,
     finalScore,
-    finalRank,
+    finalRank: rankForScore(finalScore, universities),
+    finalNationalRank: nationalRankForScore(finalScore, universities),
     finalUniversity,
     admitted: Boolean(finalUniversity),
     conditionText: conditionLabel(penalty, effMax, balance),
   };
+}
+
+// 시뮬레이터 진입점: profile { days, packs, eduLevels, equipEsd, aptitudeRuns, retakeCount } → ESD → 결과
+export function resolveSuneung(profile, deps, rng = Math.random) {
+  const esd = computeEsd(profile, deps.balance);
+  return { esd, ...resolveSuneungFromEsd(esd.total, { retakeCount: profile.retakeCount }, deps, rng) };
 }
 
 // 시드 RNG(시뮬레이터 재현용). mulberry32.

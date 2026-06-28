@@ -1476,15 +1476,21 @@ function ResultPanel({ gameState, onAcceptCareer, onRetake }) {
         <article className="panel decision">
           <div className="course-line">
             <div>
-              <p>수능 결과</p>
+              <p>수능 결과{outcome.suneungCondition ? ` · ${outcome.suneungCondition}` : ""}</p>
               <strong>{formatMoney(outcome.suneungRank)}등 · {Math.round(outcome.suneungScore)}점</strong>
             </div>
             <Medal size={24} />
           </div>
           <div className="result-row">
-            <span>최상위 합격</span>
+            <span>합격</span>
             <strong>#{admission.gameRank} {admission.name}</strong>
           </div>
+          {outcome.suneungEsd && qaToolsEnabled() && (
+            <div className="result-row">
+              <span>ESD(캘리브레이션)</span>
+              <strong>합계 {outcome.suneungEsd.total} · 공부 {outcome.suneungEsd.studyEsd} · 교육 {outcome.suneungEsd.eduEsd} · 장비 {outcome.suneungEsd.equipEsd} · 적성 {outcome.suneungEsd.aptitudeEsd}</strong>
+            </div>
+          )}
           <div className="decision-careers">
             <header className="section-title compact-title">
               <div>

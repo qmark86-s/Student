@@ -48,6 +48,7 @@
     "asset:integrity": "python tools/asset-factory/audit-sprite-integrity.py",
     "balance:verify": "node tools/validate-career-balance.mjs",
     "suneung:sim": "node tools/suneung-sim.mjs",
+    "student:farm-sim": "node tools/student-farm-sim.mjs",
     "career:smoke": "node tools/career-outcome-smoke.mjs",
     "retake:smoke": "node tools/retake-year-smoke.mjs",
     "verify": "npm run balance:verify && npm run battle-road:verify && npm run curriculum-vfx:verify && npm run react:verify && npm run visual:verify",
