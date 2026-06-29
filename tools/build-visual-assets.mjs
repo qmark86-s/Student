@@ -53,7 +53,7 @@ const enemyTones = [
 
 const expeditionBackdropRoadProfile = "fixed-road-v2";
 const expeditionBackdropTileCount = 10;
-const expeditionBackdropStagesPerTile = 100;
+const expeditionBackdropStagesPerTile = 25;
 const expeditionBackdropThemes = [
   { id: "shelter", timeOfDay: "dawn", landmark: "temporary-shelter-alley", skyTop: "#24384e", sky: "#52647f", horizon: "#c08a58", far: "#33455f", mid: "#52413d", floor: "#30313a", road: "#34343c", roadDark: "#171b24", accent: "#facc15", accent2: "#ef4444", light: "#ffd58a" },
   { id: "studio", timeOfDay: "deep-night", landmark: "studio-laundry-neon", skyTop: "#160f2f", sky: "#342052", horizon: "#6b315e", far: "#2b2741", mid: "#4b324f", floor: "#272637", road: "#262337", roadDark: "#11111f", accent: "#fb923c", accent2: "#f9a8d4", light: "#fef3c7" },
@@ -3100,37 +3100,38 @@ function isExpeditionBackdropRawSource(image) {
 
 function readExpeditionBackdropSourceInfo(path) {
   if (!existsSync(path)) return null;
+  const bytes = readFileSync(path).length;
   const image = readPngRgba(path);
+  const aspect = image.width / Math.max(1, image.height);
+  const reasons = [];
+  if (image.width < 1600) reasons.push(`width ${image.width} < 1600`);
+  if (image.height < 650) reasons.push(`height ${image.height} < 650`);
+  if (aspect < 2.2 || aspect > 3.4) reasons.push(`aspect ${aspect.toFixed(2)} outside 2.2~3.4`);
+  if (image.width === 5016 && image.height === 540) reasons.push("runtime tile size 5016x540");
+  if (bytes < 500000) reasons.push(`file too small ${bytes} bytes`);
   return {
+    bytes,
     image,
-    valid: isExpeditionBackdropRawSource(image),
+    reasons,
+    valid: isExpeditionBackdropRawSource(image) && bytes >= 500000,
   };
 }
 
-function generateExpeditionBackdropRawSource(theme, themeIndex, tileIndex, width, height) {
-  const target = canvas(width, height);
-  drawExpeditionChapterBackdrop(target, theme, themeIndex * 997 + tileIndex * 101 + 29, width, height);
-  writePng(expeditionBackdropSourcePath(theme, tileIndex), target);
-  return target;
-}
-
 function ensureExpeditionBackdropSourceSet() {
-  const defaultWidth = 2138;
-  const defaultHeight = 736;
-  expeditionBackdropThemes.forEach((theme, themeIndex) => {
-    mkdirSync(dirname(expeditionBackdropSourcePath(theme, 0)), { recursive: true });
-    const basePath = expeditionBackdropSourcePath(theme, 0);
-    const baseInfo = readExpeditionBackdropSourceInfo(basePath);
-    const baseImage = baseInfo?.valid ? baseInfo.image : generateExpeditionBackdropRawSource(theme, themeIndex, 0, defaultWidth, defaultHeight);
-    const sourceWidth = baseImage.width;
-    const sourceHeight = baseImage.height;
+  const failures = [];
+  expeditionBackdropThemes.forEach((theme) => {
     for (let tileIndex = 0; tileIndex < expeditionBackdropTileCount; tileIndex += 1) {
       const path = expeditionBackdropSourcePath(theme, tileIndex);
-      const sourceInfo = tileIndex === 0 && baseInfo?.valid ? baseInfo : readExpeditionBackdropSourceInfo(path);
+      const sourceInfo = readExpeditionBackdropSourceInfo(path);
       if (sourceInfo?.valid) continue;
-      generateExpeditionBackdropRawSource(theme, themeIndex, tileIndex, sourceWidth, sourceHeight);
+      const label = relative(process.cwd(), path);
+      const reason = sourceInfo ? sourceInfo.reasons.join(", ") : "missing";
+      failures.push(`${label}: ${reason}`);
     }
   });
+  if (failures.length > 0) {
+    throw new Error(`원정대 생성형 배경 원본 검증 실패:\n${failures.join("\n")}`);
+  }
 }
 
 function loadExpeditionBackdropSource(theme, tileIndex) {

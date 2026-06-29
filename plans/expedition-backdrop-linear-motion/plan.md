@@ -1,5 +1,7 @@
 # 원정대 배경 이동 선형화 계획
 
+> 최신 기준: `plans/expedition-backdrop-commercial-qa/plan.md` 차수 이후 선형 이동은 유지하되 Stage당 이동 거리는 `80px`, route tile 교체 주기는 `25 Stage`다. 아래 `300px` 내용은 이전 감각 튜닝 기록이다.
+
 ## Summary
 - Stage 이동 거리는 `300px`로 유지한다.
 - 배경 이동 중 가속/감속/정지 keyframe을 제거해, 4초 동안 `from -> to`를 일정 속도로 이동하게 한다.

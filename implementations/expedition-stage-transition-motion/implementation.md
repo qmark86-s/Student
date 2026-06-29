@@ -1,7 +1,7 @@
 # 원정대 Stage 전환 연출 구현
 
 ## 개요
-- 최신 기준: `implementations/expedition-transition-overlap-motion/implementation.md`와 `implementations/expedition-backdrop-linear-motion/implementation.md`에서 Stage 이동 후반 1초와 몬스터 접근을 겹치고, 배경은 4초 동안 linear로 이동하도록 갱신했다. 아래 문서의 “이동 완료 후 2.95초 조우” 설명은 당시 구현 기록이다.
+- 최신 기준: `implementations/expedition-transition-overlap-motion/implementation.md`, `implementations/expedition-backdrop-linear-motion/implementation.md`, `plans/expedition-backdrop-commercial-qa/plan.md`에서 Stage 이동 후반 1초와 몬스터 접근을 겹치고, 배경은 4초 동안 linear로 이동하며 Stage당 `80px`, route tile `25 Stage` 주기로 갱신했다. 아래 문서의 “이동 완료 후 2.95초 조우” 및 `300px/100 Stage` 설명은 당시 구현 기록이다.
 - 원정대 Stage 승리 직후 화면의 현재 몬스터가 먼저 사망 연출을 보여준 뒤 다음 Stage 화면으로 넘어가도록 표시 계층을 분리했다.
 - 현재 Stage의 모든 몬스터 처치/디스폰 연출이 끝난 뒤에만 Stage 이동을 시작한다.
 - Stage 이동 중에는 이전 Stage 몬스터 그룹을 렌더하지 않는다.
@@ -72,7 +72,7 @@
   - `1 -> 2` 전환 metadata를 확인한다.
   - 전환 중 배경 offset이 `from > to`인지 확인해 왼쪽 이동 방향을 검사한다.
   - 전환 완료 후 배경 offset이 다음 Stage 값에 머무르는지 확인한다.
-  - Stage 1 -> 2 전환 offset이 `0 -> -300`인지 확인한다.
+  - Stage 1 -> 2 전환 offset이 `0 -> -80`인지 확인한다.
   - 이동 중에는 전투 플로트가 남아 있지 않은지 확인한다.
   - 최신 smoke는 이동 초반에는 다음 몬스터 접근이 없고, 이동 후반에는 `data-stage-transition="moving"`과 `data-encounter-intro="approaching"`이 동시에 켜지며 1초 접근 duration을 갖는지 확인한다.
   - 파티가 전투 정리/대기 중에는 combat, 이동 중과 이동 후반 조우 접근 중에는 running인지 확인한다.

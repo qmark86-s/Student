@@ -179,7 +179,7 @@ else {
     else landmarks.add(item.landmark);
     if (item.roadProfile !== "fixed-road-v2") failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} roadProfile mismatch`);
     if (item.tileCount !== 10) failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} tileCount mismatch`);
-    if (item.stagesPerTile !== 100) failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} stagesPerTile mismatch`);
+    if (item.stagesPerTile !== 25) failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} stagesPerTile mismatch`);
     if (item.sourceMode !== "chapter-panorama") failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} must be built from chapter-panorama source mode`);
     if (!Array.isArray(item.tiles) || item.tiles.length !== 10) failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} tiles must contain 10 PNGs`);
     if (!item.file) failures.push(`expedition backdrop ${item.backdrop ?? "unknown"} file is missing`);
@@ -204,11 +204,13 @@ else {
         const sourcePath = resolve(tile.source);
         if (!existsSync(sourcePath)) failures.push(`expedition backdrop source does not exist: ${tile.source}`);
         else {
-          const sourceInfo = pngInfo(readFileSync(sourcePath));
+          const sourceBuffer = readFileSync(sourcePath);
+          const sourceInfo = pngInfo(sourceBuffer);
           if (sourceInfo.width < 1600) failures.push(`expedition backdrop source ${tile.source} width is too small: ${sourceInfo.width}`);
           if (sourceInfo.height < 650) failures.push(`expedition backdrop source ${tile.source} height is too small for a generation original: ${sourceInfo.height}`);
           const sourceAspect = sourceInfo.width / Math.max(1, sourceInfo.height);
           if (sourceAspect < 2.2 || sourceAspect > 3.4) failures.push(`expedition backdrop source ${tile.source} aspect ratio must be a raw route source, got ${sourceAspect.toFixed(2)}`);
+          if (sourceBuffer.length < 500000) failures.push(`expedition backdrop source ${tile.source} is too small for a high-quality generated original: ${sourceBuffer.length} bytes`);
           if (sourceInfo.width === expeditionBackdrops.width && sourceInfo.height === expeditionBackdrops.rowHeight) {
             failures.push(`expedition backdrop source ${tile.source} looks like a built runtime tile, not an independent generation original`);
           }

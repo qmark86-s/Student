@@ -1,8 +1,8 @@
 # 원정대 조우/이동/개별 처치 연출 개선 구현
 
 ## 개요
-- 최신 기준: `implementations/expedition-transition-overlap-motion/implementation.md`에서 몬스터 접근을 이동 완료 후 별도 2.95초가 아니라 Stage 이동 마지막 1초에 겹치도록 변경했다. 현재 파티는 오버랩 구간에도 `running`을 유지하고, 이동 종료 직후 `combat`으로 돌아간다.
-- Stage 전환 시간은 4초로 유지하고, Stage당 배경 이동 거리는 챕터별 배경 고도화 이후 `300px`로 확대해 이동 체감을 키웠다.
+- 최신 기준: `implementations/expedition-transition-overlap-motion/implementation.md`와 `plans/expedition-backdrop-commercial-qa/plan.md`에서 몬스터 접근을 이동 마지막 1초에 겹치도록 유지하고, 배경 이동은 Stage당 `80px`, route tile `25 Stage` 주기로 갱신했다. 현재 파티는 오버랩 구간에도 `running`을 유지하고, 이동 종료 직후 `combat`으로 돌아간다.
+- 아래의 `300px` 이동 거리 설명은 챕터별 배경 고도화 이전 감각 튜닝 기록이다.
 - 원정대원 컨테이너의 앞뒤 왕복 이동을 제거하고, 걷는 프레임과 작은 수직 리듬만 유지했다.
 - 현재 Stage 몬스터가 모두 처치되고 디스폰까지 끝난 뒤에만 Stage 이동을 시작한다.
 - Stage 이동 중에는 이전 Stage 몬스터 그룹을 렌더하지 않아, 사라진 몬스터가 이동 중 다시 보이는 문제를 막았다.
@@ -53,8 +53,8 @@
 
 ## 검증
 - `tools/react-vite-expedition-smoke.mjs`
-  - Stage 1 -> 2 배경 offset이 `0 -> -300`인지 검사한다.
-  - 전환 후 Stage 2 offset이 `-300`에 유지되는지 검사한다.
+  - Stage 1 -> 2 배경 offset이 `0 -> -80`인지 검사한다.
+  - 전환 후 Stage 2 offset이 `-80`에 유지되는지 검사한다.
   - 현재 Stage 적 asset 종류가 복수인지 검사한다.
   - 전투 정리 구간에서 처치된 적 모두가 `data-defeat-order`를 갖고, 복수 적이면 delay가 분산되는지 검사한다.
   - 전투 정리 구간의 처치 적이 이동 전에 opacity 0까지 디스폰되는지 검사한다.

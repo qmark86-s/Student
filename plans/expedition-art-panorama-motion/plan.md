@@ -7,9 +7,11 @@
 ## 적용 방향
 
 1. 원화급 긴 배경
-   - 생성형 PNG 원본을 `assets/visual-source/expedition-backdrops/<theme>/source-00.png`에 둔다.
-   - 최신 기준에서는 1~10챕터가 같은 배경을 공유하지 않도록 챕터별 route tile 10개, 총 `visual-expedition-backdrop-{theme}-{00..09}.png` 100개를 생성한다.
-   - 각 tile은 `5016x540`이며 챕터 내부 100 Stage 구간을 담당해, 챕터 1개가 1000 Stage 길이의 탐험길을 가진다.
+   - 생성형 PNG 원본을 `assets/visual-source/expedition-backdrops/<theme>/source-00.png`~`source-09.png`에 둔다.
+   - 최신 기준에서는 1~10챕터가 같은 배경을 공유하지 않도록 챕터별 독립 source 10개와 route tile 10개, 총 `visual-expedition-backdrop-{theme}-{00..09}.png` 100개를 생성한다.
+   - 각 tile은 `5016x540`이며, 최신 런타임은 Stage당 `80px` 이동과 25 Stage route tile 전환으로 한 tile이 감겨 보이기 전에 다음 segment로 넘어간다.
+   - source 누락/저품질은 빌드에서 실패하고 자동 생성이나 공용 fallback으로 숨기지 않는다.
+   - runtime tile은 source를 직접 잡아당기지 않고 chapter panorama overlap blend 결과에서 잘라낸다.
    - `expedition-arena::before`에는 현재 Stage가 속한 tile PNG를 `--expedition-bg-image`로 주입하고 천천히 이동시킨다.
 
 2. 낮은 품질 오버레이 제거
@@ -22,7 +24,7 @@
    - 피격 대상에는 shock ring, slash, dust burst를 적용한다.
 
 4. 검증
-   - `visual:verify`가 챕터 10개, route tile 100개 파일과 크기 일치를 확인한다.
+   - `visual:verify`가 챕터 10개, source 100개, route tile 100개 파일과 크기 일치를 확인한다.
    - `visual:smoke`가 원화 파노라마 이미지, pan, 기존 배경 숨김, 동료/적/VFX 모션을 확인한다.
    - 컨택트시트에서 챕터별 배경 파노라마도 직접 확인할 수 있게 한다.
 

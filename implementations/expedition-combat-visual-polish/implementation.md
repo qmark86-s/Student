@@ -1,7 +1,7 @@
 # 원정대 전투 시각 연출 상용화 구현
 
 ## 개요
-- 최신 기준: `implementations/expedition-transition-overlap-motion/implementation.md`에서 Stage 이동 후 별도 조우 대기 시간을 제거하고, 이동 마지막 1초에 다음 Stage 몬스터 접근을 겹치게 했다.
+- 최신 기준: `implementations/expedition-transition-overlap-motion/implementation.md`와 `plans/expedition-backdrop-commercial-qa/plan.md`에서 Stage 이동 후 별도 조우 대기 시간을 제거하고, 이동 마지막 1초에 다음 Stage 몬스터 접근을 겹치게 했다. 배경 이동은 Stage당 `80px`, route tile `25 Stage` 주기다.
 - 원정대 배경이 Stage 클리어 때 왼쪽으로 이동하고, 이동 후에도 다음 Stage/챕터 offset에 머물도록 보강했다.
 - 원정대 배경 PNG는 가로로 잡아당기거나 seam을 블러 처리하지 않고, 비율 유지 cover-crop과 normal/mirror 구간 합성으로 경계 번짐을 줄였다.
 - 대미지/회복 플로트는 더미 preview가 아니라 실제 마지막 전투 리포트를 1회 재생하도록 바꿨다.
@@ -53,7 +53,7 @@
 - `tools/build-visual-assets.mjs`
   - 생성형 PNG 원본 `assets/visual-source/expedition-backdrops/<theme>/source-00.png`를 읽어 챕터별 route tile을 생성한다.
   - `buildExpeditionBackdropAtlas()`가 챕터 10개 x tile 10개, 총 `visual-expedition-backdrop-{theme}-{00..09}.png` 100개를 만든다.
-  - 각 tile은 챕터 내부 100 Stage 구간을 담당하므로 챕터 1개는 1000 Stage 길이의 탐험길을 가진다.
+  - 각 tile은 최신 기준에서 25 Stage route 구간을 담당하고, 챕터의 1000 Stage 구조 안에서 순환 사용된다.
   - source를 강제 가로 리사이즈하지 않고 같은 crop의 normal/mirror/normal 구간을 비율 유지로 합성한다. 심을 블러로 뭉개는 함수는 제거했다.
 - `src/snapshot/assets/visual-expedition-backdrop-*-*.png`
   - 챕터 1~10이 각각 10개 긴 배경 PNG tile을 사용한다.
@@ -63,7 +63,7 @@
 - `src/react/game/assets.js`
   - `getExpeditionBackdropUrl(backdropClass, tileIndex)`가 현재 Stage의 tile PNG를 반환한다.
 - `src/react/App.jsx`
-  - `expeditionStageBackdropTile()`로 100 Stage마다 tile index를 바꾸고, `expeditionStageBackdropOffset()`은 tile 내부 Stage 기준으로 이동 offset을 계산한다.
+  - `expeditionStageBackdropTile()`로 25 Stage마다 tile index를 바꾸고, `expeditionStageBackdropOffset()`은 tile 내부 Stage 기준으로 이동 offset을 계산한다.
 - `src/snapshot/manifest.json`
   - 원정대 배경 에셋의 bytes/hash를 갱신했다.
 
@@ -75,7 +75,7 @@
   - 전투 플로트가 몬스터 스프라이트 전면을 가리지 않는지 검사한다.
   - 플로트에 actor/target/target-side/killed metadata가 있는지 검사한다.
   - 플로트 animation이 무한 반복이 아닌지 검사한다.
-  - Stage 1 -> 2 배경 이동 offset이 `0 -> -300`인지 검사한다.
+  - Stage 1 -> 2 배경 이동 offset이 `0 -> -80`인지 검사한다.
   - 현재 Stage 적의 개별 처치 order/delay를 검사한다.
   - 이동 초반에는 조우 접근이 없고, 이동 후반에는 1초 접근 상태가 Stage 이동과 동시에 생기는지 검사한다.
   - `data-combat-ready`가 전투 정리중과 이동/접근 오버랩 중에는 false이고 이동 완료 뒤 true로 돌아오는지 검사한다.

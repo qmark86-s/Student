@@ -3991,7 +3991,7 @@ button:disabled {
     background-position: var(--expedition-bg-from-x, 0px) center;
   }
   100% {
-    background-position: var(--expedition-bg-to-x, -300px) center;
+    background-position: var(--expedition-bg-to-x, -80px) center;
   }
 }
 
@@ -4005,7 +4005,7 @@ button:disabled {
   }
   100% {
     opacity: 0;
-    background-position: var(--expedition-bg-old-to-x, -300px) center;
+    background-position: var(--expedition-bg-old-to-x, -80px) center;
   }
 }
 
@@ -4022,7 +4022,7 @@ button:disabled {
   }
   100% {
     opacity: 1;
-    background-position: var(--expedition-bg-to-x, -300px) center;
+    background-position: var(--expedition-bg-to-x, -80px) center;
   }
 }
 

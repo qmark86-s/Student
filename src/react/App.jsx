@@ -130,10 +130,11 @@ const LOCKED_CAREER_LABEL = "\u003f\u003f\u003f";
 const EXPEDITION_STAGE_TRANSITION_MS = 4000;
 const EXPEDITION_ENCOUNTER_APPROACH_DELAY_MS = 3000;
 const EXPEDITION_ENCOUNTER_APPROACH_MS = 1000;
-const EXPEDITION_STAGE_BACKDROP_STEP_PX = 300;
+const EXPEDITION_STAGE_BACKDROP_STEP_PX = 80;
 const EXPEDITION_CHAPTER_STAGE_COUNT = 1000;
 const EXPEDITION_BACKDROP_TILE_COUNT = 10;
-const EXPEDITION_BACKDROP_STAGES_PER_TILE = EXPEDITION_CHAPTER_STAGE_COUNT / EXPEDITION_BACKDROP_TILE_COUNT;
+const EXPEDITION_BACKDROP_STAGES_PER_TILE = 25;
+const EXPEDITION_BACKDROP_ROUTE_CYCLE_STAGE_COUNT = EXPEDITION_BACKDROP_TILE_COUNT * EXPEDITION_BACKDROP_STAGES_PER_TILE;
 const EXPEDITION_COMBAT_FLOAT_REPLAY_MS = 1900;
 const EXPEDITION_BATTLE_REPLAY_MS = 3600;
 const EXPEDITION_BATTLE_EVENT_REPLAY_MS = 2200;
@@ -149,15 +150,15 @@ function requireConfig(condition, message) {
 
 function expeditionStageBackdropOffset(stageNumber, chapterNumber = 1) {
   const stage = Math.max(1, Math.floor(Number(stageNumber) || 1));
-  const stageInChapter = ((stage - 1) % EXPEDITION_CHAPTER_STAGE_COUNT) + 1;
-  const stageInTile = ((stageInChapter - 1) % EXPEDITION_BACKDROP_STAGES_PER_TILE) + 1;
+  const stageInRouteCycle = ((stage - 1) % EXPEDITION_BACKDROP_ROUTE_CYCLE_STAGE_COUNT) + 1;
+  const stageInTile = ((stageInRouteCycle - 1) % EXPEDITION_BACKDROP_STAGES_PER_TILE) + 1;
   return -((stageInTile - 1) * EXPEDITION_STAGE_BACKDROP_STEP_PX);
 }
 
 function expeditionStageBackdropTile(stageNumber) {
   const stage = Math.max(1, Math.floor(Number(stageNumber) || 1));
-  const stageInChapter = ((stage - 1) % EXPEDITION_CHAPTER_STAGE_COUNT) + 1;
-  return Math.max(0, Math.min(EXPEDITION_BACKDROP_TILE_COUNT - 1, Math.floor((stageInChapter - 1) / EXPEDITION_BACKDROP_STAGES_PER_TILE)));
+  const stageInRouteCycle = ((stage - 1) % EXPEDITION_BACKDROP_ROUTE_CYCLE_STAGE_COUNT) + 1;
+  return Math.max(0, Math.min(EXPEDITION_BACKDROP_TILE_COUNT - 1, Math.floor((stageInRouteCycle - 1) / EXPEDITION_BACKDROP_STAGES_PER_TILE)));
 }
 
 function expeditionEnemyDefeatMap(report, stageNumber, enemies) {
