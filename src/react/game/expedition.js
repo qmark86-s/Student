@@ -1907,6 +1907,37 @@ export function removeExpeditionMemberFromParty(state, memberId) {
   return next;
 }
 
+export function reorderExpeditionPartyMembers(state, fromSlotIndex, toSlotIndex) {
+  const next = normalizeExpeditionState(state);
+  const expedition = next.expedition;
+  const partyLength = expedition.partyMemberIds.length;
+  assert(partyLength > 0, "순서를 변경할 원정대 파티원이 없습니다.");
+  const from = Math.floor(finiteNumber(fromSlotIndex, "원정대 파티 이동 시작 슬롯 값이 올바르지 않습니다."));
+  const to = Math.floor(finiteNumber(toSlotIndex, "원정대 파티 이동 대상 슬롯 값이 올바르지 않습니다."));
+  assert(from >= 0 && from < partyLength, `이동할 원정대 파티 슬롯이 비어 있습니다: ${from + 1}`);
+  assert(to >= 0 && to < expeditionPartySize, `원정대 파티 이동 대상 슬롯이 올바르지 않습니다: ${to + 1}`);
+  if (from === to || partyLength <= 1) return next;
+
+  const memberId = expedition.partyMemberIds[from];
+  const targetIndex = to >= partyLength ? partyLength - 1 : to;
+  if (from === targetIndex) return next;
+  if (to >= partyLength) {
+    expedition.partyMemberIds.splice(from, 1);
+    expedition.partyMemberIds.push(memberId);
+  } else {
+    const targetMemberId = expedition.partyMemberIds[targetIndex];
+    expedition.partyMemberIds[from] = targetMemberId;
+    expedition.partyMemberIds[targetIndex] = memberId;
+  }
+
+  const member = expedition.members.find((candidate) => candidate.id === memberId);
+  assert(member, `원정대원을 찾을 수 없습니다: ${memberId}`);
+  pushExpeditionLog(expedition, `${member.careerName} 배치를 ${from + 1}번에서 ${targetIndex + 1}번으로 변경했다.`, "info");
+  next.expedition = expeditionAliases(expedition);
+  validateExpeditionState(next.expedition, "save.expedition");
+  return next;
+}
+
 function promotionOrder(member) {
   const promotion = promotionById.get(member.promotionTier);
   assert(promotion, `지원하지 않는 원정대 승급 단계입니다: ${member.promotionTier}`);

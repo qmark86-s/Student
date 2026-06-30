@@ -99,6 +99,7 @@ import {
   fuseExpeditionMembers,
   levelUpExpeditionMember,
   removeExpeditionMemberFromParty,
+  reorderExpeditionPartyMembers,
   resolveExpeditionAutoCombat,
   startExpeditionDispatch,
   toggleExpeditionMemberLock,
@@ -141,6 +142,7 @@ const EXPEDITION_BACKDROP_ROUTE_CYCLE_STAGE_COUNT = EXPEDITION_BACKDROP_TILE_COU
 const EXPEDITION_COMBAT_FLOAT_REPLAY_MS = 1900;
 const EXPEDITION_BATTLE_REPLAY_MS = 3600;
 const EXPEDITION_BATTLE_EVENT_REPLAY_MS = 2200;
+const EXPEDITION_PARTY_REORDER_MS = 500;
 const EXPEDITION_COMBAT_FLOAT_ANIMATION_MS = 920;
 const EXPEDITION_COMBAT_FLOAT_MAX_COUNT = 8;
 const EXPEDITION_ENEMY_DEATH_ANIMATION_MS = 720;
@@ -1048,6 +1050,28 @@ function SpriteFrames({ className, frames }) {
   );
 }
 
+function expeditionPartyOrderIds(gameState) {
+  const ids = gameState?.expedition?.partyMemberIds;
+  return Array.isArray(ids) ? ids.filter((id) => typeof id === "string") : [];
+}
+
+function sameExpeditionPartySet(leftIds, rightIds) {
+  if (leftIds.length !== rightIds.length) return false;
+  const remaining = new Map();
+  for (const id of leftIds) remaining.set(id, (remaining.get(id) || 0) + 1);
+  for (const id of rightIds) {
+    const count = remaining.get(id) || 0;
+    if (count <= 0) return false;
+    if (count === 1) remaining.delete(id);
+    else remaining.set(id, count - 1);
+  }
+  return remaining.size === 0;
+}
+
+function expeditionPartyOrderChanged(leftIds, rightIds) {
+  return leftIds.length === rightIds.length && leftIds.some((id, index) => id !== rightIds[index]);
+}
+
 function ExpeditionScene({ gameState, onCombatReadyChange, onExpeditionComplete, onOpenPendingReward, rewardToast }) {
   const [displayGameState, setDisplayGameState] = useState(gameState);
   const [stageTransition, setStageTransition] = useState(null);
@@ -1055,8 +1079,10 @@ function ExpeditionScene({ gameState, onCombatReadyChange, onExpeditionComplete,
   const [battleReplay, setBattleReplay] = useState(null);
   const [battleReplayNow, setBattleReplayNow] = useState(0);
   const [encounterIntro, setEncounterIntro] = useState(null);
+  const [partyReorderActive, setPartyReorderActive] = useState(false);
   const latestGameStateRef = useRef(gameState);
   const previousGameStateRef = useRef(gameState);
+  const partyOrderRef = useRef(expeditionPartyOrderIds(gameState));
   const stageTransitionRef = useRef(null);
   const transitionStartTimerRef = useRef(0);
   const transitionTimerRef = useRef(0);
@@ -1064,6 +1090,7 @@ function ExpeditionScene({ gameState, onCombatReadyChange, onExpeditionComplete,
   const battleReplayTimerRef = useRef(0);
   const battleReplayIntervalRef = useRef(0);
   const encounterIntroTimerRef = useRef(0);
+  const partyReorderTimerRef = useRef(0);
   const seenBattleIdRef = useRef(gameState?.expedition?.pendingReward?.lastBattle?.id || "");
 
   useEffect(() => {
@@ -1074,12 +1101,32 @@ function ExpeditionScene({ gameState, onCombatReadyChange, onExpeditionComplete,
       if (battleReplayTimerRef.current) window.clearTimeout(battleReplayTimerRef.current);
       if (battleReplayIntervalRef.current) window.clearInterval(battleReplayIntervalRef.current);
       if (encounterIntroTimerRef.current) window.clearTimeout(encounterIntroTimerRef.current);
+      if (partyReorderTimerRef.current) window.clearTimeout(partyReorderTimerRef.current);
     };
   }, []);
 
   useEffect(() => {
     stageTransitionRef.current = stageTransition;
   }, [stageTransition]);
+
+  useEffect(() => {
+    const previousOrder = partyOrderRef.current;
+    const nextOrder = expeditionPartyOrderIds(gameState);
+    const isReorderOnly =
+      previousOrder.length > 1 &&
+      sameExpeditionPartySet(previousOrder, nextOrder) &&
+      expeditionPartyOrderChanged(previousOrder, nextOrder);
+
+    partyOrderRef.current = nextOrder.slice();
+    if (!isReorderOnly) return;
+
+    if (partyReorderTimerRef.current) window.clearTimeout(partyReorderTimerRef.current);
+    setPartyReorderActive(true);
+    partyReorderTimerRef.current = window.setTimeout(() => {
+      setPartyReorderActive(false);
+      partyReorderTimerRef.current = 0;
+    }, EXPEDITION_PARTY_REORDER_MS);
+  }, [gameState]);
 
   useEffect(() => {
     latestGameStateRef.current = gameState;
@@ -1169,6 +1216,7 @@ function ExpeditionScene({ gameState, onCombatReadyChange, onExpeditionComplete,
   }, [gameState]);
 
   const expedition = createExpeditionViewModel(displayGameState);
+  const partyExpedition = displayGameState === gameState ? expedition : createExpeditionViewModel(gameState);
   const latestExpedition = stageTransition ? createExpeditionViewModel(gameState) : expedition;
   const stage = expedition.stage;
   assert(Array.isArray(stage.normalEnemyNames) && stage.normalEnemyNames.length > 0, `원정대 stage normalEnemyNames 누락: ${stage.id}`);
@@ -1223,8 +1271,9 @@ function ExpeditionScene({ gameState, onCombatReadyChange, onExpeditionComplete,
   const defeatMap = activeBattleReport
     ? expeditionEnemyDefeatMap(activeBattleReport, stage.globalStage, currentStageEnemyVisuals)
     : new Map();
-  const partyMotionClass = !expedition.ready ? "standing" : isStageTransitioning ? "running" : isEncounterIntro ? "standing" : "combat";
-  const combatReady = expedition.ready && !isStageTransitioning && !isBattleReplaying && !isEncounterIntro;
+  const visualPartyReady = partyExpedition.partyMembers.length > 0;
+  const partyMotionClass = !visualPartyReady ? "standing" : isStageTransitioning ? "running" : isEncounterIntro ? "standing" : "combat";
+  const combatReady = partyExpedition.ready && !isStageTransitioning && !isBattleReplaying && !isEncounterIntro;
   const shouldRenderEnemies = !isStageTransitioning || isEncounterIntro;
   const sceneBoss = isStageTransitioning && isEncounterIntro ? latestExpedition.stage.isBoss : stage.isBoss;
 
@@ -1273,10 +1322,20 @@ function ExpeditionScene({ gameState, onCombatReadyChange, onExpeditionComplete,
           </div>
           <em>{isStageTransitioning ? `Stage ${stageTransition.toStage} 이동중` : isBattleReplaying ? "전투 정리중" : isEncounterIntro ? "몬스터 조우" : stage.isBoss ? "보스 게이트" : `다음 보스 ${stage.nextBossStageCount} Stage`}</em>
         </div>
-        <div className={expedition.ready ? `expedition-party-visual ${partyMotionClass}` : "expedition-party-visual empty"} data-party-motion={partyMotionClass}>
-          {expedition.ready ? (
-            expedition.partyMembers.map((member) => (
-              <div className={`expedition-unit-avatar large unit-${member.slot} role-${member.role}`} key={member.id} title={`${member.careerName} · ${member.roleLabel} · HP ${formatCompactNumber(member.combatStats.hp)} · 공격 ${formatCompactNumber(member.combatStats.attack)}`}>
+        <div
+          className={visualPartyReady ? `expedition-party-visual ${partyMotionClass}${partyReorderActive ? " reordering" : ""}` : "expedition-party-visual empty"}
+          data-party-motion={partyMotionClass}
+          data-party-reorder={partyReorderActive ? "active" : "idle"}
+        >
+          {visualPartyReady ? (
+            partyExpedition.partyMembers.map((member) => (
+              <div
+                className={`expedition-unit-avatar large unit-${member.slot} role-${member.role}`}
+                data-member-id={member.id}
+                data-party-slot={member.slot}
+                key={member.id}
+                title={`${member.slot}번 · ${member.careerName} · ${member.roleLabel} · HP ${formatCompactNumber(member.combatStats.hp)} · 공격 ${formatCompactNumber(member.combatStats.attack)}`}
+              >
                 <SpriteFrames className="expedition-unit-frame" frames={getCompanionFrameUrls(member.career, member.avatarGender)} />
                 <span className="expedition-role-badge">{member.roleLabel}</span>
                 <i className="expedition-hp-bar ally" aria-label={`${member.careerName} HP`}>
@@ -1802,6 +1861,12 @@ const expeditionDispatchSortOptions = [
   { id: "role", label: "역할" },
 ];
 
+const expeditionPartySlotLabels = ["앞", "뒤", "중", "뒤", "중"];
+
+function expeditionPartySlotLabel(index) {
+  return expeditionPartySlotLabels[index] || "배치";
+}
+
 const careerChoiceSortOptions = [
   { id: "rank", label: "추천순" },
   { id: "income", label: "수입" },
@@ -1909,12 +1974,86 @@ function ExpeditionGrowthPanel({ management, onLevelUp }) {
   );
 }
 
-function ExpeditionPartyPanel({ management, onAssign, onRecommend, onRemove }) {
+function ExpeditionPartyPanel({ management, onAssign, onRecommend, onRemove, onReorder }) {
   const [roleFilter, setRoleFilter] = useState("all");
   const [sortKey, setSortKey] = useState("power");
+  const [dragState, setDragState] = useState({ from: null, over: null });
+  const [reorderBusy, setReorderBusy] = useState({ from: null, to: null });
+  const pointerDragRef = useRef({ from: null, over: null, pointerId: null });
+  const reorderBusyTimerRef = useRef(0);
   const partyFull = management.party.length >= management.partySize;
   const filteredMembers = roleFilter === "all" ? management.members : management.members.filter((member) => member.role === roleFilter);
   const visibleMembers = sortedExpeditionMembers(filteredMembers, sortKey);
+  useEffect(() => () => {
+    if (reorderBusyTimerRef.current) window.clearTimeout(reorderBusyTimerRef.current);
+  }, []);
+  const clearDragState = useCallback(() => {
+    pointerDragRef.current = { from: null, over: null, pointerId: null };
+    setDragState({ from: null, over: null });
+  }, []);
+  const commitReorder = useCallback((from, to) => {
+    if (!Number.isInteger(from) || !Number.isInteger(to) || from === to) return;
+    const target = Math.min(to, Math.max(0, management.party.length - 1));
+    if (from === target) return;
+    if (reorderBusyTimerRef.current) window.clearTimeout(reorderBusyTimerRef.current);
+    setReorderBusy({ from, to: target });
+    reorderBusyTimerRef.current = window.setTimeout(() => {
+      setReorderBusy({ from: null, to: null });
+      reorderBusyTimerRef.current = 0;
+    }, EXPEDITION_PARTY_REORDER_MS);
+    onReorder(from, to);
+  }, [management.party.length, onReorder]);
+  const slotIndexFromPoint = useCallback((event) => {
+    const element = document.elementFromPoint(event.clientX, event.clientY);
+    const slot = element?.closest?.("[data-expedition-party-slot]");
+    if (!slot) return null;
+    const index = Number(slot.getAttribute("data-expedition-party-slot"));
+    return Number.isInteger(index) ? index : null;
+  }, []);
+  const handleNativeDragStart = useCallback((event, index, member) => {
+    if (!member) {
+      event.preventDefault();
+      return;
+    }
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", String(index));
+    setDragState({ from: index, over: index });
+  }, []);
+  const handleNativeDragOver = useCallback((event, index) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    setDragState((current) => (current.over === index ? current : { ...current, over: index }));
+  }, []);
+  const handleNativeDrop = useCallback((event, index) => {
+    event.preventDefault();
+    const from = Number(event.dataTransfer.getData("text/plain"));
+    commitReorder(from, index);
+    clearDragState();
+  }, [clearDragState, commitReorder]);
+  const handlePointerDown = useCallback((event, index, member) => {
+    if (!member || event.pointerType === "mouse") return;
+    const target = event.target instanceof Element ? event.target : null;
+    if (target?.closest("button")) return;
+    pointerDragRef.current = { from: index, over: index, pointerId: event.pointerId };
+    setDragState({ from: index, over: index });
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+  }, []);
+  const handlePointerMove = useCallback((event) => {
+    const active = pointerDragRef.current;
+    if (active.pointerId !== event.pointerId) return;
+    const over = slotIndexFromPoint(event);
+    active.over = over;
+    setDragState({ from: active.from, over });
+    event.preventDefault();
+  }, [slotIndexFromPoint]);
+  const handlePointerEnd = useCallback((event) => {
+    const active = pointerDragRef.current;
+    if (active.pointerId !== event.pointerId) return;
+    const over = slotIndexFromPoint(event) ?? active.over;
+    if (Number.isInteger(active.from) && Number.isInteger(over)) commitReorder(active.from, over);
+    event.currentTarget.releasePointerCapture?.(event.pointerId);
+    clearDragState();
+  }, [clearDragState, commitReorder, slotIndexFromPoint]);
   return (
     <section className="expedition-party-panel">
       <header className="section-title compact-title">
@@ -1927,27 +2066,55 @@ function ExpeditionPartyPanel({ management, onAssign, onRecommend, onRemove }) {
           <span>추천 편성</span>
         </button>
       </header>
-      <div className="expedition-party-slots">
-        {management.partySlots.map((member, index) => (
-          <article className={member ? "expedition-party-slot filled" : "expedition-party-slot"} key={`slot-${index}`}>
-            <b>{index + 1}</b>
-            {member ? (
-              <>
-                <ExpeditionMemberPortrait member={member} size="medium" />
-                <strong>{member.careerName}</strong>
-                <span>{member.roleLabel} · {member.tierName} · Lv.{member.level}</span>
-                <button className="icon-button dark" type="button" title="파티 해제" onClick={() => onRemove(member.id)}>
-                  <X size={15} />
-                </button>
-              </>
-            ) : (
-              <>
-                <strong>빈 슬롯</strong>
-                <span>편성 가능</span>
-              </>
-            )}
-          </article>
-        ))}
+      <div className="expedition-party-slots" role="list" aria-label="원정 파티 배치">
+        {management.partySlots.map((member, index) => {
+          const slotLabel = expeditionPartySlotLabel(index);
+          const slotClassName = [
+            "expedition-party-slot",
+            member ? "filled draggable" : "empty",
+            dragState.from === index ? "dragging" : "",
+            dragState.from !== null && dragState.from !== index && dragState.over === index ? "drop-target" : "",
+            reorderBusy.from === index || reorderBusy.to === index ? "reorder-loading" : "",
+          ].filter(Boolean).join(" ");
+          return (
+            <article
+              aria-label={`${index + 1}번 ${slotLabel} 슬롯${member ? ` ${member.careerName}` : " 빈 슬롯"}`}
+              className={slotClassName}
+              data-expedition-party-slot={index}
+              data-member-id={member?.id || ""}
+              data-party-slot={index + 1}
+              draggable={Boolean(member)}
+              key={`slot-${index}`}
+              onDragEnd={clearDragState}
+              onDragOver={(event) => handleNativeDragOver(event, index)}
+              onDragStart={(event) => handleNativeDragStart(event, index, member)}
+              onDrop={(event) => handleNativeDrop(event, index)}
+              onPointerCancel={clearDragState}
+              onPointerDown={(event) => handlePointerDown(event, index, member)}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerEnd}
+              role="listitem"
+              title={member ? "드래그해서 파티 순서 변경" : "빈 파티 슬롯"}
+            >
+              <b>{index + 1}<small>{slotLabel}</small></b>
+              {member ? (
+                <>
+                  <ExpeditionMemberPortrait member={member} size="medium" />
+                  <strong>{member.careerName}</strong>
+                  <span>{member.roleLabel} · {member.tierName} · Lv.{member.level}</span>
+                  <button className="icon-button dark" type="button" title="파티 해제" onClick={() => onRemove(member.id)}>
+                    <X size={15} />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <strong>빈 슬롯</strong>
+                  <span>편성 가능</span>
+                </>
+              )}
+            </article>
+          );
+        })}
       </div>
       <div className="expedition-party-roster">
         <header className="section-title compact-title">
@@ -2305,14 +2472,14 @@ function ExpeditionLogPanel({ management }) {
   );
 }
 
-function ExpeditionManagementPanel({ activeTab, gameState, onAssign, onClaimDispatch, onFuse, onLevelUp, onRecommend, onRemove, onStartDispatch, onTabChange, onToggleLock }) {
+function ExpeditionManagementPanel({ activeTab, gameState, onAssign, onClaimDispatch, onFuse, onLevelUp, onRecommend, onRemove, onReorder, onStartDispatch, onTabChange, onToggleLock }) {
   const management = createExpeditionManagementViewModel(gameState);
   return (
     <>
       <ExpeditionTabBar activeTab={activeTab} management={management} onTabChange={onTabChange} />
       <section className="expedition-viewport">
         {activeTab === "growth" && <ExpeditionGrowthPanel management={management} onLevelUp={onLevelUp} />}
-        {activeTab === "party" && <ExpeditionPartyPanel management={management} onAssign={onAssign} onRecommend={onRecommend} onRemove={onRemove} />}
+        {activeTab === "party" && <ExpeditionPartyPanel management={management} onAssign={onAssign} onRecommend={onRecommend} onRemove={onRemove} onReorder={onReorder} />}
         {activeTab === "dispatch" && <ExpeditionDispatchPanel gameState={gameState} onClaimDispatch={onClaimDispatch} onStartDispatch={onStartDispatch} />}
         {activeTab === "manage" && <ExpeditionManagePanel management={management} onFuse={onFuse} onToggleLock={onToggleLock} />}
         {activeTab === "log" && <ExpeditionLogPanel management={management} />}
@@ -4147,6 +4314,10 @@ function GameApp({ loaded }) {
     setGameState((state) => assignRecommendedExpeditionParty(state));
   };
 
+  const handleExpeditionReorder = (fromSlotIndex, toSlotIndex) => {
+    setGameState((state) => reorderExpeditionPartyMembers(state, fromSlotIndex, toSlotIndex));
+  };
+
   const handleExpeditionLevelUp = (memberId) => {
     setGameState((state) => levelUpExpeditionMember(state, memberId));
   };
@@ -4281,6 +4452,7 @@ function GameApp({ loaded }) {
               onLevelUp={handleExpeditionLevelUp}
               onRecommend={handleExpeditionRecommend}
               onRemove={handleExpeditionRemove}
+              onReorder={handleExpeditionReorder}
               onStartDispatch={handleStartExpeditionDispatch}
               onTabChange={setExpeditionTab}
               onToggleLock={handleExpeditionToggleLock}

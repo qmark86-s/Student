@@ -321,6 +321,12 @@ async function collectSnapshot(page) {
       expeditionTabs: document.querySelectorAll(".expedition-tab").length,
       expeditionGrowthCards: document.querySelectorAll(".expedition-growth-card").length,
       expeditionPartySlots: document.querySelectorAll(".expedition-party-slot").length,
+      expeditionPartySlotMemberIds: [...document.querySelectorAll(".expedition-party-slot")].map((node) => node.getAttribute("data-member-id") || ""),
+      expeditionPartySlotLoading: document.querySelectorAll(".expedition-party-slot.reorder-loading").length,
+      expeditionScenePartyMemberIds: [...document.querySelectorAll(".expedition-unit-avatar.large")]
+        .slice()
+        .sort((left, right) => Number(left.getAttribute("data-party-slot") || 0) - Number(right.getAttribute("data-party-slot") || 0))
+        .map((node) => node.getAttribute("data-member-id") || ""),
       expeditionRosterCards: document.querySelectorAll(".expedition-roster-card").length,
       expeditionManageCards: document.querySelectorAll(".expedition-manage-card").length,
       expeditionDispatchAssignments: state.expedition.dispatch?.assignments?.length ?? 0,
@@ -357,6 +363,7 @@ async function collectSnapshot(page) {
       expeditionEnemyApproachDurationMs: parseMs(enemyGroupStyle?.animationDuration),
       expeditionEnemyApproachDelayMs: parseMs(enemyGroupStyle?.animationDelay),
       expeditionPartyMotion: partyVisual?.getAttribute("data-party-motion") || "",
+      expeditionPartyReorderState: partyVisual?.getAttribute("data-party-reorder") || "",
       expeditionPartyRunning: partyVisual?.classList.contains("running") || false,
       expeditionPartyCombat: partyVisual?.classList.contains("combat") || false,
       expeditionEnemyAssetKinds: new Set(currentEnemies.map((node) => node.getAttribute("data-enemy-asset")).filter(Boolean)).size,
@@ -507,6 +514,61 @@ try {
     state.expedition.dispatch = { assignments: [], history: [] };
     return state;
   }, saveKey);
+
+  const reorderPage = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+  reorderPage.on("console", (message) => {
+    if (message.type() === "error") consoleErrors.push(`[reorder] ${message.text()}`);
+  });
+  reorderPage.on("pageerror", (error) => pageErrors.push(`[reorder] ${error.message}`));
+  await reorderPage.addInitScript(({ key, state }) => localStorage.setItem(key, JSON.stringify(state)), {
+    key: saveKey,
+    state: dispatchState,
+  });
+  await reorderPage.goto(baseUrl, { waitUntil: "networkidle" });
+  await reorderPage.getByRole("button", { name: "원정대" }).click();
+  await reorderPage.waitForSelector('.expedition-scene .expedition-unit-avatar.large[data-member-id]', { timeout: 6000 });
+  await reorderPage.locator(".expedition-tab", { hasText: "파티" }).click();
+  await reorderPage.waitForSelector(".expedition-party-slot.filled[data-member-id]", { timeout: 6000 });
+  const reorderBefore = await collectSnapshot(reorderPage);
+  const reorderExpectedPartyIds = [
+    reorderBefore.expeditionPartySlotMemberIds[4],
+    reorderBefore.expeditionPartySlotMemberIds[1],
+    reorderBefore.expeditionPartySlotMemberIds[2],
+    reorderBefore.expeditionPartySlotMemberIds[3],
+    reorderBefore.expeditionPartySlotMemberIds[0],
+  ];
+  await reorderPage.evaluate(() => {
+    const slots = [...document.querySelectorAll(".expedition-party-slot.filled")];
+    const source = slots[0];
+    const target = slots[4];
+    if (!source || !target) throw new Error("원정대 파티 드래그 검증 슬롯을 찾지 못했습니다.");
+    const dataTransfer = new DataTransfer();
+    source.dispatchEvent(new DragEvent("dragstart", { bubbles: true, cancelable: true, dataTransfer }));
+    target.dispatchEvent(new DragEvent("dragover", { bubbles: true, cancelable: true, dataTransfer }));
+    target.dispatchEvent(new DragEvent("drop", { bubbles: true, cancelable: true, dataTransfer }));
+    source.dispatchEvent(new DragEvent("dragend", { bubbles: true, cancelable: true, dataTransfer }));
+  });
+  await reorderPage.waitForFunction(() => {
+    const partyVisual = document.querySelector(".expedition-party-visual");
+    return partyVisual?.getAttribute("data-party-reorder") === "active" && document.querySelectorAll(".expedition-party-slot.reorder-loading").length >= 2;
+  }, null, { timeout: 1500 });
+  const reorderDuring = await collectSnapshot(reorderPage);
+  await reorderPage.waitForFunction(
+    ({ expected, key }) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      return JSON.stringify(state.expedition.partyMemberIds.slice(0, expected.length)) === JSON.stringify(expected);
+    },
+    { expected: reorderExpectedPartyIds, key: saveKey },
+    { timeout: 6000 },
+  );
+  const reorderAfter = await collectSnapshot(reorderPage);
+  await reorderPage.waitForFunction(() => {
+    const partyVisual = document.querySelector(".expedition-party-visual");
+    return partyVisual?.getAttribute("data-party-reorder") !== "active" && document.querySelectorAll(".expedition-party-slot.reorder-loading").length === 0;
+  }, null, { timeout: 2000 });
+  const reorderSettled = await collectSnapshot(reorderPage);
+  await reorderPage.close();
+
   const dispatchPage = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
   dispatchPage.on("console", (message) => {
     if (message.type() === "error") consoleErrors.push(`[dispatch] ${message.text()}`);
@@ -714,6 +776,17 @@ try {
   if (afterAccept.expeditionGrowthCards !== 1) failures.push(`Expected 1 expedition growth card, got ${afterAccept.expeditionGrowthCards}`);
   if (partyTab.expeditionPartySlots !== 5) failures.push(`Expected 5 expedition party slots, got ${partyTab.expeditionPartySlots}`);
   if (partyTab.expeditionRosterCards !== 1) failures.push(`Expected 1 expedition roster card, got ${partyTab.expeditionRosterCards}`);
+  if (reorderBefore.expeditionPartySlotMemberIds.filter(Boolean).length !== 5) failures.push("Expected reorder setup to have 5 filled party slots");
+  if (reorderDuring.expeditionPartyReorderState !== "active") failures.push("Expedition party reorder did not expose active scene reorder state");
+  if (reorderDuring.expeditionPartySlotLoading < 2) failures.push(`Expected at least 2 loading party slots during reorder, got ${reorderDuring.expeditionPartySlotLoading}`);
+  if (JSON.stringify(reorderAfter.expeditionPartySlotMemberIds.filter(Boolean)) !== JSON.stringify(reorderExpectedPartyIds)) {
+    failures.push("Expedition party drag reorder did not update party slot order");
+  }
+  if (JSON.stringify(reorderAfter.expeditionScenePartyMemberIds) !== JSON.stringify(reorderExpectedPartyIds)) {
+    failures.push("Expedition party drag reorder did not sync scene unit order");
+  }
+  if (reorderSettled.expeditionPartyReorderState === "active") failures.push("Expedition party reorder scene state did not settle");
+  if (reorderSettled.expeditionPartySlotLoading !== 0) failures.push(`Expected party slot loading to settle to 0, got ${reorderSettled.expeditionPartySlotLoading}`);
   if (manageTab.expeditionManageCards !== 1) failures.push(`Expected 1 expedition manage card, got ${manageTab.expeditionManageCards}`);
   if (!logTab.text.includes("원정 기록")) failures.push("Expedition log tab did not render 원정 기록");
   if (dispatchBeforeStart.expeditionTabs !== 5) failures.push(`Expected dispatch setup to expose 5 expedition tabs, got ${dispatchBeforeStart.expeditionTabs}`);
