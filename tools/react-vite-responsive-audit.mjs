@@ -560,8 +560,8 @@ function collectBattleLayoutParityFailures(student, expedition) {
   if (!expedition.activeTabLabel.startsWith("성장")) {
     failures.push(`expedition active lower tab ${expedition.activeTabLabel || "(missing)"}/성장`);
   }
-  if (!expedition.managementTitle.startsWith("출전 대원 성장")) {
-    failures.push(`expedition management title ${expedition.managementTitle || "(missing)"}/출전 대원 성장`);
+  if (!expedition.managementTitle.startsWith("출전 성장")) {
+    failures.push(`expedition management title ${expedition.managementTitle || "(missing)"}/출전 성장`);
   }
 
   return failures;

@@ -113,6 +113,15 @@ try {
 
     const response = await page.goto(baseUrl, { waitUntil: "networkidle" });
     await page.waitForSelector(".react-battle-arena", { timeout: 15000 });
+    const investmentToggle = page.locator(".investment-panel .compact-disclosure-head");
+    const investmentToggleCount = await investmentToggle.count();
+    const investmentCollapsedByDefault = investmentToggleCount === 1
+      ? await investmentToggle.first().getAttribute("aria-expanded") === "false"
+      : false;
+    if (investmentToggleCount === 1) {
+      await investmentToggle.first().click();
+      await page.waitForSelector('.investment-panel input[type="range"]', { timeout: 5000 });
+    }
 
     const metrics = await page.evaluate(() => {
       const doc = document.documentElement;
@@ -135,6 +144,7 @@ try {
         hasBattleArena: Boolean(document.querySelector(".react-battle-arena")),
         hasGrowthPanel: Boolean(document.querySelector(".growth-panel")),
         hasInvestmentPanel: Boolean(document.querySelector(".investment-panel")),
+        investmentOpen: document.querySelector(".investment-panel .compact-disclosure-head")?.getAttribute("aria-expanded") === "true",
         studentSprites: document.querySelectorAll(".student-sprite").length,
         studentAtlasLoaded: Boolean(firstStudentStyle?.backgroundImage.includes("url(")),
         enemySprites: document.querySelectorAll(".battle-scene-enemy").length,
@@ -147,6 +157,8 @@ try {
         rangeInputs: document.querySelectorAll('input[type="range"]').length,
       };
     });
+    metrics.investmentToggleCount = investmentToggleCount;
+    metrics.investmentCollapsedByDefault = investmentCollapsedByDefault;
 
     const screenshotPath = resolve(outputDir, `${viewport.name}.png`);
     await page.screenshot({ path: screenshotPath, fullPage: true });
@@ -162,7 +174,9 @@ try {
     if (!metrics.hasHeader || !metrics.hasStatus || !metrics.hasBattleArena || !metrics.hasGrowthPanel) {
       failures.push("Missing core first-screen sections");
     }
-    if (!metrics.hasInvestmentPanel || metrics.rangeInputs !== 5) failures.push("Investment controls are incomplete");
+    if (!metrics.hasInvestmentPanel || metrics.investmentToggleCount !== 1 || !metrics.investmentCollapsedByDefault || !metrics.investmentOpen || metrics.rangeInputs !== 5) {
+      failures.push("Investment controls are incomplete");
+    }
     if (metrics.studentSprites !== 1 || !metrics.studentAtlasLoaded) failures.push("Student atlas sprite did not load");
     if (metrics.enemySprites < 3 || !metrics.enemyAtlasLoaded) failures.push(`Expected at least 3 loaded enemy sprites, got ${metrics.enemySprites}`);
     if (metrics.debugButtons !== 0 || metrics.hasDebugText) failures.push("Production smoke must not expose DEBUG controls");

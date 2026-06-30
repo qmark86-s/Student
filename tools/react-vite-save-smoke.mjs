@@ -517,7 +517,7 @@ try {
   const failures = [];
   if (!response || response.status() !== 200) failures.push(`HTTP status ${response?.status() ?? "missing"}`);
   if (beforeClick.debugButtonCount !== 1) failures.push(`QA smoke expected 1 debug button, got ${beforeClick.debugButtonCount}`);
-  for (const expectedText of ["9회차 · N수", "2수", "98,765원", "123", "45", "678", "9", "장착 장비 2/2", "전투력 +29", "Lv.3", "적성 240", "213"]) {
+  for (const expectedText of ["9회차 · N수", "2수", "98,765원", "123", "45", "678", "9", "장비 2/2", "전투력 +29", "Lv.3", "적성 240", "213"]) {
     if (!beforeClick.text.includes(expectedText)) failures.push(`Missing text from injected save: ${expectedText}`);
   }
   if (beforeClick.state.current.totalStudyPoints !== 678) failures.push("Injected save was not loaded before click");

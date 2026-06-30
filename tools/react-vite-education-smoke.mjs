@@ -219,7 +219,7 @@ try {
   if (beforeUpgrade.advancedButtonText !== expectedAdvancedCost.toLocaleString("ko-KR")) {
     failures.push(`Expected advanced cost ${expectedAdvancedCost}, got ${beforeUpgrade.advancedButtonText}`);
   }
-  for (const expectedText of ["조기교육", "선행학습", "사립초 전학", "사립중 전학", "특목고 전학", "논술 스튜디오", "과학 탐구반", "N수 과외", "진로 컨설팅", "적용 배율", "가능 교육"]) {
+  for (const expectedText of ["조기교육", "선행학습", "사립초 전학", "사립중 전학", "특목고 전학", "논술 스튜디오", "과학 탐구반", "N수 과외", "진로 컨설팅", "배율", "가능"]) {
     if (!beforeUpgrade.text.includes(expectedText)) failures.push(`Missing education text: ${expectedText}`);
   }
   if (!beforeUpgrade.text.includes("x1.12")) failures.push("Expected initial education multiplier x1.12");
@@ -227,7 +227,7 @@ try {
   if (afterUpgrade.state.money !== 100000 - expectedAdvancedCost) failures.push(`Expected money ${100000 - expectedAdvancedCost}, got ${afterUpgrade.state.money}`);
   if (!afterUpgrade.text.includes("선행학습 Lv.3/60")) failures.push("Education panel did not refresh upgraded level text");
   if (!afterUpgrade.text.includes("x1.16")) failures.push("Expected upgraded education multiplier x1.16");
-  if (!growth.text.includes("교육 성장 배율") || !growth.text.includes("x1.16")) failures.push("Growth panel did not show upgraded education multiplier");
+  if (!growth.text.includes("교육") || !growth.text.includes("x1.16")) failures.push("Growth panel did not show upgraded education multiplier");
   for (const [name, panel] of [
     ["before", beforeUpgrade],
     ["after", afterUpgrade],

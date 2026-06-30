@@ -1393,12 +1393,29 @@ function Metric({ label, value }) {
   );
 }
 
+function CompactDisclosure({ children, className = "", defaultOpen = false, meta = "", title }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <section className={open ? `compact-disclosure open ${className}` : `compact-disclosure ${className}`}>
+      <button className="compact-disclosure-head" type="button" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+        <span className="compact-disclosure-copy">
+          <strong>{title}</strong>
+          {meta && <small>{meta}</small>}
+        </span>
+        <ChevronRight size={15} />
+        <b>{open ? "접기" : "세부"}</b>
+      </button>
+      {open && <div className="compact-disclosure-body">{children}</div>}
+    </section>
+  );
+}
+
 function SummaryCards({ summary }) {
   return (
     <div className="panel accent-panel income-panel summary-grid">
-      <Metric label="보유 공부량" value={formatMoney(summary.unspentStudyPoints)} />
-      <Metric label="누적 공부량" value={formatMoney(summary.totalStudyPoints)} />
-      <Metric label="처치한 책" value={formatMoney(summary.totalKills)} />
+      <Metric label="보유" value={formatMoney(summary.unspentStudyPoints)} />
+      <Metric label="누적" value={formatMoney(summary.totalStudyPoints)} />
+      <Metric label="처치" value={formatMoney(summary.totalKills)} />
     </div>
   );
 }
@@ -1406,23 +1423,17 @@ function SummaryCards({ summary }) {
 function BuffCards({ summary }) {
   return (
     <div className="panel equipment-impact-panel buff-grid">
-      <Metric label={`장착 장비 ${summary.equipmentCount}/2`} value={`전투력 +${summary.equipmentPower}`} />
-      <Metric label="교육 성장 배율" value={`x${summary.educationMultiplier.toFixed(2)}`} />
-      <Metric label="다음 공부량" value={`+${summary.nextStudyGain}`} />
+      <Metric label={`장비 ${summary.equipmentCount}/2`} value={`전투력 +${summary.equipmentPower}`} />
+      <Metric label="교육" value={`x${summary.educationMultiplier.toFixed(2)}`} />
+      <Metric label="다음" value={`+${summary.nextStudyGain}`} />
     </div>
   );
 }
 
 function InvestmentPanel({ summary }) {
+  const allocationTotal = Object.values(summary.allocationWeights).reduce((sum, value) => sum + value, 0);
   return (
-    <section className="panel allocation-panel investment-panel" aria-label="자동 투자 비율">
-      <header className="allocation-head">
-        <div>
-          <strong>자동 투자 비율</strong>
-          <span>직접 설정</span>
-        </div>
-        <b>합계 {Object.values(summary.allocationWeights).reduce((sum, value) => sum + value, 0)}</b>
-      </header>
+    <CompactDisclosure className="panel allocation-panel investment-panel" title="투자 비율" meta={`합계 ${allocationTotal}`}>
       <div className="allocation-grid">
         {subjects.map((subject) => (
           <label className="allocation-row" key={subject.id}>
@@ -1435,7 +1446,7 @@ function InvestmentPanel({ summary }) {
           </label>
         ))}
       </div>
-    </section>
+    </CompactDisclosure>
   );
 }
 
@@ -1476,7 +1487,7 @@ function GrowthPanel({ saveError, saveSource, summary }) {
               {statButtons.map((button) => (
                 <button disabled={button.cost <= 0 || summary.unspentStudyPoints < button.cost} type="button" key={button.label}>
                   <span>{button.label}</span>
-                  <small>비용 {formatCompactNumber(button.cost)}</small>
+                  <small>{formatCompactNumber(button.cost)}</small>
                 </button>
               ))}
             </div>
@@ -1860,9 +1871,9 @@ function ExpeditionGrowthPanel({ management, onLevelUp }) {
       <header className="section-title compact-title">
         <div>
           <Sparkles size={18} />
-          <h2>출전 대원 성장 {management.upgradeableCount}명 투자 가능</h2>
+          <h2>출전 성장 {management.upgradeableCount}명</h2>
         </div>
-        <span>보유 EXP {formatCompactNumber(management.trainingExp)}</span>
+        <span>EXP {formatCompactNumber(management.trainingExp)}</span>
       </header>
       {management.growthMembers.length === 0 ? (
         <ExpeditionEmpty icon={Users} title="출전 대원 없음" text="파티에서 대원을 편성하세요." />
@@ -1932,7 +1943,7 @@ function ExpeditionPartyPanel({ management, onAssign, onRecommend, onRemove }) {
             ) : (
               <>
                 <strong>빈 슬롯</strong>
-                <span>대원 편성 가능</span>
+                <span>편성 가능</span>
               </>
             )}
           </article>
@@ -1942,7 +1953,7 @@ function ExpeditionPartyPanel({ management, onAssign, onRecommend, onRemove }) {
         <header className="section-title compact-title">
           <div>
             <Medal size={18} />
-            <h2>편성 후보 {filteredMembers.length}/{management.members.length}명</h2>
+            <h2>후보 {filteredMembers.length}/{management.members.length}</h2>
           </div>
         </header>
         <div className="expedition-list-toolbar">
@@ -2014,12 +2025,7 @@ function ExpeditionManagePanel({ management, onFuse, onToggleLock }) {
             <ExpeditionRoleFilter value={roleFilter} onChange={setRoleFilter} />
             <ListSortControl label="대원 관리" options={expeditionManageSortOptions} value={sortKey} onChange={setSortKey} />
           </div>
-          {management.fusionCandidates.length === 0 ? (
-            <article className="expedition-empty compact">
-              <Medal size={24} />
-              <strong>합성 후보 없음</strong>
-            </article>
-          ) : (
+          {management.fusionCandidates.length > 0 && (
             <div className="expedition-fusion-list">
               {management.fusionCandidates.map((group) => (
                 <article className="expedition-fusion-card" key={group.key}>
@@ -2287,12 +2293,13 @@ function ExpeditionLogPanel({ management }) {
         <p className="empty-state">원정 기록이 아직 없습니다.</p>
       )}
       {lastBattle && (
-        <div className="expedition-battle-log">
-          <strong>마지막 전투 · Stage {lastBattle.stage} · {lastBattle.result === "win" ? "승리" : "실패"} · {lastBattle.resultReason}</strong>
-          {lastBattle.events.slice(-8).map((event, index) => (
-            <p key={`${event.time}-${event.actor}-${event.target}-${index}`}>{event.time.toFixed(2)}초 · {event.text}</p>
-          ))}
-        </div>
+        <CompactDisclosure className="expedition-battle-disclosure" title={`마지막 전투 · Stage ${lastBattle.stage}`} meta={`${lastBattle.result === "win" ? "승리" : "실패"} · ${lastBattle.resultReason}`}>
+          <div className="expedition-battle-log">
+            {lastBattle.events.slice(-8).map((event, index) => (
+              <p key={`${event.time}-${event.actor}-${event.target}-${index}`}>{event.time.toFixed(2)}초 · {event.text}</p>
+            ))}
+          </div>
+        </CompactDisclosure>
       )}
     </section>
   );
@@ -3024,15 +3031,15 @@ function WorkPanel({ gameState }) {
         </header>
         <section className="panel accent-panel income-panel record-summary-grid work-summary-grid" aria-label="직장 요약">
           <div className="metric">
-            <span>분당 수입</span>
+            <span>수입/분</span>
             <strong>{formatMoney(totalIncome)}원</strong>
           </div>
           <div className="metric">
-            <span>직장 슬롯</span>
+            <span>슬롯</span>
             <strong>0/{workSlots}</strong>
           </div>
           <div className="metric">
-            <span>오프라인 한도</span>
+            <span>한도</span>
             <strong>12시간</strong>
           </div>
         </section>
@@ -3058,27 +3065,18 @@ function WorkPanel({ gameState }) {
       </header>
       <section className="record-summary-grid work-summary-grid" aria-label="직장 요약">
         <article>
-          <span>등록 졸업생</span>
+          <span>등록</span>
           <strong>{careerAlumni.length}명</strong>
         </article>
         <article>
-          <span>분당 수입</span>
+          <span>수입/분</span>
           <strong>{formatMoney(totalIncome)}원</strong>
         </article>
         <article>
-          <span>평균 전투</span>
+          <span>전투</span>
           <strong>x{averagePower.toFixed(2)}</strong>
         </article>
       </section>
-      <article className="record-card work-income-card">
-        <header>
-          <div>
-            <strong>졸업생 직업 수입</strong>
-            <small>슬롯 {workSlots}개 · 직업 졸업생 {careerAlumni.length}명</small>
-          </div>
-          <b>{formatMoney(totalIncome)}원/분</b>
-        </header>
-      </article>
       {careerAlumni.length > 0 ? (
         <section className="record-list work-companion-list" aria-label="직장 졸업생 목록">
           {careerAlumni.map((alumni) => {
@@ -3163,35 +3161,12 @@ function careerSubjectWeights(career) {
   }));
 }
 
-function careerWeightGuide(career) {
-  return careerSubjectWeights(career).map(({ subject, value }) => {
-    return `${subject.label} ${value.toFixed(2)}`;
-  }).join(" ");
-}
-
-function ArchiveGuideIcon({ size = 15 }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sliders-horizontal" aria-hidden="true">
-      <line x1="21" x2="14" y1="4" y2="4" />
-      <line x1="10" x2="3" y1="4" y2="4" />
-      <line x1="21" x2="12" y1="12" y2="12" />
-      <line x1="8" x2="3" y1="12" y2="12" />
-      <line x1="21" x2="16" y1="20" y2="20" />
-      <line x1="12" x2="3" y1="20" y2="20" />
-      <line x1="14" x2="14" y1="2" y2="6" />
-      <line x1="8" x2="8" y1="10" y2="14" />
-      <line x1="16" x2="16" y1="18" y2="22" />
-    </svg>
-  );
-}
-
 function ArchivePanel({ gameState }) {
   const histories = gameState.history;
   // 도감 보너스는 발견 직업(careerAlumni + history + archive) 기반으로 실제 적용된다.
   const discovered = discoveredCareerIdsFor(gameState);
   const effectTotals = collectionBonuses(gameState);
   const orderedCareers = careers.slice().sort((a, b) => finiteNumber(a.choiceRank, `careers.json choiceRank 값이 올바르지 않습니다: ${a.id}`) - finiteNumber(b.choiceRank, `careers.json choiceRank 값이 올바르지 않습니다: ${b.id}`));
-  const discoveredCareers = orderedCareers.filter((career) => discovered.has(career.id));
   const activeEffectCount = careerCollectionData.collectionEffects.filter((effect) => effectTotals[effect.id] > 0).length;
   const completionPercent = Math.round((discovered.size / Math.max(1, careers.length)) * 100);
 
@@ -3206,15 +3181,15 @@ function ArchivePanel({ gameState }) {
       </div>
       <div className="panel accent-panel income-panel archive-summary-grid" aria-label="도감 요약">
         <div className="metric">
-          <span>발견 직업</span>
+          <span>발견</span>
           <strong>{discovered.size}개</strong>
         </div>
         <div className="metric">
-          <span>도감 완성</span>
+          <span>완성</span>
           <strong>{completionPercent}%</strong>
         </div>
         <div className="metric">
-          <span>적용 효과</span>
+          <span>효과</span>
           <strong>{activeEffectCount}종</strong>
         </div>
       </div>
@@ -3253,17 +3228,6 @@ function ArchivePanel({ gameState }) {
           })}
         </section>
       )}
-      {discoveredCareers.length > 0 && (
-        <section className="archive-career-grid" aria-label="발견 직업 요약">
-          {discoveredCareers.map((career) => (
-            <article className="archive-career-card" key={career.id} style={{ "--career-aura": career.auraColor }}>
-              <strong>{career.name}</strong>
-              <span>{career.choiceBand} · Tier {career.tier} · #{career.choiceRank}</span>
-              <span>{trackLabel(career.preferredTrack)} · {career.supportRole}</span>
-            </article>
-          ))}
-        </section>
-      )}
       <div className="panel collection-bonus-panel">
         <header>
           <strong>도감 효과 (발견 직업 적용)</strong>
@@ -3299,7 +3263,7 @@ function ArchivePanel({ gameState }) {
                 <span className={`career-emblem career-portrait career-${career.id}`} style={careerAtlasStyle(career, "male")} aria-hidden="true" />
                 <div>
                   <strong>{isDiscovered ? career.name : LOCKED_CAREER_LABEL}</strong>
-                  <small>#{career.choiceRank} · Tier {career.tier} · {trackLabel(career.preferredTrack)} · 명성 {career.minPrestige}</small>
+                  <small>{isDiscovered ? `#${career.choiceRank} · Tier ${career.tier} · ${trackLabel(career.preferredTrack)}` : `#${career.choiceRank} · 명성 ${career.minPrestige}`}</small>
                 </div>
                 <b>{isDiscovered ? "보유" : "미발견"}</b>
               </header>
@@ -3308,21 +3272,19 @@ function ArchivePanel({ gameState }) {
                 <span>{formatMoney(career.baseIncomePerMinute)}원/분</span>
                 <span>{effect.shortName} {formatCollectionValue(effect, value)}</span>
               </div>
-              <button className="career-guide-button" disabled type="button">
-                <ArchiveGuideIcon size={15} />
-                <span>분배 가이드</span>
-              </button>
-              <div className="career-weights">
-                {weights.map(({ subject, value }) => (
-                  <div className="weight-row" key={`${career.id}-${subject.id}`}>
-                    <span>{subject.label}</span>
-                    <div>
-                      <i style={{ width: `${Math.max(4, (value / maxWeight) * 100)}%`, backgroundColor: subject.color }} />
+              <CompactDisclosure className="career-guide-disclosure" title="분배 가이드" meta="5과목">
+                <div className="career-weights">
+                  {weights.map(({ subject, value }) => (
+                    <div className="weight-row" key={`${career.id}-${subject.id}`}>
+                      <span>{subject.label}</span>
+                      <div>
+                        <i style={{ width: `${Math.max(4, (value / maxWeight) * 100)}%`, backgroundColor: subject.color }} />
+                      </div>
+                      <b>{value.toFixed(2)}</b>
                     </div>
-                    <b>{value.toFixed(2)}</b>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              </CompactDisclosure>
             </article>
           );
         })}
@@ -3356,15 +3318,15 @@ function EducationPanel({ gameState, onEducationUpgrade, summary }) {
       {showEducationSummary && (
         <section className="record-summary-grid education-summary-grid" aria-label="교육 요약">
           <article>
-            <span>현재 과정</span>
+            <span>과정</span>
             <strong>{summary.courseLabel}</strong>
           </article>
           <article>
-            <span>적용 배율</span>
+            <span>배율</span>
             <strong>x{currentMultiplier.toFixed(2)}</strong>
           </article>
           <article>
-            <span>가능 교육</span>
+            <span>가능</span>
             <strong>{activeActions.length}/{educationActions.length}</strong>
           </article>
         </section>
@@ -3387,7 +3349,7 @@ function EducationPanel({ gameState, onEducationUpgrade, summary }) {
             <article className={available ? "education-action-card" : "education-action-card muted"} data-action-id={action.id} key={action.id}>
               <div className="education-action-main">
                 <strong>{action.name} Lv.{level}/{action.maxLevel}</strong>
-                <small>생산 +{formatEducationCardEffect(currentEffect)} · 다음 +{formatEducationCardEffect(nextEffect)}</small>
+                <small>+{formatEducationCardEffect(currentEffect)} → +{formatEducationCardEffect(nextEffect)}</small>
               </div>
               <button
                 className="education-upgrade-button"

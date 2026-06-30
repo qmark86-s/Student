@@ -300,6 +300,8 @@ async function collectPanel(page) {
       archiveHistoryCards: document.querySelectorAll(".archive-history-card").length,
       archiveCareerCards: document.querySelectorAll(".archive-career-card").length,
       careerBookCards: document.querySelectorAll(".career-card").length,
+      careerGuideDisclosures: document.querySelectorAll(".career-guide-disclosure .compact-disclosure-head").length,
+      visibleCareerWeightGroups: document.querySelectorAll(".career-guide-disclosure .career-weights").length,
       collectionEffectItems: document.querySelectorAll(".collection-effect-item").length,
       archiveSummaryHeight: Math.round(document.querySelector(".archive-summary-grid")?.getBoundingClientRect().height || 0),
       collectionBonusHeight: Math.round(document.querySelector(".collection-bonus-panel")?.getBoundingClientRect().height || 0),
@@ -332,6 +334,11 @@ try {
   const work = await collectPanel(page);
   await openTab(page, tabLabels.archive, ".archive-panel");
   const archive = await collectPanel(page);
+  await page.locator(".career-guide-disclosure .compact-disclosure-head").first().click();
+  const archiveGuide = await page.evaluate(() => ({
+    openGuides: document.querySelectorAll(".career-guide-disclosure.open").length,
+    weightRows: document.querySelectorAll(".career-guide-disclosure.open .weight-row").length,
+  }));
 
   const failures = [];
   if (!response || response.status() !== 200) failures.push(`HTTP status ${response?.status() ?? "missing"}`);
@@ -345,19 +352,22 @@ try {
   for (const expectedText of ["수능 전투", "수능 완료", "전국 모의 수능", "고등학교 2학년 학년 평가", "995점", "1,200등"]) {
     if (!exam.text.includes(expectedText)) failures.push(`Missing exam text: ${expectedText}`);
   }
-  if (work.workPanels !== 1 || work.workIncomeCards !== 1) failures.push(`Expected work panel/income card, got ${work.workPanels}/${work.workIncomeCards}`);
+  if (work.workPanels !== 1 || work.workIncomeCards !== 0) failures.push(`Expected work panel without duplicate income card, got ${work.workPanels}/${work.workIncomeCards}`);
   if (work.workCareerCards !== 2) failures.push(`Expected 2 work career cards, got ${work.workCareerCards}`);
-  for (const expectedText of ["42원/분", "의사", "소프트웨어 엔지니어", "서울대학교", "한국과학기술원"]) {
+  for (const expectedText of ["수입/분", "42원", "의사", "소프트웨어 엔지니어", "서울대학교", "한국과학기술원"]) {
     if (!work.text.includes(expectedText)) failures.push(`Missing work text: ${expectedText}`);
   }
   if (archive.archivePanels !== 1) failures.push(`Expected archive panel, got ${archive.archivePanels}`);
   if (archive.archiveHistoryCards !== 2) failures.push(`Expected 2 archive history cards, got ${archive.archiveHistoryCards}`);
-  if (archive.archiveCareerCards !== 2) failures.push(`Expected 2 archive career cards, got ${archive.archiveCareerCards}`);
+  if (archive.archiveCareerCards !== 0) failures.push(`Expected no duplicate archive career summary cards, got ${archive.archiveCareerCards}`);
   if (archive.careerBookCards !== 62) failures.push(`Expected 62 career book cards, got ${archive.careerBookCards}`);
+  if (archive.careerGuideDisclosures !== 62) failures.push(`Expected 62 career guide disclosures, got ${archive.careerGuideDisclosures}`);
+  if (archive.visibleCareerWeightGroups !== 0) failures.push(`Expected collapsed career weights by default, got ${archive.visibleCareerWeightGroups}`);
+  if (archiveGuide.openGuides !== 1 || archiveGuide.weightRows !== 5) failures.push(`Expected one expanded career guide with 5 rows, got ${archiveGuide.openGuides}/${archiveGuide.weightRows}`);
   if (archive.collectionEffectItems !== 4) failures.push(`Expected 4 collection effect items, got ${archive.collectionEffectItems}`);
   if (archive.archiveSummaryHeight < 60) failures.push(`Archive summary collapsed: ${archive.archiveSummaryHeight}px`);
   if (archive.collectionBonusHeight < 100) failures.push(`Collection bonus panel collapsed: ${archive.collectionBonusHeight}px`);
-  for (const expectedText of ["32회차", "31회차", "955점", "995점", "S급", "A급"]) {
+  for (const expectedText of ["32회차", "31회차", "955점", "995점", "보유", "미발견"]) {
     if (!archive.text.includes(expectedText)) failures.push(`Missing archive text: ${expectedText}`);
   }
   for (const [name, panel] of [
@@ -370,7 +380,7 @@ try {
   }
   if (consoleErrors.length > 0) failures.push(`Console errors: ${consoleErrors.slice(0, 3).join(" | ")}`);
 
-  console.log(JSON.stringify({ baseUrl, exam, work, archive, failures }, null, 2));
+  console.log(JSON.stringify({ baseUrl, exam, work, archive, archiveGuide, failures }, null, 2));
 
   if (failures.length > 0) {
     console.error(`REACT_VITE_RECORDS_SMOKE_FAILED failures=${failures.length}`);

@@ -719,6 +719,83 @@ button:disabled {
   white-space: nowrap;
 }
 
+.compact-disclosure {
+  min-width: 0;
+  min-height: 40px;
+  display: grid;
+  overflow: hidden;
+  border: 1px solid #dfe4ec;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.compact-disclosure-head {
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  padding: 5px 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 7px;
+  overflow: hidden;
+  background: transparent;
+  color: #253044;
+  line-height: 1;
+  text-align: left;
+}
+
+.compact-disclosure-copy {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.compact-disclosure-copy strong,
+.compact-disclosure-copy small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compact-disclosure-copy strong {
+  font-size: .82rem;
+  font-weight: 950;
+  line-height: 1.1;
+}
+
+.compact-disclosure-copy small {
+  color: #697184;
+  font-size: .64rem;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.compact-disclosure-head svg {
+  color: #526075;
+  transition: transform .16s ease;
+}
+
+.compact-disclosure.open .compact-disclosure-head svg {
+  transform: rotate(90deg);
+}
+
+.compact-disclosure-head b {
+  color: #2b8a7e;
+  font-size: .68rem;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.compact-disclosure-body {
+  min-width: 0;
+  padding: 8px 10px 10px;
+  display: grid;
+  gap: 8px;
+  border-top: 1px solid #edf1f5;
+}
+
 .investment-panel,
 .panel,
 .stat-card {
@@ -741,6 +818,15 @@ button:disabled {
 
 .investment-panel {
   padding: 20px 17px 18px;
+}
+
+.investment-panel.compact-disclosure {
+  padding: 0;
+  border-radius: 8px;
+}
+
+.investment-panel .compact-disclosure-body {
+  padding: 8px;
 }
 
 .allocation-panel {
@@ -2967,13 +3053,19 @@ button:disabled {
   gap: 6px;
 }
 
+.expedition-battle-disclosure {
+  border-color: #d8e1ec;
+  background: #fff;
+}
+
+.expedition-battle-disclosure .compact-disclosure-body {
+  padding: 7px;
+  background: #f8fafc;
+}
+
 .expedition-battle-log {
   display: grid;
   gap: 5px;
-  padding: 9px;
-  border: 1px solid #d8e1ec;
-  border-radius: 8px;
-  background: #f8fafc;
 }
 
 .expedition-battle-log strong,
@@ -3181,8 +3273,7 @@ button:disabled {
 
 .record-summary-grid span,
 .record-card small,
-.record-empty span,
-.archive-career-card span {
+.record-empty span {
   color: #657083;
   font-weight: 850;
 }
@@ -3191,9 +3282,7 @@ button:disabled {
 .record-summary-grid strong,
 .record-card strong,
 .record-card small,
-.record-card b,
-.archive-career-card strong,
-.archive-career-card span {
+.record-card b {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3216,8 +3305,7 @@ button:disabled {
 }
 
 .record-card,
-.record-empty,
-.archive-career-card {
+.record-empty {
   border: 1px solid #d9e1ec;
   border-radius: 13px;
   background: #fff;
@@ -3453,28 +3541,6 @@ button:disabled {
   font-weight: 400;
 }
 
-.archive-career-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.archive-career-card {
-  min-width: 0;
-  padding: 14px 13px;
-  border-left: 6px solid var(--career-aura);
-}
-
-.archive-career-card strong {
-  font-size: 1rem;
-  font-weight: 950;
-}
-
-.archive-career-card span {
-  margin-top: 5px;
-  font-size: .86rem;
-}
-
 .archive-summary-grid {
   min-height: 64px;
   padding: 8px;
@@ -3621,10 +3687,11 @@ button:disabled {
 
 .career-card {
   min-width: 0;
-  min-height: 235px;
+  min-height: 108px;
   padding: 10px;
   display: grid;
-  grid-template-rows: 37px 25px 32px 95px;
+  grid-template-rows: 37px 25px auto;
+  align-content: start;
   gap: 8px;
   border: 1px solid #dfe4ec;
   border-radius: 8px;
@@ -3726,31 +3793,30 @@ button:disabled {
   white-space: nowrap;
 }
 
-.career-guide-button {
-  width: 100%;
-  min-height: 32px;
-  padding: 1px 6px;
-  display: block;
-  gap: 6px;
-  border: 1px solid #b9dad2;
-  border-radius: 0;
+.career-guide-disclosure {
+  border-color: #b9dad2;
   background: #edf8f5;
+}
+
+.career-guide-disclosure .compact-disclosure-head {
+  min-height: 32px;
+  padding: 6px 8px;
+}
+
+.career-guide-disclosure .compact-disclosure-copy strong {
   color: #2b8a7e;
-  text-align: center;
   font-size: .7rem;
-  font-weight: 950;
 }
 
-.career-guide-button span {
-  display: inline;
+.career-guide-disclosure .compact-disclosure-copy small,
+.career-guide-disclosure .compact-disclosure-head svg,
+.career-guide-disclosure .compact-disclosure-head b {
+  color: #2b8a7e;
 }
 
-.career-guide-button:disabled {
-  border-color: #dfe4ec;
-  background: #eef2f7;
-  color: #94a3b8;
-  opacity: .8;
-  cursor: default;
+.career-guide-disclosure .compact-disclosure-body {
+  padding: 8px;
+  background: #fff;
 }
 
 .career-weights {
@@ -4822,10 +4888,6 @@ button:disabled {
 
   .record-card b {
     justify-self: start;
-  }
-
-  .archive-career-grid {
-    grid-template-columns: minmax(0, 1fr);
   }
 
   .career-choice.ranked {

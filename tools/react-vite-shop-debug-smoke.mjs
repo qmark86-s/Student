@@ -250,7 +250,7 @@ try {
   if (!afterGacha.stationeryEquipped) failures.push("Expected stationery equipment to auto-equip after 문방구 draw");
   if (afterGacha.diamonds !== 19700) failures.push(`Expected diamonds 19700 after gacha, got ${afterGacha.diamonds}`);
   if (afterShopClose.equippedIcons !== 1) failures.push(`Expected 1 visible equipped item icon, got ${afterShopClose.equippedIcons}`);
-  if (!afterShopClose.text.includes("장착 장비 1/2")) failures.push("Growth panel did not show 장착 장비 1/2");
+  if (!afterShopClose.text.includes("장비 1/2")) failures.push("Growth panel did not show 장비 1/2");
   if (afterEquipmentTab.equipmentCards !== 1 || afterEquipmentTab.filledEquipmentSlots !== 1) failures.push(`Expected equipment tab card/slot 1/1, got ${afterEquipmentTab.equipmentCards}/${afterEquipmentTab.filledEquipmentSlots}`);
   if (afterDebugAdd.debugModal !== 1) failures.push(`Expected debug modal, got ${afterDebugAdd.debugModal}`);
   if (afterDebugAdd.equipmentCount !== 1 || afterDebugAdd.careerAlumniCount !== 0) failures.push(`Expected debug to keep student equipment/careerAlumni at 1/0, got ${afterDebugAdd.equipmentCount}/${afterDebugAdd.careerAlumniCount}`);

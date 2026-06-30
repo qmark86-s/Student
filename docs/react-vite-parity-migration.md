@@ -82,8 +82,8 @@ npm run verify:mobile
 - `tools/validate-expedition-dispatches.mjs`: 원정대 의뢰 12개, band 4종, 한글 help, 추천 직업/역할 ID, 실제/준비중 보상 구조 검사
 - `tools/react-vite-real-estate-smoke.mjs`: 부동산 모드, 도시/지역, 대형 배경 이미지, 기본 전체 보기, 포커스 휠 확대, 상세 지도 pan, 구매/임대/랭킹/DEBUG 흐름 검사
 - `tools/react-vite-real-estate-visual-audit.mjs`: 부동산 도시와 지역 상세 화면 시각 audit
-- `tools/react-vite-records-smoke.mjs`: 시험/직장/도감 저장 상태 검사
-- `tools/react-vite-education-smoke.mjs`: 교육 탭/업그레이드 검사
+- `tools/react-vite-records-smoke.mjs`: 시험/직장/도감 저장 상태, 직장 중복 수입 카드 제거, 도감 분배 가이드 기본 접힘/펼침 검사
+- `tools/react-vite-education-smoke.mjs`: 교육 탭/업그레이드와 축약 효과 문구 검사
 - `tools/react-vite-shop-debug-smoke.mjs`: 상점 장비/DEBUG 대원 후보/원정대 편성 검사
 - `tools/react-vite-responsive-audit.mjs`: viewport별 overflow, 이미지, 주요 기능 표면 검사
 - `tools/visual-asset-smoke.mjs`: 메인 전투 장비 오버레이, 교과 VFX, Battle Road 몬스터 atlas, 원정대 이미지 프레임 렌더링 검사
