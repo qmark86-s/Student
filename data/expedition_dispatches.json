@@ -1,0 +1,249 @@
+{
+  "version": 1,
+  "help": {
+    "version": "원정대 파견/의뢰 콘텐츠 데이터 버전입니다.",
+    "rules": "파견 동시 진행 수, 일일 노출 수, 추천 보너스 등 공통 규칙입니다.",
+    "bands": "일일 회전에 사용할 의뢰 시간대별 정적 풀입니다."
+  },
+  "rules": {
+    "activeSlotCount": 2,
+    "dailyVisibleCount": 4,
+    "maxMembersPerMission": 3,
+    "historyLimit": 20,
+    "bonusPerMatchPoint": 0.05,
+    "bonusCap": 0.3,
+    "localDateKeyFormat": "YYYY-MM-DD",
+    "help": {
+      "activeSlotCount": "동시에 진행할 수 있는 파견 의뢰 수입니다.",
+      "dailyVisibleCount": "하루에 화면에 노출할 의뢰 수입니다. 현재는 시간대별 1개씩 총 4개를 사용합니다.",
+      "maxMembersPerMission": "의뢰 하나에 투입할 수 있는 최대 원정대원 수입니다.",
+      "historyLimit": "보상 수령 후 저장할 최근 파견 완료 기록 수입니다.",
+      "bonusPerMatchPoint": "추천 직업/역할 매칭 점수 1점당 실제 지급 보상에 더하는 배율입니다.",
+      "bonusCap": "추천 매칭으로 더할 수 있는 최대 보상 배율입니다.",
+      "localDateKeyFormat": "일일 의뢰 회전에 사용하는 로컬 날짜 키 형식입니다."
+    }
+  },
+  "bands": [
+    {
+      "id": "thirty_minutes",
+      "label": "30분",
+      "durationMinutes": 30,
+      "dailyOrder": 1,
+      "missions": [
+        {
+          "id": "alley-safety-patrol",
+          "title": "골목길 치안 유지",
+          "summary": "하교 시간 골목길을 순찰하고 취약 동선을 점검합니다.",
+          "requiredMemberCount": 1,
+          "recommendedCareerIds": ["police_officer", "public_officer", "local_admin"],
+          "recommendedRoles": ["tank"],
+          "rewards": {
+            "trainingExp": 10,
+            "diamonds": 1,
+            "realEstateCash": 60,
+            "future": []
+          }
+        },
+        {
+          "id": "after-school-route-check",
+          "title": "방과후 귀가 동선 점검",
+          "summary": "학생들의 귀가 동선을 살피고 안전 표식을 정비합니다.",
+          "requiredMemberCount": 1,
+          "recommendedCareerIds": ["teacher", "social_worker", "police_officer"],
+          "recommendedRoles": ["healer", "tank"],
+          "rewards": {
+            "trainingExp": 9,
+            "diamonds": 1,
+            "realEstateCash": 70,
+            "future": []
+          }
+        },
+        {
+          "id": "night-study-room-support",
+          "title": "야간 자습실 긴급 지원",
+          "summary": "늦은 시간까지 남은 학생들의 컨디션과 시설 안전을 지원합니다.",
+          "requiredMemberCount": 1,
+          "recommendedCareerIds": ["teacher", "nurse", "psychologist"],
+          "recommendedRoles": ["healer"],
+          "rewards": {
+            "trainingExp": 11,
+            "diamonds": 0,
+            "realEstateCash": 90,
+            "future": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "two_hours",
+      "label": "2시간",
+      "durationMinutes": 120,
+      "dailyOrder": 2,
+      "missions": [
+        {
+          "id": "traffic-control",
+          "title": "도로 교통 통제",
+          "summary": "행사 구간의 교통 흐름을 정리하고 우회로 안내를 돕습니다.",
+          "requiredMemberCount": 2,
+          "recommendedCareerIds": ["police_officer", "civil_engineer", "public_officer"],
+          "recommendedRoles": ["tank", "dealer"],
+          "rewards": {
+            "trainingExp": 28,
+            "diamonds": 2,
+            "realEstateCash": 260,
+            "future": [
+              { "id": "tech-tree-point-small", "label": "테크트리 포인트", "amount": 1 }
+            ]
+          }
+        },
+        {
+          "id": "local-civil-documents",
+          "title": "지역 민원 자료 정리",
+          "summary": "쌓인 민원 자료를 분류하고 긴급 처리 항목을 선별합니다.",
+          "requiredMemberCount": 2,
+          "recommendedCareerIds": ["local_admin", "public_officer", "accountant", "librarian"],
+          "recommendedRoles": ["dealer"],
+          "rewards": {
+            "trainingExp": 25,
+            "diamonds": 2,
+            "realEstateCash": 300,
+            "future": [
+              { "id": "tech-tree-point-small", "label": "테크트리 포인트", "amount": 1 }
+            ]
+          }
+        },
+        {
+          "id": "disaster-drill-assist",
+          "title": "재난 대비 훈련 보조",
+          "summary": "대피 훈련 동선을 점검하고 현장 대응 순서를 정리합니다.",
+          "requiredMemberCount": 2,
+          "recommendedCareerIds": ["firefighter", "military_officer", "civil_engineer"],
+          "recommendedRoles": ["tank"],
+          "rewards": {
+            "trainingExp": 31,
+            "diamonds": 1,
+            "realEstateCash": 320,
+            "future": [
+              { "id": "tech-tree-point-small", "label": "테크트리 포인트", "amount": 1 }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "six_hours",
+      "label": "6시간",
+      "durationMinutes": 360,
+      "dailyOrder": 3,
+      "missions": [
+        {
+          "id": "flood-recovery",
+          "title": "홍수 피해 복구",
+          "summary": "침수 지역 정리와 임시 복구 작업을 지원합니다.",
+          "requiredMemberCount": 3,
+          "recommendedCareerIds": ["firefighter", "civil_engineer", "environmental_engineer", "social_worker"],
+          "recommendedRoles": ["tank", "healer"],
+          "rewards": {
+            "trainingExp": 82,
+            "diamonds": 4,
+            "realEstateCash": 980,
+            "future": [
+              { "id": "relic-basic", "label": "유물", "amount": 1 }
+            ]
+          }
+        },
+        {
+          "id": "public-health-campaign",
+          "title": "공공 보건 캠페인",
+          "summary": "지역 보건 안내와 취약 계층 건강 체크를 진행합니다.",
+          "requiredMemberCount": 3,
+          "recommendedCareerIds": ["doctor", "nurse", "pharmacist", "social_worker"],
+          "recommendedRoles": ["healer"],
+          "rewards": {
+            "trainingExp": 78,
+            "diamonds": 4,
+            "realEstateCash": 900,
+            "future": [
+              { "id": "relic-basic", "label": "유물", "amount": 1 }
+            ]
+          }
+        },
+        {
+          "id": "old-facility-safety-check",
+          "title": "노후 시설 안전 점검",
+          "summary": "오래된 시설의 균열, 배선, 대피 경로를 점검합니다.",
+          "requiredMemberCount": 3,
+          "recommendedCareerIds": ["architect", "civil_engineer", "electrical_engineer", "firefighter"],
+          "recommendedRoles": ["tank", "dealer"],
+          "rewards": {
+            "trainingExp": 86,
+            "diamonds": 3,
+            "realEstateCash": 1100,
+            "future": [
+              { "id": "relic-basic", "label": "유물", "amount": 1 }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "twelve_hours",
+      "label": "12시간",
+      "durationMinutes": 720,
+      "dailyOrder": 4,
+      "missions": [
+        {
+          "id": "international-volunteer",
+          "title": "국제 자원 봉사",
+          "summary": "해외 현장의 교육, 의료, 행정 지원을 이어받습니다.",
+          "requiredMemberCount": 3,
+          "recommendedCareerIds": ["diplomat", "translator", "doctor", "social_worker", "airline_crew"],
+          "recommendedRoles": ["healer", "dealer"],
+          "rewards": {
+            "trainingExp": 170,
+            "diamonds": 8,
+            "realEstateCash": 2200,
+            "future": [
+              { "id": "relic-advanced", "label": "유물", "amount": 1 },
+              { "id": "expedition-recruit-ticket", "label": "원정대 뽑기권", "amount": 1 }
+            ]
+          }
+        },
+        {
+          "id": "global-relief-route",
+          "title": "국제 구호 물자 루트 개척",
+          "summary": "구호 물자 이동 경로를 세우고 현장 보급 우선순위를 정합니다.",
+          "requiredMemberCount": 3,
+          "recommendedCareerIds": ["diplomat", "airline_crew", "consultant", "policy_researcher", "civil_engineer"],
+          "recommendedRoles": ["tank", "dealer"],
+          "rewards": {
+            "trainingExp": 180,
+            "diamonds": 7,
+            "realEstateCash": 2400,
+            "future": [
+              { "id": "relic-advanced", "label": "유물", "amount": 1 },
+              { "id": "expedition-recruit-ticket", "label": "원정대 뽑기권", "amount": 1 }
+            ]
+          }
+        },
+        {
+          "id": "world-education-summit",
+          "title": "세계 교육 정상회의 지원",
+          "summary": "회의 자료를 번역하고 교육 지원 의제를 현장에 정리합니다.",
+          "requiredMemberCount": 3,
+          "recommendedCareerIds": ["diplomat", "translator", "professor", "policy_researcher", "teacher"],
+          "recommendedRoles": ["dealer", "healer"],
+          "rewards": {
+            "trainingExp": 168,
+            "diamonds": 8,
+            "realEstateCash": 2100,
+            "future": [
+              { "id": "relic-advanced", "label": "유물", "amount": 1 },
+              { "id": "expedition-recruit-ticket", "label": "원정대 뽑기권", "amount": 1 }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -323,6 +323,13 @@ async function collectSnapshot(page) {
       expeditionPartySlots: document.querySelectorAll(".expedition-party-slot").length,
       expeditionRosterCards: document.querySelectorAll(".expedition-roster-card").length,
       expeditionManageCards: document.querySelectorAll(".expedition-manage-card").length,
+      expeditionDispatchAssignments: state.expedition.dispatch?.assignments?.length ?? 0,
+      expeditionDispatchHistory: state.expedition.dispatch?.history?.length ?? 0,
+      expeditionDispatchCards: document.querySelectorAll(".expedition-dispatch-card").length,
+      expeditionDispatchActiveCards: document.querySelectorAll(".expedition-dispatch-active").length,
+      expeditionDispatchCompleteCards: document.querySelectorAll(".expedition-dispatch-active.complete").length,
+      expeditionDispatchAvailableMembers: document.querySelectorAll(".expedition-dispatch-member-picker button").length,
+      expeditionDispatchedRosterCards: document.querySelectorAll(".expedition-roster-card.dispatched").length,
       expeditionLogEntries: document.querySelectorAll(".log-entry").length,
       expeditionScene: document.querySelectorAll(".expedition-scene").length,
       expeditionArena: document.querySelectorAll(".expedition-arena").length,
@@ -484,6 +491,81 @@ try {
   await page.locator(".expedition-tab", { hasText: "성장" }).click();
   await page.waitForSelector(".expedition-growth-card", { timeout: 6000 });
 
+  const dispatchState = await page.evaluate((key) => {
+    const state = JSON.parse(localStorage.getItem(key));
+    const base = state.expedition.members[0];
+    for (let index = 1; index < 8; index += 1) {
+      state.expedition.members.push({
+        ...base,
+        id: `${base.id}-dispatch-smoke-${index}`,
+        sourceKey: `${base.sourceKey}:dispatch-smoke:${index}`,
+        sourceRunNumber: index,
+        createdAt: Date.now() + index,
+      });
+    }
+    state.expedition.partyMemberIds = state.expedition.members.slice(0, 5).map((member) => member.id);
+    state.expedition.dispatch = { assignments: [], history: [] };
+    return state;
+  }, saveKey);
+  const dispatchPage = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+  dispatchPage.on("console", (message) => {
+    if (message.type() === "error") consoleErrors.push(`[dispatch] ${message.text()}`);
+  });
+  dispatchPage.on("pageerror", (error) => pageErrors.push(`[dispatch] ${error.message}`));
+  await dispatchPage.addInitScript(({ key, state }) => localStorage.setItem(key, JSON.stringify(state)), {
+    key: saveKey,
+    state: dispatchState,
+  });
+  await dispatchPage.goto(baseUrl, { waitUntil: "networkidle" });
+  await dispatchPage.getByRole("button", { name: "원정대" }).click();
+  await dispatchPage.locator(".expedition-tab", { hasText: "의뢰" }).click();
+  await dispatchPage.waitForSelector(".expedition-dispatch-card", { timeout: 6000 });
+  const firstDispatchCard = dispatchPage.locator(".expedition-dispatch-card").first();
+  await firstDispatchCard.getByRole("button", { name: "세부" }).click();
+  const dispatchBeforeStart = await collectSnapshot(dispatchPage);
+  await firstDispatchCard.getByRole("button", { name: "추천 선택" }).click();
+  await firstDispatchCard.locator(".expedition-dispatch-member-picker button.selected").first().waitFor({ timeout: 3000 });
+  const dispatchRecommendedSelectedCount = await firstDispatchCard.locator(".expedition-dispatch-member-picker button.selected").count();
+  await firstDispatchCard.getByRole("button", { name: "시작" }).click();
+  await dispatchPage.waitForFunction(
+    (key) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      return state.expedition.dispatch.assignments.length === 1;
+    },
+    saveKey,
+    { timeout: 6000 },
+  );
+  const dispatchAfterStart = await collectSnapshot(dispatchPage);
+  const dispatchCompletedState = await dispatchPage.evaluate((key) => {
+    const state = JSON.parse(localStorage.getItem(key));
+    const assignment = state.expedition.dispatch.assignments[0];
+    const durationMs = Math.max(1, Number(assignment.completeAt) - Number(assignment.startedAt));
+    assignment.completeAt = Date.now() - 1000;
+    assignment.startedAt = assignment.completeAt - durationMs;
+    localStorage.setItem(key, JSON.stringify(state));
+    return state;
+  }, saveKey);
+  await dispatchPage.addInitScript(({ key, state }) => localStorage.setItem(key, JSON.stringify(state)), {
+    key: saveKey,
+    state: dispatchCompletedState,
+  });
+  await dispatchPage.reload({ waitUntil: "networkidle" });
+  await dispatchPage.getByRole("button", { name: "원정대" }).click();
+  await dispatchPage.locator(".expedition-tab", { hasText: "의뢰" }).click();
+  await dispatchPage.waitForSelector(".expedition-dispatch-active.complete", { timeout: 6000 });
+  const dispatchReadyToClaim = await collectSnapshot(dispatchPage);
+  await dispatchPage.locator(".expedition-dispatch-active.complete").first().getByRole("button", { name: "받기" }).click();
+  await dispatchPage.waitForFunction(
+    (key) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      return state.expedition.dispatch.assignments.length === 0 && state.expedition.dispatch.history.length === 1;
+    },
+    saveKey,
+    { timeout: 6000 },
+  );
+  const dispatchAfterClaim = await collectSnapshot(dispatchPage);
+  await dispatchPage.close();
+
   const clearClickedAt = Date.now();
   await page.click(".expedition-action-button");
   await page.waitForSelector('.expedition-scene[data-combat-replay="win"][data-stage-transition="idle"]', { timeout: 2000 });
@@ -628,12 +710,24 @@ try {
   if (afterAccept.careerAlumniCount !== 1) failures.push(`Expected 1 career alumni after accept, got ${afterAccept.careerAlumniCount}`);
   if (afterAccept.partyMemberCount !== 1) failures.push(`Expected 1 expedition party member, got ${afterAccept.partyMemberCount}`);
   if (afterAccept.expeditionMembers !== 1) failures.push(`Expected 1 expedition member, got ${afterAccept.expeditionMembers}`);
-  if (afterAccept.expeditionTabs !== 4) failures.push(`Expected 4 expedition tabs, got ${afterAccept.expeditionTabs}`);
+  if (afterAccept.expeditionTabs !== 5) failures.push(`Expected 5 expedition tabs, got ${afterAccept.expeditionTabs}`);
   if (afterAccept.expeditionGrowthCards !== 1) failures.push(`Expected 1 expedition growth card, got ${afterAccept.expeditionGrowthCards}`);
   if (partyTab.expeditionPartySlots !== 5) failures.push(`Expected 5 expedition party slots, got ${partyTab.expeditionPartySlots}`);
   if (partyTab.expeditionRosterCards !== 1) failures.push(`Expected 1 expedition roster card, got ${partyTab.expeditionRosterCards}`);
   if (manageTab.expeditionManageCards !== 1) failures.push(`Expected 1 expedition manage card, got ${manageTab.expeditionManageCards}`);
   if (!logTab.text.includes("원정 기록")) failures.push("Expedition log tab did not render 원정 기록");
+  if (dispatchBeforeStart.expeditionTabs !== 5) failures.push(`Expected dispatch setup to expose 5 expedition tabs, got ${dispatchBeforeStart.expeditionTabs}`);
+  if (dispatchBeforeStart.expeditionDispatchCards !== 4) failures.push(`Expected 4 daily dispatch cards, got ${dispatchBeforeStart.expeditionDispatchCards}`);
+  if (dispatchBeforeStart.expeditionDispatchAvailableMembers < 1) failures.push(`Expected at least 1 dispatch-available member, got ${dispatchBeforeStart.expeditionDispatchAvailableMembers}`);
+  if (dispatchRecommendedSelectedCount !== 3) failures.push(`Expected recommended dispatch selection to fill 3 members, got ${dispatchRecommendedSelectedCount}`);
+  if (dispatchAfterStart.expeditionDispatchAssignments !== 1) failures.push(`Expected 1 dispatch assignment after start, got ${dispatchAfterStart.expeditionDispatchAssignments}`);
+  if (dispatchAfterStart.expeditionDispatchActiveCards !== 1) failures.push(`Expected 1 active dispatch card after start, got ${dispatchAfterStart.expeditionDispatchActiveCards}`);
+  if (dispatchAfterStart.expeditionDispatchedRosterCards > 0 && !dispatchAfterStart.text.includes("파견중")) failures.push("Expected dispatched member state to display 파견중");
+  if (dispatchReadyToClaim.expeditionDispatchCompleteCards !== 1) failures.push(`Expected 1 completed dispatch card before claim, got ${dispatchReadyToClaim.expeditionDispatchCompleteCards}`);
+  if (dispatchAfterClaim.expeditionDispatchAssignments !== 0) failures.push(`Expected 0 dispatch assignments after claim, got ${dispatchAfterClaim.expeditionDispatchAssignments}`);
+  if (dispatchAfterClaim.expeditionDispatchHistory !== 1) failures.push(`Expected 1 dispatch history entry after claim, got ${dispatchAfterClaim.expeditionDispatchHistory}`);
+  if (dispatchAfterClaim.trainingExp <= dispatchAfterStart.trainingExp) failures.push(`Expected dispatch claim to increase trainingExp, got ${dispatchAfterStart.trainingExp} -> ${dispatchAfterClaim.trainingExp}`);
+  if (dispatchAfterClaim.realEstateCash <= dispatchAfterStart.realEstateCash) failures.push(`Expected dispatch claim to increase realEstate cash, got ${dispatchAfterStart.realEstateCash} -> ${dispatchAfterClaim.realEstateCash}`);
   if (afterAccept.expeditionScene !== 1 || afterAccept.expeditionArena !== 1) failures.push(`Expected expedition scene/arena, got ${afterAccept.expeditionScene}/${afterAccept.expeditionArena}`);
   if (!afterAccept.expeditionBackdropImage || afterAccept.expeditionBackdropImage === "none") failures.push("Expected expedition backdrop image on arena ::before");
   if (afterAccept.expeditionBackdropTile !== 0) failures.push(`Expected stage 1 backdrop tile 0, got ${afterAccept.expeditionBackdropTile}`);
@@ -735,7 +829,7 @@ try {
   if (consoleErrors.length > 0) failures.push(`Console errors: ${consoleErrors.slice(0, 3).join(" | ")}`);
   if (pageErrors.length > 0) failures.push(`Page errors: ${pageErrors.slice(0, 3).join(" | ")}`);
 
-  console.log(JSON.stringify({ baseUrl, beforeAccept, afterAccept, stage26Backdrop, duringDefeatReplay, afterEnemyDespawn, duringStageTransition, duringEncounterIntro, afterClear, autoGateInitial, autoGateBusyStart, autoGateBusyMid, autoGateReadyAgain, autoGateAfterResume, debugAutoInitial, debugAutoAfterFirst, debugAutoAfterSecond, moveStartedAfterMs, failures }, null, 2));
+  console.log(JSON.stringify({ baseUrl, beforeAccept, afterAccept, stage26Backdrop, dispatchBeforeStart, dispatchRecommendedSelectedCount, dispatchAfterStart, dispatchReadyToClaim, dispatchAfterClaim, duringDefeatReplay, afterEnemyDespawn, duringStageTransition, duringEncounterIntro, afterClear, autoGateInitial, autoGateBusyStart, autoGateBusyMid, autoGateReadyAgain, autoGateAfterResume, debugAutoInitial, debugAutoAfterFirst, debugAutoAfterSecond, moveStartedAfterMs, failures }, null, 2));
 
   if (failures.length > 0) {
     console.error(`REACT_VITE_EXPEDITION_SMOKE_FAILED failures=${failures.length}`);

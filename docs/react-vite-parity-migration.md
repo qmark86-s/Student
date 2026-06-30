@@ -25,6 +25,7 @@ npm run preview
 npm run react:smoke
 npm run react:save-smoke
 npm run react:battle-smoke
+npm run expedition:dispatch-verify
 npm run react:expedition-smoke
 npm run react:expedition-rules-smoke
 npm run real-estate:verify
@@ -75,9 +76,10 @@ npm run verify:mobile
 - `tools/react-vite-smoke.mjs`: 모바일 렌더링, 핵심 UI, production 기본 DEBUG 미노출 검사
 - `tools/react-vite-save-smoke.mjs`: save 호환, QA 조작, legacy save 승격, fresh save 흐름 검사
 - `tools/react-vite-battle-road-smoke.mjs`: Battle Road/N수/수능/결과 흐름 검사
-- `tools/react-vite-expedition-smoke.mjs`: 직업 수락, 졸업생 보존, 원정대원 등록, 원정대 stage 진행, 수동 즉시 보상, 보상 모달 미표시, HP bar 검사
+- `tools/react-vite-expedition-smoke.mjs`: 직업 수락, 졸업생 보존, 원정대원 등록, 원정대 stage 진행, 접힌 의뢰 카드 세부 펼침/파견 시작/완료 수령, 수동 즉시 보상, 보상 모달 미표시, HP bar 검사
 - `tools/react-vite-expedition-rules-smoke.mjs`: 원정대 실시간 역할 전투, 수동/온라인 즉시 보상, 오프라인 pending 보상, 480전투 cap, 보스 보상, 실패 처리, 추천 편성, 성장 투자, 승급 합성 규칙 검사
 - `tools/validate-expedition-combat-balance.mjs`: 직업 62개 역할 스탯, 일반/보스 enemy 100개씩, 한글 help, 화면 몬스터 수 일치 검사
+- `tools/validate-expedition-dispatches.mjs`: 원정대 의뢰 12개, band 4종, 한글 help, 추천 직업/역할 ID, 실제/준비중 보상 구조 검사
 - `tools/react-vite-real-estate-smoke.mjs`: 부동산 모드, 도시/지역, 대형 배경 이미지, 기본 전체 보기, 포커스 휠 확대, 상세 지도 pan, 구매/임대/랭킹/DEBUG 흐름 검사
 - `tools/react-vite-real-estate-visual-audit.mjs`: 부동산 도시와 지역 상세 화면 시각 audit
 - `tools/react-vite-records-smoke.mjs`: 시험/직장/도감 저장 상태 검사

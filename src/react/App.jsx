@@ -89,7 +89,9 @@ import {
   assignRecommendedExpeditionParty,
   assignExpeditionMember,
   claimExpeditionPendingReward,
+  claimExpeditionDispatch,
   completeExpeditionStage,
+  createExpeditionDispatchViewModel,
   createExpeditionManagementViewModel,
   createExpeditionSummary,
   createExpeditionViewModel,
@@ -98,6 +100,7 @@ import {
   levelUpExpeditionMember,
   removeExpeditionMemberFromParty,
   resolveExpeditionAutoCombat,
+  startExpeditionDispatch,
   toggleExpeditionMemberLock,
 } from "./game/expedition.js";
 import {
@@ -608,6 +611,24 @@ function formatDateTime(value) {
   return new Intl.DateTimeFormat("ko-KR", {
     month: "2-digit",
     day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(timestamp));
+}
+
+function formatDurationMs(value) {
+  const totalMinutes = Math.max(0, Math.ceil(finiteNumber(value, "시간 표시 값이 올바르지 않습니다.") / 60000));
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  if (hours > 0 && minutes > 0) return `${hours}시간 ${minutes}분`;
+  if (hours > 0) return `${hours}시간`;
+  return `${minutes}분`;
+}
+
+function formatClockTime(value) {
+  const timestamp = Number(value);
+  assert(Number.isFinite(timestamp) && timestamp > 0, `시각 표시 값이 올바르지 않습니다: ${value}`);
+  return new Intl.DateTimeFormat("ko-KR", {
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(timestamp));
@@ -1472,6 +1493,7 @@ function GrowthPanel({ saveError, saveSource, summary }) {
 function ResultPanel({ gameState, onAcceptCareer, onRetake }) {
   const current = gameState.current;
   const outcome = current.outcome;
+  const [careerSortKey, setCareerSortKey] = useState("rank");
   if (!current.awaitingDecision) {
     return (
       <section className="viewport result-panel">
@@ -1513,6 +1535,7 @@ function ResultPanel({ gameState, onAcceptCareer, onRetake }) {
   assert(Array.isArray(outcome.admissions) && outcome.admissions.length > 0, "수능 결과 admissions 데이터가 비어 있습니다.");
   assert(Array.isArray(outcome.careerCandidates) && outcome.careerCandidates.length > 0, "수능 결과 careerCandidates 데이터가 비어 있습니다.");
   const admission = outcome.admissions[0];
+  const careerCandidates = sortCareerCandidates(outcome.careerCandidates, careerSortKey);
   return (
     <section className="viewport result-panel">
       <div className="stack">
@@ -1548,8 +1571,9 @@ function ResultPanel({ gameState, onAcceptCareer, onRetake }) {
               </div>
               <span className="count-badge">{outcome.careerSelectableCount}개 가능</span>
             </header>
+            <ListSortControl label="직업 선택" options={careerChoiceSortOptions} value={careerSortKey} onChange={setCareerSortKey} />
             <div className="career-choice-list career-choice-ranked">
-              {outcome.careerCandidates.map((candidate) => {
+              {careerCandidates.map((candidate) => {
                 const career = careers.find((item) => item.id === candidate.careerId);
                 assert(career, `careers.json에서 직업을 찾을 수 없습니다: ${candidate.careerId}`);
                 const portrait = getCareerPortraitUrl(career, candidate.avatarGender);
@@ -1569,7 +1593,7 @@ function ResultPanel({ gameState, onAcceptCareer, onRetake }) {
                     />
                     <span className="career-choice-main">
                       <strong>{candidate.name}</strong>
-                      <small>{candidate.choiceBand} · Tier {candidate.tier} · 요구 {candidate.minPrestige} · {formatMoney(candidate.incomePerMinute)}원/분</small>
+                      <small>{candidate.choiceBand} · {formatMoney(candidate.incomePerMinute)}원/분</small>
                     </span>
                     <b className="career-choice-state">{selectable ? `전투 x${candidate.powerMultiplier.toFixed(2)}` : candidate.lockedReason}</b>
                   </button>
@@ -1688,6 +1712,7 @@ function ExpeditionTabBar({ activeTab, management, onTabChange }) {
   const tabs = [
     { id: "growth", label: `성장${management.upgradeableCount > 0 ? ` ${management.upgradeableCount}` : ""}`, icon: Sparkles },
     { id: "party", label: "파티", icon: Users },
+    { id: "dispatch", label: `의뢰${management.dispatchCompletedCount > 0 ? ` ${management.dispatchCompletedCount}` : ""}`, icon: CalendarDays },
     { id: "manage", label: `대원 관리${management.fusionCandidates.length > 0 ? ` ${management.fusionCandidates.length}` : ""}`, icon: Medal },
     { id: "log", label: "기록", icon: ScrollText },
   ];
@@ -1709,7 +1734,7 @@ function ExpeditionEmpty({ icon: Icon, title, text }) {
     <article className="expedition-empty">
       <Icon size={28} />
       <strong>{title}</strong>
-      <p>{text}</p>
+      {text && <p>{text}</p>}
     </article>
   );
 }
@@ -1734,6 +1759,101 @@ function ExpeditionRoleFilter({ value, onChange }) {
   );
 }
 
+function ListSortControl({ label, options, value, onChange }) {
+  return (
+    <div className="list-sort-control" aria-label={`${label} 정렬`}>
+      <SlidersHorizontal size={14} />
+      {options.map((option) => (
+        <button className={value === option.id ? "active" : ""} key={option.id} type="button" onClick={() => onChange(option.id)}>
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+const expeditionMemberSortOptions = [
+  { id: "power", label: "전투력" },
+  { id: "role", label: "역할" },
+  { id: "career", label: "직업" },
+  { id: "level", label: "레벨" },
+];
+
+const expeditionManageSortOptions = [
+  { id: "status", label: "상태" },
+  ...expeditionMemberSortOptions,
+];
+
+const expeditionDispatchSortOptions = [
+  { id: "recommended", label: "추천" },
+  { id: "power", label: "전투력" },
+  { id: "career", label: "직업" },
+  { id: "role", label: "역할" },
+];
+
+const careerChoiceSortOptions = [
+  { id: "rank", label: "추천순" },
+  { id: "income", label: "수입" },
+  { id: "power", label: "전투" },
+  { id: "tier", label: "티어" },
+];
+
+const expeditionRoleOrder = { tank: 1, dealer: 2, healer: 3 };
+
+function expeditionMissionMatchScore(member, mission) {
+  if (!mission) return 0;
+  let score = 0;
+  if (mission.recommendedCareerIds.includes(member.sourceCareerId)) score += 2;
+  if (mission.recommendedRoles.includes(member.role)) score += 1;
+  return score;
+}
+
+function compareExpeditionMembersBySort(left, right, sortKey, mission = null) {
+  if (sortKey === "recommended") {
+    const matchDelta = expeditionMissionMatchScore(right, mission) - expeditionMissionMatchScore(left, mission);
+    if (matchDelta !== 0) return matchDelta;
+  }
+  if (sortKey === "role") {
+    const roleDelta = (expeditionRoleOrder[left.role] || 99) - (expeditionRoleOrder[right.role] || 99);
+    if (roleDelta !== 0) return roleDelta;
+  }
+  if (sortKey === "career") {
+    const careerDelta = left.careerName.localeCompare(right.careerName, "ko");
+    if (careerDelta !== 0) return careerDelta;
+  }
+  if (sortKey === "level") {
+    const levelDelta = Number(right.level) - Number(left.level);
+    if (levelDelta !== 0) return levelDelta;
+  }
+  const powerDelta = Number(right.power) - Number(left.power);
+  if (powerDelta !== 0) return powerDelta;
+  const levelDelta = Number(right.level) - Number(left.level);
+  if (levelDelta !== 0) return levelDelta;
+  return left.careerName.localeCompare(right.careerName, "ko") || Number(left.createdAt) - Number(right.createdAt);
+}
+
+function sortedExpeditionMembers(members, sortKey, mission = null) {
+  return members.slice().sort((left, right) => compareExpeditionMembersBySort(left, right, sortKey, mission));
+}
+
+function sortCareerCandidates(candidates, sortKey) {
+  return candidates.slice().sort((left, right) => {
+    if (sortKey === "income") {
+      const incomeDelta = Number(right.incomePerMinute) - Number(left.incomePerMinute);
+      if (incomeDelta !== 0) return incomeDelta;
+    }
+    if (sortKey === "power") {
+      const powerDelta = Number(right.powerMultiplier) - Number(left.powerMultiplier);
+      if (powerDelta !== 0) return powerDelta;
+    }
+    if (sortKey === "tier") {
+      const tierDelta = Number(left.tier) - Number(right.tier);
+      if (tierDelta !== 0) return tierDelta;
+    }
+    return Number(left.choiceRank) - Number(right.choiceRank);
+  });
+}
+
 function ExpeditionGrowthPanel({ management, onLevelUp }) {
   return (
     <section className="expedition-growth-panel">
@@ -1745,7 +1865,7 @@ function ExpeditionGrowthPanel({ management, onLevelUp }) {
         <span>보유 EXP {formatCompactNumber(management.trainingExp)}</span>
       </header>
       {management.growthMembers.length === 0 ? (
-        <ExpeditionEmpty icon={Users} title="출전 중인 대원이 없습니다." text="파티 탭에서 성장시킬 대원을 먼저 편성해 주세요." />
+        <ExpeditionEmpty icon={Users} title="출전 대원 없음" text="파티에서 대원을 편성하세요." />
       ) : (
         <div className="expedition-growth-list">
           {management.growthMembers.map((member) => {
@@ -1758,12 +1878,12 @@ function ExpeditionGrowthPanel({ management, onLevelUp }) {
                 <div className="expedition-growth-main">
                   <div>
                     <strong>{member.careerName}</strong>
-                    <span>{member.roleLabel} · Lv.{member.level} → {member.level + 1} · 전투력 +{formatCompactNumber(powerGain)}</span>
+                    <span>{member.roleLabel} · Lv.{member.level} → {member.level + 1}</span>
                   </div>
                   <div className="expedition-exp-bar" aria-label={`${member.careerName} 경험치`}>
                     <i style={{ width: `${expPercent}%` }} />
                   </div>
-                  <small>보유 {formatCompactNumber(management.trainingExp)} · 사용 후 {formatCompactNumber(Math.max(0, management.trainingExp - member.levelCost))}</small>
+                  <small>전투력 +{formatCompactNumber(powerGain)}</small>
                 </div>
                 <button className="secondary-action compact expedition-invest-button" type="button" disabled={!canLevel} onClick={() => onLevelUp(member.id)}>
                   <span>{canLevel ? "투자" : "부족"}</span>
@@ -1780,8 +1900,10 @@ function ExpeditionGrowthPanel({ management, onLevelUp }) {
 
 function ExpeditionPartyPanel({ management, onAssign, onRecommend, onRemove }) {
   const [roleFilter, setRoleFilter] = useState("all");
+  const [sortKey, setSortKey] = useState("power");
   const partyFull = management.party.length >= management.partySize;
   const filteredMembers = roleFilter === "all" ? management.members : management.members.filter((member) => member.role === roleFilter);
+  const visibleMembers = sortedExpeditionMembers(filteredMembers, sortKey);
   return (
     <section className="expedition-party-panel">
       <header className="section-title compact-title">
@@ -1823,29 +1945,31 @@ function ExpeditionPartyPanel({ management, onAssign, onRecommend, onRemove }) {
             <h2>편성 후보 {filteredMembers.length}/{management.members.length}명</h2>
           </div>
         </header>
-        <ExpeditionRoleFilter value={roleFilter} onChange={setRoleFilter} />
+        <div className="expedition-list-toolbar">
+          <ExpeditionRoleFilter value={roleFilter} onChange={setRoleFilter} />
+          <ListSortControl label="편성 후보" options={expeditionMemberSortOptions} value={sortKey} onChange={setSortKey} />
+        </div>
         {management.members.length === 0 ? (
-          <ExpeditionEmpty icon={Medal} title="아직 원정대원이 없습니다." text="디버그 메뉴에서 후보를 추가하거나 수능 결과로 원정대원을 획득해 주세요." />
+          <ExpeditionEmpty icon={Medal} title="원정대원 없음" text="수능 결과나 DEBUG로 대원을 획득하세요." />
         ) : filteredMembers.length === 0 ? (
-          <ExpeditionEmpty icon={SlidersHorizontal} title="해당 역할 대원이 없습니다." text="다른 역할 필터를 선택해 주세요." />
+          <ExpeditionEmpty icon={SlidersHorizontal} title="해당 역할 없음" text="다른 필터를 선택하세요." />
         ) : (
           <div className="expedition-roster-list">
-            {filteredMembers.map((member) => {
+            {visibleMembers.map((member) => {
               const inParty = management.partyIds.has(member.id);
+              const dispatched = management.dispatchedMemberIds.has(member.id);
               return (
-                <article className={inParty ? "expedition-roster-card expedition-member-card active in-party" : "expedition-roster-card expedition-member-card"} key={member.id}>
+                <article className={inParty ? "expedition-roster-card expedition-member-card active in-party" : dispatched ? "expedition-roster-card expedition-member-card active dispatched" : "expedition-roster-card expedition-member-card"} key={member.id}>
                   <ExpeditionMemberPortrait member={member} />
                   <div className="expedition-member-main">
                     <strong>{member.careerName}</strong>
                     <span>{member.roleLabel} · {member.tierName} Lv.{member.level}</span>
                   </div>
                   <div className="expedition-card-meta">
-                    <small>HP {formatCompactNumber(member.combatStats.hp)}</small>
-                    <small>공격 {formatCompactNumber(member.combatStats.attack)}</small>
-                    <small>공속 {member.combatStats.attackSpeed.toFixed(2)}</small>
+                    <small>전투력 {formatCompactNumber(member.power)}</small>
                   </div>
-                  <button className="secondary-action compact" type="button" disabled={inParty || partyFull} onClick={() => onAssign(member.id)}>
-                    <span>{inParty ? "편성중" : partyFull ? "가득 참" : "편성"}</span>
+                  <button className="secondary-action compact" type="button" disabled={inParty || dispatched || partyFull} onClick={() => onAssign(member.id)}>
+                    <span>{inParty ? "편성중" : dispatched ? "파견중" : partyFull ? "가득 참" : "편성"}</span>
                   </button>
                 </article>
               );
@@ -1859,7 +1983,21 @@ function ExpeditionPartyPanel({ management, onAssign, onRecommend, onRemove }) {
 
 function ExpeditionManagePanel({ management, onFuse, onToggleLock }) {
   const [roleFilter, setRoleFilter] = useState("all");
+  const [sortKey, setSortKey] = useState("status");
   const filteredMembers = roleFilter === "all" ? management.members : management.members.filter((member) => member.role === roleFilter);
+  const statusRank = (member) => {
+    if (management.partyIds.has(member.id)) return 1;
+    if (management.dispatchedMemberIds.has(member.id)) return 2;
+    if (member.locked) return 3;
+    return 0;
+  };
+  const visibleMembers = filteredMembers.slice().sort((left, right) => {
+    if (sortKey === "status") {
+      const statusDelta = statusRank(left) - statusRank(right);
+      if (statusDelta !== 0) return statusDelta;
+    }
+    return compareExpeditionMembersBySort(left, right, sortKey);
+  });
   return (
     <section className="expedition-manage-panel">
       <header className="section-title compact-title">
@@ -1869,15 +2007,17 @@ function ExpeditionManagePanel({ management, onFuse, onToggleLock }) {
         </div>
       </header>
       {management.members.length === 0 ? (
-        <ExpeditionEmpty icon={Medal} title="관리할 대원이 없습니다." text="파티 후보가 생기면 이곳에서 합성과 잠금 관리를 진행합니다." />
+        <ExpeditionEmpty icon={Medal} title="관리할 대원 없음" text="대원을 획득하면 표시됩니다." />
       ) : (
         <div className="expedition-manage-stack">
-          <ExpeditionRoleFilter value={roleFilter} onChange={setRoleFilter} />
+          <div className="expedition-list-toolbar">
+            <ExpeditionRoleFilter value={roleFilter} onChange={setRoleFilter} />
+            <ListSortControl label="대원 관리" options={expeditionManageSortOptions} value={sortKey} onChange={setSortKey} />
+          </div>
           {management.fusionCandidates.length === 0 ? (
             <article className="expedition-empty compact">
               <Medal size={24} />
-              <strong>합성 가능한 대원이 없습니다.</strong>
-              <p>같은 직업과 같은 직급 대원 2명이 필요합니다.</p>
+              <strong>합성 후보 없음</strong>
             </article>
           ) : (
             <div className="expedition-fusion-list">
@@ -1895,8 +2035,9 @@ function ExpeditionManagePanel({ management, onFuse, onToggleLock }) {
             </div>
           )}
           <div className="expedition-manage-list">
-            {filteredMembers.map((member) => {
+            {visibleMembers.map((member) => {
               const inParty = management.partyIds.has(member.id);
+              const dispatched = management.dispatchedMemberIds.has(member.id);
               return (
                 <article className={member.locked ? "expedition-manage-card expedition-manage-member locked" : "expedition-manage-card expedition-manage-member"} key={member.id}>
                   <ExpeditionMemberPortrait member={member} />
@@ -1904,8 +2045,8 @@ function ExpeditionManagePanel({ management, onFuse, onToggleLock }) {
                     <strong>{member.careerName}</strong>
                     <span>{member.roleLabel} · {member.tierName} Lv.{member.level}</span>
                   </div>
-                  <small className={inParty ? "expedition-manage-status party" : member.locked ? "expedition-manage-status locked" : "expedition-manage-status available"}>
-                    {inParty ? "출전중" : member.locked ? "잠금" : "합성 가능"}
+                  <small className={inParty ? "expedition-manage-status party" : dispatched ? "expedition-manage-status dispatched" : member.locked ? "expedition-manage-status locked" : "expedition-manage-status available"}>
+                    {inParty ? "출전중" : dispatched ? "파견중" : member.locked ? "잠금" : "합성 가능"}
                   </small>
                   <button className={member.locked ? "secondary-action compact expedition-lock-button is-locked" : "secondary-action compact expedition-lock-button"} type="button" onClick={() => onToggleLock(member.id)}>
                     {member.locked ? <LockOpen size={15} /> : <Lock size={15} />}
@@ -1917,6 +2058,211 @@ function ExpeditionManagePanel({ management, onFuse, onToggleLock }) {
           </div>
         </div>
       )}
+    </section>
+  );
+}
+
+function expeditionDispatchSelectionReward(mission, selectedMembers, bonusPerMatchPoint, bonusCap) {
+  const matchScore = selectedMembers.reduce((sum, member) => {
+    let score = 0;
+    if (mission.recommendedCareerIds.includes(member.sourceCareerId)) score += 2;
+    if (mission.recommendedRoles.includes(member.role)) score += 1;
+    return sum + score;
+  }, 0);
+  const multiplier = Math.round((1 + Math.min(Number(bonusCap), matchScore * Number(bonusPerMatchPoint))) * 1000) / 1000;
+  return {
+    trainingExp: Math.floor(Number(mission.rewards.trainingExp) * multiplier),
+    diamonds: Math.floor(Number(mission.rewards.diamonds) * multiplier),
+    realEstateCash: Math.floor(Number(mission.rewards.realEstateCash) * multiplier),
+    bonusMultiplier: multiplier,
+  };
+}
+
+function ExpeditionDispatchPanel({ gameState, onClaimDispatch, onStartDispatch }) {
+  const dispatch = createExpeditionDispatchViewModel(gameState);
+  const [selectedByMission, setSelectedByMission] = useState({});
+  const [memberSortKey, setMemberSortKey] = useState("recommended");
+  const [openMissionIds, setOpenMissionIds] = useState({});
+  const [openAssignmentIds, setOpenAssignmentIds] = useState({});
+  const availableIdSet = new Set(dispatch.availableMembers.map((member) => member.id));
+  const activeFull = dispatch.usedSlotCount >= dispatch.activeSlotCount;
+  const cleanSelectedIds = (mission) => {
+    const selected = Array.isArray(selectedByMission[mission.id]) ? selectedByMission[mission.id] : [];
+    return selected.filter((id) => availableIdSet.has(id)).slice(0, dispatch.maxMembersPerMission);
+  };
+  const toggleMember = (mission, memberId) => {
+    const selected = cleanSelectedIds(mission);
+    const nextSelected = selected.includes(memberId)
+      ? selected.filter((id) => id !== memberId)
+      : selected.length >= dispatch.maxMembersPerMission
+        ? selected
+        : [...selected, memberId];
+    setSelectedByMission((source) => ({ ...source, [mission.id]: nextSelected }));
+  };
+  const chooseRecommended = (mission) => {
+    setSelectedByMission((source) => ({ ...source, [mission.id]: mission.recommendedMemberIds.filter((id) => availableIdSet.has(id)) }));
+  };
+  const toggleMissionOpen = (missionId) => {
+    setOpenMissionIds((source) => ({ ...source, [missionId]: !source[missionId] }));
+  };
+  const toggleAssignmentOpen = (assignment) => {
+    setOpenAssignmentIds((source) => {
+      const current = Object.prototype.hasOwnProperty.call(source, assignment.id) ? source[assignment.id] : assignment.complete;
+      return { ...source, [assignment.id]: !current };
+    });
+  };
+  return (
+    <section className="expedition-dispatch-panel">
+      <header className="section-title compact-title">
+        <div>
+          <CalendarDays size={18} />
+          <h2>원정대 의뢰</h2>
+        </div>
+        <span>{dispatch.usedSlotCount}/{dispatch.activeSlotCount} · 가능 {dispatch.availableMembers.length}</span>
+      </header>
+      <div className="expedition-dispatch-summary">
+        <Metric label="오늘" value={`${dispatch.missions.length}건`} />
+        <Metric label="완료" value={`${dispatch.completedCount}건`} />
+        <Metric label="갱신" value={formatClockTime(dispatch.nextRefreshAt)} />
+      </div>
+      <div className="expedition-dispatch-active-list">
+        {dispatch.assignments.length === 0 ? (
+          <article className="expedition-empty compact">
+            <CalendarDays size={24} />
+            <strong>진행 중 의뢰 없음</strong>
+            <p>파티 밖 대원을 보내세요.</p>
+          </article>
+        ) : dispatch.assignments.map((assignment) => {
+          const assignmentOpen = Object.prototype.hasOwnProperty.call(openAssignmentIds, assignment.id) ? openAssignmentIds[assignment.id] : assignment.complete;
+          return (
+            <article className={assignment.complete ? "expedition-dispatch-active complete" : "expedition-dispatch-active"} key={assignment.id}>
+              <div className="expedition-dispatch-active-main">
+                <strong>{assignment.mission.title}</strong>
+                <span>{assignment.complete ? "귀환 완료" : `${formatDurationMs(assignment.remainingMs)} 남음`} · x{assignment.reward.bonusMultiplier.toFixed(2)}</span>
+              </div>
+              <div className="expedition-dispatch-progress" aria-label={`${assignment.mission.title} 진행률`}>
+                <i style={{ width: `${assignment.progressPercent}%` }} />
+              </div>
+              <div className="expedition-dispatch-member-row">
+                {assignment.members.map((member) => (
+                  <span className="expedition-dispatch-mini-member" key={member.id}>{member.careerName}</span>
+                ))}
+              </div>
+              <div className="expedition-dispatch-actions">
+                <button
+                  aria-expanded={assignmentOpen}
+                  className={assignmentOpen ? "secondary-action compact expedition-dispatch-toggle open" : "secondary-action compact expedition-dispatch-toggle"}
+                  type="button"
+                  onClick={() => toggleAssignmentOpen(assignment)}
+                >
+                  <ChevronRight size={15} />
+                  <span>{assignmentOpen ? "접기" : "세부"}</span>
+                </button>
+                <button className="primary-action compact" type="button" disabled={!assignment.complete} onClick={() => onClaimDispatch(assignment.id)}>
+                  <CheckCircle size={15} />
+                  <span>{assignment.complete ? "받기" : "진행중"}</span>
+                </button>
+              </div>
+              {assignmentOpen && (
+                <div className="expedition-dispatch-detail active-detail">
+                  <div className="expedition-dispatch-rewards">
+                    <span>EXP {formatCompactNumber(assignment.reward.trainingExp)}</span>
+                    <span>다이아 {formatCompactNumber(assignment.reward.diamonds)}</span>
+                    <span>부동산 {formatCompactNumber(assignment.reward.realEstateCash)}</span>
+                  </div>
+                  {assignment.futureRewards.length > 0 && (
+                    <div className="expedition-dispatch-future">
+                      {assignment.futureRewards.map((reward) => (
+                        <span key={reward.id}>{reward.label} {reward.amount} · 준비중</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </article>
+          );
+        })}
+      </div>
+      <div className="expedition-list-toolbar expedition-dispatch-toolbar">
+        <ListSortControl label="파견 대원" options={expeditionDispatchSortOptions} value={memberSortKey} onChange={setMemberSortKey} />
+      </div>
+      <section className="expedition-dispatch-mission-list expedition-dispatch-mission-table" aria-label="오늘의 의뢰 테이블">
+        {dispatch.missions.map((mission) => {
+          const selectedIds = cleanSelectedIds(mission);
+          const selectedMembers = dispatch.availableMembers.filter((member) => selectedIds.includes(member.id));
+          const pickerMembers = sortedExpeditionMembers(dispatch.availableMembers, memberSortKey, mission);
+          const reward = expeditionDispatchSelectionReward(mission, selectedMembers, dispatch.bonusPerMatchPoint, dispatch.bonusCap);
+          const canStart = !activeFull && selectedIds.length >= Number(mission.requiredMemberCount);
+          const missionOpen = Boolean(openMissionIds[mission.id]);
+          return (
+            <article className={canStart ? "expedition-dispatch-card ready" : "expedition-dispatch-card"} key={mission.id}>
+              <div className="expedition-dispatch-card-summary">
+                <div className="expedition-dispatch-card-head">
+                  <div>
+                    <strong>{mission.title}</strong>
+                    <span>{mission.bandLabel} · 필요 {mission.requiredMemberCount} · 선택 {selectedIds.length}/{dispatch.maxMembersPerMission}</span>
+                  </div>
+                  <b>x{reward.bonusMultiplier.toFixed(2)}</b>
+                </div>
+                <div className="expedition-dispatch-quick">
+                  <span>EXP {formatCompactNumber(reward.trainingExp)}</span>
+                  <span>다이아 {formatCompactNumber(reward.diamonds)}</span>
+                  <span>부동산 {formatCompactNumber(reward.realEstateCash)}</span>
+                </div>
+                <button
+                  aria-expanded={missionOpen}
+                  className={missionOpen ? "secondary-action compact expedition-dispatch-toggle open" : "secondary-action compact expedition-dispatch-toggle"}
+                  type="button"
+                  onClick={() => toggleMissionOpen(mission.id)}
+                >
+                  <ChevronRight size={15} />
+                  <span>{missionOpen ? "접기" : "세부"}</span>
+                </button>
+              </div>
+              {missionOpen && (
+                <div className="expedition-dispatch-detail">
+                  <p>{mission.summary}</p>
+                  <div className="expedition-dispatch-tags">
+                    <span>직업 {mission.recommendedCareerNames.slice(0, 3).join(" · ")}</span>
+                    <span>역할 {mission.recommendedRoleLabels.join(" · ")}</span>
+                  </div>
+                  {mission.futureRewards.length > 0 && (
+                    <div className="expedition-dispatch-future">
+                      {mission.futureRewards.map((future) => (
+                        <span key={future.id}>{future.label} {future.amount} · 준비중</span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="expedition-dispatch-picker-head">
+                    <strong>대원 {selectedIds.length}/{dispatch.maxMembersPerMission}</strong>
+                    <span>필요 {mission.requiredMemberCount}</span>
+                  </div>
+                  <div className="expedition-dispatch-member-picker">
+                    {dispatch.availableMembers.length === 0 ? (
+                      <span className="expedition-dispatch-no-member">파티 밖 대원이 없습니다.</span>
+                    ) : pickerMembers.map((member) => (
+                      <button className={selectedIds.includes(member.id) ? "selected" : ""} key={member.id} type="button" onClick={() => toggleMember(mission, member.id)}>
+                        <span>{member.careerName}</span>
+                        <small>{member.roleLabel} · 전투력 {formatCompactNumber(member.power)} · 추천 +{expeditionMissionMatchScore(member, mission)}</small>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="expedition-dispatch-actions">
+                    <button className="secondary-action compact" type="button" disabled={mission.recommendedMemberIds.length === 0} onClick={() => chooseRecommended(mission)}>
+                      <Shuffle size={15} />
+                      <span>추천 선택</span>
+                    </button>
+                    <button className="primary-action compact" type="button" disabled={!canStart} onClick={() => onStartDispatch(mission.id, selectedIds)}>
+                      <CheckCircle size={15} />
+                      <span>{activeFull ? "슬롯 부족" : selectedIds.length < Number(mission.requiredMemberCount) ? "인원 부족" : "시작"}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </article>
+          );
+        })}
+      </section>
     </section>
   );
 }
@@ -1952,7 +2298,7 @@ function ExpeditionLogPanel({ management }) {
   );
 }
 
-function ExpeditionManagementPanel({ activeTab, gameState, onAssign, onFuse, onLevelUp, onRecommend, onRemove, onTabChange, onToggleLock }) {
+function ExpeditionManagementPanel({ activeTab, gameState, onAssign, onClaimDispatch, onFuse, onLevelUp, onRecommend, onRemove, onStartDispatch, onTabChange, onToggleLock }) {
   const management = createExpeditionManagementViewModel(gameState);
   return (
     <>
@@ -1960,6 +2306,7 @@ function ExpeditionManagementPanel({ activeTab, gameState, onAssign, onFuse, onL
       <section className="expedition-viewport">
         {activeTab === "growth" && <ExpeditionGrowthPanel management={management} onLevelUp={onLevelUp} />}
         {activeTab === "party" && <ExpeditionPartyPanel management={management} onAssign={onAssign} onRecommend={onRecommend} onRemove={onRemove} />}
+        {activeTab === "dispatch" && <ExpeditionDispatchPanel gameState={gameState} onClaimDispatch={onClaimDispatch} onStartDispatch={onStartDispatch} />}
         {activeTab === "manage" && <ExpeditionManagePanel management={management} onFuse={onFuse} onToggleLock={onToggleLock} />}
         {activeTab === "log" && <ExpeditionLogPanel management={management} />}
       </section>
@@ -3850,6 +4197,14 @@ function GameApp({ loaded }) {
     setGameState((state) => fuseExpeditionMembers(state, careerId, promotionTier));
   };
 
+  const handleStartExpeditionDispatch = (missionId, memberIds) => {
+    setGameState((state) => startExpeditionDispatch(state, missionId, memberIds));
+  };
+
+  const handleClaimExpeditionDispatch = (assignmentId) => {
+    setGameState((state) => claimExpeditionDispatch(state, assignmentId));
+  };
+
   const handleEducationUpgrade = (actionId) => {
     setGameState((state) => upgradeEducation(state, actionId));
   };
@@ -3959,10 +4314,12 @@ function GameApp({ loaded }) {
               activeTab={expeditionTab}
               gameState={gameState}
               onAssign={handleExpeditionAssign}
+              onClaimDispatch={handleClaimExpeditionDispatch}
               onFuse={handleExpeditionFuse}
               onLevelUp={handleExpeditionLevelUp}
               onRecommend={handleExpeditionRecommend}
               onRemove={handleExpeditionRemove}
+              onStartDispatch={handleStartExpeditionDispatch}
               onTabChange={setExpeditionTab}
               onToggleLock={handleExpeditionToggleLock}
             />

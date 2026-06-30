@@ -8,6 +8,7 @@ const outDir = resolve("artifacts/react-vite-responsive-audit");
 const preferredPort = Number(process.env.REACT_RESPONSIVE_AUDIT_PORT || 5786);
 const appReadyTimeoutMs = Number(process.env.REACT_RESPONSIVE_READY_TIMEOUT_MS || 45000);
 const saveKey = "student-idle-rpg-save-v1";
+const expectedExpeditionTabCount = 5;
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -476,7 +477,7 @@ function collectFailures(metrics, scenario) {
   }
   if (metrics.horizontalOverflow > 1) failures.push(`horizontal overflow ${metrics.horizontalOverflow}px`);
   if (scenario === "expedition-debug") {
-    if (metrics.expeditionTabCount !== 4) failures.push(`expedition tab count ${metrics.expeditionTabCount}/4`);
+    if (metrics.expeditionTabCount !== expectedExpeditionTabCount) failures.push(`expedition tab count ${metrics.expeditionTabCount}/${expectedExpeditionTabCount}`);
   } else if (metrics.tabCount !== 7) {
     failures.push(`tab count ${metrics.tabCount}/7`);
   }
@@ -553,8 +554,8 @@ function collectBattleLayoutParityFailures(student, expedition) {
   if (expedition.actionRect.height < 31 || expedition.actionRect.height > 34) {
     failures.push(`expedition action button height ${expedition.actionRect.height}px out of battle HUD range`);
   }
-  if (expedition.expeditionTabCount !== 4) {
-    failures.push(`expedition lower tabs ${expedition.expeditionTabCount}/4`);
+  if (expedition.expeditionTabCount !== expectedExpeditionTabCount) {
+    failures.push(`expedition lower tabs ${expedition.expeditionTabCount}/${expectedExpeditionTabCount}`);
   }
   if (!expedition.activeTabLabel.startsWith("성장")) {
     failures.push(`expedition active lower tab ${expedition.activeTabLabel || "(missing)"}/성장`);

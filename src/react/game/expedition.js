@@ -3,6 +3,7 @@ import expeditionCombatBalance from "../../../data/expedition_combat_balance.jso
 import expeditionBalance from "../../../data/expedition_balance.json";
 import expeditionBosses from "../../../data/expedition_bosses.json";
 import expeditionChapters from "../../../data/expedition_chapters.json";
+import expeditionDispatches from "../../../data/expedition_dispatches.json";
 import expeditionPromotions from "../../../data/expedition_promotions.json";
 import expeditionSegments from "../../../data/expedition_stages.json";
 import expeditionLevels from "../../../data/expedition_unit_levels.json";
@@ -42,6 +43,8 @@ const chapterBossByChapter = new Map(
     .filter((boss) => boss.bossType === "chapter")
     .map((boss) => [Number(boss.chapter), boss]),
 );
+const dispatchBands = validateDispatchConfig(expeditionDispatches).bands.slice().sort((a, b) => Number(a.dailyOrder) - Number(b.dailyOrder));
+const dispatchMissionById = new Map(dispatchBands.flatMap((band) => band.missions.map((mission) => [mission.id, { ...mission, band }])));
 
 export const expeditionPartySize = expeditionBalance.partySize;
 export const expeditionAutoTickMs = expeditionCombatBalance.timing.onlineTickMs;
@@ -123,6 +126,141 @@ function pushExpeditionLog(expedition, text, tone = "info") {
     },
     ...expedition.log,
   ].slice(0, 40);
+}
+
+function validateDispatchConfig(config) {
+  assertObject(config, "expedition_dispatches.json");
+  assertNumberInteger(config.version, "expedition_dispatches.json.version", 1);
+  assertObject(config.rules, "expedition_dispatches.json.rules");
+  assertNumberInteger(config.rules.activeSlotCount, "expedition_dispatches.json.rules.activeSlotCount", 1);
+  assertNumberInteger(config.rules.dailyVisibleCount, "expedition_dispatches.json.rules.dailyVisibleCount", 1);
+  assertNumberInteger(config.rules.maxMembersPerMission, "expedition_dispatches.json.rules.maxMembersPerMission", 1);
+  assertNumberInteger(config.rules.historyLimit, "expedition_dispatches.json.rules.historyLimit", 1);
+  nonNegativeNumber(config.rules.bonusPerMatchPoint, "expedition_dispatches.json.rules.bonusPerMatchPoint");
+  nonNegativeNumber(config.rules.bonusCap, "expedition_dispatches.json.rules.bonusCap");
+  assert(Array.isArray(config.bands), "expedition_dispatches.json.bands 데이터가 배열이 아닙니다.");
+  assert(config.bands.length === Number(config.rules.dailyVisibleCount), "expedition_dispatches.json bands 수가 dailyVisibleCount와 다릅니다.");
+  const missionIds = new Set();
+  const bandOrders = new Set();
+  for (const [bandIndex, band] of config.bands.entries()) {
+    const bandPath = `expedition_dispatches.json.bands[${bandIndex}]`;
+    assertObject(band, bandPath);
+    assert(typeof band.id === "string" && band.id.length > 0, `${bandPath}.id 값이 없습니다.`);
+    assert(typeof band.label === "string" && band.label.length > 0, `${bandPath}.label 값이 없습니다.`);
+    assertNumberInteger(band.durationMinutes, `${bandPath}.durationMinutes`, 1);
+    assertNumberInteger(band.dailyOrder, `${bandPath}.dailyOrder`, 1);
+    assert(!bandOrders.has(Number(band.dailyOrder)), `${bandPath}.dailyOrder 값이 중복되었습니다: ${band.dailyOrder}`);
+    bandOrders.add(Number(band.dailyOrder));
+    assert(Array.isArray(band.missions) && band.missions.length > 0, `${bandPath}.missions 데이터가 비어 있습니다.`);
+    for (const [missionIndex, mission] of band.missions.entries()) {
+      const missionPath = `${bandPath}.missions[${missionIndex}]`;
+      assertObject(mission, missionPath);
+      assert(typeof mission.id === "string" && mission.id.length > 0, `${missionPath}.id 값이 없습니다.`);
+      assert(!missionIds.has(mission.id), `${missionPath}.id 값이 중복되었습니다: ${mission.id}`);
+      missionIds.add(mission.id);
+      assert(typeof mission.title === "string" && mission.title.length > 0, `${missionPath}.title 값이 없습니다.`);
+      assert(typeof mission.summary === "string" && mission.summary.length > 0, `${missionPath}.summary 값이 없습니다.`);
+      assertNumberInteger(mission.requiredMemberCount, `${missionPath}.requiredMemberCount`, 1);
+      assert(Number(mission.requiredMemberCount) <= Number(config.rules.maxMembersPerMission), `${missionPath}.requiredMemberCount 값이 최대 투입 수를 초과했습니다.`);
+      assert(Array.isArray(mission.recommendedCareerIds) && mission.recommendedCareerIds.length > 0, `${missionPath}.recommendedCareerIds 값이 비어 있습니다.`);
+      for (const careerId of mission.recommendedCareerIds) {
+        assert(typeof careerId === "string" && careerById.has(careerId), `${missionPath}.recommendedCareerIds 값이 올바르지 않습니다: ${careerId}`);
+      }
+      assert(Array.isArray(mission.recommendedRoles) && mission.recommendedRoles.length > 0, `${missionPath}.recommendedRoles 값이 비어 있습니다.`);
+      for (const roleId of mission.recommendedRoles) {
+        assert(expeditionRoleIds.includes(roleId), `${missionPath}.recommendedRoles 값이 올바르지 않습니다: ${roleId}`);
+      }
+      assertObject(mission.rewards, `${missionPath}.rewards`);
+      assertNumberInteger(mission.rewards.trainingExp, `${missionPath}.rewards.trainingExp`, 0);
+      assertNumberInteger(mission.rewards.diamonds, `${missionPath}.rewards.diamonds`, 0);
+      assertNumberInteger(mission.rewards.realEstateCash, `${missionPath}.rewards.realEstateCash`, 0);
+      assert(Array.isArray(mission.rewards.future), `${missionPath}.rewards.future 데이터가 배열이 아닙니다.`);
+    }
+  }
+  return config;
+}
+
+function createEmptyDispatchState() {
+  return {
+    assignments: [],
+    history: [],
+  };
+}
+
+function validateDispatchAssignment(assignment, path, memberIds) {
+  assertObject(assignment, path);
+  assert(typeof assignment.id === "string" && assignment.id.length > 0, `${path}.id 값이 없습니다.`);
+  assert(typeof assignment.missionId === "string" && dispatchMissionById.has(assignment.missionId), `${path}.missionId 값이 올바르지 않습니다: ${assignment.missionId}`);
+  assertNumberInteger(assignment.startedAt, `${path}.startedAt`, 0);
+  assertNumberInteger(assignment.completeAt, `${path}.completeAt`, 0);
+  assert(Number(assignment.completeAt) > Number(assignment.startedAt), `${path}.completeAt 값은 startedAt보다 커야 합니다.`);
+  assert(Array.isArray(assignment.memberIds), `${path}.memberIds 데이터가 배열이 아닙니다.`);
+  const memberIdSet = new Set(assignment.memberIds);
+  assert(memberIdSet.size === assignment.memberIds.length, `${path}.memberIds 값이 중복되었습니다.`);
+  const mission = dispatchMissionById.get(assignment.missionId);
+  assert(assignment.memberIds.length >= Number(mission.requiredMemberCount), `${path}.memberIds 수가 의뢰 필요 인원보다 적습니다.`);
+  assert(assignment.memberIds.length <= Number(expeditionDispatches.rules.maxMembersPerMission), `${path}.memberIds 수가 최대 파견 인원을 초과했습니다.`);
+  for (const memberId of assignment.memberIds) {
+    assert(typeof memberId === "string" && memberIds.has(memberId), `${path}.memberIds에서 원정대원을 찾을 수 없습니다: ${memberId}`);
+  }
+  if (assignment.dateKey !== undefined) assert(typeof assignment.dateKey === "string" && assignment.dateKey.length > 0, `${path}.dateKey 값이 올바르지 않습니다.`);
+}
+
+function validateDispatchHistoryEntry(entry, path, memberIds) {
+  assertObject(entry, path);
+  assert(typeof entry.id === "string" && entry.id.length > 0, `${path}.id 값이 없습니다.`);
+  assert(typeof entry.missionId === "string" && dispatchMissionById.has(entry.missionId), `${path}.missionId 값이 올바르지 않습니다: ${entry.missionId}`);
+  assert(typeof entry.title === "string" && entry.title.length > 0, `${path}.title 값이 없습니다.`);
+  assertNumberInteger(entry.claimedAt, `${path}.claimedAt`, 0);
+  assert(Array.isArray(entry.memberIds), `${path}.memberIds 데이터가 배열이 아닙니다.`);
+  for (const memberId of entry.memberIds) {
+    assert(typeof memberId === "string" && memberIds.has(memberId), `${path}.memberIds에서 원정대원을 찾을 수 없습니다: ${memberId}`);
+  }
+  assertObject(entry.rewards, `${path}.rewards`);
+  for (const key of ["trainingExp", "diamonds", "realEstateCash"]) {
+    assertNumberInteger(entry.rewards[key], `${path}.rewards.${key}`, 0);
+  }
+  positiveNumber(entry.bonusMultiplier, `${path}.bonusMultiplier`);
+}
+
+function validateDispatchState(dispatch, path, memberIds) {
+  assertObject(dispatch, path);
+  assert(Array.isArray(dispatch.assignments), `${path}.assignments 데이터가 배열이 아닙니다.`);
+  assert(Array.isArray(dispatch.history), `${path}.history 데이터가 배열이 아닙니다.`);
+  assert(dispatch.assignments.length <= Number(expeditionDispatches.rules.activeSlotCount), `${path}.assignments 수가 동시 파견 슬롯을 초과했습니다.`);
+  const assignmentIds = new Set();
+  const assignedMemberIds = new Set();
+  for (const [index, assignment] of dispatch.assignments.entries()) {
+    validateDispatchAssignment(assignment, `${path}.assignments[${index}]`, memberIds);
+    assert(!assignmentIds.has(assignment.id), `${path}.assignments id가 중복되었습니다: ${assignment.id}`);
+    assignmentIds.add(assignment.id);
+    for (const memberId of assignment.memberIds) {
+      assert(!assignedMemberIds.has(memberId), `${path}.assignments에서 같은 대원이 여러 의뢰에 배정되었습니다: ${memberId}`);
+      assignedMemberIds.add(memberId);
+    }
+  }
+  assert(dispatch.history.length <= Number(expeditionDispatches.rules.historyLimit), `${path}.history 수가 historyLimit을 초과했습니다.`);
+  const historyIds = new Set();
+  for (const [index, entry] of dispatch.history.entries()) {
+    validateDispatchHistoryEntry(entry, `${path}.history[${index}]`, memberIds);
+    assert(!historyIds.has(entry.id), `${path}.history id가 중복되었습니다: ${entry.id}`);
+    historyIds.add(entry.id);
+  }
+}
+
+function normalizeDispatchState(dispatch) {
+  if (dispatch === undefined || dispatch === null) return createEmptyDispatchState();
+  assertObject(dispatch, "save.expedition.dispatch");
+  return {
+    assignments: Array.isArray(dispatch.assignments) ? dispatch.assignments.map((assignment) => ({ ...assignment, memberIds: [...assignment.memberIds] })) : dispatch.assignments,
+    history: Array.isArray(dispatch.history)
+      ? dispatch.history.map((entry) => ({
+          ...entry,
+          memberIds: [...entry.memberIds],
+          rewards: { ...entry.rewards },
+        }))
+      : dispatch.history,
+  };
 }
 
 function createEmptyPendingReward(createdAt = now(), previousLastBattle = null) {
@@ -294,6 +432,7 @@ export function createDefaultExpeditionState(createdAt = now()) {
     chapterRun: createChapterRun(1, 0),
     lastResolvedAt: createdAt,
     pendingReward: createEmptyPendingReward(createdAt),
+    dispatch: createEmptyDispatchState(),
     log: [],
     stageIndex: 0,
     clearedStageCount: 0,
@@ -365,6 +504,7 @@ export function validateExpeditionState(expedition, path = "save.expedition") {
   finiteNumber(expedition.chapterRun.boostMultiplier, `${path}.chapterRun.boostMultiplier 값이 올바르지 않습니다.`);
   assertNumberInteger(expedition.lastResolvedAt, `${path}.lastResolvedAt`, 0);
   validatePendingReward(expedition.pendingReward, `${path}.pendingReward`);
+  validateDispatchState(expedition.dispatch, `${path}.dispatch`, memberIds);
   assert(Array.isArray(expedition.log), `${path}.log 데이터가 배열이 아닙니다.`);
   expedition.log.forEach((entry, index) => validateLogEntry(entry, `${path}.log[${index}]`));
 
@@ -985,6 +1125,7 @@ export function migrateLegacyExpeditionState(expedition, companions = [], create
     chapterRun: requireOwn(expedition, "chapterRun", "legacy expedition"),
     lastResolvedAt: Math.max(0, Math.floor(finiteNumber(requireOwn(expedition, "lastResolvedAt", "legacy expedition"), "legacy expedition lastResolvedAt 값이 올바르지 않습니다."))),
     pendingReward: normalizePendingReward(hasOwn(expedition, "pendingReward") ? expedition.pendingReward : null, createdAt),
+    dispatch: normalizeDispatchState(hasOwn(expedition, "dispatch") ? expedition.dispatch : null),
     log: requireOwn(expedition, "log", "legacy expedition"),
   }, requireOwn(expedition, "lastStageId", "legacy expedition"));
   validateExpeditionState(migrated, "save.expedition");
@@ -1045,8 +1186,296 @@ export function addDebugExpeditionMembers(state, count, { autoParty = true } = {
 export function normalizeExpeditionState(state) {
   const next = cloneState(state);
   if (next.expedition) next.expedition.pendingReward = normalizePendingReward(next.expedition.pendingReward, now());
+  if (next.expedition) next.expedition.dispatch = normalizeDispatchState(next.expedition.dispatch);
   validateExpeditionState(next.expedition, "save.expedition");
   next.expedition = expeditionAliases(next.expedition);
+  return next;
+}
+
+function localDateKeyForTimestamp(timestamp = now()) {
+  const date = new Date(Math.max(0, Math.floor(finiteNumber(timestamp, "파견 날짜 기준 시각 값이 올바르지 않습니다."))));
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function nextLocalDateRefreshAt(timestamp = now()) {
+  const date = new Date(Math.max(0, Math.floor(finiteNumber(timestamp, "파견 갱신 기준 시각 값이 올바르지 않습니다."))));
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime();
+}
+
+function hashString(value) {
+  assert(typeof value === "string" && value.length > 0, "파견 회전 키 값이 없습니다.");
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+export function createDailyDispatchMissions(dateKey) {
+  assert(typeof dateKey === "string" && /^\d{4}-\d{2}-\d{2}$/.test(dateKey), `파견 일일 날짜 키가 올바르지 않습니다: ${dateKey}`);
+  return dispatchBands.map((band) => {
+    const index = hashString(`${dateKey}:${band.id}`) % band.missions.length;
+    const mission = band.missions[index];
+    return {
+      ...mission,
+      bandId: band.id,
+      bandLabel: band.label,
+      durationMinutes: Number(band.durationMinutes),
+      dailyOrder: Number(band.dailyOrder),
+    };
+  });
+}
+
+export function expeditionDispatchedMemberIds(expedition) {
+  assertObject(expedition, "save.expedition");
+  const dispatch = normalizeDispatchState(expedition.dispatch);
+  assert(Array.isArray(dispatch.assignments), "save.expedition.dispatch.assignments 데이터가 배열이 아닙니다.");
+  return new Set(dispatch.assignments.flatMap((assignment) => assignment.memberIds));
+}
+
+function dispatchMissionByIdStrict(missionId) {
+  assert(typeof missionId === "string" && dispatchMissionById.has(missionId), `파견 의뢰를 찾을 수 없습니다: ${missionId}`);
+  return dispatchMissionById.get(missionId);
+}
+
+function dispatchMatchScore(member, mission) {
+  validateExpeditionMember(member, "파견 대원");
+  assertObject(mission, "파견 의뢰");
+  const role = careerCombatConfig(member.sourceCareerId).role;
+  let score = 0;
+  if (mission.recommendedCareerIds.includes(member.sourceCareerId)) score += 2;
+  if (mission.recommendedRoles.includes(role)) score += 1;
+  return score;
+}
+
+function dispatchBonusMultiplierForMembers(mission, members) {
+  assert(Array.isArray(members), "파견 보너스 대원 목록이 배열이 아닙니다.");
+  const score = members.reduce((sum, member) => sum + dispatchMatchScore(member, mission), 0);
+  const bonus = Math.min(Number(expeditionDispatches.rules.bonusCap), score * Number(expeditionDispatches.rules.bonusPerMatchPoint));
+  return Math.round((1 + bonus) * 1000) / 1000;
+}
+
+function dispatchRewardsForMembers(mission, members) {
+  const multiplier = dispatchBonusMultiplierForMembers(mission, members);
+  return {
+    trainingExp: Math.floor(Number(mission.rewards.trainingExp) * multiplier),
+    diamonds: Math.floor(Number(mission.rewards.diamonds) * multiplier),
+    realEstateCash: Math.floor(Number(mission.rewards.realEstateCash) * multiplier),
+    bonusMultiplier: multiplier,
+  };
+}
+
+function dispatchRewardsForAssignment(expedition, assignment) {
+  const mission = dispatchMissionByIdStrict(assignment.missionId);
+  const members = assignment.memberIds.map((memberId) => {
+    const member = expedition.members.find((candidate) => candidate.id === memberId);
+    assert(member, `파견 보상 대원을 찾을 수 없습니다: ${memberId}`);
+    return member;
+  });
+  return dispatchRewardsForMembers(mission, members);
+}
+
+function dispatchAssignmentStatus(assignment, timestamp) {
+  const nowMs = Math.max(0, Math.floor(finiteNumber(timestamp, "파견 상태 기준 시각 값이 올바르지 않습니다.")));
+  const startedAt = Number(assignment.startedAt);
+  const completeAt = Number(assignment.completeAt);
+  const durationMs = Math.max(1, completeAt - startedAt);
+  const elapsedMs = Math.max(0, nowMs - startedAt);
+  const remainingMs = Math.max(0, completeAt - nowMs);
+  return {
+    complete: remainingMs <= 0,
+    elapsedMs,
+    remainingMs,
+    progressPercent: Math.max(0, Math.min(100, Math.floor((elapsedMs / durationMs) * 100))),
+  };
+}
+
+function dispatchMemberView(member, stage, assignmentByMemberId) {
+  const assignment = assignmentByMemberId.get(member.id);
+  return {
+    ...memberView(member, stage),
+    dispatchAssignmentId: assignment ? assignment.id : null,
+    dispatchMissionId: assignment ? assignment.missionId : null,
+    dispatchStatusLabel: assignment ? "파견중" : "",
+  };
+}
+
+function recommendedDispatchMemberIds(mission, availableMembers) {
+  return availableMembers
+    .slice()
+    .map((member, index) => ({
+      member,
+      index,
+      matchScore: dispatchMatchScore(member, mission),
+      power: member.power,
+      level: Number(member.level),
+      createdAt: Number(member.createdAt),
+    }))
+    .sort((left, right) => (
+      right.matchScore - left.matchScore ||
+      right.power - left.power ||
+      right.level - left.level ||
+      left.createdAt - right.createdAt ||
+      left.index - right.index
+    ))
+    .slice(0, Number(expeditionDispatches.rules.maxMembersPerMission))
+    .map((entry) => entry.member.id);
+}
+
+function dispatchMissionView(mission, availableMembers) {
+  const recommendedIds = recommendedDispatchMemberIds(mission, availableMembers);
+  const recommendedMembers = availableMembers.filter((member) => recommendedIds.includes(member.id));
+  const rewardPreview = recommendedMembers.length >= Number(mission.requiredMemberCount)
+    ? dispatchRewardsForMembers(mission, recommendedMembers)
+    : dispatchRewardsForMembers(mission, []);
+  return {
+    ...mission,
+    durationMs: Number(mission.durationMinutes) * 60 * 1000,
+    recommendedCareerNames: mission.recommendedCareerIds.map((careerId) => {
+      const career = careerById.get(careerId);
+      assert(career, `파견 추천 직업을 찾을 수 없습니다: ${careerId}`);
+      return career.name;
+    }),
+    recommendedRoleLabels: mission.recommendedRoles.map((role) => roleLabel(role)),
+    recommendedMemberIds: recommendedIds,
+    rewardPreview,
+    futureRewards: mission.rewards.future.map((reward) => ({ ...reward, statusLabel: "준비중" })),
+  };
+}
+
+export function createExpeditionDispatchViewModel(state, timestamp = now()) {
+  const normalized = normalizeExpeditionState(state);
+  const expedition = normalized.expedition;
+  const stage = createStageView(expedition.currentStage);
+  const partyIds = new Set(expedition.partyMemberIds);
+  const assignmentByMemberId = new Map();
+  for (const assignment of expedition.dispatch.assignments) {
+    for (const memberId of assignment.memberIds) assignmentByMemberId.set(memberId, assignment);
+  }
+  const members = expedition.members.map((member) => dispatchMemberView(member, stage, assignmentByMemberId));
+  const availableMembers = members.filter((member) => !partyIds.has(member.id) && !assignmentByMemberId.has(member.id));
+  const dateKey = localDateKeyForTimestamp(timestamp);
+  const missions = createDailyDispatchMissions(dateKey).map((mission) => dispatchMissionView(mission, availableMembers));
+  const assignments = expedition.dispatch.assignments.map((assignment) => {
+    const mission = dispatchMissionView(createDailyDispatchMissions(assignment.dateKey || dateKey).find((candidate) => candidate.id === assignment.missionId) || {
+      ...dispatchMissionByIdStrict(assignment.missionId),
+      bandId: dispatchMissionByIdStrict(assignment.missionId).band.id,
+      bandLabel: dispatchMissionByIdStrict(assignment.missionId).band.label,
+      durationMinutes: Number(dispatchMissionByIdStrict(assignment.missionId).band.durationMinutes),
+      dailyOrder: Number(dispatchMissionByIdStrict(assignment.missionId).band.dailyOrder),
+    }, members);
+    const status = dispatchAssignmentStatus(assignment, timestamp);
+    const reward = dispatchRewardsForAssignment(expedition, assignment);
+    return {
+      ...assignment,
+      mission,
+      members: assignment.memberIds.map((memberId) => {
+        const member = members.find((candidate) => candidate.id === memberId);
+        assert(member, `파견 중 대원을 찾을 수 없습니다: ${memberId}`);
+        return member;
+      }),
+      reward,
+      futureRewards: mission.futureRewards,
+      ...status,
+    };
+  });
+  const completedCount = assignments.filter((assignment) => assignment.complete).length;
+  return {
+    activeSlotCount: Number(expeditionDispatches.rules.activeSlotCount),
+    usedSlotCount: expedition.dispatch.assignments.length,
+    availableSlotCount: Math.max(0, Number(expeditionDispatches.rules.activeSlotCount) - expedition.dispatch.assignments.length),
+    maxMembersPerMission: Number(expeditionDispatches.rules.maxMembersPerMission),
+    dailyVisibleCount: Number(expeditionDispatches.rules.dailyVisibleCount),
+    bonusPerMatchPoint: Number(expeditionDispatches.rules.bonusPerMatchPoint),
+    bonusCap: Number(expeditionDispatches.rules.bonusCap),
+    dateKey,
+    nextRefreshAt: nextLocalDateRefreshAt(timestamp),
+    members,
+    availableMembers,
+    partyIds,
+    dispatchedMemberIds: new Set(assignmentByMemberId.keys()),
+    assignments,
+    completedCount,
+    missions,
+    history: expedition.dispatch.history,
+  };
+}
+
+export function startExpeditionDispatch(state, missionId, memberIds, startedAt = now()) {
+  assert(Array.isArray(memberIds), "파견 시작 대원 목록이 배열이 아닙니다.");
+  const timestamp = Math.max(0, Math.floor(finiteNumber(startedAt, "파견 시작 시각 값이 올바르지 않습니다.")));
+  const next = normalizeExpeditionState(state);
+  const expedition = next.expedition;
+  assert(expedition.dispatch.assignments.length < Number(expeditionDispatches.rules.activeSlotCount), "진행 가능한 파견 슬롯이 부족합니다.");
+  const dateKey = localDateKeyForTimestamp(timestamp);
+  const mission = createDailyDispatchMissions(dateKey).find((candidate) => candidate.id === missionId);
+  assert(mission, `오늘의 파견 의뢰가 아닙니다: ${missionId}`);
+  assert(memberIds.length >= Number(mission.requiredMemberCount), `${mission.title} 의뢰에 필요한 대원이 부족합니다.`);
+  assert(memberIds.length <= Number(expeditionDispatches.rules.maxMembersPerMission), `${mission.title} 의뢰 파견 인원이 최대치를 초과했습니다.`);
+  const uniqueMemberIds = new Set(memberIds);
+  assert(uniqueMemberIds.size === memberIds.length, "파견 대원 목록에 중복이 있습니다.");
+  const partyIds = new Set(expedition.partyMemberIds);
+  const dispatchedIds = expeditionDispatchedMemberIds(expedition);
+  for (const memberId of memberIds) {
+    assert(typeof memberId === "string" && memberId.length > 0, `파견 대원 id 값이 올바르지 않습니다: ${memberId}`);
+    assert(expedition.members.some((member) => member.id === memberId), `파견 대원을 찾을 수 없습니다: ${memberId}`);
+    assert(!partyIds.has(memberId), `출전 중인 대원은 파견할 수 없습니다: ${memberId}`);
+    assert(!dispatchedIds.has(memberId), `이미 파견 중인 대원입니다: ${memberId}`);
+  }
+  const completeAt = timestamp + Number(mission.durationMinutes) * 60 * 1000;
+  const assignment = {
+    id: `dispatch-${timestamp}-${mission.id}-${expedition.dispatch.assignments.length}`,
+    missionId: mission.id,
+    dateKey,
+    startedAt: timestamp,
+    completeAt,
+    memberIds: [...memberIds],
+  };
+  expedition.dispatch.assignments.push(assignment);
+  pushExpeditionLog(expedition, `${mission.title} 의뢰에 ${memberIds.length}명을 파견했다.`, "info");
+  next.expedition = expeditionAliases(expedition);
+  validateExpeditionState(next.expedition, "save.expedition");
+  return next;
+}
+
+export function claimExpeditionDispatch(state, assignmentId, claimedAt = now()) {
+  assert(typeof assignmentId === "string" && assignmentId.length > 0, "수령할 파견 id 값이 없습니다.");
+  const timestamp = Math.max(0, Math.floor(finiteNumber(claimedAt, "파견 보상 수령 시각 값이 올바르지 않습니다.")));
+  let next = normalizeExpeditionState(state);
+  let expedition = next.expedition;
+  const assignment = expedition.dispatch.assignments.find((candidate) => candidate.id === assignmentId);
+  assert(assignment, `파견 의뢰를 찾을 수 없습니다: ${assignmentId}`);
+  assert(timestamp >= Number(assignment.completeAt), "아직 완료되지 않은 파견 의뢰입니다.");
+  const mission = dispatchMissionByIdStrict(assignment.missionId);
+  const reward = dispatchRewardsForAssignment(expedition, assignment);
+  next.expedition.trainingExp += reward.trainingExp;
+  next.diamonds = finiteNumber(next.diamonds, "save.diamonds 값이 올바르지 않습니다.") + reward.diamonds;
+  if (reward.realEstateCash > 0) next = grantRealEstateExpeditionPendingCash(next, reward.realEstateCash, timestamp);
+  expedition = next.expedition;
+  expedition.dispatch.assignments = expedition.dispatch.assignments.filter((candidate) => candidate.id !== assignmentId);
+  expedition.dispatch.history = [
+    {
+      id: `${assignment.id}-claimed-${timestamp}`,
+      missionId: mission.id,
+      title: mission.title,
+      claimedAt: timestamp,
+      memberIds: [...assignment.memberIds],
+      rewards: {
+        trainingExp: reward.trainingExp,
+        diamonds: reward.diamonds,
+        realEstateCash: reward.realEstateCash,
+      },
+      bonusMultiplier: reward.bonusMultiplier,
+    },
+    ...expedition.dispatch.history,
+  ].slice(0, Number(expeditionDispatches.rules.historyLimit));
+  pushExpeditionLog(expedition, `파견 보상 수령: ${mission.title} · EXP ${reward.trainingExp} · 다이아 ${reward.diamonds} · 부동산 자금 ${reward.realEstateCash}`, "good");
+  next.expedition = expeditionAliases(expedition);
+  validateExpeditionState(next.expedition, "save.expedition");
   return next;
 }
 
@@ -1338,9 +1767,10 @@ export function createExpeditionViewModel(state) {
 function fusionCandidateGroups(expedition) {
   validateExpeditionState(expedition, "save.expedition");
   const partyIds = new Set(expedition.partyMemberIds);
+  const dispatchedIds = expeditionDispatchedMemberIds(expedition);
   const groups = new Map();
   for (const member of expedition.members) {
-    if (partyIds.has(member.id) || member.locked || !nextPromotionId(member.promotionTier)) continue;
+    if (partyIds.has(member.id) || dispatchedIds.has(member.id) || member.locked || !nextPromotionId(member.promotionTier)) continue;
     const key = `${member.sourceCareerId}:${member.promotionTier}`;
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(member);
@@ -1371,27 +1801,49 @@ export function createExpeditionManagementViewModel(state) {
   const expedition = normalized.expedition;
   const stage = createStageView(expedition.currentStage);
   const partyIds = new Set(expedition.partyMemberIds);
-  const members = expedition.members.map((member, index) => ({ ...memberView(member, stage, partyIds.has(member.id) ? expedition.partyMemberIds.indexOf(member.id) + 1 : null), rosterIndex: index }));
+  const assignmentByMemberId = new Map();
+  for (const assignment of expedition.dispatch.assignments) {
+    for (const memberId of assignment.memberIds) assignmentByMemberId.set(memberId, assignment);
+  }
+  const members = expedition.members.map((member, index) => {
+    const assignment = assignmentByMemberId.get(member.id);
+    return {
+      ...memberView(member, stage, partyIds.has(member.id) ? expedition.partyMemberIds.indexOf(member.id) + 1 : null),
+      rosterIndex: index,
+      dispatchAssignmentId: assignment ? assignment.id : null,
+      dispatchMissionId: assignment ? assignment.missionId : null,
+      dispatchStatusLabel: assignment ? "파견중" : "",
+    };
+  });
   const party = expedition.partyMemberIds.map((id, index) => {
     const member = expedition.members.find((candidate) => candidate.id === id);
     assert(member, `원정대 편성 대원을 찾을 수 없습니다: ${id}`);
-    return memberView(member, stage, index + 1);
+    const assignment = assignmentByMemberId.get(member.id);
+    return {
+      ...memberView(member, stage, index + 1),
+      dispatchAssignmentId: assignment ? assignment.id : null,
+      dispatchMissionId: assignment ? assignment.missionId : null,
+      dispatchStatusLabel: assignment ? "파견중" : "",
+    };
   });
   const growthMembers = party;
   const upgradeableCount = growthMembers.filter((member) => expedition.trainingExp >= member.levelCost).length;
   const fusionCandidates = fusionCandidateGroups(expedition);
   const visibleLog = expedition.log.filter((entry, index, list) => index === 0 || entry.text !== list[index - 1].text);
+  const dispatchCompletedCount = expedition.dispatch.assignments.filter((assignment) => Number(assignment.completeAt) <= now()).length;
   return {
     stage,
     partySize: expeditionPartySize,
     party,
     partyIds,
+    dispatchedMemberIds: new Set(assignmentByMemberId.keys()),
     partySlots: Array.from({ length: expeditionPartySize }, (_, index) => (index < party.length ? party[index] : null)),
     members,
     roster: members,
     growthMembers,
     upgradeableCount,
     fusionCandidates,
+    dispatchCompletedCount,
     trainingExp: expedition.trainingExp,
     pendingReward: expedition.pendingReward,
     log: visibleLog,
@@ -1426,6 +1878,7 @@ export function assignExpeditionMember(state, memberId, slotIndex = expeditionPa
   const expedition = next.expedition;
   const member = expedition.members.find((candidate) => candidate.id === memberId);
   assert(member, `원정대원을 찾을 수 없습니다: ${memberId}`);
+  assert(!expeditionDispatchedMemberIds(expedition).has(memberId), `파견 중인 대원은 파티에 편성할 수 없습니다: ${member.careerName}`);
   if (expedition.partyMemberIds.includes(memberId)) return next;
   const wasPartyEmpty = expedition.partyMemberIds.length === 0;
   const slot = clamp(Math.floor(finiteNumber(slotIndex, "원정대 편성 슬롯 값이 올바르지 않습니다.")), 0, expeditionPartySize - 1);
@@ -1465,8 +1918,10 @@ export function assignRecommendedExpeditionParty(state) {
   const expedition = next.expedition;
   if (expedition.members.length === 0) return next;
   const stage = createStageView(expedition.currentStage);
+  const dispatchedIds = expeditionDispatchedMemberIds(expedition);
   const recommended = expedition.members
     .slice()
+    .filter((member) => !dispatchedIds.has(member.id))
     .map((member, index) => ({
       member,
       index,
@@ -1523,8 +1978,9 @@ export function fuseExpeditionMembers(state, careerId, promotionTier) {
   const nextTier = nextPromotionId(promotionTier);
   assert(nextTier, `다음 승급 단계를 찾을 수 없습니다: ${promotionTier}`);
   const partyIds = new Set(expedition.partyMemberIds);
+  const dispatchedIds = expeditionDispatchedMemberIds(expedition);
   const candidates = expedition.members
-    .filter((member) => member.sourceCareerId === careerId && member.promotionTier === promotionTier && !member.locked && !partyIds.has(member.id))
+    .filter((member) => member.sourceCareerId === careerId && member.promotionTier === promotionTier && !member.locked && !partyIds.has(member.id) && !dispatchedIds.has(member.id))
     .sort((a, b) => a.createdAt - b.createdAt);
   assert(candidates.length >= 2, "합성 가능한 대원이 부족합니다.");
   const consumed = candidates.slice(0, 2);
