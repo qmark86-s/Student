@@ -5,6 +5,7 @@ import expeditionBosses from "../../../data/expedition_bosses.json";
 import expeditionChapters from "../../../data/expedition_chapters.json";
 import expeditionDispatches from "../../../data/expedition_dispatches.json";
 import expeditionPromotions from "../../../data/expedition_promotions.json";
+import expeditionResearch from "../../../data/expedition_research.json";
 import expeditionSegments from "../../../data/expedition_stages.json";
 import expeditionLevels from "../../../data/expedition_unit_levels.json";
 import { grantRealEstateExpeditionPendingCash, realEstateExpeditionStageReward } from "./realEstate.js";
@@ -45,6 +46,9 @@ const chapterBossByChapter = new Map(
 );
 const dispatchBands = validateDispatchConfig(expeditionDispatches).bands.slice().sort((a, b) => Number(a.dailyOrder) - Number(b.dailyOrder));
 const dispatchMissionById = new Map(dispatchBands.flatMap((band) => band.missions.map((mission) => [mission.id, { ...mission, band }])));
+const researchConfig = validateResearchConfig(expeditionResearch);
+const researchNodes = researchConfig.nodes.slice().sort((a, b) => Number(a.position.depth) - Number(b.position.depth) || Number(a.position.lane) - Number(b.position.lane));
+const researchNodeById = new Map(researchNodes.map((node) => [node.id, node]));
 
 export const expeditionPartySize = expeditionBalance.partySize;
 export const expeditionAutoTickMs = expeditionCombatBalance.timing.onlineTickMs;
@@ -180,10 +184,111 @@ function validateDispatchConfig(config) {
   return config;
 }
 
+function validateResearchConfig(config) {
+  assertObject(config, "expedition_research.json");
+  assertNumberInteger(config.version, "expedition_research.json.version", 1);
+  assertObject(config.help, "expedition_research.json.help");
+  for (const key of ["version", "rules", "lanes", "nodes"]) {
+    assert(typeof config.help[key] === "string" && config.help[key].length > 0, `expedition_research.json.help.${key} 값이 없습니다.`);
+  }
+  assertObject(config.rules, "expedition_research.json.rules");
+  assert(typeof config.rules.currencyName === "string" && config.rules.currencyName.length > 0, "expedition_research.json.rules.currencyName 값이 없습니다.");
+  nonNegativeNumber(config.rules.maxTotalCombatBonus, "expedition_research.json.rules.maxTotalCombatBonus");
+  assert(typeof config.rules.freeReset === "boolean", "expedition_research.json.rules.freeReset 값이 boolean이 아닙니다.");
+  assertObject(config.rules.bossRewards, "expedition_research.json.rules.bossRewards");
+  assertNumberInteger(config.rules.bossRewards.mid, "expedition_research.json.rules.bossRewards.mid", 0);
+  assertNumberInteger(config.rules.bossRewards.chapter, "expedition_research.json.rules.bossRewards.chapter", 0);
+  assertObject(config.rules.help, "expedition_research.json.rules.help");
+  for (const key of ["currencyName", "maxTotalCombatBonus", "freeReset", "bossRewards"]) {
+    assert(typeof config.rules.help[key] === "string" && config.rules.help[key].length > 0, `expedition_research.json.rules.help.${key} 값이 없습니다.`);
+  }
+  assert(Array.isArray(config.lanes) && config.lanes.length > 0, "expedition_research.json.lanes 데이터가 비어 있습니다.");
+  const laneIds = new Set();
+  const laneNumbers = new Set();
+  for (const [laneIndex, lane] of config.lanes.entries()) {
+    const lanePath = `expedition_research.json.lanes[${laneIndex}]`;
+    assertObject(lane, lanePath);
+    assert(typeof lane.id === "string" && lane.id.length > 0, `${lanePath}.id 값이 없습니다.`);
+    assert(!laneIds.has(lane.id), `${lanePath}.id 값이 중복되었습니다: ${lane.id}`);
+    laneIds.add(lane.id);
+    assert(typeof lane.name === "string" && lane.name.length > 0, `${lanePath}.name 값이 없습니다.`);
+    assertNumberInteger(lane.lane, `${lanePath}.lane`, 0);
+    assert(!laneNumbers.has(Number(lane.lane)), `${lanePath}.lane 값이 중복되었습니다: ${lane.lane}`);
+    laneNumbers.add(Number(lane.lane));
+    assert(typeof lane.help === "string" && lane.help.length > 0, `${lanePath}.help 값이 없습니다.`);
+  }
+  assert(Array.isArray(config.nodes) && config.nodes.length > 0, "expedition_research.json.nodes 데이터가 비어 있습니다.");
+  const nodeIds = new Set();
+  const occupiedPositions = new Set();
+  const allowedEffectTypes = new Set(["partyPowerPercent", "combatStatPercent", "roleCombatStatPercent", "stageRewardPercent", "researchPointDropFlat"]);
+  const allowedRewardIds = new Set(["trainingExp", "realEstateCash"]);
+  const allowedBossTypes = new Set(["mid", "chapter", "all"]);
+  for (const [nodeIndex, node] of config.nodes.entries()) {
+    const nodePath = `expedition_research.json.nodes[${nodeIndex}]`;
+    assertObject(node, nodePath);
+    assert(typeof node.id === "string" && node.id.length > 0, `${nodePath}.id 값이 없습니다.`);
+    assert(!nodeIds.has(node.id), `${nodePath}.id 값이 중복되었습니다: ${node.id}`);
+    nodeIds.add(node.id);
+    assert(typeof node.name === "string" && node.name.length > 0, `${nodePath}.name 값이 없습니다.`);
+    assert(typeof node.shortName === "string" && node.shortName.length > 0, `${nodePath}.shortName 값이 없습니다.`);
+    assert(typeof node.description === "string" && node.description.length > 0, `${nodePath}.description 값이 없습니다.`);
+    assertNumberInteger(node.cost, `${nodePath}.cost`, 1);
+    assert(Array.isArray(node.prerequisiteNodeIds), `${nodePath}.prerequisiteNodeIds 데이터가 배열이 아닙니다.`);
+    assertObject(node.position, `${nodePath}.position`);
+    assertNumberInteger(node.position.depth, `${nodePath}.position.depth`, 1);
+    assertNumberInteger(node.position.lane, `${nodePath}.position.lane`, 0);
+    assert(laneNumbers.has(Number(node.position.lane)), `${nodePath}.position.lane에 해당하는 lanes 정의가 없습니다: ${node.position.lane}`);
+    const positionKey = `${Number(node.position.depth)}:${Number(node.position.lane)}`;
+    assert(!occupiedPositions.has(positionKey), `${nodePath}.position 값이 다른 노드와 겹칩니다: ${positionKey}`);
+    occupiedPositions.add(positionKey);
+    assert(Array.isArray(node.effects) && node.effects.length > 0, `${nodePath}.effects 데이터가 비어 있습니다.`);
+    for (const [effectIndex, effect] of node.effects.entries()) {
+      const effectPath = `${nodePath}.effects[${effectIndex}]`;
+      assertObject(effect, effectPath);
+      assert(allowedEffectTypes.has(effect.type), `${effectPath}.type 값이 올바르지 않습니다: ${effect.type}`);
+      assert(typeof effect.help === "string" && effect.help.length > 0, `${effectPath}.help 값이 없습니다.`);
+      if (effect.type === "partyPowerPercent") {
+        nonNegativeNumber(effect.value, `${effectPath}.value`);
+      } else if (effect.type === "combatStatPercent") {
+        assert(combatStatIds.includes(effect.stat), `${effectPath}.stat 값이 올바르지 않습니다: ${effect.stat}`);
+        nonNegativeNumber(effect.value, `${effectPath}.value`);
+      } else if (effect.type === "roleCombatStatPercent") {
+        assert(expeditionRoleIds.includes(effect.role), `${effectPath}.role 값이 올바르지 않습니다: ${effect.role}`);
+        assert(combatStatIds.includes(effect.stat), `${effectPath}.stat 값이 올바르지 않습니다: ${effect.stat}`);
+        nonNegativeNumber(effect.value, `${effectPath}.value`);
+      } else if (effect.type === "stageRewardPercent") {
+        assert(allowedRewardIds.has(effect.reward), `${effectPath}.reward 값이 올바르지 않습니다: ${effect.reward}`);
+        nonNegativeNumber(effect.value, `${effectPath}.value`);
+      } else if (effect.type === "researchPointDropFlat") {
+        assert(allowedBossTypes.has(effect.bossType), `${effectPath}.bossType 값이 올바르지 않습니다: ${effect.bossType}`);
+        assertNumberInteger(effect.value, `${effectPath}.value`, 0);
+      }
+    }
+  }
+  for (const [nodeIndex, node] of config.nodes.entries()) {
+    const nodePath = `expedition_research.json.nodes[${nodeIndex}]`;
+    for (const prerequisiteId of node.prerequisiteNodeIds) {
+      assert(typeof prerequisiteId === "string" && nodeIds.has(prerequisiteId), `${nodePath}.prerequisiteNodeIds 값이 올바르지 않습니다: ${prerequisiteId}`);
+      const prerequisite = config.nodes.find((candidate) => candidate.id === prerequisiteId);
+      assert(Number(prerequisite.position.depth) < Number(node.position.depth), `${nodePath}.prerequisiteNodeIds 선행 노드는 더 위 depth여야 합니다: ${prerequisiteId}`);
+    }
+  }
+  return config;
+}
+
 function createEmptyDispatchState() {
   return {
     assignments: [],
     history: [],
+  };
+}
+
+export function createEmptyResearchState() {
+  return {
+    points: 0,
+    spentPoints: 0,
+    unlockedNodeIds: [],
+    resetCount: 0,
   };
 }
 
@@ -263,6 +368,44 @@ function normalizeDispatchState(dispatch) {
   };
 }
 
+function researchNodeCost(nodeId) {
+  const node = researchNodeById.get(nodeId);
+  assert(node, `원정대 연구 노드를 찾을 수 없습니다: ${nodeId}`);
+  return Math.max(0, Math.floor(finiteNumber(node.cost, `expedition_research.json ${nodeId}.cost 값이 올바르지 않습니다.`)));
+}
+
+function validateResearchState(research, path) {
+  assertObject(research, path);
+  assertNumberInteger(research.points, `${path}.points`, 0);
+  assertNumberInteger(research.spentPoints, `${path}.spentPoints`, 0);
+  assert(Array.isArray(research.unlockedNodeIds), `${path}.unlockedNodeIds 데이터가 배열이 아닙니다.`);
+  const unlocked = new Set();
+  for (const [index, nodeId] of research.unlockedNodeIds.entries()) {
+    assert(typeof nodeId === "string" && researchNodeById.has(nodeId), `${path}.unlockedNodeIds[${index}] 값이 올바르지 않습니다: ${nodeId}`);
+    assert(!unlocked.has(nodeId), `${path}.unlockedNodeIds 값이 중복되었습니다: ${nodeId}`);
+    const node = researchNodeById.get(nodeId);
+    for (const prerequisiteId of node.prerequisiteNodeIds) {
+      assert(unlocked.has(prerequisiteId), `${path}.unlockedNodeIds 선행 연구가 먼저 저장되어야 합니다: ${nodeId} <- ${prerequisiteId}`);
+    }
+    unlocked.add(nodeId);
+  }
+  const expectedSpent = research.unlockedNodeIds.reduce((sum, nodeId) => sum + researchNodeCost(nodeId), 0);
+  assert(Number(research.spentPoints) === expectedSpent, `${path}.spentPoints 값이 해금 노드 비용 합계와 다릅니다: ${research.spentPoints} !== ${expectedSpent}`);
+  assertNumberInteger(research.resetCount, `${path}.resetCount`, 0);
+}
+
+function normalizeResearchState(research) {
+  if (research === undefined || research === null) return createEmptyResearchState();
+  assertObject(research, "save.expedition.research");
+  const unlockedNodeIds = Array.isArray(research.unlockedNodeIds) ? [...research.unlockedNodeIds] : research.unlockedNodeIds;
+  return {
+    points: hasOwn(research, "points") ? Math.max(0, Math.floor(finiteNumber(research.points, "save.expedition.research.points 값이 올바르지 않습니다."))) : 0,
+    spentPoints: hasOwn(research, "spentPoints") ? Math.max(0, Math.floor(finiteNumber(research.spentPoints, "save.expedition.research.spentPoints 값이 올바르지 않습니다."))) : 0,
+    unlockedNodeIds,
+    resetCount: hasOwn(research, "resetCount") ? Math.max(0, Math.floor(finiteNumber(research.resetCount, "save.expedition.research.resetCount 값이 올바르지 않습니다."))) : 0,
+  };
+}
+
 function createEmptyPendingReward(createdAt = now(), previousLastBattle = null) {
   const timestamp = Math.max(0, Math.floor(finiteNumber(createdAt, "원정대 pendingReward createdAt 값이 올바르지 않습니다.")));
   return {
@@ -270,6 +413,7 @@ function createEmptyPendingReward(createdAt = now(), previousLastBattle = null) 
     trainingExp: 0,
     diamonds: 0,
     realEstateCash: 0,
+    researchPoints: 0,
     battles: 0,
     wins: 0,
     losses: 0,
@@ -288,7 +432,8 @@ function pendingRewardHasValue(pendingReward) {
     (Number(pendingReward.money) > 0 ||
       Number(pendingReward.trainingExp) > 0 ||
       Number(pendingReward.diamonds) > 0 ||
-      Number(pendingReward.realEstateCash) > 0)
+      Number(pendingReward.realEstateCash) > 0 ||
+      Number(pendingReward.researchPoints) > 0)
   );
 }
 
@@ -315,6 +460,7 @@ function normalizePendingReward(pendingReward, createdAt = now()) {
     trainingExp: Math.max(0, Math.floor(Number(pendingReward.trainingExp) || 0)),
     diamonds: Math.max(0, Math.floor(Number(pendingReward.diamonds) || 0)),
     realEstateCash: Math.max(0, Math.floor(Number(pendingReward.realEstateCash) || 0)),
+    researchPoints: Math.max(0, Math.floor(Number(pendingReward.researchPoints) || 0)),
     battles: Math.max(0, Math.floor(Number(pendingReward.battles) || 0)),
     wins: Math.max(0, Math.floor(Number(pendingReward.wins) || 0)),
     losses: Math.max(0, Math.floor(Number(pendingReward.losses) || 0)),
@@ -398,7 +544,7 @@ function validateBattleReport(report, path) {
 
 function validatePendingReward(pendingReward, path) {
   assert(pendingReward && typeof pendingReward === "object" && !Array.isArray(pendingReward), `${path} 데이터가 객체가 아닙니다.`);
-  for (const key of ["money", "trainingExp", "diamonds", "realEstateCash", "battles", "wins", "losses"]) {
+  for (const key of ["money", "trainingExp", "diamonds", "realEstateCash", "researchPoints", "battles", "wins", "losses"]) {
     assertNumberInteger(pendingReward[key], `${path}.${key}`, 0);
   }
   assertNumberInteger(pendingReward.startedAt, `${path}.startedAt`, 0);
@@ -433,6 +579,7 @@ export function createDefaultExpeditionState(createdAt = now()) {
     lastResolvedAt: createdAt,
     pendingReward: createEmptyPendingReward(createdAt),
     dispatch: createEmptyDispatchState(),
+    research: createEmptyResearchState(),
     log: [],
     stageIndex: 0,
     clearedStageCount: 0,
@@ -505,6 +652,7 @@ export function validateExpeditionState(expedition, path = "save.expedition") {
   assertNumberInteger(expedition.lastResolvedAt, `${path}.lastResolvedAt`, 0);
   validatePendingReward(expedition.pendingReward, `${path}.pendingReward`);
   validateDispatchState(expedition.dispatch, `${path}.dispatch`, memberIds);
+  validateResearchState(expedition.research, `${path}.research`);
   assert(Array.isArray(expedition.log), `${path}.log 데이터가 배열이 아닙니다.`);
   expedition.log.forEach((entry, index) => validateLogEntry(entry, `${path}.log[${index}]`));
 
@@ -700,6 +848,67 @@ function roleLabel(role) {
   return label;
 }
 
+function emptyResearchEffects() {
+  return {
+    partyPowerPercent: 0,
+    combatStatPercent: Object.fromEntries(combatStatIds.map((stat) => [stat, 0])),
+    roleCombatStatPercent: Object.fromEntries(expeditionRoleIds.map((role) => [role, Object.fromEntries(combatStatIds.map((stat) => [stat, 0]))])),
+    stageRewardPercent: {
+      trainingExp: 0,
+      realEstateCash: 0,
+    },
+    researchPointDropFlat: {
+      mid: 0,
+      chapter: 0,
+    },
+  };
+}
+
+export function expeditionResearchEffects(expedition) {
+  assertObject(expedition, "save.expedition");
+  const research = normalizeResearchState(expedition.research);
+  validateResearchState(research, "save.expedition.research");
+  const effects = emptyResearchEffects();
+  for (const nodeId of research.unlockedNodeIds) {
+    const node = researchNodeById.get(nodeId);
+    assert(node, `원정대 연구 노드를 찾을 수 없습니다: ${nodeId}`);
+    for (const effect of node.effects) {
+      const value = nonNegativeNumber(effect.value, `expedition_research.json ${nodeId}.${effect.type}.value`);
+      if (effect.type === "partyPowerPercent") {
+        effects.partyPowerPercent += value;
+      } else if (effect.type === "combatStatPercent") {
+        effects.combatStatPercent[effect.stat] += value;
+      } else if (effect.type === "roleCombatStatPercent") {
+        effects.roleCombatStatPercent[effect.role][effect.stat] += value;
+      } else if (effect.type === "stageRewardPercent") {
+        effects.stageRewardPercent[effect.reward] += value;
+      } else if (effect.type === "researchPointDropFlat") {
+        const amount = Math.max(0, Math.floor(value));
+        if (effect.bossType === "all") {
+          effects.researchPointDropFlat.mid += amount;
+          effects.researchPointDropFlat.chapter += amount;
+        } else {
+          effects.researchPointDropFlat[effect.bossType] += amount;
+        }
+      }
+    }
+  }
+  effects.partyPowerPercent = Math.min(Number(researchConfig.rules.maxTotalCombatBonus), effects.partyPowerPercent);
+  return effects;
+}
+
+function researchStatMultiplier(effects, role, stat) {
+  assert(effects && typeof effects === "object", "원정대 연구 효과 데이터가 없습니다.");
+  assert(expeditionRoleIds.includes(role), `원정대 역할 값이 올바르지 않습니다: ${role}`);
+  assert(combatStatIds.includes(stat), `원정대 전투 스탯 값이 올바르지 않습니다: ${stat}`);
+  return 1 + Number(effects.combatStatPercent[stat] || 0) + Number(effects.roleCombatStatPercent[role]?.[stat] || 0);
+}
+
+function researchRewardMultiplier(expedition, rewardId) {
+  const effects = expeditionResearchEffects(expedition);
+  return 1 + Number(effects.stageRewardPercent[rewardId] || 0);
+}
+
 function combatPromotionMultiplier(promotionId) {
   const multiplier = finiteNumber(expeditionCombatBalance.promotionMultipliers?.[promotionId], `expedition_combat_balance.json promotionMultipliers 누락: ${promotionId}`);
   assert(multiplier > 0, `expedition_combat_balance.json promotion multiplier 값은 0보다 커야 합니다: ${promotionId}`);
@@ -711,8 +920,10 @@ function memberRawSubjectPower(member) {
   return subjectIds.reduce((sum, subject) => sum + finiteNumber(member.baseStats[subject], `원정대원 baseStats.${subject} 값이 올바르지 않습니다.`), 0);
 }
 
-function memberRoleCombatStats(member) {
+function memberRoleCombatStats(member, expedition = null) {
   const config = careerCombatConfig(member.sourceCareerId);
+  const role = config.role;
+  const effects = expedition ? expeditionResearchEffects(expedition) : emptyResearchEffects();
   const rawPower = memberRawSubjectPower(member);
   const aptitudeScale = Math.max(0.05, rawPower / 160);
   const promotionScale = combatPromotionMultiplier(member.promotionTier);
@@ -722,13 +933,13 @@ function memberRoleCombatStats(member) {
   for (const key of ["hp", "attack", "defense", "healing"]) {
     const base = nonNegativeNumber(config[key], `expedition_combat_balance.json ${member.sourceCareerId}.${key}`);
     const growthRate = nonNegativeNumber(growth[key] ?? 0, `expedition_combat_balance.json ${member.sourceCareerId}.levelGrowth.${key}`);
-    scaled[key] = Math.max(key === "defense" || key === "healing" ? 0 : 1, Math.round(base * aptitudeScale * promotionScale * (1 + (level - 1) * growthRate)));
+    scaled[key] = Math.max(key === "defense" || key === "healing" ? 0 : 1, Math.round(base * aptitudeScale * promotionScale * (1 + (level - 1) * growthRate) * researchStatMultiplier(effects, role, key)));
   }
   const speedGrowth = nonNegativeNumber(growth.attackSpeed ?? 0, `expedition_combat_balance.json ${member.sourceCareerId}.levelGrowth.attackSpeed`);
   scaled.attackSpeed = roundTo(positiveNumber(config.attackSpeed, `expedition_combat_balance.json ${member.sourceCareerId}.attackSpeed`) + (level - 1) * speedGrowth, 3);
   return {
-    role: config.role,
-    roleLabel: roleLabel(config.role),
+    role,
+    roleLabel: roleLabel(role),
     ...scaled,
   };
 }
@@ -751,13 +962,14 @@ function partyPowerForStage(expedition, stageView) {
   const stats = blankStats();
   for (const member of partyMembers(expedition)) addStats(stats, memberCombatStats(member));
   const boost = finiteNumber(expedition.chapterRun.boostMultiplier, "save.expedition.chapterRun.boostMultiplier 값이 올바르지 않습니다.");
+  const researchMultiplier = 1 + expeditionResearchEffects(expedition).partyPowerPercent;
   return subjectIds.reduce((sum, subject) => {
     let multiplier = 1;
     if (stageView.focusSubjects.includes(subject)) multiplier *= expeditionBalance.focusMultiplier;
     if (stageView.weakSubjects.includes(subject)) multiplier *= expeditionBalance.weakMultiplier;
     if (stageView.resistSubjects.includes(subject)) multiplier *= expeditionBalance.resistMultiplier;
     return sum + stats[subject] * multiplier;
-  }, 0) * boost;
+  }, 0) * boost * researchMultiplier;
 }
 
 function requiredPowerForStage(currentStage) {
@@ -815,7 +1027,7 @@ function enemyCombatantsForStage(stageView) {
 
 function partyCombatantsForExpedition(expedition, stageView) {
   return partyMembers(expedition).map((member, index) => {
-    const roleStats = memberRoleCombatStats(member);
+    const roleStats = memberRoleCombatStats(member, expedition);
     return {
       id: member.id,
       name: member.careerName,
@@ -830,7 +1042,7 @@ function partyCombatantsForExpedition(expedition, stageView) {
       healing: roleStats.healing,
       attackSpeed: roleStats.attackSpeed,
       nextAt: roundTo(1 / roleStats.attackSpeed, 4),
-      stagePower: Math.round(partyPowerForStage({ ...createDefaultExpeditionState(), members: [member], partyMemberIds: [member.id], currentStage: stageView.globalStage, highestStage: 0, claimedBossStages: [], trainingExp: 0, chapterRun: createChapterRun(stageView.globalStage, 0), lastResolvedAt: now(), pendingReward: createEmptyPendingReward(now()), log: [], stageIndex: stageView.globalStage - 1, clearedStageCount: 0, lastStageId: null }, stageView)),
+      stagePower: Math.round(partyPowerForStage({ ...createDefaultExpeditionState(), members: [member], partyMemberIds: [member.id], currentStage: stageView.globalStage, highestStage: 0, claimedBossStages: [], trainingExp: 0, chapterRun: createChapterRun(stageView.globalStage, 0), lastResolvedAt: now(), pendingReward: createEmptyPendingReward(now()), research: normalizeResearchState(expedition.research), log: [], stageIndex: stageView.globalStage - 1, clearedStageCount: 0, lastStageId: null }, stageView)),
     };
   });
 }
@@ -1126,6 +1338,7 @@ export function migrateLegacyExpeditionState(expedition, companions = [], create
     lastResolvedAt: Math.max(0, Math.floor(finiteNumber(requireOwn(expedition, "lastResolvedAt", "legacy expedition"), "legacy expedition lastResolvedAt 값이 올바르지 않습니다."))),
     pendingReward: normalizePendingReward(hasOwn(expedition, "pendingReward") ? expedition.pendingReward : null, createdAt),
     dispatch: normalizeDispatchState(hasOwn(expedition, "dispatch") ? expedition.dispatch : null),
+    research: normalizeResearchState(hasOwn(expedition, "research") ? expedition.research : null),
     log: requireOwn(expedition, "log", "legacy expedition"),
   }, requireOwn(expedition, "lastStageId", "legacy expedition"));
   validateExpeditionState(migrated, "save.expedition");
@@ -1187,6 +1400,7 @@ export function normalizeExpeditionState(state) {
   const next = cloneState(state);
   if (next.expedition) next.expedition.pendingReward = normalizePendingReward(next.expedition.pendingReward, now());
   if (next.expedition) next.expedition.dispatch = normalizeDispatchState(next.expedition.dispatch);
+  if (next.expedition) next.expedition.research = normalizeResearchState(next.expedition.research);
   validateExpeditionState(next.expedition, "save.expedition");
   next.expedition = expeditionAliases(next.expedition);
   return next;
@@ -1294,10 +1508,10 @@ function dispatchAssignmentStatus(assignment, timestamp) {
   };
 }
 
-function dispatchMemberView(member, stage, assignmentByMemberId) {
+function dispatchMemberView(member, stage, assignmentByMemberId, expedition) {
   const assignment = assignmentByMemberId.get(member.id);
   return {
-    ...memberView(member, stage),
+    ...memberView(member, stage, null, expedition),
     dispatchAssignmentId: assignment ? assignment.id : null,
     dispatchMissionId: assignment ? assignment.missionId : null,
     dispatchStatusLabel: assignment ? "파견중" : "",
@@ -1356,7 +1570,7 @@ export function createExpeditionDispatchViewModel(state, timestamp = now()) {
   for (const assignment of expedition.dispatch.assignments) {
     for (const memberId of assignment.memberIds) assignmentByMemberId.set(memberId, assignment);
   }
-  const members = expedition.members.map((member) => dispatchMemberView(member, stage, assignmentByMemberId));
+  const members = expedition.members.map((member) => dispatchMemberView(member, stage, assignmentByMemberId, expedition));
   const availableMembers = members.filter((member) => !partyIds.has(member.id) && !assignmentByMemberId.has(member.id));
   const dateKey = localDateKeyForTimestamp(timestamp);
   const missions = createDailyDispatchMissions(dateKey).map((mission) => dispatchMissionView(mission, availableMembers));
@@ -1486,11 +1700,23 @@ function rewardForBattle(stageView, expedition) {
       ? Math.round(expeditionBalance.chapterBossFirstClearDiamonds * expeditionBalance.bossDiamondGrowth ** (stageView.chapter - 1))
       : Math.round(expeditionBalance.midBossFirstClearDiamonds * expeditionBalance.bossDiamondGrowth ** (stageView.chapter - 1))
     : 0;
+  const researchEffects = expeditionResearchEffects(expedition);
+  const researchBase = firstBossClear
+    ? stageView.isChapterBoss
+      ? Number(researchConfig.rules.bossRewards.chapter)
+      : Number(researchConfig.rules.bossRewards.mid)
+    : 0;
+  const researchBonus = firstBossClear
+    ? stageView.isChapterBoss
+      ? Number(researchEffects.researchPointDropFlat.chapter || 0)
+      : Number(researchEffects.researchPointDropFlat.mid || 0)
+    : 0;
   return {
     money: expeditionMoneyReward(stageView.globalStage),
-    trainingExp: expeditionStageExpReward(stageView.globalStage),
+    trainingExp: Math.floor(expeditionStageExpReward(stageView.globalStage) * researchRewardMultiplier(expedition, "trainingExp")),
     diamonds,
-    realEstateCash: realEstateExpeditionStageReward(stageView),
+    realEstateCash: Math.floor(realEstateExpeditionStageReward(stageView) * researchRewardMultiplier(expedition, "realEstateCash")),
+    researchPoints: Math.max(0, Math.floor(researchBase + researchBonus)),
   };
 }
 
@@ -1502,11 +1728,12 @@ function pendingSummary(pending) {
   if (pending.money > 0) rewards.push(`돈 ${pending.money}`);
   if (pending.realEstateCash > 0) rewards.push(`부동산 ${pending.realEstateCash}`);
   if (pending.diamonds > 0) rewards.push(`다이아 ${pending.diamonds}`);
+  if (pending.researchPoints > 0) rewards.push(`연구 ${pending.researchPoints}`);
   return rewards.length > 0 ? `${pieces.join(" · ")} / ${rewards.join(" · ")}` : pieces.join(" · ");
 }
 
 function emptyExpeditionReward() {
-  return { money: 0, trainingExp: 0, diamonds: 0, realEstateCash: 0 };
+  return { money: 0, trainingExp: 0, diamonds: 0, realEstateCash: 0, researchPoints: 0 };
 }
 
 function addRewardTotals(total, reward) {
@@ -1514,6 +1741,7 @@ function addRewardTotals(total, reward) {
   total.trainingExp += Math.max(0, Math.floor(reward.trainingExp));
   total.diamonds += Math.max(0, Math.floor(reward.diamonds));
   total.realEstateCash += Math.max(0, Math.floor(reward.realEstateCash));
+  total.researchPoints += Math.max(0, Math.floor(reward.researchPoints));
 }
 
 function rewardDeliveryOption(options) {
@@ -1534,6 +1762,7 @@ function instantRewardText(reward) {
   const pieces = [];
   if (reward.trainingExp > 0) pieces.push(`EXP +${reward.trainingExp}`);
   if (reward.realEstateCash > 0) pieces.push(`부동산 +${reward.realEstateCash}`);
+  if (reward.researchPoints > 0) pieces.push(`연구 +${reward.researchPoints}`);
   if (reward.diamonds > 0) pieces.push(`다이아 +${reward.diamonds}`);
   if (reward.money > 0) pieces.push(`돈 +${reward.money}`);
   return pieces.join(" · ");
@@ -1544,6 +1773,7 @@ function grantInstantExpeditionReward(state, reward, rewardedAt) {
   next.money = finiteNumber(next.money, "save.money 값이 올바르지 않습니다.") + Math.max(0, Math.floor(reward.money));
   next.diamonds = finiteNumber(next.diamonds, "save.diamonds 값이 올바르지 않습니다.") + Math.max(0, Math.floor(reward.diamonds));
   next.expedition.trainingExp += Math.max(0, Math.floor(reward.trainingExp));
+  next.expedition.research.points += Math.max(0, Math.floor(reward.researchPoints || 0));
   if (reward.realEstateCash > 0) {
     next = grantRealEstateExpeditionPendingCash(next, reward.realEstateCash, rewardedAt);
   }
@@ -1570,6 +1800,7 @@ function addPendingBattleResult(expedition, battle, reward, fromStage, resolvedA
   pending.trainingExp += Math.max(0, Math.floor(reward.trainingExp));
   pending.diamonds += Math.max(0, Math.floor(reward.diamonds));
   pending.realEstateCash += Math.max(0, Math.floor(reward.realEstateCash));
+  pending.researchPoints += Math.max(0, Math.floor(reward.researchPoints || 0));
   pending.battles += 1;
   if (battle.won) pending.wins += 1;
   else pending.losses += 1;
@@ -1669,23 +1900,25 @@ export function claimExpeditionPendingReward(state, option = "base", claimedAt =
   next.money = finiteNumber(next.money, "save.money 값이 올바르지 않습니다.") + pending.money;
   next.diamonds = finiteNumber(next.diamonds, "save.diamonds 값이 올바르지 않습니다.") + pending.diamonds;
   next.expedition.trainingExp += pending.trainingExp;
+  next.expedition.research.points += pending.researchPoints;
   if (pending.realEstateCash > 0) {
     next = grantRealEstateExpeditionPendingCash(next, pending.realEstateCash, claimedAt);
   }
   const lastBattle = pending.lastBattle;
-  pushExpeditionLog(next.expedition, `원정대 보상 수령: EXP ${pending.trainingExp} · 부동산 자금 ${pending.realEstateCash} · 다이아 ${pending.diamonds}`, "good");
+  pushExpeditionLog(next.expedition, `원정대 보상 수령: EXP ${pending.trainingExp} · 부동산 자금 ${pending.realEstateCash} · 연구 ${pending.researchPoints} · 다이아 ${pending.diamonds}`, "good");
   next.expedition.pendingReward = createEmptyPendingReward(claimedAt, lastBattle);
   next.expedition = expeditionAliases(next.expedition);
   validateExpeditionState(next.expedition, "save.expedition");
   return next;
 }
 
-function memberView(member, stageView, slot = null) {
+function memberView(member, stageView, slot = null, expedition = null) {
   const career = careerById.get(member.sourceCareerId);
   assert(career, `careers.json에서 직업을 찾을 수 없습니다: ${member.sourceCareerId}`);
   assert(typeof career.battleProp === "string" && career.battleProp.length > 0, `careers.json battleProp 값이 없습니다: ${career.id}`);
   const stats = memberCombatStats(member);
-  const roleStats = memberRoleCombatStats(member);
+  const roleStats = memberRoleCombatStats(member, expedition);
+  const research = expedition ? normalizeResearchState(expedition.research) : createEmptyResearchState();
   const topSubjects = subjectIds
     .slice()
     .sort((a, b) => stats[b] - stats[a])
@@ -1700,7 +1933,7 @@ function memberView(member, stageView, slot = null) {
     nextPromotionId: nextPromotionId(member.promotionTier),
     levelCost: expeditionLevelCost(member),
     power: Math.round(memberPower(member)),
-    stagePower: stageView ? Math.round(partyPowerForStage({ ...createDefaultExpeditionState(), members: [member], partyMemberIds: [member.id], currentStage: stageView.globalStage, highestStage: 0, claimedBossStages: [], trainingExp: 0, chapterRun: createChapterRun(stageView.globalStage, 0), lastResolvedAt: now(), log: [], stageIndex: stageView.globalStage - 1, clearedStageCount: 0, lastStageId: null }, stageView)) : Math.round(memberPower(member)),
+    stagePower: stageView ? Math.round(partyPowerForStage({ ...createDefaultExpeditionState(), members: [member], partyMemberIds: [member.id], currentStage: stageView.globalStage, highestStage: 0, claimedBossStages: [], trainingExp: 0, chapterRun: createChapterRun(stageView.globalStage, 0), lastResolvedAt: now(), research, log: [], stageIndex: stageView.globalStage - 1, clearedStageCount: 0, lastStageId: null }, stageView)) : Math.round(memberPower(member)),
     role: roleStats.role,
     roleLabel: roleStats.roleLabel,
     combatStats: roleStats,
@@ -1714,7 +1947,7 @@ export function createExpeditionViewModel(state) {
   const normalized = normalizeExpeditionState(state);
   const expedition = normalized.expedition;
   const stage = createStageView(expedition.currentStage);
-  const baseParty = partyMembers(expedition).map((member, index) => memberView(member, stage, index + 1));
+  const baseParty = partyMembers(expedition).map((member, index) => memberView(member, stage, index + 1, expedition));
   const battlePreview = baseParty.length > 0 ? simulateExpeditionBattle(normalized) : null;
   const party = baseParty.map((member) => ({
     ...member,
@@ -1729,8 +1962,10 @@ export function createExpeditionViewModel(state) {
   });
   const partyPower = Math.round(party.reduce((sum, member) => sum + member.combatStats.hp * 0.35 + member.combatStats.attack * 1.4 + member.combatStats.defense * 2 + member.combatStats.healing * 1.15, 0));
   const enemyPower = Math.round(enemies.reduce((sum, enemy) => sum + enemy.maxHp * 0.3 + enemy.attack * 1.5 + enemy.defense * 2, 0));
-  const rewardExp = expeditionStageExpReward(expedition.currentStage);
-  const rewardMoney = expeditionMoneyReward(expedition.currentStage);
+  const previewReward = rewardForBattle(stage, expedition);
+  const rewardExp = previewReward.trainingExp;
+  const rewardMoney = previewReward.money;
+  const rewardResearchPoints = previewReward.researchPoints;
   const bossReward = stage.isChapterBoss ? Math.round(expeditionBalance.chapterBossFirstClearDiamonds * expeditionBalance.bossDiamondGrowth ** (stage.chapter - 1)) : Math.round(expeditionBalance.midBossFirstClearDiamonds * expeditionBalance.bossDiamondGrowth ** (stage.chapter - 1));
   const pendingReward = expedition.pendingReward;
 
@@ -1748,6 +1983,7 @@ export function createExpeditionViewModel(state) {
     enemyPower,
     rewardExp,
     rewardMoney,
+    rewardResearchPoints,
     bossReward,
     bossRewardClaimed: expedition.claimedBossStages.includes(expedition.currentStage),
     ready: party.length > 0,
@@ -1808,7 +2044,7 @@ export function createExpeditionManagementViewModel(state) {
   const members = expedition.members.map((member, index) => {
     const assignment = assignmentByMemberId.get(member.id);
     return {
-      ...memberView(member, stage, partyIds.has(member.id) ? expedition.partyMemberIds.indexOf(member.id) + 1 : null),
+      ...memberView(member, stage, partyIds.has(member.id) ? expedition.partyMemberIds.indexOf(member.id) + 1 : null, expedition),
       rosterIndex: index,
       dispatchAssignmentId: assignment ? assignment.id : null,
       dispatchMissionId: assignment ? assignment.missionId : null,
@@ -1820,7 +2056,7 @@ export function createExpeditionManagementViewModel(state) {
     assert(member, `원정대 편성 대원을 찾을 수 없습니다: ${id}`);
     const assignment = assignmentByMemberId.get(member.id);
     return {
-      ...memberView(member, stage, index + 1),
+      ...memberView(member, stage, index + 1, expedition),
       dispatchAssignmentId: assignment ? assignment.id : null,
       dispatchMissionId: assignment ? assignment.missionId : null,
       dispatchStatusLabel: assignment ? "파견중" : "",
@@ -1845,6 +2081,7 @@ export function createExpeditionManagementViewModel(state) {
     fusionCandidates,
     dispatchCompletedCount,
     trainingExp: expedition.trainingExp,
+    researchPoints: expedition.research.points,
     pendingReward: expedition.pendingReward,
     log: visibleLog,
     currentStage: expedition.currentStage,
@@ -1852,6 +2089,145 @@ export function createExpeditionManagementViewModel(state) {
     partyPower: Math.round(partyPowerForStage(expedition, stage)),
     enemyPower: requiredPowerForStage(expedition.currentStage),
   };
+}
+
+function researchEffectLabel(effect) {
+  const percent = (value) => `+${Math.round(Number(value) * 100)}%`;
+  if (effect.type === "partyPowerPercent") return `전투력 ${percent(effect.value)}`;
+  if (effect.type === "combatStatPercent") {
+    const statLabels = { hp: "체력", attack: "공격", defense: "방어", healing: "회복", attackSpeed: "속도" };
+    return `전체 ${statLabels[effect.stat] || effect.stat} ${percent(effect.value)}`;
+  }
+  if (effect.type === "roleCombatStatPercent") {
+    const statLabels = { hp: "체력", attack: "공격", defense: "방어", healing: "회복", attackSpeed: "속도" };
+    return `${roleLabel(effect.role)} ${statLabels[effect.stat] || effect.stat} ${percent(effect.value)}`;
+  }
+  if (effect.type === "stageRewardPercent") {
+    const rewardLabels = { trainingExp: "EXP", realEstateCash: "부동산" };
+    return `${rewardLabels[effect.reward] || effect.reward} 보상 ${percent(effect.value)}`;
+  }
+  if (effect.type === "researchPointDropFlat") {
+    const bossLabel = effect.bossType === "mid" ? "중간보스" : effect.bossType === "chapter" ? "챕터보스" : "보스";
+    return `${bossLabel} 연구 +${effect.value}`;
+  }
+  return effect.help;
+}
+
+function researchNodeView(node, research) {
+  const unlocked = research.unlockedNodeIds.includes(node.id);
+  const unlockedSet = new Set(research.unlockedNodeIds);
+  const prerequisitesMet = node.prerequisiteNodeIds.every((id) => unlockedSet.has(id));
+  const affordable = Number(research.points) >= Number(node.cost);
+  const canUnlock = !unlocked && prerequisitesMet && affordable;
+  const missingPrerequisites = node.prerequisiteNodeIds
+    .filter((id) => !unlockedSet.has(id))
+    .map((id) => researchNodeById.get(id)?.shortName || researchNodeById.get(id)?.name || id);
+  return {
+    ...node,
+    cost: Number(node.cost),
+    unlocked,
+    prerequisitesMet,
+    affordable,
+    canUnlock,
+    missingPrerequisites,
+    prerequisiteNames: node.prerequisiteNodeIds.map((id) => researchNodeById.get(id)?.shortName || researchNodeById.get(id)?.name || id),
+    effectLabels: node.effects.map(researchEffectLabel),
+    statusLabel: unlocked ? "완료" : !prerequisitesMet ? "잠김" : affordable ? "연구 가능" : "재화 부족",
+  };
+}
+
+export function createExpeditionResearchViewModel(state) {
+  const normalized = normalizeExpeditionState(state);
+  const expedition = normalized.expedition;
+  const research = normalizeResearchState(expedition.research);
+  validateResearchState(research, "save.expedition.research");
+  const effects = expeditionResearchEffects(expedition);
+  const nodes = researchNodes
+    .map((node) => researchNodeView(node, research))
+    .sort((a, b) => Number(a.position.depth) - Number(b.position.depth) || Number(a.position.lane) - Number(b.position.lane) || a.name.localeCompare(b.name, "ko"));
+  const unlockedCount = research.unlockedNodeIds.length;
+  const nextNode = nodes.find((node) => node.canUnlock) || nodes.find((node) => !node.unlocked) || null;
+  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+  const laneCount = Math.max(1, ...nodes.map((node) => Number(node.position.lane) + 1));
+  const depthCount = Math.max(1, ...nodes.map((node) => Number(node.position.depth)));
+  const lanes = researchConfig.lanes
+    .slice()
+    .sort((a, b) => Number(a.lane) - Number(b.lane))
+    .map((lane) => ({ ...lane, lane: Number(lane.lane) }));
+  const links = nodes.flatMap((node) =>
+    node.prerequisiteNodeIds.map((sourceId) => {
+      const source = nodeById.get(sourceId);
+      assert(source, `원정대 연구 선행 노드를 찾을 수 없습니다: ${sourceId}`);
+      const complete = source.unlocked && node.unlocked;
+      const ready = source.unlocked && !node.unlocked && node.prerequisitesMet;
+      return {
+        id: `${sourceId}->${node.id}`,
+        fromId: sourceId,
+        toId: node.id,
+        fromLane: Number(source.position.lane),
+        fromDepth: Number(source.position.depth),
+        toLane: Number(node.position.lane),
+        toDepth: Number(node.position.depth),
+        status: complete ? "complete" : ready ? "ready" : "locked",
+      };
+    }),
+  );
+  return {
+    currencyName: researchConfig.rules.currencyName,
+    points: research.points,
+    spentPoints: research.spentPoints,
+    totalEarnedPoints: research.points + research.spentPoints,
+    resetCount: research.resetCount,
+    freeReset: Boolean(researchConfig.rules.freeReset),
+    unlockedCount,
+    totalCount: nodes.length,
+    maxTotalCombatBonus: Number(researchConfig.rules.maxTotalCombatBonus),
+    totalCombatBonus: effects.partyPowerPercent,
+    stageRewardBonus: effects.stageRewardPercent,
+    researchDropBonus: effects.researchPointDropFlat,
+    laneCount,
+    depthCount,
+    lanes,
+    links,
+    nodes,
+    nextNode,
+  };
+}
+
+export function unlockExpeditionResearchNode(state, nodeId) {
+  assert(typeof nodeId === "string" && researchNodeById.has(nodeId), `원정대 연구 노드를 찾을 수 없습니다: ${nodeId}`);
+  const next = normalizeExpeditionState(state);
+  const expedition = next.expedition;
+  const research = expedition.research;
+  const node = researchNodeById.get(nodeId);
+  assert(!research.unlockedNodeIds.includes(nodeId), `${node.name} 연구는 이미 완료되었습니다.`);
+  const unlocked = new Set(research.unlockedNodeIds);
+  const missing = node.prerequisiteNodeIds.filter((id) => !unlocked.has(id));
+  assert(missing.length === 0, `${node.name} 연구의 선행 조건이 부족합니다: ${missing.join(", ")}`);
+  const cost = researchNodeCost(nodeId);
+  assert(Number(research.points) >= cost, `${node.name} 연구 재화가 부족합니다.`);
+  research.points -= cost;
+  research.spentPoints += cost;
+  research.unlockedNodeIds.push(nodeId);
+  pushExpeditionLog(expedition, `연구 완료: ${node.name} · 연구 ${cost} 사용`, "good");
+  next.expedition = expeditionAliases(expedition);
+  validateExpeditionState(next.expedition, "save.expedition");
+  return next;
+}
+
+export function resetExpeditionResearch(state) {
+  const next = normalizeExpeditionState(state);
+  const research = next.expedition.research;
+  if (Number(research.spentPoints) <= 0 && research.unlockedNodeIds.length === 0) return next;
+  const returnedPoints = Number(research.spentPoints);
+  research.points += returnedPoints;
+  research.spentPoints = 0;
+  research.unlockedNodeIds = [];
+  research.resetCount += 1;
+  pushExpeditionLog(next.expedition, `원정대 연구 초기화: 연구 ${returnedPoints} 반환`, "info");
+  next.expedition = expeditionAliases(next.expedition);
+  validateExpeditionState(next.expedition, "save.expedition");
+  return next;
 }
 
 export function createExpeditionSummary(state) {
@@ -1866,7 +2242,10 @@ export function createExpeditionSummary(state) {
     partyPower: view.partyPower,
     enemyPower: view.enemyPower,
     trainingExp: expedition.trainingExp,
+    researchPoints: expedition.research.points,
+    researchSpentPoints: expedition.research.spentPoints,
     pendingTrainingExp: expedition.pendingReward.trainingExp,
+    pendingResearchPoints: expedition.pendingReward.researchPoints,
     pendingRewards: expedition.pendingReward.battles,
     hasPendingReward: pendingRewardHasValue(expedition.pendingReward),
     diamonds: Number(state.diamonds),
@@ -1956,7 +2335,7 @@ export function assignRecommendedExpeditionParty(state) {
     .map((member, index) => ({
       member,
       index,
-      stagePower: memberView(member, stage).stagePower,
+      stagePower: memberView(member, stage, null, expedition).stagePower,
       promotionOrder: promotionOrder(member),
       level: Math.max(1, Math.floor(Number(member.level))),
       createdAt: Math.max(0, Math.floor(Number(member.createdAt))),

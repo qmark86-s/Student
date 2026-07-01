@@ -307,8 +307,12 @@ async function collectSnapshot(page) {
       currentStage: state.expedition.currentStage ?? -1,
       highestStage: state.expedition.highestStage ?? -1,
       trainingExp: state.expedition.trainingExp ?? -1,
+      researchPoints: state.expedition.research?.points ?? -1,
+      researchSpentPoints: state.expedition.research?.spentPoints ?? -1,
+      researchUnlockedCount: state.expedition.research?.unlockedNodeIds?.length ?? -1,
       pendingTrainingExp: state.expedition.pendingReward?.trainingExp ?? 0,
       pendingRealEstateCash: state.expedition.pendingReward?.realEstateCash ?? 0,
+      pendingResearchPoints: state.expedition.pendingReward?.researchPoints ?? 0,
       pendingBattles: state.expedition.pendingReward?.battles ?? 0,
       lastBattleId: state.expedition.pendingReward?.lastBattle?.id || "",
       lastBattleEvents: state.expedition.pendingReward?.lastBattle?.events?.length ?? 0,
@@ -320,6 +324,17 @@ async function collectSnapshot(page) {
       expeditionMembers: state.expedition.members?.length ?? 0,
       expeditionTabs: document.querySelectorAll(".expedition-tab").length,
       expeditionGrowthCards: document.querySelectorAll(".expedition-growth-card").length,
+      expeditionResearchNodes: document.querySelectorAll(".expedition-research-node").length,
+      expeditionResearchReadyNodes: document.querySelectorAll(".expedition-research-node.ready").length,
+      expeditionResearchUnlockedNodes: document.querySelectorAll(".expedition-research-node.unlocked").length,
+      expeditionResearchLinks: document.querySelectorAll(".expedition-rune-link").length,
+      expeditionResearchLanes: new Set([...document.querySelectorAll(".expedition-research-node")].map((node) => node.getAttribute("data-lane"))).size,
+      expeditionResearchRuneTrees: document.querySelectorAll(".expedition-rune-tree").length,
+      expeditionResearchRuneNodes: document.querySelectorAll(".expedition-rune-node").length,
+      expeditionResearchSelectedNodes: document.querySelectorAll(".expedition-research-node.selected").length,
+      expeditionResearchDetailPanes: document.querySelectorAll(".expedition-research-detail-pane").length,
+      expeditionResearchUnlockButtons: document.querySelectorAll(".expedition-research-unlock").length,
+      expeditionResearchResetDisabled: document.querySelector(".expedition-research-reset") instanceof HTMLButtonElement ? document.querySelector(".expedition-research-reset").disabled : null,
       expeditionPartySlots: document.querySelectorAll(".expedition-party-slot").length,
       expeditionPartySlotMemberIds: [...document.querySelectorAll(".expedition-party-slot")].map((node) => node.getAttribute("data-member-id") || ""),
       expeditionPartySlotLoading: document.querySelectorAll(".expedition-party-slot.reorder-loading").length,
@@ -628,6 +643,86 @@ try {
   const dispatchAfterClaim = await collectSnapshot(dispatchPage);
   await dispatchPage.close();
 
+  const researchState = JSON.parse(JSON.stringify(dispatchState));
+  researchState.expedition.currentStage = 100;
+  researchState.expedition.highestStage = 99;
+  researchState.expedition.stageIndex = 99;
+  researchState.expedition.clearedStageCount = 99;
+  researchState.expedition.claimedBossStages = [];
+  researchState.expedition.research = { points: 0, spentPoints: 0, unlockedNodeIds: [], resetCount: 0 };
+  researchState.expedition.pendingReward = {
+    money: 0,
+    trainingExp: 0,
+    diamonds: 0,
+    realEstateCash: 0,
+    researchPoints: 0,
+    battles: 0,
+    wins: 0,
+    losses: 0,
+    startedAt: 0,
+    updatedAt: Date.now(),
+    fromStage: null,
+    toStage: null,
+    summaryText: "",
+    lastBattle: null,
+  };
+  researchState.expedition.members = researchState.expedition.members.map((member, index) => ({
+    ...member,
+    level: 12,
+    baseStats: Object.fromEntries(Object.keys(member.baseStats).map((subject) => [subject, 5000 + index * 100])),
+  }));
+  researchState.expedition.partyMemberIds = researchState.expedition.members.slice(0, 5).map((member) => member.id);
+
+  const researchPage = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+  researchPage.on("console", (message) => {
+    if (message.type() === "error") consoleErrors.push(`[research] ${message.text()}`);
+  });
+  researchPage.on("pageerror", (error) => pageErrors.push(`[research] ${error.message}`));
+  await researchPage.addInitScript(({ key, state }) => localStorage.setItem(key, JSON.stringify(state)), {
+    key: saveKey,
+    state: researchState,
+  });
+  await researchPage.goto(baseUrl, { waitUntil: "networkidle" });
+  await researchPage.getByRole("button", { name: "원정대" }).click();
+  await researchPage.waitForSelector(".expedition-action-button:not([disabled])", { timeout: 6000 });
+  const researchBeforeBoss = await collectSnapshot(researchPage);
+  await researchPage.locator(".expedition-action-button").click();
+  await researchPage.waitForFunction(
+    (key) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      return state.expedition.currentStage === 101 && state.expedition.research?.points >= 1;
+    },
+    saveKey,
+    { timeout: 6000 },
+  );
+  const researchAfterBoss = await collectSnapshot(researchPage);
+  await researchPage.locator(".expedition-tab", { hasText: "연구" }).click();
+  await researchPage.waitForSelector(".expedition-research-node", { timeout: 6000 });
+  const researchBeforeUnlock = await collectSnapshot(researchPage);
+  await researchPage.locator(".expedition-research-node.ready").first().click();
+  await researchPage.waitForSelector(".expedition-research-detail-pane.ready .expedition-research-unlock", { timeout: 6000 });
+  await researchPage.locator(".expedition-research-detail-pane.ready .expedition-research-unlock").first().click();
+  await researchPage.waitForFunction(
+    (key) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      return state.expedition.research?.unlockedNodeIds?.length === 1 && state.expedition.research?.spentPoints === 1;
+    },
+    saveKey,
+    { timeout: 6000 },
+  );
+  const researchAfterUnlock = await collectSnapshot(researchPage);
+  await researchPage.locator(".expedition-research-reset").click();
+  await researchPage.waitForFunction(
+    (key) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      return state.expedition.research?.unlockedNodeIds?.length === 0 && state.expedition.research?.spentPoints === 0 && state.expedition.research?.points >= 1;
+    },
+    saveKey,
+    { timeout: 6000 },
+  );
+  const researchAfterReset = await collectSnapshot(researchPage);
+  await researchPage.close();
+
   const clearClickedAt = Date.now();
   await page.click(".expedition-action-button");
   await page.waitForSelector('.expedition-scene[data-combat-replay="win"][data-stage-transition="idle"]', { timeout: 2000 });
@@ -772,7 +867,7 @@ try {
   if (afterAccept.careerAlumniCount !== 1) failures.push(`Expected 1 career alumni after accept, got ${afterAccept.careerAlumniCount}`);
   if (afterAccept.partyMemberCount !== 1) failures.push(`Expected 1 expedition party member, got ${afterAccept.partyMemberCount}`);
   if (afterAccept.expeditionMembers !== 1) failures.push(`Expected 1 expedition member, got ${afterAccept.expeditionMembers}`);
-  if (afterAccept.expeditionTabs !== 5) failures.push(`Expected 5 expedition tabs, got ${afterAccept.expeditionTabs}`);
+  if (afterAccept.expeditionTabs !== 6) failures.push(`Expected 6 expedition tabs, got ${afterAccept.expeditionTabs}`);
   if (afterAccept.expeditionGrowthCards !== 1) failures.push(`Expected 1 expedition growth card, got ${afterAccept.expeditionGrowthCards}`);
   if (partyTab.expeditionPartySlots !== 5) failures.push(`Expected 5 expedition party slots, got ${partyTab.expeditionPartySlots}`);
   if (partyTab.expeditionRosterCards !== 1) failures.push(`Expected 1 expedition roster card, got ${partyTab.expeditionRosterCards}`);
@@ -789,7 +884,7 @@ try {
   if (reorderSettled.expeditionPartySlotLoading !== 0) failures.push(`Expected party slot loading to settle to 0, got ${reorderSettled.expeditionPartySlotLoading}`);
   if (manageTab.expeditionManageCards !== 1) failures.push(`Expected 1 expedition manage card, got ${manageTab.expeditionManageCards}`);
   if (!logTab.text.includes("원정 기록")) failures.push("Expedition log tab did not render 원정 기록");
-  if (dispatchBeforeStart.expeditionTabs !== 5) failures.push(`Expected dispatch setup to expose 5 expedition tabs, got ${dispatchBeforeStart.expeditionTabs}`);
+  if (dispatchBeforeStart.expeditionTabs !== 6) failures.push(`Expected dispatch setup to expose 6 expedition tabs, got ${dispatchBeforeStart.expeditionTabs}`);
   if (dispatchBeforeStart.expeditionDispatchCards !== 4) failures.push(`Expected 4 daily dispatch cards, got ${dispatchBeforeStart.expeditionDispatchCards}`);
   if (dispatchBeforeStart.expeditionDispatchAvailableMembers < 1) failures.push(`Expected at least 1 dispatch-available member, got ${dispatchBeforeStart.expeditionDispatchAvailableMembers}`);
   if (dispatchRecommendedSelectedCount !== 3) failures.push(`Expected recommended dispatch selection to fill 3 members, got ${dispatchRecommendedSelectedCount}`);
@@ -801,6 +896,23 @@ try {
   if (dispatchAfterClaim.expeditionDispatchHistory !== 1) failures.push(`Expected 1 dispatch history entry after claim, got ${dispatchAfterClaim.expeditionDispatchHistory}`);
   if (dispatchAfterClaim.trainingExp <= dispatchAfterStart.trainingExp) failures.push(`Expected dispatch claim to increase trainingExp, got ${dispatchAfterStart.trainingExp} -> ${dispatchAfterClaim.trainingExp}`);
   if (dispatchAfterClaim.realEstateCash <= dispatchAfterStart.realEstateCash) failures.push(`Expected dispatch claim to increase realEstate cash, got ${dispatchAfterStart.realEstateCash} -> ${dispatchAfterClaim.realEstateCash}`);
+  if (researchBeforeBoss.researchPoints !== 0) failures.push(`Expected research setup to start with 0 points, got ${researchBeforeBoss.researchPoints}`);
+  if (researchAfterBoss.researchPoints < 1) failures.push(`Expected mid boss clear to grant research points, got ${researchAfterBoss.researchPoints}`);
+  if (researchAfterBoss.currentStage !== 101) failures.push(`Expected research boss clear to advance to stage 101, got ${researchAfterBoss.currentStage}`);
+  if (researchBeforeUnlock.expeditionResearchNodes !== 18) failures.push(`Expected 18 research nodes, got ${researchBeforeUnlock.expeditionResearchNodes}`);
+  if (researchBeforeUnlock.expeditionResearchRuneTrees !== 1) failures.push(`Expected 1 research rune tree, got ${researchBeforeUnlock.expeditionResearchRuneTrees}`);
+  if (researchBeforeUnlock.expeditionResearchRuneNodes !== 18) failures.push(`Expected 18 research rune nodes, got ${researchBeforeUnlock.expeditionResearchRuneNodes}`);
+  if (researchBeforeUnlock.expeditionResearchLinks < 10) failures.push(`Expected research rune links, got ${researchBeforeUnlock.expeditionResearchLinks}`);
+  if (researchBeforeUnlock.expeditionResearchLanes < 5) failures.push(`Expected 5 research lanes, got ${researchBeforeUnlock.expeditionResearchLanes}`);
+  if (researchBeforeUnlock.expeditionResearchSelectedNodes !== 1) failures.push(`Expected 1 selected research node, got ${researchBeforeUnlock.expeditionResearchSelectedNodes}`);
+  if (researchBeforeUnlock.expeditionResearchDetailPanes !== 1) failures.push(`Expected 1 research detail pane, got ${researchBeforeUnlock.expeditionResearchDetailPanes}`);
+  if (researchBeforeUnlock.expeditionResearchReadyNodes < 1) failures.push(`Expected at least 1 ready research node, got ${researchBeforeUnlock.expeditionResearchReadyNodes}`);
+  if (researchAfterUnlock.researchUnlockedCount !== 1 || researchAfterUnlock.researchSpentPoints !== 1) failures.push(`Expected first research unlock to spend 1 point, got unlocked=${researchAfterUnlock.researchUnlockedCount} spent=${researchAfterUnlock.researchSpentPoints}`);
+  if (researchAfterUnlock.researchPoints !== researchAfterBoss.researchPoints - 1) failures.push(`Expected research point to decrease by 1, got ${researchAfterBoss.researchPoints} -> ${researchAfterUnlock.researchPoints}`);
+  if (researchAfterUnlock.expeditionResearchUnlockedNodes !== 1) failures.push(`Expected UI to show 1 unlocked research node, got ${researchAfterUnlock.expeditionResearchUnlockedNodes}`);
+  if (researchAfterReset.researchUnlockedCount !== 0 || researchAfterReset.researchSpentPoints !== 0) failures.push(`Expected research reset to clear unlocks/spent, got unlocked=${researchAfterReset.researchUnlockedCount} spent=${researchAfterReset.researchSpentPoints}`);
+  if (researchAfterReset.researchPoints !== researchAfterBoss.researchPoints) failures.push(`Expected research reset to return spent point, got ${researchAfterReset.researchPoints} vs ${researchAfterBoss.researchPoints}`);
+  if (researchAfterReset.expeditionResearchResetDisabled !== true) failures.push("Expected research reset button to disable after reset");
   if (afterAccept.expeditionScene !== 1 || afterAccept.expeditionArena !== 1) failures.push(`Expected expedition scene/arena, got ${afterAccept.expeditionScene}/${afterAccept.expeditionArena}`);
   if (!afterAccept.expeditionBackdropImage || afterAccept.expeditionBackdropImage === "none") failures.push("Expected expedition backdrop image on arena ::before");
   if (afterAccept.expeditionBackdropTile !== 0) failures.push(`Expected stage 1 backdrop tile 0, got ${afterAccept.expeditionBackdropTile}`);
@@ -902,7 +1014,7 @@ try {
   if (consoleErrors.length > 0) failures.push(`Console errors: ${consoleErrors.slice(0, 3).join(" | ")}`);
   if (pageErrors.length > 0) failures.push(`Page errors: ${pageErrors.slice(0, 3).join(" | ")}`);
 
-  console.log(JSON.stringify({ baseUrl, beforeAccept, afterAccept, stage26Backdrop, dispatchBeforeStart, dispatchRecommendedSelectedCount, dispatchAfterStart, dispatchReadyToClaim, dispatchAfterClaim, duringDefeatReplay, afterEnemyDespawn, duringStageTransition, duringEncounterIntro, afterClear, autoGateInitial, autoGateBusyStart, autoGateBusyMid, autoGateReadyAgain, autoGateAfterResume, debugAutoInitial, debugAutoAfterFirst, debugAutoAfterSecond, moveStartedAfterMs, failures }, null, 2));
+  console.log(JSON.stringify({ baseUrl, beforeAccept, afterAccept, stage26Backdrop, dispatchBeforeStart, dispatchRecommendedSelectedCount, dispatchAfterStart, dispatchReadyToClaim, dispatchAfterClaim, researchBeforeBoss, researchAfterBoss, researchBeforeUnlock, researchAfterUnlock, researchAfterReset, duringDefeatReplay, afterEnemyDespawn, duringStageTransition, duringEncounterIntro, afterClear, autoGateInitial, autoGateBusyStart, autoGateBusyMid, autoGateReadyAgain, autoGateAfterResume, debugAutoInitial, debugAutoAfterFirst, debugAutoAfterSecond, moveStartedAfterMs, failures }, null, 2));
 
   if (failures.length > 0) {
     console.error(`REACT_VITE_EXPEDITION_SMOKE_FAILED failures=${failures.length}`);

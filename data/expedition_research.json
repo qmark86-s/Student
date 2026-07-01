@@ -1,0 +1,278 @@
+{
+  "version": 1,
+  "help": {
+    "version": "원정대 연구 콘텐츠 데이터 버전입니다.",
+    "rules": "연구 재화, 보스 드랍, 초기화, 전투 보너스 상한 같은 공통 규칙입니다.",
+    "lanes": "연구 맵의 가로 갈래 이름과 배치 순서입니다.",
+    "nodes": "다열 원정대 연구 트리에 표시할 정적 노드 목록입니다."
+  },
+  "rules": {
+    "currencyName": "연구",
+    "maxTotalCombatBonus": 0.2,
+    "freeReset": true,
+    "bossRewards": {
+      "mid": 1,
+      "chapter": 3
+    },
+    "help": {
+      "currencyName": "원정대 연구에 사용하는 전용 재화 표시명입니다.",
+      "maxTotalCombatBonus": "partyPowerPercent 효과가 합산되어도 넘을 수 없는 최대 전투력 보너스입니다.",
+      "freeReset": "연구 초기화 비용 여부입니다. v1은 무료 초기화입니다.",
+      "bossRewards": "첫 클리어한 원정대 중간보스와 챕터보스가 지급하는 기본 연구 재화입니다."
+    }
+  },
+  "lanes": [
+    {
+      "id": "supply",
+      "name": "보급",
+      "lane": 0,
+      "help": "체력, 방어, 장기 교전 안정성을 담당하는 연구 갈래입니다."
+    },
+    {
+      "id": "command",
+      "name": "지휘",
+      "lane": 1,
+      "help": "방어선과 위기 대응을 거쳐 상위 교범으로 합류하는 연구 갈래입니다."
+    },
+    {
+      "id": "core",
+      "name": "작전",
+      "lane": 2,
+      "help": "공용 전투력과 챕터 진행 보상을 담당하는 중심 연구 갈래입니다."
+    },
+    {
+      "id": "assault",
+      "name": "공격",
+      "lane": 3,
+      "help": "딜러 화력, 돌파 지휘, 자원 항로를 담당하는 연구 갈래입니다."
+    },
+    {
+      "id": "support",
+      "name": "의무/보상",
+      "lane": 4,
+      "help": "회복, 조달, 보상 회수율을 담당하는 연구 갈래입니다."
+    }
+  ],
+  "nodes": [
+    {
+      "id": "field_basics",
+      "name": "원정 기초 훈련",
+      "shortName": "기초",
+      "description": "모든 원정대원이 같은 지휘 기준으로 움직이도록 기본 전술을 정비합니다.",
+      "cost": 1,
+      "prerequisiteNodeIds": [],
+      "position": { "depth": 1, "lane": 2 },
+      "effects": [
+        { "type": "partyPowerPercent", "value": 0.02, "help": "원정대 전투력 판정이 2% 증가합니다." }
+      ]
+    },
+    {
+      "id": "supply_routes",
+      "name": "보급 동선",
+      "shortName": "보급",
+      "description": "장기 전투에서 버틸 수 있도록 장비와 응급 물자를 빠르게 보급합니다.",
+      "cost": 2,
+      "prerequisiteNodeIds": ["field_basics"],
+      "position": { "depth": 2, "lane": 0 },
+      "effects": [
+        { "type": "combatStatPercent", "stat": "hp", "value": 0.03, "help": "모든 원정대원의 전투 체력이 3% 증가합니다." }
+      ]
+    },
+    {
+      "id": "command_network",
+      "name": "현장 지휘",
+      "shortName": "지휘",
+      "description": "교전 중 위치와 목표를 빠르게 공유해 파티 전체의 손실을 줄입니다.",
+      "cost": 2,
+      "prerequisiteNodeIds": ["field_basics"],
+      "position": { "depth": 2, "lane": 2 },
+      "effects": [
+        { "type": "partyPowerPercent", "value": 0.02, "help": "원정대 전투력 판정이 2% 증가합니다." }
+      ]
+    },
+    {
+      "id": "field_medicine",
+      "name": "현장 의무 키트",
+      "shortName": "의무",
+      "description": "전투 중 회복 판단을 돕는 응급 키트와 처치 기록 양식을 표준화합니다.",
+      "cost": 2,
+      "prerequisiteNodeIds": ["field_basics"],
+      "position": { "depth": 2, "lane": 4 },
+      "effects": [
+        { "type": "combatStatPercent", "stat": "healing", "value": 0.03, "help": "모든 원정대원의 전투 회복량이 3% 증가합니다." }
+      ]
+    },
+    {
+      "id": "tank_guard_drill",
+      "name": "탱커 방어 전술",
+      "shortName": "탱커",
+      "description": "탱커가 먼저 맞고 오래 버티도록 방어 각도와 교대 타이밍을 훈련합니다.",
+      "cost": 2,
+      "prerequisiteNodeIds": ["supply_routes"],
+      "position": { "depth": 3, "lane": 0 },
+      "effects": [
+        { "type": "roleCombatStatPercent", "role": "tank", "stat": "defense", "value": 0.06, "help": "탱커의 전투 방어가 6% 증가합니다." },
+        { "type": "roleCombatStatPercent", "role": "tank", "stat": "hp", "value": 0.03, "help": "탱커의 전투 체력이 3% 증가합니다." }
+      ]
+    },
+    {
+      "id": "recon_mapping",
+      "name": "정찰 지도화",
+      "shortName": "정찰",
+      "description": "스테이지별 위험 지형을 기록해 파티 전체가 더 안정적으로 움직이게 합니다.",
+      "cost": 2,
+      "prerequisiteNodeIds": ["command_network"],
+      "position": { "depth": 3, "lane": 2 },
+      "effects": [
+        { "type": "partyPowerPercent", "value": 0.02, "help": "원정대 전투력 판정이 2% 증가합니다." }
+      ]
+    },
+    {
+      "id": "dealer_focus_fire",
+      "name": "딜러 집중 타격",
+      "shortName": "딜러",
+      "description": "딜러가 같은 목표를 빠르게 정리하도록 표식과 사격 순서를 표준화합니다.",
+      "cost": 2,
+      "prerequisiteNodeIds": ["command_network"],
+      "position": { "depth": 3, "lane": 3 },
+      "effects": [
+        { "type": "roleCombatStatPercent", "role": "dealer", "stat": "attack", "value": 0.06, "help": "딜러의 전투 공격이 6% 증가합니다." }
+      ]
+    },
+    {
+      "id": "fortified_camp",
+      "name": "임시 방어진",
+      "shortName": "방어진",
+      "description": "보급 거점 주변에 임시 엄폐와 후퇴선을 만들어 장기 교전을 버팁니다.",
+      "cost": 3,
+      "prerequisiteNodeIds": ["tank_guard_drill"],
+      "position": { "depth": 4, "lane": 0 },
+      "effects": [
+        { "type": "combatStatPercent", "stat": "defense", "value": 0.03, "help": "모든 원정대원의 전투 방어가 3% 증가합니다." }
+      ]
+    },
+    {
+      "id": "healer_triage",
+      "name": "힐러 응급 처치",
+      "shortName": "힐러",
+      "description": "힐러가 가장 위험한 아군을 먼저 살릴 수 있도록 처치 우선순위를 정리합니다.",
+      "cost": 3,
+      "prerequisiteNodeIds": ["field_medicine"],
+      "position": { "depth": 4, "lane": 4 },
+      "effects": [
+        { "type": "roleCombatStatPercent", "role": "healer", "stat": "healing", "value": 0.07, "help": "힐러의 전투 회복량이 7% 증가합니다." }
+      ]
+    },
+    {
+      "id": "precision_timing",
+      "name": "정밀 교전 타이밍",
+      "shortName": "타이밍",
+      "description": "정찰 정보와 딜러 표식을 합쳐 공격 타이밍을 좁힙니다.",
+      "cost": 3,
+      "prerequisiteNodeIds": ["recon_mapping", "dealer_focus_fire"],
+      "position": { "depth": 4, "lane": 2 },
+      "effects": [
+        { "type": "roleCombatStatPercent", "role": "dealer", "stat": "attackSpeed", "value": 0.04, "help": "딜러의 전투 공격 속도가 4% 증가합니다." }
+      ]
+    },
+    {
+      "id": "crisis_response",
+      "name": "위기 대응",
+      "shortName": "위기",
+      "description": "보스전에서 흔들리지 않도록 후퇴 신호와 재진입 루틴을 정비합니다.",
+      "cost": 3,
+      "prerequisiteNodeIds": ["fortified_camp", "healer_triage"],
+      "position": { "depth": 5, "lane": 1 },
+      "effects": [
+        { "type": "partyPowerPercent", "value": 0.03, "help": "원정대 전투력 판정이 3% 증가합니다." }
+      ]
+    },
+    {
+      "id": "assault_command",
+      "name": "돌파 지휘",
+      "shortName": "돌파",
+      "description": "정밀 타이밍과 현장 지휘를 결합해 짧은 창에 화력을 집중합니다.",
+      "cost": 3,
+      "prerequisiteNodeIds": ["precision_timing", "command_network"],
+      "position": { "depth": 5, "lane": 3 },
+      "effects": [
+        { "type": "partyPowerPercent", "value": 0.03, "help": "원정대 전투력 판정이 3% 증가합니다." }
+      ]
+    },
+    {
+      "id": "mid_boss_analysis",
+      "name": "중간보스 분석",
+      "shortName": "분석",
+      "description": "중간보스 전투 기록을 연구 자료로 전환해 다음 연구 속도를 높입니다.",
+      "cost": 4,
+      "prerequisiteNodeIds": ["crisis_response"],
+      "position": { "depth": 6, "lane": 0 },
+      "effects": [
+        { "type": "researchPointDropFlat", "bossType": "mid", "value": 1, "help": "첫 클리어 중간보스의 연구 드랍이 1 증가합니다." }
+      ]
+    },
+    {
+      "id": "chapter_operations",
+      "name": "챕터 작전 기록",
+      "shortName": "기록",
+      "description": "챕터 단위 작전을 문서화해 원정 EXP와 부동산 자금 회수를 개선합니다.",
+      "cost": 4,
+      "prerequisiteNodeIds": ["crisis_response", "assault_command"],
+      "position": { "depth": 6, "lane": 2 },
+      "effects": [
+        { "type": "stageRewardPercent", "reward": "trainingExp", "value": 0.05, "help": "원정대 EXP 보상이 5% 증가합니다." },
+        { "type": "stageRewardPercent", "reward": "realEstateCash", "value": 0.05, "help": "원정대 부동산 자금 보상이 5% 증가합니다." }
+      ]
+    },
+    {
+      "id": "logistics_markets",
+      "name": "현장 조달 계약",
+      "shortName": "조달",
+      "description": "원정 중 확보한 자원을 부동산 자금 회수와 보급 계약으로 연결합니다.",
+      "cost": 4,
+      "prerequisiteNodeIds": ["assault_command"],
+      "position": { "depth": 6, "lane": 4 },
+      "effects": [
+        { "type": "stageRewardPercent", "reward": "realEstateCash", "value": 0.04, "help": "원정대 부동산 자금 보상이 4% 증가합니다." }
+      ]
+    },
+    {
+      "id": "expedition_doctrine",
+      "name": "원정 교범",
+      "shortName": "교범",
+      "description": "방어, 회복, 돌파 기록을 한 교범으로 묶어 모든 대원의 판단 속도를 높입니다.",
+      "cost": 5,
+      "prerequisiteNodeIds": ["mid_boss_analysis", "chapter_operations"],
+      "position": { "depth": 7, "lane": 1 },
+      "effects": [
+        { "type": "partyPowerPercent", "value": 0.03, "help": "원정대 전투력 판정이 3% 증가합니다." },
+        { "type": "combatStatPercent", "stat": "attack", "value": 0.02, "help": "모든 원정대원의 전투 공격이 2% 증가합니다." }
+      ]
+    },
+    {
+      "id": "resource_cartography",
+      "name": "자원 항로도",
+      "shortName": "항로",
+      "description": "챕터 작전과 조달 계약을 묶어 보스 이후 연구 자료 회수율을 높입니다.",
+      "cost": 5,
+      "prerequisiteNodeIds": ["chapter_operations", "logistics_markets"],
+      "position": { "depth": 7, "lane": 3 },
+      "effects": [
+        { "type": "researchPointDropFlat", "bossType": "chapter", "value": 1, "help": "첫 클리어 챕터보스의 연구 드랍이 1 증가합니다." }
+      ]
+    },
+    {
+      "id": "long_march_preparation",
+      "name": "장기 원정 준비",
+      "shortName": "장기",
+      "description": "원정대 전체가 장거리 교전을 버틸 수 있도록 지휘, 보급, 회복 루틴을 통합합니다.",
+      "cost": 6,
+      "prerequisiteNodeIds": ["expedition_doctrine", "resource_cartography"],
+      "position": { "depth": 8, "lane": 2 },
+      "effects": [
+        { "type": "partyPowerPercent", "value": 0.04, "help": "원정대 전투력 판정이 4% 증가합니다." },
+        { "type": "combatStatPercent", "stat": "defense", "value": 0.03, "help": "모든 원정대원의 전투 방어가 3% 증가합니다." }
+      ]
+    }
+  ]
+}

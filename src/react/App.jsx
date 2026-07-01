@@ -93,6 +93,7 @@ import {
   completeExpeditionStage,
   createExpeditionDispatchViewModel,
   createExpeditionManagementViewModel,
+  createExpeditionResearchViewModel,
   createExpeditionSummary,
   createExpeditionViewModel,
   expeditionAutoTickMs,
@@ -100,9 +101,11 @@ import {
   levelUpExpeditionMember,
   removeExpeditionMemberFromParty,
   reorderExpeditionPartyMembers,
+  resetExpeditionResearch,
   resolveExpeditionAutoCombat,
   startExpeditionDispatch,
   toggleExpeditionMemberLock,
+  unlockExpeditionResearchNode,
 } from "./game/expedition.js";
 import {
   accrueRealEstateIncome,
@@ -482,9 +485,11 @@ function expeditionRewardToastText(before, after) {
   const realEstateCash = Math.max(0, Math.floor(Number(after.realEstate?.cash || 0) - Number(before.realEstate?.cash || 0)));
   const diamonds = Math.max(0, Math.floor(Number(after.diamonds || 0) - Number(before.diamonds || 0)));
   const money = Math.max(0, Math.floor(Number(after.money || 0) - Number(before.money || 0)));
+  const researchPoints = Math.max(0, Math.floor(Number(after.expedition?.research?.points || 0) - Number(before.expedition?.research?.points || 0)));
   const pieces = [];
   if (trainingExp > 0) pieces.push(`EXP +${formatCompactNumber(trainingExp)}`);
   if (realEstateCash > 0) pieces.push(`부동산 +${formatCompactNumber(realEstateCash)}`);
+  if (researchPoints > 0) pieces.push(`연구 +${formatCompactNumber(researchPoints)}`);
   if (diamonds > 0) pieces.push(`다이아 +${formatCompactNumber(diamonds)}`);
   if (money > 0) pieces.push(`돈 +${formatCompactNumber(money)}`);
   return pieces.join(" · ");
@@ -802,7 +807,7 @@ function StatusGrid({ expeditionSummary, mode, realEstateSummary, summary }) {
         ["파티", `${expeditionSummary.partyCount}/${expeditionSummary.partySize}`],
         ["전투력", `${formatCompactNumber(expeditionSummary.partyPower)}/${formatCompactNumber(expeditionSummary.enemyPower)}`],
         ["보유 EXP", formatCompactNumber(expeditionSummary.trainingExp)],
-        ["다이아", formatCompactNumber(expeditionSummary.diamonds)],
+        ["연구", formatCompactNumber(expeditionSummary.researchPoints)],
       ]
       : mode === "realEstate"
         ? [
@@ -1781,6 +1786,7 @@ function ExpeditionMemberPortrait({ member, size = "small" }) {
 function ExpeditionTabBar({ activeTab, management, onTabChange }) {
   const tabs = [
     { id: "growth", label: `성장${management.upgradeableCount > 0 ? ` ${management.upgradeableCount}` : ""}`, icon: Sparkles },
+    { id: "research", label: `연구${management.researchPoints > 0 ? ` ${management.researchPoints}` : ""}`, icon: BookOpen },
     { id: "party", label: "파티", icon: Users },
     { id: "dispatch", label: `의뢰${management.dispatchCompletedCount > 0 ? ` ${management.dispatchCompletedCount}` : ""}`, icon: CalendarDays },
     { id: "manage", label: `대원 관리${management.fusionCandidates.length > 0 ? ` ${management.fusionCandidates.length}` : ""}`, icon: Medal },
@@ -1970,6 +1976,135 @@ function ExpeditionGrowthPanel({ management, onLevelUp }) {
           })}
         </div>
       )}
+    </section>
+  );
+}
+
+const expeditionResearchRuneIcons = {
+  supply: Package,
+  command: Medal,
+  core: BookOpen,
+  assault: Gem,
+  support: ShieldCheck,
+};
+
+function ExpeditionResearchPanel({ gameState, onResetResearch, onUnlockResearch }) {
+  const research = createExpeditionResearchViewModel(gameState);
+  const [selectedNodeId, setSelectedNodeId] = useState(research.nextNode?.id || research.nodes[0]?.id || "");
+  useEffect(() => {
+    if (!research.nodes.some((node) => node.id === selectedNodeId)) {
+      setSelectedNodeId(research.nextNode?.id || research.nodes[0]?.id || "");
+    }
+  }, [research.nextNode?.id, research.nodes, selectedNodeId]);
+  const selectedNode = research.nodes.find((node) => node.id === selectedNodeId) || research.nextNode || research.nodes[0] || null;
+  const selectedLane = selectedNode ? research.lanes.find((lane) => Number(lane.lane) === Number(selectedNode.position.lane)) : null;
+  const progressPercent = research.totalCount > 0 ? Math.round((research.unlockedCount / research.totalCount) * 100) : 0;
+  const runeLaneCount = Math.max(1, Number(research.laneCount || 1));
+  const runeDepthCount = Math.max(1, Number(research.depthCount || 1));
+  const runeRowHeight = 94;
+  const runeWidth = runeLaneCount * 100;
+  const runeHeight = runeDepthCount * runeRowHeight;
+  const SelectedRuneIcon = expeditionResearchRuneIcons[selectedLane?.id] || Sparkles;
+  const runePoint = (position) => ({
+    x: (Number(position.lane) + 0.5) * 100,
+    y: (Number(position.depth) - 0.5) * runeRowHeight,
+  });
+  return (
+    <section className="expedition-research-panel expedition-rune-panel">
+      <header className="expedition-rune-title">
+        <span>원정대 연구</span>
+        <strong>{formatCompactNumber(research.points)}</strong>
+      </header>
+      <div className="expedition-rune-bonus-strip">
+        <span><Gem size={14} /> 전투 +{Math.round(research.totalCombatBonus * 100)}%</span>
+        <span><BookOpen size={14} /> 진행 {progressPercent}%</span>
+        <button className="secondary-action compact expedition-research-reset" type="button" disabled={research.spentPoints <= 0} onClick={onResetResearch} aria-label="연구 초기화">
+          <RefreshCcw size={15} />
+        </button>
+      </div>
+      {selectedNode && (
+        <div className={`expedition-research-detail-pane expedition-rune-selection ${selectedNode.unlocked ? "unlocked" : selectedNode.canUnlock ? "ready" : "locked"}`} data-node-id={selectedNode.id}>
+          <div className="expedition-rune-selection-icon">
+            <SelectedRuneIcon size={18} />
+          </div>
+          <div className="expedition-rune-selection-copy">
+            <small>{selectedLane?.name || "연구"} · {selectedNode.statusLabel} · {selectedNode.effectLabels[0]}</small>
+            <strong>{selectedNode.name}</strong>
+            {(selectedNode.prerequisiteNames.length > 0 || selectedNode.missingPrerequisites.length > 0) && (
+              <span>{selectedNode.missingPrerequisites.length > 0 ? `필요 ${selectedNode.missingPrerequisites.join(" · ")}` : `선행 ${selectedNode.prerequisiteNames.join(" · ")}`}</span>
+            )}
+          </div>
+          <button className="primary-action compact expedition-research-unlock" type="button" disabled={!selectedNode.canUnlock} onClick={() => onUnlockResearch(selectedNode.id)}>
+            <CheckCircle size={15} />
+            <span>{selectedNode.unlocked ? "완료" : selectedNode.canUnlock ? "연구" : selectedNode.prerequisitesMet ? "부족" : "잠김"}</span>
+          </button>
+        </div>
+      )}
+      <div className="expedition-rune-tree-wrap">
+        <div
+          className="expedition-rune-tree"
+          style={{
+            "--rune-depths": runeDepthCount,
+          }}
+        >
+          <svg
+            className="expedition-rune-links"
+            viewBox={`0 0 ${runeWidth} ${runeHeight}`}
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            {research.links.map((link) => {
+              const from = runePoint({ lane: link.fromLane, depth: link.fromDepth });
+              const to = runePoint({ lane: link.toLane, depth: link.toDepth });
+              return (
+                <line
+                  className={`expedition-rune-link ${link.status}`}
+                  key={link.id}
+                  x1={from.x}
+                  y1={from.y}
+                  x2={to.x}
+                  y2={to.y}
+                />
+              );
+            })}
+          </svg>
+          {research.nodes.map((node) => {
+            const lane = research.lanes.find((candidate) => Number(candidate.lane) === Number(node.position.lane));
+            const Icon = expeditionResearchRuneIcons[lane?.id] || Sparkles;
+            const nodeClassName = [
+              "expedition-research-node",
+              "expedition-rune-node",
+              selectedNode?.id === node.id ? "selected" : "",
+              node.unlocked ? "unlocked" : "",
+              node.canUnlock ? "ready" : "",
+              !node.unlocked && !node.prerequisitesMet ? "locked" : "",
+            ].filter(Boolean).join(" ");
+            const nodeProgress = `${node.unlocked ? formatCompactNumber(node.cost) : 0}/${formatCompactNumber(node.cost)}`;
+            const x = ((Number(node.position.lane) + 0.5) / runeLaneCount) * 100;
+            const y = ((Number(node.position.depth) - 0.5) / runeDepthCount) * 100;
+            return (
+              <button
+                aria-label={`${node.name}, ${node.statusLabel}, ${nodeProgress}`}
+                aria-pressed={selectedNode?.id === node.id}
+                className={nodeClassName}
+                data-depth={node.position.depth}
+                data-lane={node.position.lane}
+                data-node-id={node.id}
+                key={node.id}
+                style={{ "--rune-x": `${x}%`, "--rune-y": `${y}%` }}
+                title={`${node.name} · ${node.effectLabels.join(" · ")}`}
+                type="button"
+                onClick={() => setSelectedNodeId(node.id)}
+              >
+                <span className="expedition-rune-node-core">
+                  <Icon size={22} />
+                </span>
+                <small>{nodeProgress}</small>
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </section>
   );
 }
@@ -2472,13 +2607,14 @@ function ExpeditionLogPanel({ management }) {
   );
 }
 
-function ExpeditionManagementPanel({ activeTab, gameState, onAssign, onClaimDispatch, onFuse, onLevelUp, onRecommend, onRemove, onReorder, onStartDispatch, onTabChange, onToggleLock }) {
+function ExpeditionManagementPanel({ activeTab, gameState, onAssign, onClaimDispatch, onFuse, onLevelUp, onRecommend, onRemove, onReorder, onResetResearch, onStartDispatch, onTabChange, onToggleLock, onUnlockResearch }) {
   const management = createExpeditionManagementViewModel(gameState);
   return (
     <>
       <ExpeditionTabBar activeTab={activeTab} management={management} onTabChange={onTabChange} />
       <section className="expedition-viewport">
         {activeTab === "growth" && <ExpeditionGrowthPanel management={management} onLevelUp={onLevelUp} />}
+        {activeTab === "research" && <ExpeditionResearchPanel gameState={gameState} onResetResearch={onResetResearch} onUnlockResearch={onUnlockResearch} />}
         {activeTab === "party" && <ExpeditionPartyPanel management={management} onAssign={onAssign} onRecommend={onRecommend} onRemove={onRemove} onReorder={onReorder} />}
         {activeTab === "dispatch" && <ExpeditionDispatchPanel gameState={gameState} onClaimDispatch={onClaimDispatch} onStartDispatch={onStartDispatch} />}
         {activeTab === "manage" && <ExpeditionManagePanel management={management} onFuse={onFuse} onToggleLock={onToggleLock} />}
@@ -3573,6 +3709,7 @@ function ExpeditionRewardModal({ onClaim, onClose, pendingReward }) {
       <div className="expedition-reward-list">
         <span>EXP <strong>{formatCompactNumber(pendingReward.trainingExp)}</strong></span>
         <span>부동산 자금 <strong>{formatCompactNumber(pendingReward.realEstateCash)}</strong></span>
+        <span>연구 <strong>{formatCompactNumber(pendingReward.researchPoints)}</strong></span>
         <span>다이아 <strong>{formatCompactNumber(pendingReward.diamonds)}</strong></span>
       </div>
       <div className="modal-actions expedition-reward-actions">
@@ -4133,7 +4270,8 @@ function GameApp({ loaded }) {
     Number(expeditionPendingReward.trainingExp) > 0 ||
     Number(expeditionPendingReward.money) > 0 ||
     Number(expeditionPendingReward.diamonds) > 0 ||
-    Number(expeditionPendingReward.realEstateCash) > 0
+    Number(expeditionPendingReward.realEstateCash) > 0 ||
+    Number(expeditionPendingReward.researchPoints) > 0
   );
 
   const showExpeditionRewardToast = (text) => {
@@ -4322,6 +4460,14 @@ function GameApp({ loaded }) {
     setGameState((state) => levelUpExpeditionMember(state, memberId));
   };
 
+  const handleUnlockExpeditionResearch = (nodeId) => {
+    setGameState((state) => unlockExpeditionResearchNode(state, nodeId));
+  };
+
+  const handleResetExpeditionResearch = () => {
+    setGameState((state) => resetExpeditionResearch(state));
+  };
+
   const handleExpeditionToggleLock = (memberId) => {
     setGameState((state) => toggleExpeditionMemberLock(state, memberId));
   };
@@ -4407,13 +4553,15 @@ function GameApp({ loaded }) {
             summary={summary}
           />
         ) : mode === "expedition" ? (
-          <ExpeditionScene
-            gameState={gameState}
-            onCombatReadyChange={handleExpeditionCombatReadyChange}
-            onExpeditionComplete={handleExpeditionComplete}
-            onOpenPendingReward={handleOpenExpeditionReward}
-            rewardToast={expeditionRewardToast}
-          />
+          expeditionTab === "research" ? null : (
+            <ExpeditionScene
+              gameState={gameState}
+              onCombatReadyChange={handleExpeditionCombatReadyChange}
+              onExpeditionComplete={handleExpeditionComplete}
+              onOpenPendingReward={handleOpenExpeditionReward}
+              rewardToast={expeditionRewardToast}
+            />
+          )
         ) : (
           <RealEstateScene
             notice={realEstateNotice}
@@ -4453,9 +4601,11 @@ function GameApp({ loaded }) {
               onRecommend={handleExpeditionRecommend}
               onRemove={handleExpeditionRemove}
               onReorder={handleExpeditionReorder}
+              onResetResearch={handleResetExpeditionResearch}
               onStartDispatch={handleStartExpeditionDispatch}
               onTabChange={setExpeditionTab}
               onToggleLock={handleExpeditionToggleLock}
+              onUnlockResearch={handleUnlockExpeditionResearch}
             />
           ) : (
             <RealEstateManagementPanel

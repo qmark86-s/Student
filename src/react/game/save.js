@@ -17,8 +17,8 @@ import { createDefaultExpeditionState, migrateLegacyExpeditionState, normalizeEx
 import { createDefaultRealEstateState, normalizeRealEstateState, validateRealEstateState } from "./realEstate.js";
 
 export const SAVE_KEY = "student-idle-rpg-save-v1";
-export const SAVE_SCHEMA_VERSION = 6;
-export const CONTENT_REVISION = "expdispatchv1";
+export const SAVE_SCHEMA_VERSION = 7;
+export const CONTENT_REVISION = "expresearchv1";
 
 const defaultWeights = {
   korean: 100,
@@ -578,7 +578,7 @@ function migrateGameState(state) {
         : legacy.realEstate,
     };
   }
-  if (state.schemaVersion === 3 || state.schemaVersion === 4 || state.schemaVersion === 5) {
+  if (state.schemaVersion === 3 || state.schemaVersion === 4 || state.schemaVersion === 5 || state.schemaVersion === 6) {
     const legacy = legacyTopLevelState(state);
     const migratedLegacy = migrateLegacyPeopleAndEquipment(legacy);
     return {
@@ -651,6 +651,10 @@ export function normalizeGameState(state) {
           memberIds: [...entry.memberIds],
           rewards: { ...entry.rewards },
         })),
+      },
+      research: {
+        ...migrated.expedition.research,
+        unlockedNodeIds: [...migrated.expedition.research.unlockedNodeIds],
       },
       log: migrated.expedition.log.map((entry) => ({ ...entry })),
     },

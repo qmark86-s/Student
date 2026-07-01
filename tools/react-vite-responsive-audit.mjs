@@ -8,7 +8,7 @@ const outDir = resolve("artifacts/react-vite-responsive-audit");
 const preferredPort = Number(process.env.REACT_RESPONSIVE_AUDIT_PORT || 5786);
 const appReadyTimeoutMs = Number(process.env.REACT_RESPONSIVE_READY_TIMEOUT_MS || 45000);
 const saveKey = "student-idle-rpg-save-v1";
-const expectedExpeditionTabCount = 5;
+const expectedExpeditionTabCount = 6;
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",

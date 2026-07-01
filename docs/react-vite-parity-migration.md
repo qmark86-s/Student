@@ -26,6 +26,7 @@ npm run react:smoke
 npm run react:save-smoke
 npm run react:battle-smoke
 npm run expedition:dispatch-verify
+npm run expedition:research-verify
 npm run react:expedition-smoke
 npm run react:expedition-rules-smoke
 npm run real-estate:verify
@@ -36,6 +37,7 @@ npm run react:education-smoke
 npm run react:shop-debug-smoke
 npm run react:responsive-audit
 npm run visual:smoke
+npm run live:polish
 npm run career:smoke
 npm run retake:smoke
 npm run react:verify
@@ -76,10 +78,11 @@ npm run verify:mobile
 - `tools/react-vite-smoke.mjs`: 모바일 렌더링, 핵심 UI, production 기본 DEBUG 미노출 검사
 - `tools/react-vite-save-smoke.mjs`: save 호환, QA 조작, legacy save 승격, fresh save 흐름 검사
 - `tools/react-vite-battle-road-smoke.mjs`: Battle Road/N수/수능/결과 흐름 검사
-- `tools/react-vite-expedition-smoke.mjs`: 직업 수락, 졸업생 보존, 원정대원 등록, 원정대 stage 진행, 파티 슬롯 드래그 교체와 전투장 순서 동기화, 교체 중 슬롯 진행 표시/전투장 active reorder 상태, 접힌 의뢰 카드 세부 펼침/파견 시작/완료 수령, 수동 즉시 보상, 보상 모달 미표시, HP bar 검사
+- `tools/react-vite-expedition-smoke.mjs`: 직업 수락, 졸업생 보존, 원정대원 등록, 원정대 stage 진행, 파티 슬롯 드래그 교체와 전투장 순서 동기화, 교체 중 슬롯 진행 표시/전투장 active reorder 상태, 연구 탭 보스 드랍/룬 트리/원형 노드/SVG 연결선/노드 선택/해금/초기화/상세 패널, 접힌 의뢰 카드 세부 펼침/파견 시작/완료 수령, 수동 즉시 보상, 보상 모달 미표시, HP bar 검사
 - `tools/react-vite-expedition-rules-smoke.mjs`: 원정대 실시간 역할 전투, 수동/온라인 즉시 보상, 오프라인 pending 보상, 480전투 cap, 보스 보상, 실패 처리, 추천 편성, 성장 투자, 승급 합성 규칙 검사
 - `tools/validate-expedition-combat-balance.mjs`: 직업 62개 역할 스탯, 일반/보스 enemy 100개씩, 한글 help, 화면 몬스터 수 일치 검사
 - `tools/validate-expedition-dispatches.mjs`: 원정대 의뢰 12개, band 4종, 한글 help, 추천 직업/역할 ID, 실제/준비중 보상 구조 검사
+- `tools/validate-expedition-research.mjs`: 원정대 연구 노드, 5개 lane, 한글 help, 다열 좌표, 좌표 겹침, 효과 타입, 선행 조건, 교차 선행 노드, 전투 보너스 상한, 무료 초기화 규칙 검사
 - `tools/react-vite-real-estate-smoke.mjs`: 부동산 모드, 도시/지역, 대형 배경 이미지, 기본 전체 보기, 포커스 휠 확대, 상세 지도 pan, 구매/임대/랭킹/DEBUG 흐름 검사
 - `tools/react-vite-real-estate-visual-audit.mjs`: 부동산 도시와 지역 상세 화면 시각 audit
 - `tools/react-vite-records-smoke.mjs`: 시험/직장/도감 저장 상태, 직장 중복 수입 카드 제거, 도감 분배 가이드 기본 접힘/펼침 검사
@@ -87,6 +90,7 @@ npm run verify:mobile
 - `tools/react-vite-shop-debug-smoke.mjs`: 상점 장비/DEBUG 대원 후보/원정대 편성 검사
 - `tools/react-vite-responsive-audit.mjs`: viewport별 overflow, 이미지, 주요 기능 표면 검사
 - `tools/visual-asset-smoke.mjs`: 메인 전투 장비 오버레이, 교과 VFX, Battle Road 몬스터 atlas, 원정대 이미지 프레임 렌더링 검사
+- `tools/live-visual-polish-check.mjs`: production `dist/` 기준 학생/원정대 라이브 화면 캡처, 콘솔 오류, 가로 overflow, 클리핑 의심 검사
 - `tools/career-outcome-smoke.mjs`: 수능 결과 직업 선택 62종과 초상/랭킹 렌더링 검사
 - `tools/retake-year-smoke.mjs`: 결과 탭 `N수 선택` 이후 N수 4조우, 수능 4조우, 결과 복귀 검사
 

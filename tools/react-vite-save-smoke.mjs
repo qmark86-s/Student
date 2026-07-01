@@ -6,7 +6,7 @@ import { chromium } from "@playwright/test";
 const root = resolve("dist");
 const preferredPort = Number(process.env.REACT_SAVE_SMOKE_PORT || 5670);
 const saveKey = "student-idle-rpg-save-v1";
-const expectedSchemaVersion = 6;
+const expectedSchemaVersion = 7;
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -388,6 +388,7 @@ try {
       hasCareerAlumni: Array.isArray(state.careerAlumni),
       hasPendingReward: Boolean(state.expedition?.pendingReward),
       hasDispatch: Array.isArray(state.expedition?.dispatch?.assignments) && Array.isArray(state.expedition?.dispatch?.history),
+      hasResearch: Array.isArray(state.expedition?.research?.unlockedNodeIds) && Number.isFinite(Number(state.expedition?.research?.points)),
       awaitingDecision: state.current.awaitingDecision,
       outcomeGender: state.current.outcome?.avatarGender,
       candidateGender: state.current.outcome?.careerCandidates?.[0]?.avatarGender,
@@ -412,6 +413,7 @@ try {
       retakeCount: state.current.retakeCount,
       hasPendingReward: Boolean(state.expedition?.pendingReward),
       hasDispatch: Array.isArray(state.expedition?.dispatch?.assignments) && Array.isArray(state.expedition?.dispatch?.history),
+      hasResearch: Array.isArray(state.expedition?.research?.unlockedNodeIds) && Number.isFinite(Number(state.expedition?.research?.points)),
       awaitingDecision: state.current.awaitingDecision,
       outcomeIsNull: state.current.outcome === null,
       roadMode: state.current.road?.mode,
@@ -457,6 +459,7 @@ try {
       retakeCount: state.current.retakeCount,
       hasPendingReward: Boolean(state.expedition?.pendingReward),
       hasDispatch: Array.isArray(state.expedition?.dispatch?.assignments) && Array.isArray(state.expedition?.dispatch?.history),
+      hasResearch: Array.isArray(state.expedition?.research?.unlockedNodeIds) && Number.isFinite(Number(state.expedition?.research?.points)),
       awaitingDecision: state.current.awaitingDecision,
     };
   }, saveKey);
@@ -529,6 +532,7 @@ try {
   if (afterClick.state.schemaVersion !== expectedSchemaVersion) failures.push(`Injected save did not migrate to schema ${expectedSchemaVersion}, got ${afterClick.state.schemaVersion}`);
   if (!afterClick.state.expedition?.pendingReward) failures.push("Injected save did not create expedition pendingReward state");
   if (!Array.isArray(afterClick.state.expedition?.dispatch?.assignments) || !Array.isArray(afterClick.state.expedition?.dispatch?.history)) failures.push("Injected save did not create expedition dispatch state");
+  if (!afterClick.state.expedition?.research || !Array.isArray(afterClick.state.expedition.research.unlockedNodeIds)) failures.push("Injected save did not create expedition research state");
   if (!afterClick.state.realEstate || typeof afterClick.state.realEstate.cash !== "number") failures.push("Injected save did not create realEstate state");
   if (afterClick.state.current.road.encounterIndex !== 1) failures.push(`DEBUG click did not advance Battle Road encounter, got ${afterClick.state.current.road.encounterIndex}`);
   if (afterClick.state.current.battle?.encounterIndex !== 1) failures.push(`Saved battle did not advance to encounter 1, got ${afterClick.state.current.battle?.encounterIndex}`);
@@ -541,6 +545,7 @@ try {
   if (legacyRetake.before.schemaVersion !== expectedSchemaVersion) failures.push(`Legacy decision save did not migrate to schema ${expectedSchemaVersion}, got ${legacyRetake.before.schemaVersion}`);
   if (!legacyRetake.before.hasPendingReward) failures.push("Legacy decision save did not create expedition pendingReward state");
   if (!legacyRetake.before.hasDispatch) failures.push("Legacy decision save did not create expedition dispatch state");
+  if (!legacyRetake.before.hasResearch) failures.push("Legacy decision save did not create expedition research state");
   if (legacyRetake.before.avatarGender !== "male" || legacyRetake.before.outcomeGender !== "male" || legacyRetake.before.candidateGender !== "male") failures.push("Legacy decision save did not fill missing avatarGender values");
   if (!legacyRetake.before.hasRoad || !legacyRetake.before.hasBattle) failures.push("Legacy decision save did not create road/battle state");
   if (!legacyRetake.before.hasEquipment || !legacyRetake.before.hasCareerAlumni) failures.push("Legacy decision save did not create equipment/careerAlumni state");
@@ -551,7 +556,7 @@ try {
   if (legacyRetake.after.awaitingDecision !== false || legacyRetake.after.outcomeIsNull !== true) failures.push("Legacy retake did not clear decision outcome");
   if (legacyRetake.after.roadMode !== "school" || legacyRetake.after.battleKind !== "grade" || legacyRetake.after.battleEnemyCount !== 3) failures.push("Legacy retake did not create the first retake battle");
   if (freshRetake.afterReset.hasPhone !== 1 || freshRetake.afterReset.renderGuardCount !== 0) failures.push("Fresh reset did not render the normal game UI");
-  if (freshRetake.afterReset.schemaVersion !== expectedSchemaVersion || freshRetake.afterReset.gradeId !== "E1" || freshRetake.afterReset.retakeCount !== 0 || !freshRetake.afterReset.hasPendingReward || !freshRetake.afterReset.hasDispatch) failures.push(`Fresh reset state mismatch: ${JSON.stringify(freshRetake.afterReset)}`);
+  if (freshRetake.afterReset.schemaVersion !== expectedSchemaVersion || freshRetake.afterReset.gradeId !== "E1" || freshRetake.afterReset.retakeCount !== 0 || !freshRetake.afterReset.hasPendingReward || !freshRetake.afterReset.hasDispatch || !freshRetake.afterReset.hasResearch) failures.push(`Fresh reset state mismatch: ${JSON.stringify(freshRetake.afterReset)}`);
   if (freshRetake.closed || freshRetake.crashed) failures.push(`Fresh retake page closed=${freshRetake.closed} crashed=${freshRetake.crashed}`);
   if (freshRetake.afterRetake.hasPhone !== 1 || freshRetake.afterRetake.renderGuardCount !== 0 || freshRetake.afterRetake.growthPanelCount !== 1) failures.push("Fresh retake click removed the normal game UI");
   if (freshRetake.afterRetake.bodyTextLength < 500) failures.push(`Fresh retake screen appears blank, text length ${freshRetake.afterRetake.bodyTextLength}`);

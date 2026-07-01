@@ -1969,7 +1969,24 @@ function writePng(path, target) {
     chunk("IEND", Buffer.alloc(0)),
   ];
   mkdirSync(dirname(path), { recursive: true });
-  writeFileSync(path, Buffer.concat([signature, ...chunks]));
+  writeFileSyncWithRetry(path, Buffer.concat([signature, ...chunks]));
+}
+
+function sleepSync(ms) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+}
+
+function writeFileSyncWithRetry(path, data) {
+  const transientCodes = new Set(["EBUSY", "EPERM", "UNKNOWN"]);
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    try {
+      writeFileSync(path, data);
+      return;
+    } catch (error) {
+      if (!transientCodes.has(error?.code) || attempt >= 4) throw error;
+      sleepSync(80 * (attempt + 1));
+    }
+  }
 }
 
 function paethPredictor(a, b, c) {

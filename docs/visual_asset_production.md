@@ -24,6 +24,7 @@
 3. 아틀라스를 재생성한다.
    - `npm run visual:build`
    - 생성 결과는 `src/snapshot/assets/*.png`, `src/snapshot/visual-assets.css`, `data/visual_assets.json`, `src/snapshot/manifest.json`에 반영된다.
+   - Windows에서 반복 검증 중 PNG 파일 쓰기가 일시적으로 잠기면 `tools/build-visual-assets.mjs`의 `writePng`가 같은 산출물을 짧게 재시도한다. 누락 자산 대체가 아니라 transient I/O 안정화다.
 
 4. 자동 품질 게이트를 통과시킨다.
    - `npm run visual:verify`

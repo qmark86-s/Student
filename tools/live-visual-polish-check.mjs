@@ -1,13 +1,97 @@
-import { mkdirSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { createReadStream, existsSync, mkdirSync, statSync, writeFileSync } from "node:fs";
+import { createServer } from "node:http";
+import { extname, join, normalize, resolve, sep } from "node:path";
 import { chromium } from "@playwright/test";
 
+const root = resolve("dist");
 const outputDir = resolve("artifacts/live-visual-polish");
-const baseUrl = process.env.LIVE_POLISH_URL || "http://127.0.0.1:5173/";
-const runUrl = new URL(baseUrl);
-runUrl.searchParams.set("livePolish", String(Date.now()));
+const preferredPort = Number(process.env.LIVE_POLISH_PORT || 5796);
+
+const mimeTypes = {
+  ".html": "text/html; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
+  ".svg": "image/svg+xml",
+  ".ico": "image/x-icon",
+};
 
 mkdirSync(outputDir, { recursive: true });
+
+async function waitForBuildOutput() {
+  const indexPath = resolve(root, "index.html");
+  const deadline = Date.now() + 5000;
+  while (!existsSync(indexPath) && Date.now() < deadline) {
+    await new Promise((resolveDelay) => setTimeout(resolveDelay, 100));
+  }
+  if (!existsSync(indexPath)) {
+    console.error("dist/index.html is missing. Run `npm run react:build` first.");
+    process.exit(1);
+  }
+}
+
+function resolveRequest(url) {
+  const rawPath = decodeURIComponent(new URL(url, "http://127.0.0.1").pathname);
+  const relative = normalize(rawPath === "/" ? "index.html" : rawPath.slice(1));
+  const absolute = resolve(join(root, relative));
+  if (absolute !== root && !absolute.startsWith(root + sep)) return null;
+  if (!existsSync(absolute) || !statSync(absolute).isFile()) return null;
+  return absolute;
+}
+
+function createStaticServer() {
+  return createServer((request, response) => {
+    const file = resolveRequest(request.url || "/");
+    if (!file) {
+      response.writeHead(404, { "content-type": "text/plain; charset=utf-8" });
+      response.end("Not found");
+      return;
+    }
+
+    response.writeHead(200, {
+      "content-type": mimeTypes[extname(file).toLowerCase()] || "application/octet-stream",
+      "cache-control": "no-store",
+    });
+    createReadStream(file).pipe(response);
+  });
+}
+
+function listen(server, port) {
+  return new Promise((resolveListen, reject) => {
+    const handleError = (error) => {
+      server.off("listening", handleListening);
+      reject(error);
+    };
+    const handleListening = () => {
+      server.off("error", handleError);
+      resolveListen(port);
+    };
+    server.once("error", handleError);
+    server.once("listening", handleListening);
+    server.listen(port, "127.0.0.1");
+  });
+}
+
+async function listenAvailable(server) {
+  for (let port = preferredPort; port < preferredPort + 50; port += 1) {
+    try {
+      return await listen(server, port);
+    } catch (error) {
+      if (error.code !== "EADDRINUSE") throw error;
+    }
+  }
+  throw new Error(`No available port from ${preferredPort} to ${preferredPort + 49}`);
+}
+
+function closeServer(server) {
+  return new Promise((resolveClose, reject) => {
+    server.close((error) => (error ? reject(error) : resolveClose()));
+  });
+}
 
 function rectToJson(rect) {
   if (!rect) return null;
@@ -184,6 +268,17 @@ async function capture(page, name, extra = {}) {
   };
 }
 
+let server = null;
+let baseUrl = process.env.LIVE_POLISH_URL || "";
+if (!baseUrl) {
+  await waitForBuildOutput();
+  server = createStaticServer();
+  const port = await listenAvailable(server);
+  baseUrl = `http://127.0.0.1:${port}/`;
+}
+const runUrl = new URL(baseUrl);
+runUrl.searchParams.set("livePolish", String(Date.now()));
+
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({
   viewport: { width: 390, height: 844 },
@@ -216,7 +311,11 @@ try {
   await page.waitForTimeout(2200);
   captures.push(await capture(page, "student-combat"));
 
-  await page.evaluate(() => document.querySelectorAll(".screen-switch")[1]?.click());
+  await page.evaluate(() => {
+    const expeditionTab = [...document.querySelectorAll(".mode-tab")]
+      .find((button) => (button.textContent || "").trim() === "원정대");
+    expeditionTab?.click();
+  });
   await page.waitForSelector(".expedition-arena", { timeout: 15000 });
   await page.waitForTimeout(1000);
   captures.push(await capture(page, "expedition-start"));
@@ -225,6 +324,7 @@ try {
   captures.push(await capture(page, "expedition-combat"));
 } finally {
   await browser.close();
+  if (server) await closeServer(server);
 }
 
 const report = {
