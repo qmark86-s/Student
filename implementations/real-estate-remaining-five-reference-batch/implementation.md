@@ -86,3 +86,5 @@
 - `apartment_complex`는 고층 단지가 가장자리만 먼저 뜨지 않도록 왼쪽/오른쪽/전면 단지 3덩어리로 묶었다. 런타임 단계는 `apartment-complex-growth-00..03.png`, `minOwnedCount=0,1,11,27`이다.
 - `office_tower`는 tower group을 완성 단위로 묶었다. 런타임 단계는 `office-tower-growth-00..04.png`, `minOwnedCount=0,1,6,13,21`이다.
 - `mixed_development`는 변화 없는 반복 단계와 작은 조각 단독 노출을 줄이고, 하단-left 녹색 X group을 최종 단계로 미뤘다. 런타임 단계는 `mixed-development-growth-00..05.png`, `minOwnedCount=0,1,5,8,12,39`이다.
+
+2026-07-01 후속 `real-estate-uniform-ten-growth-stage` 작업에서 현재 런타임 성장 테이블은 모든 지역 10단계로 대체되었다. 이 섹션의 `minOwnedCount` 값은 당시 수동 검수 반영 이력이며, 현재 기준은 10단계 문서를 따른다.

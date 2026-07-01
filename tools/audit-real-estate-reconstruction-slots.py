@@ -138,6 +138,74 @@ def mean_absolute_delta(a: Image.Image, b: Image.Image) -> float:
     return sum(value * count for value, count in enumerate(hist)) / max(1, a.width * a.height)
 
 
+def manual_runtime_audit_reason(growth_stages: list[dict], generation_report: dict | None) -> str:
+    if generation_report is None:
+        return "생성 리포트가 없어 사용자가 직접 제공한 runtime PNG 목록을 감사합니다."
+    if len(generation_report.get("stages", [])) != len(growth_stages):
+        return f"성장 PNG 차수와 생성 리포트 차수가 다릅니다: {len(growth_stages)} != {len(generation_report.get('stages', []))}"
+    report_files = [stage.get("file", "") for stage in generation_report.get("stages", [])]
+    data_files = [stage.get("file", "") for stage in growth_stages]
+    if report_files != data_files:
+        return "성장 PNG 파일 목록이 생성 리포트와 다릅니다."
+    runtime_size = generation_report.get("runtimeSize")
+    if isinstance(runtime_size, list) and len(runtime_size) == 2:
+        expected_size = (int(runtime_size[0]), int(runtime_size[1]))
+        for stage in growth_stages:
+            image_path = ASSET_ROOT / stage["file"]
+            require(image_path.exists(), f"성장 PNG가 없습니다: {stage['file']}")
+            with Image.open(image_path) as image:
+                if image.size != expected_size:
+                    return f"runtime PNG 해상도가 생성 리포트와 다릅니다: {stage['file']} {image.size} != {expected_size}"
+    return ""
+
+
+def audit_manual_runtime_stages(district_id: str, growth_district: dict, growth_stages: list[dict], reason: str) -> None:
+    stage_reports = []
+    first_image: Image.Image | None = None
+    final_image: Image.Image | None = None
+    for stage in growth_stages:
+        image_path = ASSET_ROOT / stage["file"]
+        require(image_path.exists(), f"성장 PNG가 없습니다: {stage['file']}")
+        with Image.open(image_path) as loaded:
+            require(loaded.width > 0 and loaded.height > 0, f"성장 PNG 해상도가 올바르지 않습니다: {stage['file']}")
+            image = loaded.convert("RGB")
+            stage_reports.append({
+                "growthStage": int(stage["growthStage"]),
+                "minOwnedCount": int(stage["minOwnedCount"]),
+                "file": stage["file"],
+                "width": int(loaded.width),
+                "height": int(loaded.height),
+                "mode": loaded.mode,
+                "fileSizeBytes": image_path.stat().st_size,
+            })
+        if first_image is None:
+            first_image = image
+        final_image = image
+
+    require(first_image is not None and final_image is not None, "성장 PNG stage가 비어 있습니다.")
+    comparable_final = final_image.resize(first_image.size, Image.Resampling.LANCZOS) if final_image.size != first_image.size else final_image
+    final_delta = mean_absolute_delta(first_image, comparable_final)
+    require(final_delta > 0.1, f"0단계와 최종 성장 PNG 차이가 너무 작습니다: meanAbsDelta={final_delta:.4f}")
+
+    report = {
+        "districtId": district_id,
+        "stageMode": "manualRuntimePng",
+        "manualReason": reason,
+        "growthStageCount": len(growth_stages),
+        "maxOwnedCount": int(growth_district["maxOwnedCount"]),
+        "firstFinalMeanAbsoluteDelta": round(final_delta, 4),
+        "stageReports": stage_reports,
+        "help": {
+            "stageMode": "생성 리포트 산출물이 아니라 사용자가 직접 제공한 runtime 성장 PNG를 검사하는 모드입니다.",
+            "manualReason": "왜 reconstruction 픽셀 감사 대신 runtime PNG 감사를 사용했는지 설명합니다."
+        }
+    }
+    write_json(artifact_file(district_id, "reconstruction-audit-report.json"), report)
+    print(f"{district_id} 수동 runtime 성장 PNG 감사 완료: stages={len(growth_stages)}, meanAbsDelta={final_delta:.2f}")
+    print(f"reason={reason}")
+    print(f"report={artifact_file(district_id, 'reconstruction-audit-report.json')}")
+
+
 def audit_full_reference_final_only(
     district_id: str,
     base: Image.Image,
@@ -225,7 +293,8 @@ def main() -> None:
     sources = read_json(SOURCE_PATH)
     slots_data = read_json(SLOTS_PATH)
     growth_data = read_json(GROWTH_DATA_PATH)
-    generation_report = read_json(artifact_file(district_id, "generation-report.json"))
+    generation_report_path = artifact_file(district_id, "generation-report.json")
+    generation_report = read_json(generation_report_path) if generation_report_path.exists() else None
     source_district = find_district(sources, district_id)
     slot_district = find_district(slots_data, district_id)
     growth_district = find_district(growth_data, district_id)
@@ -236,9 +305,13 @@ def main() -> None:
     require(base.size == final.size, "base/finalReference 해상도가 다릅니다.")
     slot_count = int(sources["output"]["slotCount"])
     require(len(slot_district["slots"]) == slot_count, f"slot 수가 {slot_count}개가 아닙니다: {len(slot_district['slots'])}")
-    require(len(generation_report["stages"]) == len(growth_stages), f"growth stage 수가 generation report와 다릅니다: {len(growth_stages)} != {len(generation_report['stages'])}")
+    manual_reason = manual_runtime_audit_reason(growth_stages, generation_report)
+    if manual_reason:
+        audit_manual_runtime_stages(district_id, growth_district, growth_stages, manual_reason)
+        return
 
     if source_district.get("stageMode") == "fullReferenceFinalOnly":
+        require(generation_report is not None, f"생성 리포트가 없습니다: {generation_report_path}")
         audit_full_reference_final_only(
             district_id,
             base,
@@ -251,6 +324,7 @@ def main() -> None:
             slot_count,
         )
         return
+    require(generation_report is not None, f"생성 리포트가 없습니다: {generation_report_path}")
 
     slots = sorted(slot_district["slots"], key=lambda item: int(item["slotIndex"]))
     require([slot["slotIndex"] for slot in slots] == list(range(1, slot_count + 1)), "slotIndex는 1..16 연속이어야 합니다.")

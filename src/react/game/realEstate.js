@@ -8,6 +8,7 @@ import realEstateScaleTiers from "../../../data/real_estate_scale_tiers.json";
 import realEstates from "../../../data/real_estates.json";
 
 const MIN_REAL_ESTATE_BUILDING_SLOT_COUNT = 16;
+const REAL_ESTATE_DISTRICT_GROWTH_STAGE_COUNT = 10;
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -315,7 +316,8 @@ function validateDistrictGrowthAsset(asset, index, ids, propertiesForValidation)
   const maxOwnedCount = integerAtLeast(asset.maxOwnedCount, `${path}.maxOwnedCount`, 1);
   validateDistrictGrowthUnlock(asset.unlock, `${path}.unlock`, index, propertiesForValidation);
   assertArray(asset.stages, `${path}.stages`);
-  assert(asset.stages.length >= 1, `${path}.stages는 1개 이상이어야 합니다.`);
+  assert(asset.stages.length === REAL_ESTATE_DISTRICT_GROWTH_STAGE_COUNT, `${path}.stages는 ${REAL_ESTATE_DISTRICT_GROWTH_STAGE_COUNT}개여야 합니다: ${asset.stages.length}`);
+  let baseStageFile = null;
   let lastMinOwnedCount = -1;
   asset.stages.forEach((stage, stageIndex) => {
     const stagePath = `${path}.stages[${stageIndex}]`;
@@ -329,6 +331,11 @@ function validateDistrictGrowthAsset(asset, index, ids, propertiesForValidation)
     lastMinOwnedCount = minOwnedCount;
     assertString(stage.file, `${stagePath}.file`);
     assert(stage.file.startsWith("real-estate-district-growth/") && stage.file.endsWith(".png"), `${stagePath}.file 값이 올바르지 않습니다: ${stage.file}`);
+    if (stageIndex === 0) baseStageFile = stage.file;
+    if (stageIndex === 1) {
+      assert(minOwnedCount === 1, `${stagePath}.minOwnedCount 첫 구매 단계는 1이어야 합니다.`);
+      assert(stage.file !== baseStageFile, `${stagePath}.file 첫 구매 단계는 0단계와 다른 PNG여야 합니다: ${stage.file}`);
+    }
     validateHelp(stage, stagePath, ["growthStage", "minOwnedCount", "file"]);
   });
   validateHelp(asset, path, ["id", "sourceBackground", "width", "height", "maxOwnedCount", "unlock", "stages"]);

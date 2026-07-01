@@ -14,6 +14,8 @@
 | `office_tower` | `office-tower-growth-00..04.png` | `0,1,6,13,21` | tower group을 완성 단위로 reveal |
 | `mixed_development` | `mixed-development-growth-00..05.png` | `0,1,5,8,12,39` | 반복 단계 제거, 하단-left X group 최종 지연 |
 
+2026-07-01 후속 `real-estate-uniform-ten-growth-stage` 작업에서 현재 런타임 성장 테이블은 모든 지역 10단계로 대체되었다. 위 표는 당시 PNG 품질 보정 기준이며, 현재 `data/real_estate_district_growth_assets.json`의 최종 `minOwnedCount` 기준은 10단계 문서를 따른다.
+
 ## 변경 파일
 
 - `tools/generate-real-estate-baked-district-growth.py`

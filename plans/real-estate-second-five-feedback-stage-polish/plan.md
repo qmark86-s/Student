@@ -20,6 +20,8 @@
 | `office_tower` | 32 | `0,1,6,13,21` |
 | `mixed_development` | 40 | `0,1,5,8,12,39` |
 
+2026-07-01 후속 `real-estate-uniform-ten-growth-stage` 작업에서 현재 런타임 성장 테이블은 모든 지역 10단계로 대체되었다. 위 권장 단계는 찢김 보정 당시의 품질 기준으로만 참고한다.
+
 ## 검증
 - `npm run real-estate:growth-assets:district -- --district <id>`로 후반 5지역 PNG 재생성
 - `npm run real-estate:growth-review -- --index-file second-five-feedback-growth-review-gallery.html ...`

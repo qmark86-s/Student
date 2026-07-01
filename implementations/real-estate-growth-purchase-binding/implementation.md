@@ -67,3 +67,44 @@
   - `tools/validate-real-estate-config.mjs`: `assertNoMojibake`를 추가하고 `help()`에서 모든 부동산 help 문자열을 검사한다.
   - `src/react/game/realEstate.js`: `validateHelp`에 같은 가드를 추가해 런타임 로드/smoke에서 깨짐을 fatal로 드러낸다.
 - 검증: `npm run real-estate:verify` 통과(validator + small_studio 픽셀 감사 `coverage=1.000`, `meanAbsDelta=0.00`).
+
+## 수동 교체 성장 PNG 적용 (2026-07-01)
+
+사용자가 직접 교체/추가한 `src/snapshot/assets/real-estate-district-growth/*.png`를 현재 성장 테이블에 모두 연결했다. `maxOwnedCount`와 순차 해금 조건은 유지하고, 파일명 순서를 성장 순서로 사용한다.
+
+현재 stage 적용표는 10단계 일괄화 기준을 따른다. PNG가 부족한 지역은 중간 단계에서 같은 파일을 재사용하지만, 첫 구매 단계는 항상 0단계와 다른 파일이다.
+
+| id | stage 수 | maxOwnedCount | minOwnedCount |
+|---|---:|---:|---|
+| `small_studio` | 10 | 10 | `0,1,2,3,4,5,6,7,8,9` |
+| `two_room` | 10 | 12 | `0,1,2,3,4,5,7,8,10,11` |
+| `villa` | 10 | 14 | `0,1,2,3,5,6,8,10,12,13` |
+| `officetel` | 10 | 16 | `0,1,2,4,6,8,10,12,14,15` |
+| `shop_unit` | 10 | 16 | `0,1,2,4,6,8,10,12,14,15` |
+| `small_building` | 10 | 18 | `0,1,3,5,7,9,11,13,15,17` |
+| `apartment_building` | 10 | 24 | `0,1,3,5,8,11,14,17,20,23` |
+| `apartment_complex` | 10 | 28 | `0,1,4,7,10,13,16,19,23,27` |
+| `office_tower` | 10 | 32 | `0,1,5,9,13,17,21,25,28,31` |
+| `mixed_development` | 10 | 40 | `0,1,5,9,13,17,22,28,34,39` |
+
+## 10단계 일괄화 (2026-07-01)
+
+- 모든 지역의 `stages.length`를 10으로 통일했다.
+- `stages[1].minOwnedCount`는 항상 1이며, 0단계와 다른 PNG를 연결한다.
+- `tools/validate-real-estate-config.mjs`와 `src/react/game/realEstate.js`에서 10단계 고정과 첫 구매 이미지 변경을 검증한다.
+- 의도적인 무변화 논리 단계를 위해 같은 PNG 파일을 여러 stage에 연결할 수 있다. 단, 실제 `src/snapshot/assets/real-estate-district-growth` 폴더의 PNG가 데이터에 한 번도 연결되지 않으면 검증은 실패한다.
+
+검증 기준도 함께 바꿨다.
+
+- `tools/validate-real-estate-config.mjs`는 `real-estate-district-growth` 폴더의 PNG가 데이터 stage에 연결되지 않으면 실패한다.
+- `tools/audit-real-estate-reconstruction-slots.py`는 생성 리포트와 차수/해상도가 다른 수동 runtime PNG를 `manualRuntimePng` 모드로 감사한다.
+- 수동 모드는 모든 stage PNG 로드, 해상도, 파일 크기, 0단계 대비 최종 단계 변화량을 검사하고 `artifacts/real-estate-reconstruction/<slug>-reconstruction-audit-report.json`에 남긴다.
+
+검증:
+
+- `npm run real-estate:verify` 통과.
+- 10개 지역 `python tools/audit-real-estate-reconstruction-slots.py --district <id>` 통과.
+- `npm run real-estate:growth-review -- --district ... --index-file manual-growth-image-application-review.html` 통과.
+- `npm run react:build` 통과.
+- `npm run react:real-estate-smoke` 통과.
+- `npm run react:real-estate-visual-audit` 통과.

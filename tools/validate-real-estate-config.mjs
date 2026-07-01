@@ -1,5 +1,7 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
+
+const REAL_ESTATE_DISTRICT_GROWTH_STAGE_COUNT = 10;
 
 function readJson(path) {
   return JSON.parse(readFileSync(resolve(path), "utf8"));
@@ -283,6 +285,10 @@ assertArray(districtGrowthAssets.districts, "real_estate_district_growth_assets.
 assert(districtGrowthAssets.districts.length === catalog.properties.length, `real_estate_district_growth_assets.json.districts 수는 매물 수와 같아야 합니다: ${districtGrowthAssets.districts.length}`);
 help(districtGrowthAssets, "real_estate_district_growth_assets.json", ["version", "outputScale", "districts"]);
 const districtGrowthIds = new Set();
+const availableDistrictGrowthFiles = new Set(readdirSync(resolve("src/snapshot/assets/real-estate-district-growth"))
+  .filter((file) => file.endsWith(".png"))
+  .map((file) => `real-estate-district-growth/${file}`));
+const linkedDistrictGrowthFiles = new Set();
 for (const [index, asset] of districtGrowthAssets.districts.entries()) {
   const path = `real_estate_district_growth_assets.json.districts[${index}]`;
   assertObject(asset, path);
@@ -306,8 +312,9 @@ for (const [index, asset] of districtGrowthAssets.districts.entries()) {
     help(asset.unlock, `${path}.unlock`, ["type", "previousDistrictId"]);
   }
   assertArray(asset.stages, `${path}.stages`);
-  assert(asset.stages.length >= 1, `${path}.stages는 1개 이상이어야 합니다.`);
+  assert(asset.stages.length === REAL_ESTATE_DISTRICT_GROWTH_STAGE_COUNT, `${path}.stages는 ${REAL_ESTATE_DISTRICT_GROWTH_STAGE_COUNT}개여야 합니다: ${asset.stages.length}`);
   const stageFiles = new Set();
+  let baseStageFile = null;
   let lastMinOwnedCount = -1;
   for (const [stageIndex, stage] of asset.stages.entries()) {
     const stagePath = `${path}.stages[${stageIndex}]`;
@@ -322,13 +329,27 @@ for (const [index, asset] of districtGrowthAssets.districts.entries()) {
     assertString(stage.file, `${stagePath}.file`);
     assert(stage.file.startsWith("real-estate-district-growth/") && stage.file.endsWith(".png"), `${stagePath}.file 값은 real-estate-district-growth/*.png 형식이어야 합니다.`);
     assert(!stage.file.includes("..") && !stage.file.includes("\\"), `${stagePath}.file 값이 올바르지 않습니다: ${stage.file}`);
-    assert(!stageFiles.has(stage.file), `${stagePath}.file 값이 중복되었습니다: ${stage.file}`);
+    if (stageIndex === 0) baseStageFile = stage.file;
+    if (stageIndex === 1) {
+      assert(minOwnedCount === 1, `${stagePath}.minOwnedCount 첫 구매 단계는 1이어야 합니다.`);
+      assert(stage.file !== baseStageFile, `${stagePath}.file 첫 구매 단계는 0단계와 다른 PNG여야 합니다: ${stage.file}`);
+    }
     stageFiles.add(stage.file);
     assert(existsSync(resolve("src/snapshot/assets", stage.file)), `${stagePath}.file 파일이 없습니다: ${stage.file}`);
+    linkedDistrictGrowthFiles.add(stage.file);
     help(stage, stagePath, ["growthStage", "minOwnedCount", "file"]);
   }
+  const districtGrowthPrefix = `real-estate-district-growth/${asset.id.replaceAll("_", "-")}-growth-`;
+  const unlinkedDistrictFiles = Array.from(availableDistrictGrowthFiles)
+    .filter((file) => file.startsWith(districtGrowthPrefix) && !stageFiles.has(file))
+    .sort();
+  assert(unlinkedDistrictFiles.length === 0, `${path}.stages에 연결되지 않은 성장 PNG가 있습니다: ${unlinkedDistrictFiles.join(", ")}`);
   help(asset, path, ["id", "sourceBackground", "width", "height", "maxOwnedCount", "unlock", "stages"]);
 }
+const unlinkedGrowthFiles = Array.from(availableDistrictGrowthFiles)
+  .filter((file) => !linkedDistrictGrowthFiles.has(file))
+  .sort();
+assert(unlinkedGrowthFiles.length === 0, `real-estate-district-growth 폴더에 데이터와 연결되지 않은 PNG가 있습니다: ${unlinkedGrowthFiles.join(", ")}`);
 
 assertObject(tiers, "real_estate_scale_tiers.json");
 integerAtLeast(tiers.version, "real_estate_scale_tiers.json.version", 1);

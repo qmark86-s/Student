@@ -40,7 +40,7 @@
         {
           "growthStage": 2,
           "minOwnedCount": 2,
-          "file": "real-estate-district-growth/small-studio-growth-02.png",
+          "file": "real-estate-district-growth/small-studio-growth-01.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -49,6 +49,16 @@
         },
         {
           "growthStage": 3,
+          "minOwnedCount": 3,
+          "file": "real-estate-district-growth/small-studio-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 4,
           "minOwnedCount": 4,
           "file": "real-estate-district-growth/small-studio-growth-03.png",
           "help": {
@@ -58,7 +68,17 @@
           }
         },
         {
-          "growthStage": 4,
+          "growthStage": 5,
+          "minOwnedCount": 5,
+          "file": "real-estate-district-growth/small-studio-growth-04.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 6,
           "minOwnedCount": 6,
           "file": "real-estate-district-growth/small-studio-growth-04.png",
           "help": {
@@ -68,9 +88,29 @@
           }
         },
         {
-          "growthStage": 5,
-          "minOwnedCount": 9,
+          "growthStage": 7,
+          "minOwnedCount": 7,
           "file": "real-estate-district-growth/small-studio-growth-05.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 8,
+          "minOwnedCount": 8,
+          "file": "real-estate-district-growth/small-studio-growth-06.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 9,
+          "minOwnedCount": 9,
+          "file": "real-estate-district-growth/small-studio-growth-07.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -125,8 +165,8 @@
         },
         {
           "growthStage": 2,
-          "minOwnedCount": 4,
-          "file": "real-estate-district-growth/two-room-growth-02.png",
+          "minOwnedCount": 2,
+          "file": "real-estate-district-growth/two-room-growth-01.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -135,8 +175,8 @@
         },
         {
           "growthStage": 3,
-          "minOwnedCount": 7,
-          "file": "real-estate-district-growth/two-room-growth-03.png",
+          "minOwnedCount": 3,
+          "file": "real-estate-district-growth/two-room-growth-02.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -145,8 +185,58 @@
         },
         {
           "growthStage": 4,
-          "minOwnedCount": 11,
+          "minOwnedCount": 4,
+          "file": "real-estate-district-growth/two-room-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 5,
+          "minOwnedCount": 5,
           "file": "real-estate-district-growth/two-room-growth-04.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 6,
+          "minOwnedCount": 7,
+          "file": "real-estate-district-growth/two-room-growth-05.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 7,
+          "minOwnedCount": 8,
+          "file": "real-estate-district-growth/two-room-growth-06.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 8,
+          "minOwnedCount": 10,
+          "file": "real-estate-district-growth/two-room-growth-07.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 9,
+          "minOwnedCount": 11,
+          "file": "real-estate-district-growth/two-room-growth-08.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -202,7 +292,7 @@
         {
           "growthStage": 2,
           "minOwnedCount": 2,
-          "file": "real-estate-district-growth/villa-growth-02.png",
+          "file": "real-estate-district-growth/villa-growth-01.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -211,8 +301,8 @@
         },
         {
           "growthStage": 3,
-          "minOwnedCount": 4,
-          "file": "real-estate-district-growth/villa-growth-03.png",
+          "minOwnedCount": 3,
+          "file": "real-estate-district-growth/villa-growth-01.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -221,6 +311,56 @@
         },
         {
           "growthStage": 4,
+          "minOwnedCount": 5,
+          "file": "real-estate-district-growth/villa-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 5,
+          "minOwnedCount": 6,
+          "file": "real-estate-district-growth/villa-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 6,
+          "minOwnedCount": 8,
+          "file": "real-estate-district-growth/villa-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 7,
+          "minOwnedCount": 10,
+          "file": "real-estate-district-growth/villa-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 8,
+          "minOwnedCount": 12,
+          "file": "real-estate-district-growth/villa-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 9,
           "minOwnedCount": 13,
           "file": "real-estate-district-growth/villa-growth-04.png",
           "help": {
@@ -277,6 +417,16 @@
         },
         {
           "growthStage": 2,
+          "minOwnedCount": 2,
+          "file": "real-estate-district-growth/officetel-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 3,
           "minOwnedCount": 4,
           "file": "real-estate-district-growth/officetel-growth-02.png",
           "help": {
@@ -286,8 +436,8 @@
           }
         },
         {
-          "growthStage": 3,
-          "minOwnedCount": 8,
+          "growthStage": 4,
+          "minOwnedCount": 6,
           "file": "real-estate-district-growth/officetel-growth-03.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
@@ -296,8 +446,8 @@
           }
         },
         {
-          "growthStage": 4,
-          "minOwnedCount": 12,
+          "growthStage": 5,
+          "minOwnedCount": 8,
           "file": "real-estate-district-growth/officetel-growth-04.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
@@ -306,9 +456,39 @@
           }
         },
         {
-          "growthStage": 5,
-          "minOwnedCount": 15,
+          "growthStage": 6,
+          "minOwnedCount": 10,
           "file": "real-estate-district-growth/officetel-growth-05.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 7,
+          "minOwnedCount": 12,
+          "file": "real-estate-district-growth/officetel-growth-06.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 8,
+          "minOwnedCount": 14,
+          "file": "real-estate-district-growth/officetel-growth-07.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 9,
+          "minOwnedCount": 15,
+          "file": "real-estate-district-growth/officetel-growth-08.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -363,8 +543,8 @@
         },
         {
           "growthStage": 2,
-          "minOwnedCount": 4,
-          "file": "real-estate-district-growth/shop-unit-growth-02.png",
+          "minOwnedCount": 2,
+          "file": "real-estate-district-growth/shop-unit-growth-01.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -373,8 +553,8 @@
         },
         {
           "growthStage": 3,
-          "minOwnedCount": 8,
-          "file": "real-estate-district-growth/shop-unit-growth-03.png",
+          "minOwnedCount": 4,
+          "file": "real-estate-district-growth/shop-unit-growth-01.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -383,6 +563,56 @@
         },
         {
           "growthStage": 4,
+          "minOwnedCount": 6,
+          "file": "real-estate-district-growth/shop-unit-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 5,
+          "minOwnedCount": 8,
+          "file": "real-estate-district-growth/shop-unit-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 6,
+          "minOwnedCount": 10,
+          "file": "real-estate-district-growth/shop-unit-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 7,
+          "minOwnedCount": 12,
+          "file": "real-estate-district-growth/shop-unit-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 8,
+          "minOwnedCount": 14,
+          "file": "real-estate-district-growth/shop-unit-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 9,
           "minOwnedCount": 15,
           "file": "real-estate-district-growth/shop-unit-growth-04.png",
           "help": {
@@ -429,7 +659,7 @@
         },
         {
           "growthStage": 1,
-          "minOwnedCount": 6,
+          "minOwnedCount": 1,
           "file": "real-estate-district-growth/small-building-growth-01.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
@@ -439,8 +669,8 @@
         },
         {
           "growthStage": 2,
-          "minOwnedCount": 10,
-          "file": "real-estate-district-growth/small-building-growth-02.png",
+          "minOwnedCount": 3,
+          "file": "real-estate-district-growth/small-building-growth-01.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -449,6 +679,66 @@
         },
         {
           "growthStage": 3,
+          "minOwnedCount": 5,
+          "file": "real-estate-district-growth/small-building-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 4,
+          "minOwnedCount": 7,
+          "file": "real-estate-district-growth/small-building-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 5,
+          "minOwnedCount": 9,
+          "file": "real-estate-district-growth/small-building-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 6,
+          "minOwnedCount": 11,
+          "file": "real-estate-district-growth/small-building-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 7,
+          "minOwnedCount": 13,
+          "file": "real-estate-district-growth/small-building-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 8,
+          "minOwnedCount": 15,
+          "file": "real-estate-district-growth/small-building-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 9,
           "minOwnedCount": 17,
           "file": "real-estate-district-growth/small-building-growth-03.png",
           "help": {
@@ -506,7 +796,7 @@
         {
           "growthStage": 2,
           "minOwnedCount": 3,
-          "file": "real-estate-district-growth/apartment-building-growth-02.png",
+          "file": "real-estate-district-growth/apartment-building-growth-01.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -515,8 +805,8 @@
         },
         {
           "growthStage": 3,
-          "minOwnedCount": 7,
-          "file": "real-estate-district-growth/apartment-building-growth-03.png",
+          "minOwnedCount": 5,
+          "file": "real-estate-district-growth/apartment-building-growth-01.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -525,7 +815,57 @@
         },
         {
           "growthStage": 4,
-          "minOwnedCount": 13,
+          "minOwnedCount": 8,
+          "file": "real-estate-district-growth/apartment-building-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 5,
+          "minOwnedCount": 11,
+          "file": "real-estate-district-growth/apartment-building-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 6,
+          "minOwnedCount": 14,
+          "file": "real-estate-district-growth/apartment-building-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 7,
+          "minOwnedCount": 17,
+          "file": "real-estate-district-growth/apartment-building-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 8,
+          "minOwnedCount": 20,
+          "file": "real-estate-district-growth/apartment-building-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 9,
+          "minOwnedCount": 23,
           "file": "real-estate-district-growth/apartment-building-growth-04.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
@@ -581,8 +921,8 @@
         },
         {
           "growthStage": 2,
-          "minOwnedCount": 11,
-          "file": "real-estate-district-growth/apartment-complex-growth-02.png",
+          "minOwnedCount": 4,
+          "file": "real-estate-district-growth/apartment-complex-growth-01.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -591,6 +931,66 @@
         },
         {
           "growthStage": 3,
+          "minOwnedCount": 7,
+          "file": "real-estate-district-growth/apartment-complex-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 4,
+          "minOwnedCount": 10,
+          "file": "real-estate-district-growth/apartment-complex-growth-01.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 5,
+          "minOwnedCount": 13,
+          "file": "real-estate-district-growth/apartment-complex-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 6,
+          "minOwnedCount": 16,
+          "file": "real-estate-district-growth/apartment-complex-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 7,
+          "minOwnedCount": 19,
+          "file": "real-estate-district-growth/apartment-complex-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 8,
+          "minOwnedCount": 23,
+          "file": "real-estate-district-growth/apartment-complex-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 9,
           "minOwnedCount": 27,
           "file": "real-estate-district-growth/apartment-complex-growth-03.png",
           "help": {
@@ -647,8 +1047,8 @@
         },
         {
           "growthStage": 2,
-          "minOwnedCount": 6,
-          "file": "real-estate-district-growth/office-tower-growth-02.png",
+          "minOwnedCount": 5,
+          "file": "real-estate-district-growth/office-tower-growth-01.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -657,8 +1057,8 @@
         },
         {
           "growthStage": 3,
-          "minOwnedCount": 13,
-          "file": "real-estate-district-growth/office-tower-growth-03.png",
+          "minOwnedCount": 9,
+          "file": "real-estate-district-growth/office-tower-growth-02.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -667,8 +1067,58 @@
         },
         {
           "growthStage": 4,
+          "minOwnedCount": 13,
+          "file": "real-estate-district-growth/office-tower-growth-02.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 5,
+          "minOwnedCount": 17,
+          "file": "real-estate-district-growth/office-tower-growth-03.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 6,
           "minOwnedCount": 21,
           "file": "real-estate-district-growth/office-tower-growth-04.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 7,
+          "minOwnedCount": 25,
+          "file": "real-estate-district-growth/office-tower-growth-04.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 8,
+          "minOwnedCount": 28,
+          "file": "real-estate-district-growth/office-tower-growth-05.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 9,
+          "minOwnedCount": 31,
+          "file": "real-estate-district-growth/office-tower-growth-06.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -724,7 +1174,7 @@
         {
           "growthStage": 2,
           "minOwnedCount": 5,
-          "file": "real-estate-district-growth/mixed-development-growth-02.png",
+          "file": "real-estate-district-growth/mixed-development-growth-01.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -733,8 +1183,8 @@
         },
         {
           "growthStage": 3,
-          "minOwnedCount": 8,
-          "file": "real-estate-district-growth/mixed-development-growth-03.png",
+          "minOwnedCount": 9,
+          "file": "real-estate-district-growth/mixed-development-growth-02.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -743,8 +1193,8 @@
         },
         {
           "growthStage": 4,
-          "minOwnedCount": 12,
-          "file": "real-estate-district-growth/mixed-development-growth-04.png",
+          "minOwnedCount": 13,
+          "file": "real-estate-district-growth/mixed-development-growth-03.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
@@ -753,8 +1203,48 @@
         },
         {
           "growthStage": 5,
-          "minOwnedCount": 39,
+          "minOwnedCount": 17,
+          "file": "real-estate-district-growth/mixed-development-growth-04.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 6,
+          "minOwnedCount": 22,
           "file": "real-estate-district-growth/mixed-development-growth-05.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 7,
+          "minOwnedCount": 28,
+          "file": "real-estate-district-growth/mixed-development-growth-06.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 8,
+          "minOwnedCount": 34,
+          "file": "real-estate-district-growth/mixed-development-growth-07.png",
+          "help": {
+            "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
+            "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
+            "file": "src/snapshot/assets 기준 단계별 baked PNG 경로입니다."
+          }
+        },
+        {
+          "growthStage": 9,
+          "minOwnedCount": 39,
+          "file": "real-estate-district-growth/mixed-development-growth-08.png",
           "help": {
             "growthStage": "지역 내 성장 PNG의 순번입니다. 0은 공터/base 단계입니다.",
             "minOwnedCount": "보유 수량이 이 값 이상일 때 이 PNG를 사용합니다.",
